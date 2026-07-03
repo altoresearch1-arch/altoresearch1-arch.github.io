@@ -1,0 +1,1675 @@
+{
+  "_comment": "3 empresas por sector. smvId = value del dropdown SMV (para EE.FF.). bvlNemonico = nemónico real en la BVL (para el precio de cierre). ticker = el nemónico que se muestra. perfiles = CRITERIO TENTATIVO, lo confirma Jair. tipoLectura: minera/banco/consumo/industrial.",
+  "_nota_pesqueras": "En el Mercado Principal de la SMV solo dos pesqueras presentan EE.FF.: Austral Group y Pesquera Exalmar. Por ahora van 2.",
+  "_nota_precios": "bvlNemonico se eligió como la serie más líquida/representativa. Algunas (Laive, Creditex, Filamentos) se negocian poco: su último cierre puede ser de hace tiempo; la app muestra la fecha real.",
+  "anio": 2026,
+  "trimestre": 1,
+  "empresas": [
+    {
+      "sector": "minas",
+      "smvId": 59,
+      "ticker": "NEXAPEC1",
+      "bvlNemonico": "NEXAPEC1",
+      "nombre": "Nexa Resources Perú S.A.A.",
+      "tipoLectura": "minera",
+      "perfiles": [
+        "apuesta",
+        "mixto"
+      ],
+      "bvlRpj": "B20010",
+      "bvlCompanyCode": "62000"
+    },
+    {
+      "sector": "minas",
+      "smvId": 50,
+      "ticker": "BVN",
+      "bvlNemonico": "BVN",
+      "nombre": "Compañía de Minas Buenaventura S.A.A.",
+      "tipoLectura": "minera",
+      "perfiles": [
+        "apuesta",
+        "dividendos"
+      ],
+      "bvlRpj": "B20003",
+      "bvlCompanyCode": "61200"
+    },
+    {
+      "sector": "minas",
+      "smvId": 93832,
+      "ticker": "CVERDEC1",
+      "bvlNemonico": "CVERDEC1",
+      "nombre": "Sociedad Minera Cerro Verde S.A.A.",
+      "tipoLectura": "minera",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "bvlRpj": "CM0006",
+      "bvlCompanyCode": "64650"
+    },
+    {
+      "sector": "bancos",
+      "smvId": 24,
+      "ticker": "BBVAC1",
+      "bvlNemonico": "BBVAC1",
+      "nombre": "Banco BBVA Perú",
+      "tipoLectura": "banco",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "bvlRpj": "B80004",
+      "bvlCompanyCode": "11600"
+    },
+    {
+      "sector": "bancos",
+      "smvId": 26,
+      "ticker": "CREDITC1",
+      "bvlNemonico": "CREDITC1",
+      "nombre": "Banco de Crédito del Perú",
+      "tipoLectura": "banco",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "bvlRpj": "B80005",
+      "bvlCompanyCode": "12000"
+    },
+    {
+      "sector": "bancos",
+      "smvId": 35,
+      "ticker": "INTERBC1",
+      "bvlNemonico": "INTERBC1",
+      "nombre": "Banco Internacional del Perú - Interbank",
+      "tipoLectura": "banco",
+      "perfiles": [
+        "dividendos",
+        "mixto"
+      ],
+      "bvlRpj": "B80020",
+      "bvlCompanyCode": "14800"
+    },
+    {
+      "sector": "bancos",
+      "smvId": 40,
+      "ticker": "SCOTIAC1",
+      "bvlNemonico": "SCOTIAC1",
+      "nombre": "Scotiabank Perú S.A.A.",
+      "tipoLectura": "banco",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "bvlRpj": "B80012",
+      "bvlCompanyCode": "14000"
+    },
+    {
+      "sector": "alimentos",
+      "smvId": 73,
+      "ticker": "ALICORC1",
+      "bvlNemonico": "ALICORC1",
+      "nombre": "Alicorp S.A.A.",
+      "tipoLectura": "consumo",
+      "perfiles": [
+        "estable",
+        "dividendos"
+      ],
+      "monedaForzada": "PEN",
+      "_notaMoneda": "El XBRL de la SMV etiqueta Alicorp en USD por error; sus estados separados auditados son en SOLES (Total activo S/8,981,886 mil al 2024). Verificado contra el Informe Separado oficial. Por eso forzamos PEN.",
+      "bvlRpj": "B30006",
+      "bvlCompanyCode": "21400"
+    },
+    {
+      "sector": "alimentos",
+      "smvId": 117,
+      "ticker": "GLORIAI1",
+      "bvlNemonico": "GLORIAI1",
+      "nombre": "Leche Gloria S.A.",
+      "tipoLectura": "consumo",
+      "perfiles": [
+        "estable",
+        "mixto"
+      ],
+      "bvlRpj": "006166",
+      "bvlCompanyCode": "36100"
+    },
+    {
+      "sector": "alimentos",
+      "smvId": 112860,
+      "ticker": "LAIVEBC1",
+      "bvlNemonico": "LAIVEBC1",
+      "nombre": "Laive S.A.",
+      "tipoLectura": "consumo",
+      "perfiles": [
+        "estable",
+        "mixto"
+      ],
+      "bvlRpj": "CI0011",
+      "bvlCompanyCode": "42500"
+    },
+    {
+      "sector": "textil",
+      "smvId": 198,
+      "ticker": "CRETEXC1",
+      "bvlNemonico": "CRETEXC1",
+      "nombre": "Creditex S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto",
+        "dividendos"
+      ],
+      "bvlRpj": "B30060",
+      "bvlCompanyCode": "26601"
+    },
+    {
+      "sector": "textil",
+      "smvId": 84522,
+      "ticker": "MICHEI1",
+      "bvlNemonico": "MICHEI1",
+      "nombre": "Michell y Cía. S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto"
+      ],
+      "bvlRpj": "TI0003",
+      "bvlCompanyCode": "45205"
+    },
+    {
+      "sector": "textil",
+      "smvId": 108,
+      "ticker": "FILAMEI1",
+      "bvlNemonico": "FILAMEI1",
+      "nombre": "Filamentos Industriales S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto"
+      ],
+      "bvlRpj": "B30083",
+      "bvlCompanyCode": "73625"
+    },
+    {
+      "sector": "acereras",
+      "smvId": 43173,
+      "ticker": "CORAREI1",
+      "bvlNemonico": "CORAREI1",
+      "nombre": "Corporación Aceros Arequipa S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto",
+        "dividendos"
+      ],
+      "bvlRpj": "CI0003",
+      "bvlCompanyCode": "20601"
+    },
+    {
+      "sector": "acereras",
+      "smvId": 75981,
+      "ticker": "SIDERC1",
+      "bvlNemonico": "SIDERC1",
+      "nombre": "Empresa Siderúrgica del Perú S.A.A. - Siderperú",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto"
+      ],
+      "bvlRpj": "CM0003",
+      "bvlCompanyCode": "53100"
+    },
+    {
+      "sector": "acereras",
+      "smvId": 76984,
+      "ticker": "SHPC1",
+      "bvlNemonico": "SHPC1",
+      "nombre": "Shougang Hierro Perú S.A.A.",
+      "tipoLectura": "minera",
+      "perfiles": [
+        "apuesta",
+        "mixto"
+      ],
+      "bvlRpj": "CM0004",
+      "bvlCompanyCode": "63900"
+    },
+    {
+      "sector": "pesqueras",
+      "smvId": 70360,
+      "ticker": "AUSTRAC1",
+      "bvlNemonico": "AUSTRAC1",
+      "nombre": "Austral Group S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto"
+      ],
+      "bvlRpj": "CI0006",
+      "bvlCompanyCode": "21650"
+    },
+    {
+      "sector": "pesqueras",
+      "smvId": 112995,
+      "ticker": "EXALMC1",
+      "bvlNemonico": "EXALMC1",
+      "nombre": "Pesquera Exalmar S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "apuesta",
+        "mixto"
+      ],
+      "bvlRpj": "CI0012",
+      "bvlCompanyCode": "50400"
+    },
+    {
+      "sector": "minas",
+      "smvId": 46703,
+      "ticker": "VOLCABC1",
+      "bvlNemonico": "VOLCABC1",
+      "nombre": "Volcan Compañía Minera S.A.A.",
+      "tipoLectura": "minera",
+      "perfiles": [
+        "apuesta",
+        "mixto"
+      ],
+      "bvlRpj": "CM0001",
+      "bvlCompanyCode": "64801"
+    },
+    {
+      "sector": "minas",
+      "smvId": 168,
+      "ticker": "MINSURI1",
+      "bvlNemonico": "MINSURI1",
+      "nombre": "Minsur S.A.",
+      "tipoLectura": "minera",
+      "perfiles": [
+        "mixto",
+        "dividendos"
+      ],
+      "bvlRpj": "A20032",
+      "bvlCompanyCode": "62200"
+    },
+    {
+      "sector": "minas",
+      "smvId": 255,
+      "ticker": "BROCALC1",
+      "bvlNemonico": "BROCALC1",
+      "nombre": "Sociedad Minera El Brocal S.A.A.",
+      "tipoLectura": "minera",
+      "perfiles": [
+        "mixto",
+        "dividendos"
+      ],
+      "_nota": "NO es junior: productora mediana de cobre/plata/plomo controlada por Buenaventura (61%), deuda casi nula. Perfil ajustado de apuesta->mixto/dividendos.",
+      "bvlRpj": "B20026",
+      "bvlCompanyCode": "61700"
+    },
+    {
+      "sector": "alimentos",
+      "smvId": 47,
+      "ticker": "BACKUSI1",
+      "bvlNemonico": "BACKUSI1",
+      "nombre": "Unión de Cervecerías Peruanas Backus y Johnston S.A.A.",
+      "tipoLectura": "consumo",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "bvlRpj": "B30021",
+      "bvlCompanyCode": "21802"
+    },
+    {
+      "sector": "alimentos",
+      "smvId": 49,
+      "ticker": "SNJUANI1",
+      "bvlNemonico": "SNJUANI1",
+      "nombre": "Cervecería San Juan S.A.",
+      "tipoLectura": "consumo",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "bvlRpj": "B30023",
+      "bvlCompanyCode": "53000"
+    },
+    {
+      "sector": "alimentos",
+      "smvId": 34382,
+      "ticker": "CASAGRC1",
+      "bvlNemonico": "CASAGRC1",
+      "nombre": "Casa Grande S.A.A.",
+      "tipoLectura": "consumo",
+      "perfiles": [
+        "mixto"
+      ],
+      "bvlRpj": "B08361",
+      "bvlCompanyCode": "77146"
+    },
+    {
+      "sector": "electricas",
+      "smvId": 30003,
+      "ticker": "LUSURC1",
+      "bvlNemonico": "LUSURC1",
+      "nombre": "Luz del Sur S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "bvlRpj": "B40008",
+      "bvlCompanyCode": "70252"
+    },
+    {
+      "sector": "electricas",
+      "smvId": 30188,
+      "ticker": "ENGIEC1",
+      "bvlNemonico": "ENGIEC1",
+      "nombre": "Engie Energía Perú S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "bvlRpj": "002829",
+      "bvlCompanyCode": "70210"
+    },
+    {
+      "sector": "electricas",
+      "smvId": 30004,
+      "ticker": "ORYGENC1",
+      "bvlNemonico": "ORYGENC1",
+      "nombre": "Orygen Perú S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "estable",
+        "mixto"
+      ],
+      "bvlRpj": "B40009",
+      "bvlCompanyCode": "70051"
+    },
+    {
+      "sector": "cemento",
+      "smvId": 74470,
+      "ticker": "CPACASC1",
+      "bvlNemonico": "CPACASC1",
+      "nombre": "Cementos Pacasmayo S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "mixto"
+      ],
+      "bvlRpj": "CD0005",
+      "bvlCompanyCode": "23950"
+    },
+    {
+      "sector": "cemento",
+      "smvId": 45,
+      "ticker": "UNACEMC1",
+      "bvlNemonico": "UNACEMC1",
+      "nombre": "UNACEM Corp S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto",
+        "dividendos"
+      ],
+      "esHolding": true,
+      "_notaHolding": "UNACEM Corp es la holding; las operaciones de cemento están en sus subsidiarias. El estado individual son dividendos de subsidiarias, no ventas.",
+      "bvlRpj": "B30121",
+      "bvlCompanyCode": "76100"
+    },
+    {
+      "sector": "cemento",
+      "smvId": 93,
+      "ticker": "FERREYC1",
+      "bvlNemonico": "FERREYC1",
+      "nombre": "Ferreycorp S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "mixto"
+      ],
+      "esHolding": true,
+      "_notaHolding": "Ferreycorp es la holding; el negocio (distribución Caterpillar) está en Ferreyros y filiales. Individual = dividendos, no ventas.",
+      "bvlRpj": "B60001",
+      "bvlCompanyCode": "73600"
+    },
+    {
+      "sector": "retail",
+      "smvId": 154527,
+      "ticker": "INRETC1",
+      "bvlNemonico": "INRETC1",
+      "nombre": "InRetail Perú Corp.",
+      "tipoLectura": "consumo",
+      "perfiles": [
+        "estable",
+        "mixto"
+      ],
+      "esHolding": true,
+      "_notaHolding": "InRetail Perú Corp es la holding (Plaza Vea, InkaFarma/Mifarma, Real Plaza). Individual = dividendos de subsidiarias.",
+      "bvlRpj": "OE5087",
+      "bvlCompanyCode": "74222"
+    },
+    {
+      "sector": "retail",
+      "smvId": 116759,
+      "ticker": "IFS",
+      "bvlNemonico": "IFS",
+      "nombre": "Intercorp Financial Services Inc.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "esHolding": true,
+      "_notaHolding": "IFS es la holding financiera (Interbank, Interseguro, Inteligo). Individual = dividendos/equity de sus filiales, sin negocio operativo propio.",
+      "bvlRpj": "OE2305",
+      "bvlCompanyCode": "5626F"
+    },
+    {
+      "sector": "retail",
+      "smvId": 30481,
+      "ticker": "AENZAC1",
+      "bvlNemonico": "AENZAC1",
+      "nombre": "Aenza S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "apuesta",
+        "mixto"
+      ],
+      "bvlRpj": "023106",
+      "bvlCompanyCode": "73658"
+    },
+    {
+      "sector": "minas",
+      "smvId": 300,
+      "ticker": "PODERC1",
+      "bvlNemonico": "PODERC1",
+      "nombre": "Compañía Minera Poderosa S.A.",
+      "tipoLectura": "minera",
+      "perfiles": [
+        "apuesta",
+        "dividendos"
+      ],
+      "bvlRpj": "B20041",
+      "bvlCompanyCode": "63500"
+    },
+    {
+      "sector": "minas",
+      "smvId": 194,
+      "ticker": "SPCCPI1",
+      "bvlNemonico": "SPCCPI1",
+      "nombre": "Southern Peru Copper Corporation, Sucursal del Perú",
+      "tipoLectura": "minera",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "bvlRpj": "B20027",
+      "bvlCompanyCode": "64200"
+    },
+    {
+      "sector": "minas",
+      "smvId": 14668,
+      "ticker": "MINCORI1",
+      "bvlNemonico": "MINCORI1",
+      "nombre": "Sociedad Minera Corona S.A.",
+      "tipoLectura": "minera",
+      "perfiles": [
+        "apuesta",
+        "mixto"
+      ],
+      "bvlRpj": "002597",
+      "bvlCompanyCode": "61630"
+    },
+    {
+      "sector": "minas",
+      "smvId": 74,
+      "ticker": "ATACOBC1",
+      "bvlNemonico": "ATACOBC1",
+      "nombre": "Nexa Resources Atacocha S.A.A.",
+      "tipoLectura": "minera",
+      "perfiles": [
+        "apuesta",
+        "mixto"
+      ],
+      "bvlRpj": "CM0007",
+      "bvlCompanyCode": "60800"
+    },
+    {
+      "sector": "alimentos",
+      "smvId": 33864,
+      "ticker": "CARTAVC1",
+      "bvlNemonico": "CARTAVC1",
+      "nombre": "Cartavio S.A.A.",
+      "tipoLectura": "consumo",
+      "perfiles": [
+        "mixto"
+      ],
+      "bvlRpj": "B11082",
+      "bvlCompanyCode": "77143"
+    },
+    {
+      "sector": "alimentos",
+      "smvId": 30989,
+      "ticker": "POMALCC1",
+      "bvlNemonico": "POMALCC1",
+      "nombre": "Empresa Agroindustrial Pomalca S.A.A.",
+      "tipoLectura": "consumo",
+      "perfiles": [
+        "apuesta",
+        "mixto"
+      ],
+      "bvlRpj": "B08360",
+      "bvlCompanyCode": "77930"
+    },
+    {
+      "sector": "electricas",
+      "smvId": 118,
+      "ticker": "HIDRA2C1",
+      "bvlNemonico": "HIDRA2C1",
+      "nombre": "Electronorte Medio - Hidrandina S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "bvlRpj": "B40002",
+      "bvlCompanyCode": "70200"
+    },
+    {
+      "sector": "electricas",
+      "smvId": 30009,
+      "ticker": "PLUZENC1",
+      "bvlNemonico": "PLUZENC1",
+      "nombre": "Pluz Energía Perú S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "bvlRpj": "B40010",
+      "bvlCompanyCode": "70101"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 138,
+      "ticker": "GRHOLDC1",
+      "bvlNemonico": "GRHOLDC1",
+      "nombre": "GR Holding S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto"
+      ],
+      "esHolding": true,
+      "_notaHolding": "GR Holding: su estado individual son dividendos de subsidiarias, no ventas.",
+      "bvlRpj": "B80049",
+      "bvlCompanyCode": "73800"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 185076,
+      "ticker": "AUNA",
+      "bvlNemonico": "AUNA",
+      "nombre": "Auna S.A.",
+      "tipoLectura": "consumo",
+      "perfiles": [
+        "apuesta",
+        "mixto"
+      ],
+      "bvlRpj": "J01375",
+      "bvlCompanyCode": "27919"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 177240,
+      "ticker": "BAMC1",
+      "bvlNemonico": "BAMC1",
+      "nombre": "Bosques Amazónicos S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "apuesta"
+      ],
+      "bvlRpj": "L01785",
+      "bvlCompanyCode": "72660"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 184920,
+      "ticker": "IPCHBC1",
+      "bvlNemonico": "IPCHBC1",
+      "nombre": "Inversiones Portuarias Chancay S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "apuesta",
+        "mixto"
+      ],
+      "esHolding": true,
+      "_notaHolding": "Holding que tiene la participación en el megapuerto de Chancay; individual = dividendos/inversión, no operación.",
+      "bvlRpj": "L02127",
+      "bvlCompanyCode": "74635"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 187,
+      "ticker": "RIMSEGC1",
+      "bvlNemonico": "RIMSEGC1",
+      "nombre": "Rímac Seguros y Reaseguros",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "Aseguradora: se lee distinto (primas, siniestralidad), no tiene FCF como una fábrica.",
+      "bvlRpj": "B80037",
+      "bvlCompanyCode": "67200"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 298,
+      "ticker": "ELCOMEI1",
+      "bvlNemonico": "ELCOMEI1",
+      "nombre": "Empresa Editora El Comercio S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto",
+        "dividendos"
+      ],
+      "bvlRpj": "B30241",
+      "bvlCompanyCode": "29401"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 117415,
+      "ticker": "TRADIC1",
+      "bvlNemonico": "TRADIC1",
+      "nombre": "Tradi S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto"
+      ],
+      "bvlRpj": "OE2487",
+      "bvlCompanyCode": "75741"
+    },
+    {
+      "sector": "electricas",
+      "smvId": 111960,
+      "ticker": "SEALDC1",
+      "bvlNemonico": "SEALDC1",
+      "nombre": "Sociedad Eléctrica del Sur Oeste S.A. (SEAL)",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "Distribuidora eléctrica de Arequipa (estatal FONAFE). Tanda 4 (01-jul-2026).",
+      "bvlRpj": "SP0010",
+      "bvlCompanyCode": "70355"
+    },
+    {
+      "sector": "electricas",
+      "smvId": 30780,
+      "ticker": "PERENBC1",
+      "bvlNemonico": "PERENBC1",
+      "nombre": "Peruana de Energía S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto",
+        "estable"
+      ],
+      "_nota": "Tanda 4 (01-jul-2026).",
+      "bvlRpj": "002927",
+      "bvlCompanyCode": "70290"
+    },
+    {
+      "sector": "electricas",
+      "smvId": 47788,
+      "ticker": "EGEPIBC1",
+      "bvlNemonico": "EGEPIBC1",
+      "nombre": "Enel Generación Piura S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "Generadora (gas natural, norte). Tanda 4 (01-jul-2026).",
+      "bvlRpj": "003058",
+      "bvlCompanyCode": "70175"
+    },
+    {
+      "sector": "minas",
+      "smvId": 77,
+      "ticker": "LUISAI1",
+      "bvlNemonico": "LUISAI1",
+      "nombre": "Compañía Minera Santa Luisa S.A.",
+      "tipoLectura": "minera",
+      "perfiles": [
+        "apuesta",
+        "mixto"
+      ],
+      "_nota": "Zinc/plomo, controlada por Mitsui. Tanda 4 (01-jul-2026).",
+      "bvlRpj": "B20016",
+      "bvlCompanyCode": "64400"
+    },
+    {
+      "sector": "minas",
+      "smvId": 61,
+      "ticker": "MOROCOI1",
+      "bvlNemonico": "MOROCOI1",
+      "nombre": "Compañía Minera San Ignacio de Morococha S.A.A. (SIMSA)",
+      "tipoLectura": "minera",
+      "perfiles": [
+        "apuesta"
+      ],
+      "_nota": "Zinc (San Vicente, Junín). PATRIMONIO NEGATIVO Q1 2026. Solo perfil apuesta. Tanda 4.",
+      "bvlRpj": "B20013",
+      "bvlCompanyCode": "62400"
+    },
+    {
+      "sector": "alimentos",
+      "smvId": 19582,
+      "ticker": "SNJACIC1",
+      "bvlNemonico": "SNJACIC1",
+      "nombre": "Agroindustrias San Jacinto S.A.A.",
+      "tipoLectura": "consumo",
+      "perfiles": [
+        "mixto",
+        "apuesta"
+      ],
+      "_nota": "Azucarera (grupo Gloria). Tanda 4 (01-jul-2026).",
+      "bvlRpj": "B11068",
+      "bvlCompanyCode": "78085"
+    },
+    {
+      "sector": "alimentos",
+      "smvId": 34868,
+      "ticker": "LAREDOC1",
+      "bvlNemonico": "LAREDOC1",
+      "nombre": "Agroindustrial Laredo S.A.A.",
+      "tipoLectura": "consumo",
+      "perfiles": [
+        "mixto"
+      ],
+      "_nota": "Azucarera (grupo Manuelita, Colombia). Tanda 4 (01-jul-2026).",
+      "bvlRpj": "B08363",
+      "bvlCompanyCode": "77600"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 101,
+      "ticker": "ETNAI1",
+      "bvlNemonico": "ETNAI1",
+      "nombre": "Fábrica Nacional de Acumuladores ETNA S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto",
+        "apuesta"
+      ],
+      "_nota": "Baterías/acumuladores. Tanda 4 (01-jul-2026).",
+      "bvlRpj": "B30211",
+      "bvlCompanyCode": "31400"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 79,
+      "ticker": "INTPEBC1",
+      "bvlNemonico": "INTPEBC1",
+      "nombre": "Integratel Perú S.A.A. (ex Telefónica del Perú)",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "apuesta"
+      ],
+      "_nota": "Telecom en reestructuración. Tanda 4 (01-jul-2026).",
+      "bvlRpj": "B70009",
+      "bvlCompanyCode": "70500"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 142,
+      "ticker": "INVCENC1",
+      "bvlNemonico": "INVCENC1",
+      "nombre": "Inversiones Centenario S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto",
+        "estable"
+      ],
+      "_nota": "Inmobiliaria (grupo Romero). Tanda 4 (01-jul-2026).",
+      "bvlRpj": "B80077",
+      "bvlCompanyCode": "72800"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 152009,
+      "ticker": "AIHC1",
+      "bvlNemonico": "AIHC1",
+      "nombre": "Andino Investment Holding S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "apuesta",
+        "mixto"
+      ],
+      "esHolding": true,
+      "_notaHolding": "Holding de puertos/logística (operó Salaverry, servicios marítimos). Individual = participaciones en subsidiarias.",
+      "_nota": "Tanda 4 (01-jul-2026).",
+      "bvlRpj": "J40120",
+      "bvlCompanyCode": "71500"
+    },
+    {
+      "sector": "fondos",
+      "smvId": null,
+      "ticker": "FIBPRIME",
+      "bvlNemonico": "FIBPRIME",
+      "nombre": "FIBRA Prime (Grupo Coril Sociedad Titulizadora)",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "FIBRA: fideicomiso de inmuebles que reparte rentas. No presenta XBRL de empresa a la SMV. Tanda 5 (02-jul-2026).",
+      "bvlRpj": "T00002",
+      "bvlCompanyCode": "72940"
+    },
+    {
+      "sector": "fondos",
+      "smvId": null,
+      "ticker": "FIBCCAP",
+      "bvlNemonico": "FIBCCAP",
+      "nombre": "Fibra Credicorp Capital (Sociedad Titulizadora)",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "FIBRA de Credicorp Capital. Tanda 5 (02-jul-2026).",
+      "bvlRpj": "T00003",
+      "bvlCompanyCode": "80050"
+    },
+    {
+      "sector": "fondos",
+      "smvId": null,
+      "ticker": "ETFPERUD",
+      "bvlNemonico": "ETFPERUD",
+      "nombre": "ETF Van Eck El Dorado Perú (canasta de acciones peruanas)",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto",
+        "estable"
+      ],
+      "_nota": "ETF de renta variable peruana. Tanda 5 (02-jul-2026).",
+      "bvlRpj": "BVL029",
+      "bvlCompanyCode": "79800"
+    },
+    {
+      "sector": "fondos",
+      "smvId": null,
+      "ticker": "ETFPESOV",
+      "bvlNemonico": "ETFPESOV",
+      "nombre": "ETF Perú Soberano Van Eck El Dorado (bonos del Estado)",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "ETF de bonos soberanos en soles (renta fija). Tanda 5 (02-jul-2026).",
+      "bvlRpj": "BVL038",
+      "bvlCompanyCode": "79005"
+    },
+    {
+      "sector": "bancos",
+      "smvId": 18049,
+      "ticker": "BAP",
+      "bvlNemonico": "BAP",
+      "nombre": "Credicorp Ltd.",
+      "tipoLectura": "banco",
+      "perfiles": [
+        "estable",
+        "mixto"
+      ],
+      "_nota": "Holding matriz del BCP (cotiza en NYSE y BVL). Emisor extranjero: probable sin XBRL individual, como AUNA. Tanda 5 (02-jul-2026).",
+      "bvlRpj": "B60051",
+      "bvlCompanyCode": "73250",
+      "esHolding": true,
+      "_notaHolding": "Credicorp Ltd. es la holding del grupo (BCP, Pacífico, Prima, Credicorp Capital): su individual son dividendos/participaciones, no el negocio bancario."
+    },
+    {
+      "sector": "minas",
+      "smvId": 18050,
+      "ticker": "SCCO",
+      "bvlNemonico": "SCCO",
+      "nombre": "Southern Copper Corporation",
+      "tipoLectura": "minera",
+      "perfiles": [
+        "dividendos",
+        "mixto"
+      ],
+      "_nota": "Matriz (Delaware, NYSE) de Southern Perú. Ya tenemos la sucursal SPCCPI1. Tanda 5 (02-jul-2026).",
+      "bvlRpj": "B60052",
+      "bvlCompanyCode": "75850"
+    },
+    {
+      "sector": "minas",
+      "smvId": 118035,
+      "ticker": "PML",
+      "bvlNemonico": "PML",
+      "nombre": "Panoro Minerals Ltd.",
+      "tipoLectura": "minera",
+      "perfiles": [
+        "apuesta"
+      ],
+      "_nota": "Minera JUNIOR canadiense (exploración, sin producción). Solo perfil apuesta. Tanda 5 (02-jul-2026).",
+      "bvlRpj": "OE2760",
+      "bvlCompanyCode": "69863"
+    },
+    {
+      "sector": "electricas",
+      "smvId": 153244,
+      "ticker": "ENPACII1",
+      "bvlNemonico": "ENPACII1",
+      "nombre": "Energía del Pacífico S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "apuesta"
+      ],
+      "_nota": "Acción de centavos, casi sin negociación. Tanda 5 (02-jul-2026).",
+      "bvlRpj": "OE4860",
+      "bvlCompanyCode": "73500"
+    },
+    {
+      "sector": "cemento",
+      "smvId": 120469,
+      "ticker": "CONCESI1",
+      "bvlNemonico": "CONCESI1",
+      "nombre": "Consorcio Cementero del Sur S.A. (Concesu)",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto",
+        "estable"
+      ],
+      "esHolding": true,
+      "_notaHolding": "Holding cementero del grupo Gloria (Yura, Cal & Cemento Sur): su individual son participaciones.",
+      "_nota": "Tanda 6 (02-jul-2026).",
+      "bvlRpj": "OE3557",
+      "bvlCompanyCode": "72930"
+    },
+    {
+      "sector": "alimentos",
+      "smvId": 30959,
+      "ticker": "PUCALAC1",
+      "bvlNemonico": "PUCALAC1",
+      "nombre": "Agro Pucalá S.A.A.",
+      "tipoLectura": "consumo",
+      "perfiles": [
+        "apuesta"
+      ],
+      "_nota": "Azucarera de Lambayeque con historia societaria complicada. Solo apuesta. Tanda 6.",
+      "bvlRpj": "B11077",
+      "bvlCompanyCode": "77935"
+    },
+    {
+      "sector": "retail",
+      "smvId": 256,
+      "ticker": "SAGAC1",
+      "bvlNemonico": "SAGAC1",
+      "nombre": "Saga Falabella S.A.",
+      "tipoLectura": "consumo",
+      "perfiles": [
+        "mixto",
+        "estable"
+      ],
+      "_nota": "La tienda por departamentos de Falabella en Perú. Tanda 6.",
+      "bvlRpj": "014313",
+      "bvlCompanyCode": "75700"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 151,
+      "ticker": "POSITIC1",
+      "bvlNemonico": "POSITIC1",
+      "nombre": "La Positiva Seguros y Reaseguros S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "Aseguradora (comparar con Rímac, ya en la app). Tanda 6.",
+      "bvlRpj": "A80069",
+      "bvlCompanyCode": "66650"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 69,
+      "ticker": "COCESUI1",
+      "bvlNemonico": "COCESUI1",
+      "nombre": "Corporación Cervesur S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto",
+        "estable"
+      ],
+      "esHolding": true,
+      "_notaHolding": "Holding arequipeño (Creditex, Transaltisa, Incalpaca): su individual son participaciones.",
+      "_nota": "Tanda 6 (02-jul-2026).",
+      "bvlRpj": "B30207",
+      "bvlCompanyCode": "73060"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 166205,
+      "ticker": "FOSSALC1",
+      "bvlNemonico": "FOSSALC1",
+      "nombre": "FOSSAL S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "apuesta"
+      ],
+      "esHolding": true,
+      "_notaHolding": "Holding del proyecto de fosfatos (Fosfatos del Pacífico, Bayóvar). Individual = participaciones.",
+      "_nota": "Tanda 6 (02-jul-2026).",
+      "bvlRpj": "OE6928",
+      "bvlCompanyCode": "73621"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 154309,
+      "ticker": "HERMESC1",
+      "bvlNemonico": "HERMESC1",
+      "nombre": "Hermes Transportes Blindados S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto",
+        "estable"
+      ],
+      "_nota": "Transporte de valores (los camiones blindados). Tanda 6.",
+      "bvlRpj": "J40184",
+      "bvlCompanyCode": "73668"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 154797,
+      "ticker": "CRECAPC1",
+      "bvlNemonico": "CRECAPC1",
+      "nombre": "Credicorp Capital Perú S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto"
+      ],
+      "esHolding": true,
+      "_notaHolding": "Vehículo del grupo Credicorp para el negocio de mercado de capitales: individual = participaciones.",
+      "_nota": "Tanda 6 (02-jul-2026).",
+      "bvlRpj": "OE5132",
+      "bvlCompanyCode": "72620"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 330,
+      "ticker": "INDECOI1",
+      "bvlNemonico": "INDECOI1",
+      "nombre": "INDECO S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto",
+        "estable"
+      ],
+      "_nota": "Cables eléctricos (grupo Nexans, Francia). Tanda 6.",
+      "bvlRpj": "B30236",
+      "bvlCompanyCode": "39510"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 18088,
+      "ticker": "GBVLAC1",
+      "bvlNemonico": "GBVLAC1",
+      "nombre": "Grupo BVL S.A.A. (la propia Bolsa de Valores de Lima)",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "mixto"
+      ],
+      "esHolding": true,
+      "_notaHolding": "Holding de la Bolsa (BVL, Cavali, etc., hoy integrada en nuam): individual = participaciones.",
+      "_nota": "Tanda 6 (02-jul-2026).",
+      "bvlRpj": "BV0001",
+      "bvlCompanyCode": "90000"
+    },
+    {
+      "sector": "minas",
+      "smvId": 72957,
+      "ticker": "ANDEXBC1",
+      "bvlNemonico": "ANDEXBC1",
+      "nombre": "Minera Andina de Exploraciones S.A.A. (Andex)",
+      "tipoLectura": "minera",
+      "perfiles": [
+        "apuesta"
+      ],
+      "_nota": "Minera junior peruana (exploración). Solo apuesta. Tanda 6.",
+      "bvlRpj": "CM0002",
+      "bvlCompanyCode": "60700"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 68856,
+      "ticker": "MAPFSGC1",
+      "bvlNemonico": "MAPFSGC1",
+      "nombre": "Mapfre Perú Compañía de Seguros y Reaseguros",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "Aseguradora (comparar con Rímac/La Positiva). Tanda 7.",
+      "bvlRpj": "CS0004",
+      "bvlCompanyCode": "66850"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 30012,
+      "ticker": "PACIFIC1",
+      "bvlNemonico": "PACIFIC1",
+      "nombre": "Pacífico Compañía de Seguros y Reaseguros",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "Aseguradora del grupo Credicorp. Tanda 7.",
+      "bvlRpj": "B60055",
+      "bvlCompanyCode": "66950"
+    },
+    {
+      "sector": "bancos",
+      "smvId": 33,
+      "ticker": "BPICHPC1",
+      "bvlNemonico": "BPICHPC1",
+      "nombre": "Banco Pichincha del Perú S.A.",
+      "tipoLectura": "banco",
+      "perfiles": [
+        "mixto"
+      ],
+      "_nota": "Banco (detalle HTML SMV, sin XBRL). Penny stock muy ilíquido. Tanda 7.",
+      "bvlRpj": "B80009",
+      "bvlCompanyCode": "13000"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 30011,
+      "ticker": "QUIMPAI1",
+      "bvlNemonico": "QUIMPAI1",
+      "nombre": "Quimpac S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto",
+        "dividendos"
+      ],
+      "_nota": "Químicos (soda cáustica, sal, cloro). Acción de inversión (la que negocia). Tanda 7.",
+      "bvlRpj": "B20042",
+      "bvlCompanyCode": "50901"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 119,
+      "ticker": "HIDROSI1",
+      "bvlNemonico": "HIDROSI1",
+      "nombre": "Hidrostal S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto"
+      ],
+      "_nota": "Fabricante de bombas hidráulicas. Tanda 7.",
+      "bvlRpj": "B30140",
+      "bvlCompanyCode": "36500"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 102,
+      "ticker": "ETERNII1",
+      "bvlNemonico": "ETERNII1",
+      "nombre": "Fábrica Peruana Eternit S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto"
+      ],
+      "_nota": "Materiales de construcción (fibrocemento, tanques). Tanda 7.",
+      "bvlRpj": "B30122",
+      "bvlCompanyCode": "31100"
+    },
+    {
+      "sector": "minas",
+      "smvId": 175,
+      "ticker": "PERUBAI1",
+      "bvlNemonico": "PERUBAI1",
+      "nombre": "Perubar S.A.",
+      "tipoLectura": "minera",
+      "perfiles": [
+        "apuesta",
+        "mixto"
+      ],
+      "_nota": "Minera de zinc/plomo (grupo Glencore). Tanda 7.",
+      "bvlRpj": "B20023",
+      "bvlCompanyCode": "63600"
+    },
+    {
+      "sector": "bancos",
+      "smvId": 155107,
+      "ticker": "FPROEMP1",
+      "bvlNemonico": "FPROEMP1",
+      "nombre": "Financiera Proempresa S.A.",
+      "tipoLectura": "banco",
+      "perfiles": [
+        "apuesta",
+        "mixto"
+      ],
+      "_nota": "Financiera de microfinanzas (regulada SBS, detalle HTML). Muy ilíquida. Tanda 8.",
+      "bvlRpj": "OE5251",
+      "bvlCompanyCode": "16840"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 177085,
+      "ticker": "INVFALC1",
+      "bvlNemonico": "INVFALC1",
+      "nombre": "Inverfal Perú S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "apuesta"
+      ],
+      "_nota": "Holding de inversión ligado al grupo Falabella. Penny stock ilíquido. Tanda 8.",
+      "bvlRpj": "J41105",
+      "bvlCompanyCode": "74190",
+      "esHolding": true,
+      "_notaHolding": "Inverfal Perú es un holding de inversión (grupo Falabella): su estado individual son resultados de participaciones, no ventas operativas; el FCF negativo es flujo de inversión, no problema de caja."
+    },
+    {
+      "sector": "diversas",
+      "smvId": 2475,
+      "ticker": "FUTURAI1",
+      "bvlNemonico": "FUTURAI1",
+      "nombre": "Futura Consorcio Inmobiliario S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "apuesta",
+        "mixto"
+      ],
+      "_nota": "Inmobiliaria. Muy ilíquida. Tanda 8.",
+      "bvlRpj": "001152",
+      "bvlCompanyCode": "73630"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 150448,
+      "ticker": "IIDEI1",
+      "bvlNemonico": "IIDEI1",
+      "nombre": "Inmobiliaria IDE S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "apuesta",
+        "mixto"
+      ],
+      "_nota": "Inmobiliaria. Penny stock ilíquido. Tanda 8.",
+      "bvlRpj": "OE4660",
+      "bvlCompanyCode": "74160"
+    },
+    {
+      "sector": "bancos",
+      "smvId": 49227,
+      "ticker": "MIBANC1",
+      "bvlNemonico": "MIBANC1",
+      "nombre": "Mibanco, Banco de la Microempresa S.A.",
+      "tipoLectura": "banco",
+      "perfiles": [
+        "mixto"
+      ],
+      "_nota": "Banco de microfinanzas del grupo Credicorp. Tanda 9.",
+      "bvlRpj": "CB0001",
+      "bvlCompanyCode": "13300"
+    },
+    {
+      "sector": "bancos",
+      "smvId": 246,
+      "ticker": "BIFC1",
+      "bvlNemonico": "BIFC1",
+      "nombre": "Banco Interamericano de Finanzas (BanBif)",
+      "tipoLectura": "banco",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "Banco mediano (grupo Fierro / IFC). Tanda 9.",
+      "bvlRpj": "B80123",
+      "bvlCompanyCode": "12100"
+    },
+    {
+      "sector": "bancos",
+      "smvId": 30013,
+      "ticker": "BANFALC1",
+      "bvlNemonico": "BANFALC1",
+      "nombre": "Banco Falabella Perú S.A.",
+      "tipoLectura": "banco",
+      "perfiles": [
+        "mixto"
+      ],
+      "_nota": "Banco del grupo Falabella (mismo grupo de Saga/Inverfal). Tanda 9.",
+      "bvlRpj": "B80144",
+      "bvlCompanyCode": "14150"
+    },
+    {
+      "sector": "bancos",
+      "smvId": 282,
+      "ticker": "BRIPLEC1",
+      "bvlNemonico": "BRIPLEC1",
+      "nombre": "Banco Ripley Perú S.A.",
+      "tipoLectura": "banco",
+      "perfiles": [
+        "mixto",
+        "apuesta"
+      ],
+      "_nota": "Banco de consumo del grupo Ripley (Chile). Tanda 9.",
+      "bvlRpj": "B80141",
+      "bvlCompanyCode": "14300"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 53735,
+      "ticker": "INTSEGC1",
+      "bvlNemonico": "INTSEGC1",
+      "nombre": "Interseguro Compañía de Seguros S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "Aseguradora del grupo Intercorp (hermana de Interbank/IFS). Tanda 9.",
+      "bvlRpj": "CS0002",
+      "bvlCompanyCode": "66450"
+    },
+    {
+      "sector": "electricas",
+      "smvId": 115926,
+      "ticker": "ELECPBC1",
+      "bvlNemonico": "ELECPBC1",
+      "nombre": "Empresa de Electricidad del Perú - Electroperú S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "La gran generadora ESTATAL (Mantaro). Tanda 9.",
+      "bvlRpj": "CD0022",
+      "bvlCompanyCode": "70156"
+    },
+    {
+      "sector": "electricas",
+      "smvId": 38580,
+      "ticker": "EDUNASC1",
+      "bvlNemonico": "EDUNASC1",
+      "nombre": "Electro Dunas S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "Distribuidora eléctrica (Ica/sur). Negocia algo. Tanda 9.",
+      "bvlRpj": "B40013",
+      "bvlCompanyCode": "70160"
+    },
+    {
+      "sector": "electricas",
+      "smvId": 111959,
+      "ticker": "SANGABC1",
+      "bvlNemonico": "SANGABC1",
+      "nombre": "Empresa de Generación Eléctrica San Gabán S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "Generadora estatal (Puno). Tanda 9.",
+      "bvlRpj": "SP0009",
+      "bvlCompanyCode": "70154"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 19593,
+      "ticker": "PORTAC1",
+      "bvlNemonico": "PORTAC1",
+      "nombre": "Los Portales S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto",
+        "dividendos"
+      ],
+      "_nota": "Inmobiliaria/viviendas y estacionamientos (grupo Raffo + Grupo Romero). Tanda 9.",
+      "bvlRpj": "B70032",
+      "bvlCompanyCode": "73050"
+    },
+    {
+      "sector": "afp",
+      "smvId": 113217,
+      "ticker": "PRIMAC1",
+      "bvlNemonico": "PRIMAC1",
+      "nombre": "Prima AFP S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "AFP del grupo Credicorp. Sector AFP nuevo. Tanda 9.",
+      "bvlRpj": "OE1928",
+      "bvlCompanyCode": "10650"
+    },
+    {
+      "sector": "afp",
+      "smvId": 8,
+      "ticker": "INTEGRC1",
+      "bvlNemonico": "INTEGRC1",
+      "nombre": "AFP Integra S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "AFP del grupo Sura. Sector AFP. Tanda 9.",
+      "bvlRpj": "AFP002",
+      "bvlCompanyCode": "10400"
+    },
+    {
+      "sector": "afp",
+      "smvId": 9,
+      "ticker": "PROFUTC1",
+      "bvlNemonico": "PROFUTC1",
+      "nombre": "Profuturo AFP S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "AFP del grupo Scotiabank. Negocia algo. Sector AFP. Tanda 9.",
+      "bvlRpj": "AFP004",
+      "bvlCompanyCode": "10700"
+    },
+    {
+      "sector": "afp",
+      "smvId": 131703,
+      "ticker": "HABITAC1",
+      "bvlNemonico": "HABITAC1",
+      "nombre": "AFP Habitat Perú S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "AFP de capitales chilenos (la más nueva). Sector AFP. Tanda 9.",
+      "bvlRpj": "OE4132",
+      "bvlCompanyCode": "10250"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 88700,
+      "ticker": "PETROBC1",
+      "bvlNemonico": "PETROBC1",
+      "nombre": "Petróleos del Perú - Petroperú S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "apuesta"
+      ],
+      "_nota": "Petrolera ESTATAL. Muy endeudada (Talara). Tanda 10.",
+      "bvlRpj": "J00171",
+      "bvlCompanyCode": "49600"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 112163,
+      "ticker": "SEDAPBC1",
+      "bvlNemonico": "SEDAPBC1",
+      "nombre": "Servicio de Agua Potable y Alcantarillado de Lima - SEDAPAL",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "Agua/alcantarillado de Lima. Estatal. Tanda 10.",
+      "bvlRpj": "SP0012",
+      "bvlCompanyCode": "70340"
+    },
+    {
+      "sector": "bancos",
+      "smvId": 73959,
+      "ticker": "COFIDCC1",
+      "bvlNemonico": "COFIDCC1",
+      "nombre": "Corporación Financiera de Desarrollo - COFIDE",
+      "tipoLectura": "banco",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "Banco de desarrollo ESTATAL (banca de segundo piso). Tanda 10.",
+      "bvlRpj": "CF0002",
+      "bvlCompanyCode": "11100"
+    },
+    {
+      "sector": "electricas",
+      "smvId": 19590,
+      "ticker": "ELESUDC1",
+      "bvlNemonico": "ELESUDC1",
+      "nombre": "Electrosur S.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "Distribuidora eléctrica estatal (Tacna/Moquegua). Tanda 10.",
+      "bvlRpj": "B40006",
+      "bvlCompanyCode": "70161"
+    },
+    {
+      "sector": "electricas",
+      "smvId": 329,
+      "ticker": "ESUREBC1",
+      "bvlNemonico": "ESUREBC1",
+      "nombre": "Electro Sur Este S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "Distribuidora eléctrica estatal (Cusco/sur). Tanda 10.",
+      "bvlRpj": "B40005",
+      "bvlCompanyCode": "70158"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 126397,
+      "ticker": "RVIA5BC1",
+      "bvlNemonico": "RVIA5BC1",
+      "nombre": "Norvial S.A. (Red Vial 5)",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "Concesión de peaje (Red Vial 5, Ancón-Huacho-Pativilca). Gran pagadora de dividendos. Tanda 10.",
+      "bvlRpj": "OE3927",
+      "bvlCompanyCode": "74850"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 161048,
+      "ticker": "INCRAIC1",
+      "bvlNemonico": "INCRAIC1",
+      "nombre": "Ferrocarril Transandino / Inca Rail",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto",
+        "apuesta"
+      ],
+      "_nota": "Tren turístico a Machu Picchu. Tanda 10.",
+      "bvlRpj": "J40655",
+      "bvlCompanyCode": "74130"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 131,
+      "ticker": "IEQSAI1",
+      "bvlNemonico": "IEQSAI1",
+      "nombre": "Industrias Electro Químicas S.A. (IEQSA)",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto"
+      ],
+      "_nota": "Aluminio y zinc (galvanizado). Tanda 10.",
+      "bvlRpj": "B30152",
+      "bvlCompanyCode": "37400"
+    },
+    {
+      "sector": "alimentos",
+      "smvId": 19581,
+      "ticker": "PARAMOC1",
+      "bvlNemonico": "PARAMOC1",
+      "nombre": "Agro Industrial Paramonga S.A.A.",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "mixto",
+        "dividendos"
+      ],
+      "_nota": "Azúcar y papel (Paramonga). La que más negocia de las que faltaban. Tanda 10.",
+      "bvlRpj": "B11067",
+      "bvlCompanyCode": "77900"
+    },
+    {
+      "sector": "bancos",
+      "smvId": 148368,
+      "ticker": "COMPARC1",
+      "bvlNemonico": "COMPARC1",
+      "nombre": "Compartamos Financiera S.A.",
+      "tipoLectura": "banco",
+      "perfiles": [
+        "mixto"
+      ],
+      "_nota": "Financiera de microfinanzas (grupo Gentera, México). Tanda 10.",
+      "bvlRpj": "OE4501",
+      "bvlCompanyCode": "16820"
+    },
+    {
+      "sector": "diversas",
+      "smvId": 113710,
+      "ticker": "POSITVC1",
+      "bvlNemonico": "POSITVC1",
+      "nombre": "La Positiva Vida Seguros y Reaseguros",
+      "tipoLectura": "industrial",
+      "perfiles": [
+        "dividendos",
+        "estable"
+      ],
+      "_nota": "Aseguradora de vida (hermana de La Positiva, ya en la app). Tanda 10.",
+      "bvlRpj": "OE2069",
+      "bvlCompanyCode": "66660"
+    },
+    {
+      "sector": "minas",
+      "smvId": 149388,
+      "ticker": "PPX",
+      "bvlNemonico": "PPX",
+      "nombre": "PPX Mining Corp.",
+      "tipoLectura": "minera",
+      "perfiles": [
+        "apuesta"
+      ],
+      "_nota": "Junior de oro/plata (proyecto Igor, La Libertad). Penny stock US$0.145. Muy alta volatilidad. Solo HI por ahora. Tanda 10.",
+      "bvlRpj": "OE4570",
+      "bvlCompanyCode": "00826"
+    }
+  ]
+}

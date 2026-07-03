@@ -1,0 +1,337 @@
+{
+  "_comment": "Simulador EDUCATIVO. Ahora REALISTA: los escenarios son movimientos % desde el PRECIO ACTUAL, según cuánto suele moverse ese tipo de acción (las minas se mueven mucho; consumo/textil poco). En la MONEDA en que cotiza (US$ o S/). NO es predicción ni recomendación. Editable por Jair.",
+  "movimiento": {
+    "minas": {
+      "bien": 0.22,
+      "regular": 0.03,
+      "mal": -0.32
+    },
+    "acereras": {
+      "bien": 0.18,
+      "regular": 0.02,
+      "mal": -0.26
+    },
+    "pesqueras": {
+      "bien": 0.2,
+      "regular": 0.02,
+      "mal": -0.28
+    },
+    "bancos": {
+      "bien": 0.1,
+      "regular": 0.02,
+      "mal": -0.14
+    },
+    "alimentos": {
+      "bien": 0.09,
+      "regular": 0.01,
+      "mal": -0.12
+    },
+    "textil": {
+      "bien": 0.07,
+      "regular": 0.0,
+      "mal": -0.14
+    },
+    "electricas": {
+      "bien": 0.08,
+      "regular": 0.01,
+      "mal": -0.1
+    },
+    "cemento": {
+      "bien": 0.15,
+      "regular": 0.02,
+      "mal": -0.18
+    },
+    "retail": {
+      "bien": 0.12,
+      "regular": 0.01,
+      "mal": -0.15
+    },
+    "diversas": {
+      "bien": 0.13,
+      "regular": 0.01,
+      "mal": -0.16
+    },
+    "fondos": {
+      "bien": 0.08,
+      "regular": 0.01,
+      "mal": -0.1
+    },
+    "afp": {
+      "bien": 0.07,
+      "regular": 0.01,
+      "mal": -0.09
+    }
+  },
+  "_rangoPE_comment": "Rango de P/E 'justo' por sector (datos del doc: minería 5-12x, no minería 12-18x). Si el P/E actual está por debajo = barata; dentro = en rango; por encima = cara. cíclico=true avisa que el P/E engaña (minería/acero/pesca).",
+  "_calibrado": "Rangos P/E calibrados contra valores reales de stockanalysis (jun 2026): Cerro Verde 15.3, BBVA 8.0, Alicorp 10.9. El mercado peruano cotiza a múltiplos más bajos que el promedio del doc.",
+  "rangoPE": {
+    "minas": {
+      "bajo": 9,
+      "alto": 15,
+      "ciclico": true
+    },
+    "acereras": {
+      "bajo": 7,
+      "alto": 13,
+      "ciclico": true
+    },
+    "pesqueras": {
+      "bajo": 6,
+      "alto": 11,
+      "ciclico": true
+    },
+    "bancos": {
+      "bajo": 7,
+      "alto": 12,
+      "ciclico": false
+    },
+    "alimentos": {
+      "bajo": 9,
+      "alto": 14,
+      "ciclico": false
+    },
+    "textil": {
+      "bajo": 6,
+      "alto": 12,
+      "ciclico": true
+    },
+    "electricas": {
+      "bajo": 8,
+      "alto": 15,
+      "ciclico": false
+    },
+    "cemento": {
+      "bajo": 9,
+      "alto": 16,
+      "ciclico": true
+    },
+    "retail": {
+      "bajo": 9,
+      "alto": 16,
+      "ciclico": false
+    },
+    "diversas": {
+      "bajo": 8,
+      "alto": 18,
+      "ciclico": false
+    }
+  },
+  "_rangoEV_comment": "Rango 'justo' de EV/EBITDA por sector. EV/EBITDA = (valor de mercado + deuda neta) ÷ EBITDA. Menor = más barata. No aplica a bancos.",
+  "rangoEVEBITDA": {
+    "minas": {
+      "bajo": 3,
+      "alto": 7
+    },
+    "acereras": {
+      "bajo": 4,
+      "alto": 8
+    },
+    "pesqueras": {
+      "bajo": 4,
+      "alto": 8
+    },
+    "alimentos": {
+      "bajo": 7,
+      "alto": 12
+    },
+    "textil": {
+      "bajo": 4,
+      "alto": 8
+    },
+    "electricas": {
+      "bajo": 6,
+      "alto": 11
+    },
+    "cemento": {
+      "bajo": 6,
+      "alto": 11
+    },
+    "retail": {
+      "bajo": 7,
+      "alto": 12
+    },
+    "diversas": {
+      "bajo": 5,
+      "alto": 12
+    }
+  },
+  "condiciones": {
+    "minas": {
+      "bien": "El metal sigue alto, a la empresa le va bien y tiene planes de expansión o un dividendo cerca.",
+      "regular": "Las cosas siguen más o menos igual: metal estable, sin grandes novedades.",
+      "mal": "El metal (oro/cobre/zinc) se desploma, la empresa se estanca o no se expande, o entran aranceles que golpean al sector."
+    },
+    "bancos": {
+      "bien": "El banco crece (más créditos, baja morosidad) o se expande a nuevos mercados.",
+      "regular": "El banco sigue prestando y ganando como hasta ahora, sin sobresaltos.",
+      "mal": "Sube la morosidad (la gente paga menos), se frena el crédito o la economía se enfría."
+    },
+    "alimentos": {
+      "bien": "La empresa se expande (más plantas, más mercados) y mantiene márgenes.",
+      "regular": "Sigue vendiendo lo de siempre: consumo masivo estable.",
+      "mal": "Suben fuerte las materias primas (aceite, trigo) o el tipo de cambio le aprieta el margen."
+    },
+    "textil": {
+      "bien": "La demanda externa repunta y el dólar acompaña (cobran más en soles por exportar).",
+      "regular": "Exporta lo de siempre, márgenes finos pero estables. Casi no se mueve.",
+      "mal": "Cae la demanda de afuera, sube el algodón/fibra, o entran aranceles a sus exportaciones."
+    },
+    "acereras": {
+      "bien": "Indecopi pone aranceles antidumping contra el acero chino, y/o repunta la construcción.",
+      "regular": "La construcción sigue como está, precio del acero estable.",
+      "mal": "Se frena la construcción, cae el precio del acero o sube fuerte el costo de energía."
+    },
+    "pesqueras": {
+      "bien": "Buena temporada de pesca y el gobierno frena la depredación de embarcaciones chinas; precio de la harina al alza.",
+      "regular": "Temporada normal, cuotas y precios de harina/aceite parecidos a los de siempre.",
+      "mal": "El Niño golpea la biomasa, se alargan las vedas o la pesca ilegal china reduce el recurso."
+    },
+    "electricas": {
+      "bien": "Sube la demanda de electricidad (más industria, más hogares) o entran nuevos proyectos de generación; las tarifas reguladas acompañan.",
+      "regular": "Demanda eléctrica estable y tarifas reguladas como siempre: negocio defensivo, casi sin sobresaltos.",
+      "mal": "Una sequía encarece la generación hidro, hay sobreoferta que baja precios, o un recorte tarifario del regulador aprieta el margen."
+    },
+    "cemento": {
+      "bien": "Repunta la construcción: autoconstrucción, vivienda y obra pública (carreteras, reconstrucción) jalan los despachos de cemento.",
+      "regular": "La construcción sigue como está; despachos de cemento estables.",
+      "mal": "Se frena la obra pública y privada, sube el costo de energía/clinker, o la inestabilidad política congela proyectos."
+    },
+    "retail": {
+      "bien": "El consumo de las familias crece y la empresa se expande (más tiendas, farmacias o metros cuadrados).",
+      "regular": "Consumo estable: la gente compra lo de siempre, sin grandes cambios.",
+      "mal": "Se enfría el consumo (más desempleo, menos ingreso disponible) o el tipo de cambio le aprieta costos importados."
+    },
+    "diversas": {
+      "bien": "Le va bien a SU negocio específico (cada una es distinta): más obras para el puerto, menos siniestros para la aseguradora, más lectores/publicidad para el medio, etc.",
+      "regular": "El negocio sigue su curso normal, sin grandes novedades.",
+      "mal": "Un golpe propio de su rubro (un siniestro grande, caída de publicidad, retraso del proyecto) o un enfriamiento general de la economía."
+    },
+    "fondos": {
+      "bien": "La bolsa peruana sube (ETF) o los inmuebles mantienen inquilinos y rentas (FIBRA); las tasas de interés bajan.",
+      "regular": "Mercado lateral: la canasta se mueve poco y el fondo sigue repartiendo lo suyo.",
+      "mal": "La bolsa cae en bloque (ETF), suben las tasas o se desocupan inmuebles (FIBRA)."
+    },
+    "afp": {
+      "bien": "Crece el fondo administrado y los afiliados; suben los sueldos (más aportes) y la SBS no recorta las comisiones.",
+      "regular": "El negocio sigue estable: cobra su comisión de siempre y reparte dividendos.",
+      "mal": "Reformas del sistema de pensiones (bajar comisiones, retiros masivos de fondos) o menos gente aportando."
+    }
+  },
+  "condicionesEmpresa": {
+    "NEXAPEC1": {
+      "mal": "Si el zinc cae o el riesgo SUNAT (US$164M sin provisionar) se activa."
+    },
+    "CREDITC1": {
+      "bien": "Si BCP logra expandirse a Estados Unidos y crecer fuera del Perú."
+    },
+    "GLORIAI1": {
+      "bien": "Si Gloria se expande más (nuevas plantas, nuevos mercados)."
+    },
+    "MICHEI1": {
+      "regular": "Michell básicamente reparte dividendos: 'regular' es que siga pagando como hasta ahora."
+    },
+    "PERUBAI1": {
+      "bien": "Si el zinc y el plomo suben; ojo que su caja quedó muy justa (US$224 mil).",
+      "mal": "Si los metales caen: es una minera chica y con poco colchón."
+    },
+    "QUIMPAI1": {
+      "bien": "Si sostiene el flujo de caja y reduce su deuda (US$195M).",
+      "mal": "Si su deuda se encarece o cae la demanda de químicos/energía."
+    },
+    "HIDROSI1": {
+      "regular": "Sin deuda y con caja: 'regular' es que siga estable pese al trimestre operativo flojo.",
+      "mal": "Si el resultado operativo negativo se repite trimestre a trimestre."
+    },
+    "ETERNII1": {
+      "bien": "Si la construcción y la autoconstrucción acompañan; ayuda que no tiene deuda.",
+      "mal": "Si la actividad de construcción se frena (su negocio es cíclico)."
+    },
+    "MAPFSGC1": {
+      "mal": "Un evento catastrófico (sismo, clima) eleva la siniestralidad y golpea el resultado."
+    },
+    "PACIFIC1": {
+      "bien": "Si mantiene el ritmo del Q1 (utilidad fuerte) con baja siniestralidad y buenos mercados.",
+      "mal": "Alta siniestralidad o mercados financieros en rojo."
+    },
+    "BPICHPC1": {
+      "bien": "Si mejora su rentabilidad (ROE) y controla la morosidad.",
+      "mal": "Si sube la morosidad o se comprime su margen financiero."
+    },
+    "FPROEMP1": {
+      "bien": "Si controla la morosidad y su cartera de micro-créditos crece sana.",
+      "mal": "Si sube la morosidad de los pequeños negocios a los que presta."
+    },
+    "INVFALC1": {
+      "bien": "Si a las empresas del grupo (Falabella) les va bien, sube el valor de sus participaciones.",
+      "mal": "Si sus participadas caen o el retail se enfría, su utilidad de inversión se resiente."
+    },
+    "FUTURAI1": {
+      "bien": "Si bajan las tasas y sube la demanda inmobiliaria; ayuda que no tiene deuda.",
+      "mal": "Si el ciclo inmobiliario se enfría o suben mucho las tasas."
+    },
+    "IIDEI1": {
+      "regular": "Es diminuta y de rentas: 'regular' es que mantenga inquilinos y siga estable.",
+      "mal": "Si pierde inquilinos o el mercado inmobiliario se enfría."
+    },
+    "MIBANC1": {
+      "bien": "Si crece su cartera sana y controla la morosidad; ayuda que la economía de los pequeños negocios mejore.",
+      "mal": "Si sube la morosidad de sus clientes (pequeños negocios sensibles al ciclo)."
+    },
+    "INTSEGC1": {
+      "bien": "Si bajan los siniestros y los mercados financieros rinden.",
+      "mal": "Alta siniestralidad o mercados en rojo golpean su resultado."
+    },
+    "ELECPBC1": {
+      "bien": "Buena hidrología (lluvias) y demanda eléctrica firme; sin deuda, convierte eso en caja.",
+      "mal": "Sequías que bajen la generación hidro, o precios de energía flojos."
+    },
+    "PORTAC1": {
+      "bien": "Si bajan las tasas y se reactiva el crédito hipotecario (más ventas de vivienda).",
+      "mal": "Tasas altas o crédito frenado enfrían la venta de viviendas y lotes."
+    },
+    "PRIMAC1": {
+      "bien": "Crece el fondo administrado y los afiliados; empleo firme (más aportes) y sin recortes de comisión.",
+      "mal": "Reformas de pensiones (comisiones a la baja, retiros de fondos) o menos gente aportando."
+    },
+    "INTEGRC1": {
+      "bien": "Crece el fondo administrado y los afiliados; empleo firme (más aportes) y sin recortes de comisión.",
+      "mal": "Reformas de pensiones (comisiones a la baja, retiros de fondos) o menos gente aportando."
+    },
+    "PROFUTC1": {
+      "bien": "Crece el fondo administrado y los afiliados; empleo firme (más aportes) y sin recortes de comisión.",
+      "mal": "Reformas de pensiones (comisiones a la baja, retiros de fondos) o menos gente aportando."
+    },
+    "HABITAC1": {
+      "bien": "Crece el fondo administrado y los afiliados; empleo firme (más aportes) y sin recortes de comisión.",
+      "mal": "Reformas de pensiones (comisiones a la baja, retiros de fondos) o menos gente aportando."
+    },
+    "PETROBC1": {
+      "bien": "Si Talara opera a full con buenos márgenes de refinación y logra ordenar su deuda.",
+      "mal": "Si los márgenes caen o se complica refinanciar la deuda: es su mayor riesgo."
+    },
+    "RVIA5BC1": {
+      "bien": "Si el tráfico por el peaje crece y mantiene su política de dividendos.",
+      "mal": "Si cae el tráfico o se acerca el fin de la concesión sin renovación."
+    },
+    "INCRAIC1": {
+      "bien": "Si el turismo a Machu Picchu se recupera con fuerza y sin conflictos.",
+      "mal": "Bloqueos, protestas o menos turistas golpean directo su tren."
+    },
+    "AUNA": {
+      "bien": "Si recupera márgenes en México y baja el apalancamiento debajo de 3x.",
+      "mal": "Si México sigue flojo o suben las tasas: su deuda alta pesa más."
+    }
+  },
+  "notaSector": {
+    "minas": "Estas tres son mineras GRANDES. Las mineras junior (como PPX o PML) pueden ser MUCHO más volátiles — suben o bajan muchísimo.",
+    "pesqueras": "Las pesqueras son estacionales: dependen de la temporada y las vedas.",
+    "textil": "Estas acciones casi no se negocian, así que su precio se mueve POCO (no esperes saltos grandes).",
+    "acereras": "Negocio cíclico: se mueve con la construcción y el precio del acero.",
+    "electricas": "Negocio regulado y defensivo: son de las acciones que MENOS se mueven. Su gracia suele ser el dividendo, no el salto de precio.",
+    "cemento": "Cíclico: sigue al ritmo de la construcción y la obra pública. Ferreycorp además depende del capex de minería y construcción.",
+    "retail": "Grupo mixto: InRetail (consumo/retail), IFS (holding financiero) y Aenza (construcción/infraestructura) NO se mueven por lo mismo — míralas una por una.",
+    "diversas": "Cajón de empresas de rubros MUY distintos (salud, seguros, puerto, medios, holding, forestal). NO se mueven por lo mismo: léelas una por una. Varias son muy poco líquidas, así que su precio en pantalla puede ser viejo.",
+    "fondos": "Un fondo se mueve como su canasta: el ETF de acciones cae si la bolsa cae; el de bonos y la FIBRA sufren cuando las tasas suben. No hay P/E de empresa que mirar aquí.",
+    "afp": "Una AFP vive de la COMISIÓN que cobra por administrar el fondo de pensiones. Es un negocio estable y muy rentable (por eso paga dividendos altos), pero su gran riesgo es REGULATORIO: el Estado (SBS) puede cambiar las reglas. No se lee por P/E como una fábrica."
+  }
+}

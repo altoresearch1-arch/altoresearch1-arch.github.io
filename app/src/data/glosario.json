@@ -1,0 +1,110 @@
+{
+  "_comment": "Glosario en árbol por capas. Cada rama agrupa términos; cada término tiene definición simple + ejemplo opcional. No hace falta llenarlo entero para lanzar: armar el árbol y llenar lo esencial primero, agregar profundidad con usuarios.",
+  "ramas": [
+    {
+      "id": "deuda",
+      "titulo": "Deuda",
+      "terminos": [
+        {
+          "t": "Deuda total",
+          "d": "Todo lo que la empresa debe (préstamos, bonos). Por sí sola dice poco; hay que compararla con su capacidad de generar caja.",
+          "ej": "Si una empresa debe 100 pero genera 50 de caja al año, su deuda es manejable. Si genera 5, ya es pesada."
+        },
+        {
+          "t": "Deuda neta",
+          "d": "Deuda total menos la caja que tiene. Se resta la caja porque podría usarse para pagar deuda hoy mismo.",
+          "ej": "Debe 100 y tiene 30 en caja → deuda neta 70."
+        },
+        {
+          "t": "Deuda / EBITDA",
+          "d": "Cuántos años de ganancia operativa tomaría pagar la deuda. 1x es cómodo; 4x ya pide atención.",
+          "ej": "Deuda/EBITDA de 4x significa ~4 años de EBITDA para saldar lo que debe."
+        },
+        {
+          "t": "Deuda en USD vs PEN",
+          "d": "Clave en Perú: si una empresa gana en soles pero debe en dólares, un dólar caro le encarece la deuda.",
+          "ej": "Sube el dólar y la cuota de un préstamo en USD pesa más, aunque las ventas en soles no cambien."
+        },
+        { "t": "Vencimientos", "d": "Cuándo hay que pagar la deuda. Muchos vencimientos juntos pueden apretar la caja.", "ej": "" }
+      ]
+    },
+    {
+      "id": "fcf",
+      "titulo": "FCF — Flujo de Caja Libre",
+      "terminos": [
+        {
+          "t": "Qué es el FCF",
+          "d": "Flujo operativo menos el capex (inversión). Es la caja que de verdad le queda libre a la empresa.",
+          "ej": "Genera 100 de caja operativa y gasta 30 en mantener equipos → FCF de 70."
+        },
+        {
+          "t": "Por qué FCF ≠ utilidad neta",
+          "d": "La utilidad incluye cosas que no son caja (depreciación, ventas a crédito). El FCF mira el dinero real que entra y sale.",
+          "ej": "Una empresa puede reportar utilidad y aun así quedarse sin caja si vendió todo al fiado."
+        },
+        {
+          "t": "Capex mantenimiento vs expansión",
+          "d": "Mantenimiento es lo que cuesta seguir operando igual; expansión es crecer. Mucho capex de expansión baja el FCF hoy a cambio de futuro.",
+          "ej": ""
+        },
+        { "t": "FCF yield", "d": "FCF dividido entre el valor de la empresa. Mide cuánta caja libre genera por cada sol invertido.", "ej": "" }
+      ]
+    },
+    {
+      "id": "dividendos",
+      "titulo": "Dividendos",
+      "terminos": [
+        { "t": "Dividend yield", "d": "El dividendo anual dividido entre el precio de la acción. Es el 'cuánto me paga' en porcentaje.", "ej": "Acción de 10 que paga 0.50 al año → yield de 5%." },
+        { "t": "Payout ratio", "d": "Qué porcentaje de la ganancia se reparte como dividendo. Muy alto puede ser insostenible.", "ej": "Gana 100 y reparte 80 → payout de 80%." },
+        { "t": "Ordinario vs extraordinario", "d": "El ordinario es recurrente; el extraordinario es un pago puntual que no se repite necesariamente.", "ej": "" },
+        { "t": "Fecha ex-dividendo", "d": "Para cobrar un dividendo hay que tener la acción antes de esta fecha.", "ej": "" },
+        { "t": "Por qué algunas pagan en USD", "d": "Varias mineras peruanas pagan dividendos en dólares porque facturan en dólares.", "ej": "" }
+      ]
+    },
+    {
+      "id": "valoracion",
+      "titulo": "Valoración",
+      "terminos": [
+        { "t": "P/E (precio / utilidad)", "d": "Cuánto pagas por cada sol de ganancia. Bajo parece barato, pero ojo con los negocios cíclicos.", "ej": "P/E de 10 = pagas 10 por cada 1 de ganancia anual." },
+        { "t": "P/B (precio / valor en libros)", "d": "Compara el precio con el patrimonio contable. Útil sobre todo en bancos.", "ej": "" },
+        { "t": "EV/EBITDA", "d": "Valor de la empresa ENTERA (todas las acciones + su deuda neta) ÷ su ganancia operativa (EBITDA). A diferencia del P/E, mira el negocio completo y toma en cuenta la deuda, así que permite comparar empresas que deben distinto. Menor = más barata.", "ej": "Dos empresas con el mismo P/E pueden verse muy distintas en EV/EBITDA si una tiene mucha más deuda que la otra." }
+      ]
+    },
+    {
+      "id": "rentabilidad",
+      "titulo": "Rentabilidad",
+      "terminos": [
+        { "t": "ROE", "d": "Cuánta ganancia genera la empresa por cada sol de patrimonio de los accionistas.", "ej": "ROE de 20% = genera 20 de ganancia por cada 100 de patrimonio." },
+        { "t": "Márgenes", "d": "Qué porción de las ventas se convierte en ganancia. Margen alto = negocio más rentable por venta.", "ej": "" }
+      ]
+    },
+    {
+      "id": "minero",
+      "titulo": "Negocio minero",
+      "terminos": [
+        { "t": "Ley del mineral", "d": "Cuánto metal hay por tonelada de roca. A mayor ley, más rentable extraer.", "ej": "" },
+        { "t": "Cash cost", "d": "Cuánto le cuesta a la mina producir una unidad de metal. Si el precio del metal cae por debajo, pierde dinero.", "ej": "" },
+        { "t": "Reservas vs recursos", "d": "Reservas son lo que es rentable extraer hoy; recursos es lo que podría serlo. No es lo mismo.", "ej": "" }
+      ]
+    },
+    {
+      "id": "riesgo",
+      "titulo": "Riesgo",
+      "terminos": [
+        { "t": "Volatilidad", "d": "Qué tanto se mueve el precio. Más volatilidad = más sustos, en ambas direcciones.", "ej": "" },
+        { "t": "Beta", "d": "Cuánto se mueve la acción respecto al mercado. Beta 1 va con el mercado; mayor a 1, amplifica.", "ej": "Beta 0.24 = se mueve poco aunque el mercado salte." },
+        { "t": "Riesgo país", "d": "El riesgo extra por invertir en un país (política, economía). Afecta a todas las empresas locales.", "ej": "" }
+      ]
+    },
+    {
+      "id": "como-leer",
+      "titulo": "Cómo leer cada tipo de empresa",
+      "terminos": [
+        { "t": "Cómo leer una MINERA", "d": "No te fíes solo del P/E (es cíclico). Mira el precio del metal, el cash cost y las reservas. La ganancia sube y baja con el metal.", "ej": "Con el oro caro, la ganancia se infla y el P/E se ve bajísimo aunque la acción esté cara." },
+        { "t": "Cómo leer un BANCO", "d": "Otro animal: no tiene 'ventas' ni margen bruto. Gana con la diferencia entre lo que cobra y paga por intereses (margen financiero). Mira morosidad, ROE y ratios de capital. Lo regula la SBS, no solo la SMV.", "ej": "Sus depósitos no son un 'peligro' como una deuda: son su materia prima." },
+        { "t": "Cómo leer una de CONSUMO", "d": "Negocio de caja predecible (la gente compra todos los meses). Aguanta más deuda. Mira márgenes y estabilidad de ventas.", "ej": "Puede tener deuda alta y aun así ser sana si su caja es constante." },
+        { "t": "Cómo leer una INDUSTRIAL/CONSTRUCCIÓN", "d": "Más ligada al ciclo económico y a la inversión. Mira la cartera de pedidos, márgenes y el nivel de deuda frente a su caja.", "ej": "" }
+      ]
+    }
+  ]
+}

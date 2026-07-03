@@ -1,0 +1,30 @@
+# === Dependencias / build ===
+node_modules/
+app/node_modules/
+app/dist/
+dist/
+
+# === Config local de la máquina (permisos de Claude, no compartir) ===
+.claude/settings.local.json
+
+# === Python (extractor) ===
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# === Secretos / entorno (NUNCA subir) ===
+.env
+.env.*
+*.key
+*.pem
+*.pfx
+secrets*.json
+credenciales*.json
+
+# === Basura del SO / editores ===
+.DS_Store
+Thumbs.db
+*.local
+*.log

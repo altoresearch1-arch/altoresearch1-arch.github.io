@@ -1,0 +1,199 @@
+{
+  "_comment": "Preguntas del quiz. Cada opción suma a un PERFIL (perfil) o fija el SECTOR. La pregunta de sector usa 'sector' en vez de 'perfil'. Perfiles válidos: apuesta, dividendos, estable, mixto.",
+  "preguntas": [
+    {
+      "id": "q1",
+      "texto": "¿Qué buscas en una inversión?",
+      "tipo": "perfil",
+      "opciones": [
+        {
+          "texto": "Movimiento fuerte, que se mueva mucho",
+          "valor": "apuesta",
+          "nota": "buscas que suba rápido, y aguantas que también baje"
+        },
+        {
+          "texto": "Que me pague cada cierto tiempo",
+          "valor": "dividendos",
+          "nota": "quieres ingresos: que te paguen dividendos seguido"
+        },
+        {
+          "texto": "Una apuesta de crecimiento",
+          "valor": "apuesta",
+          "nota": "apuestas a que la empresa crezca a futuro"
+        },
+        {
+          "texto": "Algo estable y aburrido",
+          "valor": "estable",
+          "nota": "prefieres tranquilidad, sin sustos"
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "texto": "¿Cuánto riesgo aguantas?",
+      "tipo": "perfil",
+      "opciones": [
+        {
+          "texto": "Alto, voy con todo",
+          "valor": "apuesta",
+          "nota": "puedes ver caídas fuertes sin venderte del susto"
+        },
+        {
+          "texto": "Medio, algo de vaivén está bien",
+          "valor": "mixto",
+          "nota": "aceptas que suba y baje, pero no a lo loco"
+        },
+        {
+          "texto": "Bajo, quiero dormir tranquilo",
+          "valor": "estable",
+          "nota": "prefieres poco movimiento y previsible"
+        },
+        {
+          "texto": "Cero sustos",
+          "valor": "dividendos",
+          "nota": "nada de volatilidad: mejor que te paguen y ya"
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "texto": "¿Qué sector te llama más?",
+      "tipo": "sector",
+      "opciones": [
+        {
+          "texto": "Minas",
+          "valor": "minas",
+          "nota": "la que más se mueve"
+        },
+        {
+          "texto": "Bancos",
+          "valor": "bancos",
+          "nota": "se mueve poco, estable"
+        },
+        {
+          "texto": "Alimentos y Bebidas",
+          "valor": "alimentos",
+          "nota": "se mueve poco, defensiva"
+        },
+        {
+          "texto": "Eléctricas",
+          "valor": "electricas",
+          "nota": "regulada, casi no se mueve, paga dividendos"
+        },
+        {
+          "texto": "Cemento y construcción",
+          "valor": "cemento",
+          "nota": "cíclica, se mueve con la construcción"
+        },
+        {
+          "texto": "Retail y holdings",
+          "valor": "retail",
+          "nota": "consumo y grupos, mixta"
+        },
+        {
+          "texto": "Diversas (salud, seguros, puerto…)",
+          "valor": "diversas",
+          "nota": "rubros variados, una por una"
+        },
+        {
+          "texto": "Textil",
+          "valor": "textil",
+          "nota": "casi no se mueve"
+        },
+        {
+          "texto": "Acereras",
+          "valor": "acereras",
+          "nota": "se mueve bastante, cíclica"
+        },
+        {
+          "texto": "Pesqueras",
+          "valor": "pesqueras",
+          "nota": "se mueve harto, estacional"
+        },
+        {
+          "texto": "Fondos: canastas de acciones, bonos o inmuebles (FIBRAs y ETFs)",
+          "nota": "para no apostar a una sola empresa",
+          "valor": "fondos"
+        },
+        {
+          "texto": "AFP: las administradoras de tu fondo de pensiones",
+          "valor": "afp",
+          "nota": "negocio estable, dividendos altos, riesgo regulatorio"
+        }
+      ]
+    },
+    {
+      "id": "q4",
+      "texto": "¿Por cuánto tiempo lo dejarías?",
+      "tipo": "perfil",
+      "opciones": [
+        {
+          "texto": "Semanas, entrar y salir",
+          "valor": "apuesta",
+          "nota": "comprar y vender rápido, aprovechar el movimiento"
+        },
+        {
+          "texto": "Meses",
+          "valor": "mixto",
+          "nota": "un plazo medio, sin apuro"
+        },
+        {
+          "texto": "Un par de años",
+          "valor": "estable",
+          "nota": "dejarlo madurar con calma"
+        },
+        {
+          "texto": "Años, cobrando dividendos",
+          "valor": "dividendos",
+          "nota": "largo plazo, viviendo de lo que paga"
+        }
+      ]
+    }
+  ],
+  "perfiles": {
+    "apuesta": {
+      "nombre": "Apuesta de crecimiento",
+      "descripcion": "Buscas movimiento y crecimiento, y aguantas la volatilidad a cambio de mayor potencial. Más vaivén, más riesgo."
+    },
+    "dividendos": {
+      "nombre": "Generador de ingresos",
+      "descripcion": "Prefieres que la inversión te pague de forma periódica. Te importa el flujo constante más que el salto de precio."
+    },
+    "estable": {
+      "nombre": "Defensiva / estable",
+      "descripcion": "Quieres tranquilidad: negocios predecibles, poco sobresalto, dormir sin pendientes."
+    },
+    "mixto": {
+      "nombre": "Equilibrado",
+      "descripcion": "Un punto medio: algo de crecimiento, algo de estabilidad. Ni todo a una carta ni todo quieto."
+    }
+  },
+  "sectores": {
+    "minas": "Minas",
+    "bancos": "Bancos",
+    "alimentos": "Alimentos y Bebidas",
+    "electricas": "Eléctricas",
+    "cemento": "Cemento y construcción",
+    "retail": "Retail y holdings",
+    "diversas": "Diversas",
+    "textil": "Textil",
+    "acereras": "Acereras",
+    "pesqueras": "Pesqueras",
+    "fondos": "Fondos (FIBRAs y ETFs)",
+    "afp": "AFP (fondos de pensiones)"
+  },
+  "sectorTips": {
+    "minas": "Ojo: en mineras el P/E engaña porque es cíclico. Míralas por el precio del metal, el cash cost y las reservas.",
+    "bancos": "Un banco es otro animal: no tiene 'ventas'. Gana por el margen financiero (lo que cobra menos lo que paga). Mira morosidad y ROE.",
+    "alimentos": "Consumo masivo = caja predecible (la gente compra todos los meses). Por eso aguantan más deuda. Mira los márgenes.",
+    "electricas": "Negocio regulado y defensivo: casi no se mueve, su gracia es el dividendo. Cargan deuda alta y eso es normal en utilities.",
+    "cemento": "Cíclicas: se mueven con la construcción y la obra pública. Ferreycorp además depende del capex de la minería.",
+    "retail": "Grupo mixto: InRetail (consumo), IFS (holding financiero) y Aenza (construcción). En holdings, los números individuales engañan: mira el consolidado.",
+    "diversas": "Cajón de rubros muy distintos (salud, seguros, puerto, medios). No se mueven por lo mismo: léelas una por una. Varias son poco líquidas.",
+    "textil": "Industria ligada al ciclo y a la exportación. Mira los márgenes y si vende afuera (cobra en dólares).",
+    "acereras": "Ligadas a la construcción y al precio del acero/hierro. Negocio cíclico: sube y baja con la economía.",
+    "pesqueras": "Negocio estacional: depende de las vedas y del precio de la harina y el aceite de pescado.",
+    "fondos": "Un FONDO no es una empresa: es una canasta. El ETF junta muchas acciones (o bonos) en un solo valor, y la FIBRA junta inmuebles que pagan rentas. Son la forma más simple de empezar sin apostar todo a una sola empresa.",
+    "afp": "Una AFP no es tu fondo de pensiones: es la EMPRESA que lo administra y cobra una comisión por hacerlo. Negocio muy estable y rentable (por eso pagan dividendos altos), pero depende de las reglas que ponga el Estado (SBS)."
+  }
+}

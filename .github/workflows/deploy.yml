@@ -1,0 +1,104 @@
+name: Robot diario y despliegue
+
+# ─────────────────────────────────────────────────────────────────────────
+#  ¿Qué hace esto?
+#  - De LUNES a VIERNES por la noche (hora de Perú), un robot en la nube baja
+#    los datos frescos de la BVL (precios, históricos, dividendos, EPS, hechos),
+#    corre la auditoría, los commitea de vuelta al repo y REPUBLICA la web.
+#  - La PC de Jair NO necesita estar prendida: todo corre en los servidores de
+#    GitHub (gratis para repos públicos).
+#  - También publica al hacer push a main (deploy inmediato) y hay un botón
+#    "Run workflow" para dispararlo a mano.
+# ─────────────────────────────────────────────────────────────────────────
+
+on:
+  schedule:
+    # 03:00 UTC de MARTES a SÁBADO  ==  22:00 (10 p.m.) de LUNES a VIERNES en
+    # Perú (UTC-5). Corre tras el cierre de la BVL y deja los datos listos para
+    # la mañana siguiente. (GitHub usa siempre UTC; por eso el desfase de día.)
+    - cron: '0 3 * * 2-6'
+  push:
+    branches: [main]
+  workflow_dispatch: {}   # botón manual "Run workflow" en la pestaña Actions
+
+# Permisos MÍNIMOS del token automático (GITHUB_TOKEN):
+#   contents: write        -> el robot commitea los JSON actualizados al repo
+#   pages: write / id-token -> publicar en GitHub Pages
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# Un solo despliegue a la vez; no cancelar el que esté en curso.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  # 1) Solo de noche o a mano: refresca los datos y los guarda en el repo.
+  actualizar-datos:
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependencias del extractor
+        run: pip install -r extractor/requirements.txt
+
+      - name: Correr el robot (precios, históricos, dividendos, EPS, auditoría)
+        run: python extractor/actualizar_todo.py
+
+      - name: Commit de los datos frescos (si cambiaron)
+        run: |
+          git config user.name  "robot-alto"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add app/src/data
+          if git diff --cached --quiet; then
+            echo "Sin cambios en los datos: nada que commitear."
+          else
+            git commit -m "datos: actualización automática $(date -u +%Y-%m-%d) [skip ci]"
+            git push
+          fi
+
+  # 2) Build de la PWA y publicación en GitHub Pages.
+  #    Corre tras 'actualizar-datos' (para tomar los datos frescos) y también
+  #    en push (donde 'actualizar-datos' se salta).
+  desplegar:
+    needs: [actualizar-datos]
+    if: always() && (needs.actualizar-datos.result == 'success' || needs.actualizar-datos.result == 'skipped')
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main   # toma el commit más reciente (incluye los datos que acaba de guardar el robot)
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: Instalar dependencias del front
+        run: npm ci
+        working-directory: app
+
+      - name: Build de la PWA
+        run: npm run build
+        working-directory: app
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: app/dist
+
+      - name: Publicar en GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4

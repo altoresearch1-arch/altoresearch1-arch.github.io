@@ -1,0 +1,138 @@
+# 🔁 RETOMAR EL PROYECTO — Handoff (act. 01-jul-2026 por Fable)
+
+Hola. Este archivo es el **punto de entrada**. Lo empezó Opus y lo actualizó Fable tras el
+"pase premium" del 01-jul (detalle completo arriba de `ESTADO_DEL_PROYECTO.md`).
+Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTADO_DEL_PROYECTO.md`
+(y la filosofía en `ALTO_PROYECTO_COMPLETO.md`). Los **enlaces** están todos en `extractor/FUENTES.md`.
+
+---
+
+## 1. Qué es (en 3 líneas)
+App web **educativa** de la Bolsa de Valores de Lima (BVL). El usuario hace un quiz (perfil × sector)
+y descubre **empresas para estudiar** — NUNCA se recomienda comprar. Producto = **credibilidad**.
+Negro y dorado (#D4AF37). React+Vite en `app/`. Datos en `app/src/data/*.json`, generados por `extractor/`.
+
+## 2. Las 9 Reglas de Oro (innegociables) — resumen
+1. **Cero datos inventados** (lo que falta queda vacío/"pendiente"). 2. Jerarquía de fuentes.
+3. EPS en moneda original. 4. Estados **INDIVIDUALES** SMV. 5. Lenguaje simple. 6. Verificar contra la
+fuente. 7. No mezclar rumor con hecho (etiqueta documentado/rumor). 8. **Nunca prometer rendimientos.**
+9. La app **educa, NO recomienda**. (Detalle en `ALTO_PROYECTO_COMPLETO.md`.)
+
+## 3. Estado hoy: **114 valores** (tandas 7-10 + AUNA/PPX: 02-03-jul-2026, Opus — ver ESTADO_DEL_PROYECTO.md)
+> AUNA = piloto mercado americano (NYSE, datos consolidados). PPX = junior oro/plata. UI pulida: el LOGO
+> del inicio es una moneda anti-estrés (clic → salta/gira/suena, guiño a TF2); header transparente; gráfico
+> de dividendos sin choques. Auditorías (estructural + total) en 0 problemas. PRÓXIMA SESIÓN: bugs→seguridad→lanzar (§7).
+**Tanda 10 (11):** estatales Petroperú/SEDAPAL/COFIDE, Red Vial 5 (peaje), Paramonga, IEQSA,
+Electrosur, Electro Sur Este, Inca Rail, Compartamos, La Positiva Vida. **Mercado peruano relevante YA
+agotado** (resto = liquidaciones/subs extranjeras/agro en crisis). **Tips enriquecidos ~7-9 c/u**
+(`enrich_tips.py`, datos confirmados). **Términos 112→160**. **Nuevo `auditoria_total.py`** (coherencia):
+0 problemas serios, 55 avisos legítimos; estructural 0 problemas; consola limpia.
+**Tanda 9 (13):** SECTOR NUEVO "afp" (Prima/Integra/Profuturo/Habitat) + 4 bancos (Mibanco, BanBif,
+B. Falabella, B. Ripley) + Interseguro + 3 eléctricas (Electroperú, Electro Dunas, San Gabán) + Los
+Portales. Casi todas sin precio (no negocian) pero pagan dividendos. Insight verificado: **retiros de
+AFP → la BVL/mineras caen** (riesgo en AFP + aviso en mineras grandes). Términos 102→112. Contexto web
+en Quimpac/Electroperú/Hidrostal/Mibanco/Interseguro/Eternit.
+**Tanda 8 (4):** Financiera Proempresa (bancos), Inverfal Perú (holding Falabella, diversas),
+Futura Consorcio Inmobiliario e Inmobiliaria IDE (diversas). **Tanda 7 (7):** Mapfre + Pacífico
+(aseguradoras, diversas), Banco Pichincha (bancos), Quimpac + Hidrostal + Eternit (industriales,
+diversas), Perubar (minas). Todas ilíquidas, datos SMV/BVL confirmados, con tesis/tips/catalizadores
+/escenarios. **Tooltips ampliados**: tesis+tips ahora pasan por `Glosado`; `terminos.json` 57→91
+(holding, streaming, siniestralidad, penny stock, junior, etc.). **Propiedad entre empresas**:
+investigado + reporte a Jair, PENDIENTE su OK (diseño: `relaciones.json` + bloque "🧬 Familia
+empresarial" bidireccional; 2 modelos A dividendos / B intercompañía). Fix: `auditoria.py` UTF-8.
+Sigue lo de las tandas 4-6 abajo:
+### Tandas 4-6 (02-jul-2026; sector nuevo "fondos")
+Tanda 5: FIBRAs y ETFs (sector "fondos"), BAP (XBRL OK), SCCO/PML (tipo AUNA). Tanda 6:
+Saga, La Positiva, Hermes, INDECO, Grupo BVL, Cervesur, Concesu, FOSSAL, Andex, Credicorp
+Capital, Pucalá (sin_documentos). **Dividendos BVL**: `fetch_beneficios.py` parcha lo que
+stockanalysis no cubre Y CORRIGE la moneda (14 empresas declaran en US$ aunque coticen en S/
+— hallazgo de Jair con Nexa; stockanalysis convierte y engaña). **EPS distorsionados**:
+`fix_eps.py` SIEMPRE tras fetch_anual_eps (si no, se pisan las correcciones — pasó una vez).
+**TODO EN UNO**: `python extractor/actualizar_todo.py` (diario) / `--trimestral` (Q2: antes
+cambiar "trimestre" en empresas_config.json) / `--con-build`. Cierra con `auditoria.py`
+(0 problemas estructurales al 02-jul; 12 avisos legítimos documentados en ESTADO).
+Cada una tiene: fundamentos SMV + precio BVL + dividendos + P/E verificado + tesis + tips + catalizadores.
+Sectores: minas 10, alimentos 8, diversas 7, eléctricas 5, bancos 4 (BBVA, BCP, Interbank, Scotiabank),
+textil 3, acereras 3, cemento 3, retail 3, pesqueras 2.
+Config maestro: `extractor/empresas_config.json` (smvId, bvlNemonico, perfiles, monedaForzada, esHolding).
+
+## 4. FUENTES / LINKS (todo en `extractor/FUENTES.md`; los críticos aquí)
+- **SMV — estados financieros (XBRL individual):** https://www.smv.gob.pe/SIMV/Frm_InformacionFinanciera
+  Lo usan `smv_extractor.py` / `run_batch.py` / `fetch_anual_eps.py`. Bancos: página de detalle HTML.
+- **BVL — precio de cierre:** `POST https://dataondemand.bvl.com.pe/v1/stock-quote/market` (body `{}`).
+  Campo correcto = `last` (cierre real) con `lastDate`; NO usar `sell` (es oferta). Lo usa `fetch_precios.py`.
+- **BVL — precios HISTÓRICOS (RESUELTO 01-jul):** `GET https://dataondemand.bvl.com.pe/v1/stock-quote/share-values/<NEM>?startDate=&endDate=`
+  → cierres diarios del rango. Lo usa `fetch_historicos.py` → `historicos.json` (sparkline +
+  termómetro de volatilidad). Quirks: serie rellenada + ceros (se filtran); receta en FUENTES.md.
+- **Dividendos (principal): stockanalysis.com/quote/bvl/<NEMONICO>/dividend/** → `div_stockanalysis.py`.
+  Fechas de entrega vigentes: BVL https://documents.bvl.com.pe/empresas/entrder1.htm (`div_extractor.py`, respaldo).
+- **P/E y perfiles de empresa reales:** stockanalysis.com/quote/bvl/<NEM>/statistics/ y /quote/bvl/<NEM>/.
+- **Tipo de cambio USD/PEN:** https://open.er-api.com/v6/latest/USD → `fetch_anual_eps.py`.
+- **SMV — Hechos de Importancia:** https://www.smv.gob.pe/SIMV/ → "Ir a Hechos de importancia general".
+  Token de sesión que EXPIRA (se saca fresco de /SIMV/); form ASP.NET de 2 postbacks; usar `requests`
+  (NO Chrome). Lo usa `extractor/hechos_importancia.py`. (Receta completa en FUENTES.md.)
+- **Informes propios de Jair (su criterio):** `C:\Users\User\Desktop\INFORMES REALIZADOS ALTO RESEARCH`
+  (NEXA, MINSUR, BVN, VOLCAN, CVERDE, BACKUS, BROCAL, CORONA + DATOS_VERIFICADOS.md). Base de tesis/escenarios.
+
+## 5. Cómo correr todo (comandos exactos)
+- **App (dev):** `npm --prefix app run dev` → puerto 5173 (o usa el preview; había un 5174 de sesión paralela).
+- **Regenerar datos (cuando salga el Q2 o para refrescar):**
+  - Fundamentos SMV: `python extractor/run_batch.py`  → `empresas.json` (regenera TODO).
+  - Precios BVL: `python extractor/fetch_precios.py`  → `precios.json` (correr tras el cierre; los ilíquidos
+    muestran su último cierre con fecha real).
+  - Históricos + volatilidad: `python extractor/fetch_historicos.py` → `historicos.json` (a diario,
+    junto al precio; alimenta el gráfico y el termómetro de la ficha).
+  - Dividendos: `python extractor/div_stockanalysis.py` → `dividendos.json`.
+  - EPS anual + TC: `python extractor/fetch_anual_eps.py` → `eps_anual.json`.
+  - Hechos de Importancia POR EMPRESA (12 meses, BVL): `python extractor/fetch_hechos.py` → `hechos.json`
+    (se muestra en la ficha 📰). El del SMV (`hechos_importancia.py`) queda de respaldo.
+- **Agregar una empresa:** añadir línea a `empresas_config.json` (smvId del catálogo `empresas_smv.json`,
+  bvlNemonico del mercado BVL) y correr los 4 scripts. Luego escribir a mano tesis/tips/catalizadores.
+- **Datos manuales (editables, no los pisa el extractor):** tesis.json, tips.json, catalizadores.json,
+  escenarios.json, guias.json, quiz.json, terminos.json, glosario.json, pildoras.json, config.json.
+
+## 6. Hallazgos / quirks importantes (NO re-descubrir)
+- **Bug de precios (RESUELTO):** `fetch_precios.py` usaba `sell` (oferta) como cierre; ahora usa `last`.
+- **EPS distorsionados (RESUELTOS con stockanalysis):** Minsur, Backus, InRetail, IFS, Volcan, Corona
+  daban P/E absurdos por clase de acción/moneda/holding. Corregidos en `eps_anual.json` (anotado en cada uno).
+- **Holdings** (GR Holding, Ferreycorp, InRetail, IFS, UNACEM, Inv. Portuarias Chancay): `esHolding:true` en
+  config → su estado individual son dividendos de subsidiarias, no ventas; `run_batch` pone nota en margen/ingresos.
+- **Margen inverosímil (>300%):** `run_batch` lo suprime con nota (ej. Bosques Amazónicos, ingresos casi nulos).
+- **AUNA:** no presenta EE.FF. individuales a la SMV (cotiza en NYSE) → solo precio, fundamentos pendientes.
+- **Bancos:** FCF muestra nota "no aplica, se mide por CAPITAL/CET1 y ROE"; usan detalle HTML SMV (sin XBRL).
+- **UI reciente:** se eliminó "Histórico trimestral"; dividendos muestran pagos INDIVIDUALES con fecha + mini-gráfica
+  2025 vs 2026 (`DividendoGrafico.jsx`) con flecha ▲ solo si 2026 ya superó a 2025 (honesto); empresas sin dividendos
+  muestran aviso arriba y solo el simulador de precio.
+- **Pase premium (01-jul):** PWA instalable (vite-plugin-pwa, íconos en `app/public/iconos/`),
+  sparkline + termómetro de volatilidad en la ficha (leen `historicos.json`), vista **Explorar**
+  (buscador/filtros) + **Comparador** de 2 empresas, micro-animaciones sin dependencias
+  (`lib/anim.jsx`: CountUp, Reveal; respetan prefers-reduced-motion), reveal del quiz.
+  Ilíquidas: etiqueta "poco negociada" SIN número de volatilidad (sería falso — la BVL rellena
+  la serie). NEXAPEC1 con fundamentos null → RESUELTO con `extractor/run_uno.py <TICKER>`.
+- **Actualización 2 (01-jul):** rutas por hash (#/empresa/BVN — links compartibles + botón
+  atrás), inicio con "Así cerró la BVL" (top subidas/bajadas del cierre, de precios.json),
+  favoritos ★ "Mi lista" (localStorage: ficha + Explorar + inicio), Empresa del día
+  (determinística por fecha), rango de 12 meses en el sparkline, botón ↗ Compartir,
+  buscador en el glosario. Detalle en ESTADO_DEL_PROYECTO.md.
+- **Chrome (claude-in-chrome) es INESTABLE** para el SMV (SPA/tokens): para SMV/stockanalysis usar `requests`.
+
+## 7. PENDIENTE — PRÓXIMA SESIÓN de Jair: BUGS → SEGURIDAD → LANZAR (03-jul)
+> Jair enfocará la próxima sesión en estos 3 pasos. Detalle completo en la sección
+> "🎯 PRÓXIMA SESIÓN" al inicio de `ESTADO_DEL_PROYECTO.md`.
+1. **CAZAR BUGS / QA final:** revisar las **114 fichas** + responsive móvil (375px) + flujo del quiz.
+   Los errores `[hmr] Failed to reload…` del dev server NO son bugs (salen al escribir JSON mientras Vite
+   recarga; se limpian reiniciando el server). Correr `auditoria.py` + `auditoria_total.py` (0 problemas al 03-jul).
+2. **REFORZAR SEGURIDAD:** app estática sin backend/login/datos de usuario/secretos. Cerrar: sin tokens en
+   el repo (extractor usa solo APIs públicas), hosting HTTPS, `GITHUB_TOKEN` con permisos mínimos, CSP del hosting.
+3. **LANZAR:** hosting estático (GitHub Pages/Netlify/Cloudflare, gratis) + **robot diario con GitHub Actions**
+   (corre todos los fetch_* + `npm run build` + redeploy; la PC de Jair NO se prende). Probar que los scripts
+   corran desde los runners de EE.UU. (BVL/stockanalysis OK; SMV trimestral a mano si falla).
+   Falta de Jair: **cuenta GitHub + elegir hosting + número de Yape** (`config.json`, para "copiar número").
+4. Opcional/después: mapa "🧬 Familia empresarial" (investigado, espera OK), fundamentos consolidados de AUNA,
+   contexto web del resto de empresas nuevas.
+
+## 8. Anti-amnesia
+La verdad vive en los ARCHIVOS: `ESTADO_DEL_PROYECTO.md` (estado), `ALTO_PROYECTO_COMPLETO.md` (filosofía),
+`extractor/FUENTES.md` (links), este `PARA_FABLE_RETOMAR.md` (handoff), el código y los JSON. Mientras existan,
+nada se pierde aunque se resuma la conversación. También hay memoria persistente de Claude en
+`~/.claude/projects/.../memory/` (se carga sola).
