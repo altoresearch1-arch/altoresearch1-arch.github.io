@@ -49,8 +49,11 @@ jobs:
       - name: Instalar dependencias del extractor
         run: pip install -r extractor/requirements.txt
 
-      - name: Correr el robot (precios, históricos, dividendos, EPS, auditoría)
-        run: python extractor/actualizar_todo.py
+      - name: Correr el robot (precios, históricos, dividendos, auditoría)
+        # --rapido: solo datos diarios de BVL/stockanalysis (~3-4 min). Salta el EPS anual del
+        # SMV: es ~estático (el 2025 ya cerró) y el SMV es lento/flaky desde la nube. El EPS se
+        # refresca en el run TRIMESTRAL o corriendo el comando completo a mano.
+        run: python extractor/actualizar_todo.py --rapido
 
       - name: Commit de los datos frescos (si cambiaron)
         run: |
