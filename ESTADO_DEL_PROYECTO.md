@@ -11,9 +11,13 @@
   `git push origin main` publica. Rama = `main`. `.gitignore` de raíz creado (excluye node_modules/dist/
   settings.local.json/__pycache__/secretos). Auditorías estructural + total en 0 problemas antes de subir.
 - **ROBOT DIARIO** = `.github/workflows/deploy.yml`, cron `0 3 * * 2-6` UTC = **Lun–Vie 22:00 Perú** (tras el cierre
-  BVL). Dos jobs: `actualizar-datos` (corre `extractor/actualizar_todo.py`, commitea los JSON frescos con
+  BVL). Dos jobs: `actualizar-datos` (corre `extractor/actualizar_todo.py --rapido`, commitea los JSON frescos con
   `[skip ci]`) y `desplegar` (build PWA + publica en Pages). En `push` solo despliega. La PC NO se prende.
   Deps: `extractor/requirements.txt` (requests/bs4/lxml). Botón "Run workflow" para correrlo a mano.
+- **`--rapido` (nuevo 03-jul):** el nocturno SALTA `fetch_anual_eps`+`fix_eps` (SMV). El EPS anual 2025 es ESTÁTICO
+  y el SMV es LENTO/flaky desde la nube (el run completo se quedó 20+ min en ese paso). El `--rapido` corre solo
+  BVL/stockanalysis en **~9 min**. El EPS se refresca con `--trimestral` o el comando completo local. **VALIDADO
+  EN VIVO:** run `--rapido` verde en 9 min → commiteó datos frescos del 03-jul y desplegó.
 - **Config GitHub aplicada:** Pages source = "GitHub Actions"; Actions → Workflow permissions = "Read and write"
   (el robot necesita write para commitear datos).
 - **VERIFICADO en vivo:** el robot corre desde runners de EE.UU. y la BVL responde (bajó 767 cotizaciones con fecha
