@@ -4,6 +4,26 @@
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
 > herramienta), lee esto primero. Última actualización: **03 jul 2026**. Estado: **BETA**.
 
+## 🚀 LANZADA (03-jul-2026) — EN VIVO + robot diario en la nube
+- **URL EN VIVO:** **https://altoresearch1-arch.github.io/** (HTTPS forzado por GitHub Pages).
+- **Cuenta GitHub:** `altoresearch1-arch`. **Repo (público):** `altoresearch1-arch/altoresearch1-arch.github.io`
+  (mismo nombre que el usuario → URL raíz limpia = sitio de usuario). Esta PC ya tiene `origin` + credencial (GCM):
+  `git push origin main` publica. Rama = `main`. `.gitignore` de raíz creado (excluye node_modules/dist/
+  settings.local.json/__pycache__/secretos). Auditorías estructural + total en 0 problemas antes de subir.
+- **ROBOT DIARIO** = `.github/workflows/deploy.yml`, cron `0 3 * * 2-6` UTC = **Lun–Vie 22:00 Perú** (tras el cierre
+  BVL). Dos jobs: `actualizar-datos` (corre `extractor/actualizar_todo.py`, commitea los JSON frescos con
+  `[skip ci]`) y `desplegar` (build PWA + publica en Pages). En `push` solo despliega. La PC NO se prende.
+  Deps: `extractor/requirements.txt` (requests/bs4/lxml). Botón "Run workflow" para correrlo a mano.
+- **Config GitHub aplicada:** Pages source = "GitHub Actions"; Actions → Workflow permissions = "Read and write"
+  (el robot necesita write para commitear datos).
+- **VERIFICADO en vivo:** el robot corre desde runners de EE.UU. y la BVL responde (bajó 767 cotizaciones con fecha
+  de hoy). Deploy en push OK (~37s). NOTA: el 1er deploy de un sitio Pages nuevo puede fallar 1-2 veces
+  ("Deployment failed, try again later" = backend provisionándose) → reintentar con un run NUEVO (no re-run del
+  mismo run: colisiona por 2 artifacts "github-pages"). Riesgo a vigilar: `fetch_anual_eps` toca el SMV (flaky
+  desde la nube); si `actualizar-datos` falla una noche, no se redespliega pero el sitio queda con los últimos datos.
+- **mensajeDia** de hoy: "La constancia supera al talento." (Jair lo edita en `app/src/data/config.json`).
+- **PENDIENTE de Jair:** número de Yape (`config.json` → `apoyo.yapeNumero`, hoy vacío; el QR ya está).
+
 ## 🎯 PRÓXIMA SESIÓN — 3 prioridades antes de lanzar (pedido de Jair, 03-jul)
 Jair abrirá otra sesión enfocada en: **(1) cazar bugs, (2) reforzar seguridad, (3) LANZAR.** Contexto para arrancar:
 - **BUGS a revisar / que NO son bugs:** los errores de consola tipo `[hmr] Failed to reload …` que se ven
