@@ -64,6 +64,10 @@ jobs:
             echo "Sin cambios en los datos: nada que commitear."
           else
             git commit -m "datos: actualización automática $(date -u +%Y-%m-%d) [skip ci]"
+            # Ponerse al día con el remoto ANTES de subir (evita el rechazo 'fetch first'
+            # cuando llegó otro commit mientras el robot trabajaba). -X theirs: si hubiera
+            # choque en los JSON, gana el dato FRESCO del robot.
+            git pull --rebase -X theirs origin main
             git push
           fi
 
