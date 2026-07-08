@@ -1,28 +1,30 @@
+import { useState } from 'react'
 import mineriaData from '../data/mineria.json'
 import familiaData from '../data/mineria_familia.json'
 import Glosado from './Glosado'
 
 // ⛏️ Producción minera mensual (MINEM — Boletín Estadístico Minero).
-// Un mini-gráfico por metal (las unidades no se mezclan: TMF ≠ gramos finos).
-// El BEM publica el TOP de productores por metal: si la empresa no aparece un
-// mes, ese mes queda SIN punto (produjo poco o nada relativo al top) — Regla #1:
-// el hueco se explica, no se inventa un cero.
-// Abajo: sus minas y participaciones (mineria_familia.json, datos verificados).
+// Un gráfico por metal (las unidades no se mezclan: TMF ≠ gramos finos), con
+// números grandes: último mes, vs mes anterior, vs mismo mes del año pasado y
+// % de TODO el Perú (el BEM trae el total nacional por metal). Hover/touch:
+// lectura mes a mes. El BEM publica el TOP de productores: si la empresa no
+// aparece un mes, queda SIN punto (produjo poco o nada relativo al top) —
+// Regla #1: el hueco se explica, no se inventa un cero.
 
 const METAL_INFO = {
-  cobre: { nombre: 'Cobre', unidad: 'TMF' },
-  oro: { nombre: 'Oro', unidad: 'gramos finos' },
-  zinc: { nombre: 'Zinc', unidad: 'TMF' },
-  plata: { nombre: 'Plata', unidad: 'kg finos' },
-  plomo: { nombre: 'Plomo', unidad: 'TMF' },
-  hierro: { nombre: 'Hierro', unidad: 'TMF' },
-  estano: { nombre: 'Estaño', unidad: 'TMF' },
-  molibdeno: { nombre: 'Molibdeno', unidad: 'TMF' },
-  arsenico: { nombre: 'Arsénico', unidad: 'TMF' },
-  bismuto: { nombre: 'Bismuto', unidad: 'TMF' },
-  cadmio: { nombre: 'Cadmio', unidad: 'TMF' },
-  manganeso: { nombre: 'Manganeso', unidad: 'TMF' },
-  magnesio: { nombre: 'Magnesio', unidad: 'TMF' },
+  cobre: { nombre: 'Cobre', unidad: 'TMF', emoji: '🟠' },
+  oro: { nombre: 'Oro', unidad: 'gramos finos', emoji: '🥇' },
+  zinc: { nombre: 'Zinc', unidad: 'TMF', emoji: '🛡️' },
+  plata: { nombre: 'Plata', unidad: 'kg finos', emoji: '🥈' },
+  plomo: { nombre: 'Plomo', unidad: 'TMF', emoji: '🔋' },
+  hierro: { nombre: 'Hierro', unidad: 'TMF', emoji: '🧲' },
+  estano: { nombre: 'Estaño', unidad: 'TMF', emoji: '🥫' },
+  molibdeno: { nombre: 'Molibdeno', unidad: 'TMF', emoji: '🔧' },
+  arsenico: { nombre: 'Arsénico', unidad: 'TMF', emoji: '⚗️' },
+  bismuto: { nombre: 'Bismuto', unidad: 'TMF', emoji: '💊' },
+  cadmio: { nombre: 'Cadmio', unidad: 'TMF', emoji: '🔌' },
+  manganeso: { nombre: 'Manganeso', unidad: 'TMF', emoji: '⚒️' },
+  magnesio: { nombre: 'Magnesio', unidad: 'TMF', emoji: '✨' },
 }
 
 // Colores de línea por entidad (el dorado de la marca primero)
@@ -42,16 +44,51 @@ function formatearNum(v) {
   return v.toFixed(2)
 }
 
-// Un gráfico de líneas para UN metal (varias entidades = varias líneas).
-// Grilla punteada + puntos por mes, estilo "chart clásico". Escala desde 0
-// (honesto: no exagera las subidas y bajadas).
+// Número "grande" con traducción amable: el oro en gramos se vuelve kilos,
+// la plata en kilos se vuelve toneladas, los millones se leen como millones.
+function traducir(v, metal) {
+  if (v == null) return null
+  if (metal === 'oro' && v >= 1000) {
+    const kg = v / 1000
+    return `= ${kg >= 1000 ? (kg / 1000).toFixed(1) + ' toneladas' : Math.round(kg).toLocaleString('es-PE') + ' kg'} de oro`
+  }
+  if (metal === 'plata' && v >= 1000) return `= ${(v / 1000).toFixed(1)} toneladas de plata`
+  if (v >= 1e6) return `= ${(v / 1e6).toFixed(2)} millones de toneladas`
+  return null
+}
+
+// "del cobre" pero "de la plata" (único metal femenino de la lista)
+function delMetal(metal, info) {
+  return metal === 'plata' ? `de la ${info.nombre.toLowerCase()}` : `del ${info.nombre.toLowerCase()}`
+}
+
+function pctTexto(actual, base) {
+  if (actual == null || base == null || base === 0) return null
+  const pct = ((actual - base) / base) * 100
+  return { pct, texto: `${pct >= 0 ? '▲' : '▼'} ${Math.abs(pct).toFixed(1)}%`, sube: pct >= 0 }
+}
+
+// Suma de todas las líneas del gráfico en un mes (null si ninguna tiene dato)
+function sumaMes(lineas, i) {
+  let s = null
+  lineas.forEach((l) => {
+    const v = l.valores[i]
+    if (v != null) s = (s || 0) + v
+  })
+  return s
+}
+
+// Un gráfico de líneas para UN metal (varias entidades = varias líneas), con
+// grilla punteada, récord marcado, número en el último punto y lectura al
+// pasar el dedo/cursor. Escala desde 0 (honesto: no exagera los saltos).
 function GraficoMetal({ metal, lineas, meses, conLeyenda }) {
-  const info = METAL_INFO[metal] || { nombre: metal, unidad: '' }
+  const info = METAL_INFO[metal] || { nombre: metal, unidad: '', emoji: '⛏️' }
+  const [hover, setHover] = useState(null)
   const W = 620
-  const H = 170
+  const H = 190
   const PADL = 8
   const PADR = 8
-  const PADT = 10
+  const PADT = 30
   const PADB = 24
 
   const todos = lineas.flatMap((l) => l.valores.filter((v) => v != null))
@@ -60,7 +97,6 @@ function GraficoMetal({ metal, lineas, meses, conLeyenda }) {
   const px = (i) => PADL + (i * (W - PADL - PADR)) / (meses.length - 1)
   const py = (v) => PADT + ((max - v) * (H - PADT - PADB)) / max
 
-  // Segmentos continuos (los huecos = meses sin dato → la línea se corta)
   const segmentos = (valores) => {
     const segs = []
     let seg = []
@@ -72,18 +108,107 @@ function GraficoMetal({ metal, lineas, meses, conLeyenda }) {
     return segs
   }
 
+  // ── Números que enganchan (sobre la SUMA de lo graficado) ──
+  const totalPais = mineriaData.totalesPais?.[metal]
+  let iUlt = -1
+  for (let i = meses.length - 1; i >= 0; i--) {
+    if (sumaMes(lineas, i) != null) { iUlt = i; break }
+  }
+  const vUlt = iUlt >= 0 ? sumaMes(lineas, iUlt) : null
+  const vPrev = iUlt > 0 ? sumaMes(lineas, iUlt - 1) : null
+  const vAnioPasado = iUlt >= 12 ? sumaMes(lineas, iUlt - 12) : null
+  const vsPrev = pctTexto(vUlt, vPrev)
+  const vsAnio = pctTexto(vUlt, vAnioPasado)
+  const sharePais = vUlt != null && totalPais?.[iUlt] ? (vUlt / totalPais[iUlt]) * 100 : null
+
+  // 2026 vs 2025 comparando SOLO los meses donde ambos años tienen dato (honesto)
+  let acum26 = 0; let acum25 = 0; let nComp = 0
+  meses.forEach((m, i) => {
+    if (!m.startsWith('2026')) return
+    const j = i - 12
+    const a = sumaMes(lineas, i); const b = j >= 0 ? sumaMes(lineas, j) : null
+    if (a != null && b != null) { acum26 += a; acum25 += b; nComp++ }
+  })
+  const vsAcum = nComp >= 2 ? pctTexto(acum26, acum25) : null
+
+  // Récord del período (el punto más alto de todas las líneas)
+  let record = null
+  lineas.forEach((l) => l.valores.forEach((v, i) => {
+    if (v != null && (!record || v > record.v)) record = { v, i, color: l.color }
+  }))
+
   const hayHuecos = lineas.some((l) => l.valores.some((v) => v == null))
   const ticks = meses.map((m, i) => ({ m, i })).filter(({ i }) => i % 3 === 0 || i === meses.length - 1)
+  const varias = lineas.length > 1
+
+  // Lectura al pasar el cursor/dedo (índice de mes más cercano)
+  const moverHover = (ev) => {
+    const svg = ev.currentTarget
+    const rect = svg.getBoundingClientRect()
+    const cx = (ev.touches ? ev.touches[0].clientX : ev.clientX) - rect.left
+    const xRel = (cx / rect.width) * W
+    const i = Math.round(((xRel - PADL) / (W - PADL - PADR)) * (meses.length - 1))
+    setHover(Math.min(meses.length - 1, Math.max(0, i)))
+  }
 
   return (
     <div className="prodmin-chart">
       <div className="prodmin-chart-cab">
-        <span className="prodmin-metal">{info.nombre}</span>
+        <span className="prodmin-metal">{info.emoji} {info.nombre}</span>
         <span className="muted prodmin-unidad">
           <Glosado text={`producción mensual en ${info.unidad}`} />
         </span>
       </div>
-      {(lineas.length > 1 || conLeyenda) && (
+
+      {/* 🏆 cuando domina su metal a nivel nacional */}
+      {sharePais != null && sharePais >= 25 && (
+        <div className="prodmin-trofeo">
+          🏆 {varias ? 'Sus minas juntas produjeron' : 'Produjo'} el{' '}
+          <strong>{sharePais >= 99.5 ? '100' : sharePais.toFixed(0)}%{' '}
+          {metal === 'plata' ? 'de toda la plata' : `de todo el ${info.nombre.toLowerCase()}`} del Perú</strong>{' '}
+          en {mesCorto(meses[iUlt])}.
+        </div>
+      )}
+
+      {/* Números grandes del último mes con dato */}
+      {vUlt != null && (
+        <div className="prodmin-stats">
+          <div className="prodmin-chip">
+            <div className="prodmin-chip-k">{mesCorto(meses[iUlt])}{varias ? ' (juntas)' : ''}</div>
+            <div className="prodmin-chip-v">{formatearNum(vUlt)} <span className="prodmin-chip-u">{info.unidad}</span></div>
+            {traducir(vUlt, metal) && <div className="prodmin-chip-extra">{traducir(vUlt, metal)}</div>}
+          </div>
+          {vsPrev && (
+            <div className="prodmin-chip">
+              <div className="prodmin-chip-k">vs {mesCorto(meses[iUlt - 1])}</div>
+              <div className={'prodmin-chip-v ' + (vsPrev.sube ? 'sube' : 'baja')}>{vsPrev.texto}</div>
+            </div>
+          )}
+          {vsAnio && (
+            <div className="prodmin-chip">
+              <div className="prodmin-chip-k">vs {mesCorto(meses[iUlt - 12])}</div>
+              <div className={'prodmin-chip-v ' + (vsAnio.sube ? 'sube' : 'baja')}>{vsAnio.texto}</div>
+              <div className="prodmin-chip-extra">mismo mes, un año antes</div>
+            </div>
+          )}
+          {sharePais != null && sharePais < 25 && (
+            <div className="prodmin-chip">
+              <div className="prodmin-chip-k">{delMetal(metal, info)} del Perú</div>
+              <div className="prodmin-chip-v oro">{sharePais >= 10 ? sharePais.toFixed(0) : sharePais.toFixed(1)}%</div>
+              <div className="prodmin-chip-extra">en {mesCorto(meses[iUlt])}</div>
+            </div>
+          )}
+          {vsAcum && (
+            <div className="prodmin-chip">
+              <div className="prodmin-chip-k">2026 vs 2025</div>
+              <div className={'prodmin-chip-v ' + (vsAcum.sube ? 'sube' : 'baja')}>{vsAcum.texto}</div>
+              <div className="prodmin-chip-extra">{nComp} meses comparables</div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {(varias || conLeyenda) && (
         <div className="prodmin-leyenda">
           {lineas.map((l) => (
             <span key={l.clave} className="prodmin-leyenda-item">
@@ -93,16 +218,18 @@ function GraficoMetal({ metal, lineas, meses, conLeyenda }) {
           ))}
         </div>
       )}
+
       <div className="prodmin-svg-wrap">
         <svg viewBox={`0 0 ${W} ${H}`} className="prodmin-svg" role="img"
-          aria-label={`Producción mensual de ${info.nombre} (${info.unidad})`}>
+          aria-label={`Producción mensual de ${info.nombre} (${info.unidad})`}
+          onMouseMove={moverHover} onMouseLeave={() => setHover(null)}
+          onTouchStart={moverHover} onTouchMove={moverHover} onTouchEnd={() => setHover(null)}>
           {/* grilla horizontal punteada */}
           {[0.25, 0.5, 0.75, 1].map((f) => (
             <line key={f} x1={PADL} x2={W - PADR} y1={py(max * f)} y2={py(max * f)}
               stroke="rgba(212,175,55,0.18)" strokeWidth="1" strokeDasharray="2 4" />
           ))}
           <line x1={PADL} x2={W - PADR} y1={py(0)} y2={py(0)} stroke="rgba(212,175,55,0.35)" strokeWidth="1" />
-          {/* meses en el eje */}
           {ticks.map(({ m, i }) => (
             <text key={m} x={px(i)} y={H - 8}
               textAnchor={i === 0 ? 'start' : i === meses.length - 1 ? 'end' : 'middle'}
@@ -110,6 +237,11 @@ function GraficoMetal({ metal, lineas, meses, conLeyenda }) {
               {mesCorto(m)}
             </text>
           ))}
+          {/* guía vertical del hover */}
+          {hover != null && (
+            <line x1={px(hover)} x2={px(hover)} y1={PADT - 6} y2={H - PADB}
+              stroke="rgba(244,241,233,0.35)" strokeWidth="1" strokeDasharray="3 3" />
+          )}
           {/* una línea por entidad, cortada en los meses sin dato */}
           {lineas.map((l) => {
             const color = l.color
@@ -122,14 +254,40 @@ function GraficoMetal({ metal, lineas, meses, conLeyenda }) {
                     strokeLinejoin="round" strokeLinecap="round" />
                 )}
                 {seg.map(([i, v]) => (
-                  <circle key={i} cx={px(i)} cy={py(v)} r="3" fill={color}>
+                  <circle key={i} cx={px(i)} cy={py(v)} r={hover === i ? 4.5 : 3} fill={color}>
                     <title>{`${l.nombre} — ${mesCorto(meses[i])}: ${formatearNum(v)} ${info.unidad}`}</title>
                   </circle>
                 ))}
               </g>
             ))
           })}
+          {/* récord del período */}
+          {record && (
+            <text x={Math.min(Math.max(px(record.i), 60), W - 60)} y={py(record.v) - 8}
+              textAnchor="middle" className="prodmin-record">
+              ★ récord: {formatearNum(record.v)} ({mesCorto(meses[record.i])})
+            </text>
+          )}
         </svg>
+        {/* Lectura del mes bajo el cursor/dedo */}
+        {hover != null && (
+          <div className="prodmin-lectura">
+            <strong>{mesCorto(meses[hover])}</strong>
+            {lineas.map((l) => (
+              <span key={l.clave} className="prodmin-lectura-item">
+                <span className="prodmin-dot" style={{ background: l.color }} />
+                {l.valores[hover] != null
+                  ? `${formatearNum(l.valores[hover])} ${info.unidad}`
+                  : 'fuera del top ese mes'}
+              </span>
+            ))}
+            {totalPais?.[hover] != null && sumaMes(lineas, hover) != null && (
+              <span className="prodmin-lectura-item muted">
+                {((sumaMes(lineas, hover) / totalPais[hover]) * 100).toFixed(1)}% del Perú
+              </span>
+            )}
+          </div>
+        )}
       </div>
       {hayHuecos && (
         <div className="prodmin-hueco muted">
@@ -184,9 +342,10 @@ export default function ProduccionMinera({ ticker }) {
         <>
           <p className="muted prodmin-intro">
             Lo que reportó al Ministerio de Energía y Minas, mes a mes
-            ({mesCorto(meses[0])} → {mesCorto(meses[meses.length - 1])}). Producir más no
-            garantiza ganar más (depende del precio del metal y los costos) — pero muestra
-            si el negocio está creciendo o apagándose.
+            ({mesCorto(meses[0])} → {mesCorto(meses[meses.length - 1])}). Pasa el dedo o el
+            cursor por el gráfico para leer cada mes. Producir más no garantiza ganar más
+            (depende del precio del metal y los costos) — pero muestra si el negocio está
+            creciendo o apagándose.
           </p>
           {graficables.map(([metal, lineas]) => (
             <GraficoMetal key={metal} metal={metal} lineas={lineas} meses={meses}

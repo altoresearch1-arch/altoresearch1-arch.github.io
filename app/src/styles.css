@@ -2478,3 +2478,78 @@ a.link {
   margin-top: 10px;
   font-size: 11.5px;
 }
+
+/* ⛏️ prodmin v2: números que enganchan */
+.prodmin-trofeo {
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  background: var(--oro-tenue);
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.prodmin-trofeo strong { color: var(--oro); }
+.prodmin-stats {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.prodmin-chip {
+  border: 1px solid var(--gris);
+  border-radius: 10px;
+  background: var(--negro-2);
+  padding: 7px 11px;
+  min-width: 86px;
+}
+.prodmin-chip-k {
+  font-size: 11px;
+  color: var(--texto-tenue);
+  margin-bottom: 2px;
+}
+.prodmin-chip-v {
+  font-size: 16.5px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+.prodmin-chip-v.sube { color: var(--verde); }
+.prodmin-chip-v.baja { color: var(--rojo); }
+.prodmin-chip-v.oro { color: var(--oro); }
+.prodmin-chip-u {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--texto-tenue);
+}
+.prodmin-chip-extra {
+  font-size: 10.5px;
+  color: var(--texto-tenue);
+  margin-top: 2px;
+}
+.prodmin-record {
+  fill: var(--oro-suave);
+  font-size: 10.5px;
+  font-weight: 700;
+}
+.prodmin-svg-wrap { position: relative; }
+.prodmin-svg { touch-action: pan-y; }
+.prodmin-lectura {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  border: 1px solid var(--gris);
+  border-radius: 8px;
+  background: var(--negro-2);
+  padding: 6px 10px;
+  margin-top: 6px;
+  font-size: 12.5px;
+}
+.prodmin-lectura-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Fix móvil: textos largos sin espacios (fuentes SMV, links) no deben desbordar */
+.lista-limpia li { overflow-wrap: anywhere; }

@@ -233,10 +233,9 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
           </Reveal>
         )}
 
-        {/* ⛏️ Producción mensual del MINEM + minas y participaciones (solo mineras) */}
-        {e.sector === 'minas' && (
-          <Reveal><ProduccionMinera ticker={e.ticker} /></Reveal>
-        )}
+        {/* ⛏️ Producción mensual del MINEM + minas y participaciones. Aparece si el
+            ticker tiene familia minera (cubre a Shougang, que es sector acereras). */}
+        <Reveal><ProduccionMinera ticker={e.ticker} /></Reveal>
 
         {/* Fundamentos */}
         <Reveal>

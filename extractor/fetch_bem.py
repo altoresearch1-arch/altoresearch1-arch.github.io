@@ -219,6 +219,13 @@ def parsear_edicion(ruta, mes_edicion):
         m = re.match(r"^([A-ZÑ ]+?)\s*\(", nombre)
         if m and m.group(1).strip() in METALES:
             metal_actual = METALES[m.group(1).strip()][0]
+            # La fila del metal trae el TOTAL NACIONAL del mes → se guarda
+            # bajo la clave especial '_pais' (la app calcula "% del Perú").
+            for anio_col, j in anios_cols:
+                valor = fila[j] if j < len(fila) else None
+                if isinstance(valor, (int, float)):
+                    mes_dato = f"{anio_col}-{mes}"
+                    datos.setdefault(("_pais", metal_actual), {})[mes_dato] = round(float(valor), 2)
             continue
         if metal_actual is None or nombre.startswith("OTROS"):
             continue
@@ -293,7 +300,11 @@ def main():
             m, a = 1, a + 1
 
     entidades = {}
+    totales_pais = {}
     for (clave, metal), pormes in sorted(acumulado.items()):
+        if clave == "_pais":
+            totales_pais[metal] = [pormes.get(mes) for mes in meses]
+            continue
         ent = entidades.setdefault(clave, {
             "nombre": NOMBRES_BONITOS.get(clave, clave),
             "produccion": {},
@@ -308,6 +319,7 @@ def main():
                  "principales productores del metal (produjo poco o nada) — no se inventa un cero."),
         "meses": meses,
         "unidades": {v[0]: v[1] for v in METALES.values()},
+        "totalesPais": totales_pais,
         "entidades": entidades,
     }
     # El BEM cambia UNA vez al mes: si los datos no cambiaron, no se reescribe

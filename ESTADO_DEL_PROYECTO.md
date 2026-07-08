@@ -36,8 +36,17 @@
   "Participaciones (quién tiene qué)" con links a las fichas que cotizan y si dan dividendos
   (afirmaciones respaldadas por nuestro dividendos.json). Escala desde 0 (no exagera).
 - **Términos 164 → 172**: TMF, gramos finos, kg finos, MINEM, relaves, OPA, molibdeno, bismuto.
-- Verificado en preview (desktop + 375px sin desborde, consola limpia), auditorías 0 problemas,
-  build PWA OK.
+- **V2 "con carisma" (mismo día, pedido de Jair "vuélvete loco"):** el extractor ahora captura el
+  **TOTAL NACIONAL por metal/mes** (fila del metal en el cuadro) → `totalesPais` en mineria.json.
+  Cada gráfico trae: **chips de números grandes** (último mes con dato + traducción amable
+  "= 8.4 toneladas de plata"; vs mes anterior; vs mismo mes del año pasado; **"% del metal del
+  Perú"**; 2026 vs 2025 sumando SOLO meses comparables), **🏆 banner cuando domina** (share ≥25%:
+  Minsur "100% de todo el estaño del Perú", Shougang+Shouxin "100% del hierro"), **★ récord del
+  período** marcado sobre la línea, **hover/touch interactivo** (guía vertical + lectura del mes:
+  valor por entidad + % del Perú), emoji por metal, "de la plata"/"del cobre" (género correcto).
+  FIX de paso: la sección aparece por familia minera y no por sector (Shougang es sector
+  "acereras" y se la perdía); y `.lista-limpia li { overflow-wrap:anywhere }` (las Fuentes SMV
+  largas desbordaban en 375px — bug preexistente).
 
 ## 🔧 FIXES POST-LANZAMIENTO (05–08 jul 2026, Opus)
 - **Robot ya no falla al subir ("fetch first"):** el paso "Commit de los datos frescos" del workflow ahora hace
