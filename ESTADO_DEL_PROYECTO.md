@@ -2,7 +2,26 @@
 
 > **Documento maestro vivo.** Captura TODO lo construido para que nada se pierda, sin
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
-> herramienta), lee esto primero. Última actualización: **03 jul 2026**. Estado: **BETA**.
+> herramienta), lee esto primero. Última actualización: **08 jul 2026**. Estado: **EN VIVO (beta pública)**.
+
+## 🔧 FIXES POST-LANZAMIENTO (05–08 jul 2026, Opus)
+- **Robot ya no falla al subir ("fetch first"):** el paso "Commit de los datos frescos" del workflow ahora hace
+  `git pull --rebase -X theirs origin main` ANTES del `git push`. Antes, si otro commit llegaba mientras el robot
+  trabajaba, el push se rechazaba. Se configuró también la identidad de git en el repo (evita el error
+  "unable to auto-detect email" durante la rebase). Los runs nocturnos 07 y 08-jul quedaron verdes.
+- **PWA auto-actualizable (bug "la web no se actualiza"):** el síntoma era que el navegador mostraba la versión
+  cacheada vieja hasta la 2ª recarga. **NO era el pipeline** (el servidor SIEMPRE tenía lo último — verificar con
+  `curl` del bundle, no confiar en el navegador). `app/src/main.jsx` ahora registra el Service Worker con
+  `registerSW({immediate:true})` + chequeo de versión al cargar / al volver a la pestaña (`visibilitychange`) /
+  cada 5 min → aplica y recarga sola. Para un navegador con la versión vieja pegada: **Ctrl+Shift+R** una vez.
+- **Analítica de visitas (GoatCounter):** script en `app/index.html`, panel en **altoresearch.goatcounter.com**
+  (correo `altoresearch1@gmail.com`). Privada, sin cookies, gratis. Cuenta a los visitantes reales (ignora
+  localhost y a veces la bloquea un adblocker propio — probar en incógnito/celular).
+- **NEXA — catalizador Boliden-Votorantim (verificado con MINING.COM/Mining Journal/RTTNews/StockTitan):** Boliden
+  confirmó el 02-jul que está en CONVERSACIONES para comprarle a Votorantim su participación de control (~65%) en
+  Nexa (~US$1,300M). SIN acuerdo/precio/fecha. Agregado a `catalizadores.json` (NEXAPEC1) con honestidad (Regla #7).
+- **Pendientes de Jair:** número de Yape (`config.json`→`apoyo.yapeNumero`); video promo TikTok (quedó a medias:
+  QR con Python `qrcode` + placa final vertical PIL + guion sin voz con "GRATIS"); agregar ETFs/empresas cuando pida.
 
 ## 🚀 LANZADA (03-jul-2026) — EN VIVO + robot diario en la nube
 - **URL EN VIVO:** **https://altoresearch1-arch.github.io/** (HTTPS forzado por GitHub Pages).

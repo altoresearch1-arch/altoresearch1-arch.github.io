@@ -7,6 +7,46 @@ Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTAD
 
 ---
 
+## ⚡ ÚLTIMO ESTADO (08-jul-2026, Opus) — YA ESTÁ LANZADA + fixes
+> **La app está EN VIVO:** **https://altoresearch1-arch.github.io/** (HTTPS, GitHub Pages).
+> **Cuenta GitHub:** `altoresearch1-arch`. **Repo (público):** `altoresearch1-arch/altoresearch1-arch.github.io`.
+> Esta PC ya tiene `origin` + credencial (GCM) e identidad de git configurada en el repo → `git push` funciona.
+>
+> **ROBOT DIARIO** (`.github/workflows/deploy.yml`, cron `0 3 * * 2-6` UTC ≈ Lun–Vie noche Perú; GitHub a veces
+> lo corre en la mañana — igual toma el ÚLTIMO CIERRE completo). Dos jobs: `actualizar-datos` corre
+> `actualizar_todo.py --rapido` (baja precios/históricos/dividendos/hechos de BVL+stockanalysis, ~9 min, commitea
+> con `[skip ci]`) y `desplegar` (build PWA + Pages). En `push` solo despliega. Botón **Actions → Run workflow**
+> para dispararlo a mano. La PC NO se prende.
+>   - **`--rapido` SALTA el SMV** (`fetch_anual_eps`+`fix_eps`): el EPS anual 2025 es estático y el SMV es
+>     lento/flaky desde la nube (el run completo se colgaba 20+ min ahí). El EPS se refresca con `--trimestral`
+>     o el comando completo local.
+>   - **El paso de commit hace `git pull --rebase -X theirs origin main` ANTES del push** (arreglado 05-jul:
+>     antes fallaba con "fetch first" cuando otro commit llegaba primero).
+>
+> **ANALÍTICA de visitas:** GoatCounter (script en `app/index.html`), panel en **altoresearch.goatcounter.com**
+> (cuenta de Jair, correo `altoresearch1@gmail.com`). Privada, sin cookies, gratis. Cuenta a los visitantes reales.
+>
+> **NEXA — catalizador nuevo (verificado):** Boliden confirmó (02-jul) que está en CONVERSACIONES para comprarle
+> a Votorantim su participación de control (~65%) en Nexa (~US$1,300M). SIN acuerdo/precio/fecha. Agregado en
+> `catalizadores.json` (NEXAPEC1) redactado con honestidad (Regla #7). Si cierran o rompen, actualizar ese texto.
+>
+> **⚠️ GOTCHA IMPORTANTE — "la web no se actualiza":** casi siempre es la **caché del Service Worker (PWA)**, NO
+> el pipeline (el servidor SIEMPRE tiene lo último; verificar con `curl` del bundle, no confiar en el navegador
+> cacheado). **Arreglado 08-jul:** `app/src/main.jsx` ahora registra el SW con chequeo de versión al cargar / al
+> volver a la pestaña / cada 5 min → se auto-refresca (antes quedaba "una recarga atrás"). Para un navegador que
+> ya tiene la versión vieja pegada: **Ctrl+Shift+R** una vez (o incógnito/celular).
+>
+> **PENDIENTES de Jair:** (a) **número de Yape** para el botón "copiar número" (`config.json` → `apoyo.yapeNumero`,
+> vacío; el QR ya está). (b) **Video promo TikTok** (quedó a medias: se iba a generar un QR con Python `qrcode` +
+> una placa final vertical con PIL, y guion cuadro-por-cuadro sin voz con "GRATIS" claro). (c) Agregar **ETFs/más
+> empresas** cuando lo pida (verificar datos primero, sector "fondos" para ETFs). (d) `mensajeDia` lo edita él en
+> `config.json` (hoy sigue "La constancia supera al talento." del 3-jul — NO es dato viejo, es manual).
+>
+> **Comando estrella:** `python extractor/actualizar_todo.py` (completo local) | `--rapido` (lo que usa el robot) |
+> `--trimestral` (Q nuevo) | `--con-build`. Auditorías: `python extractor/auditoria.py` y `auditoria_total.py`.
+
+---
+
 ## 1. Qué es (en 3 líneas)
 App web **educativa** de la Bolsa de Valores de Lima (BVL). El usuario hace un quiz (perfil × sector)
 y descubre **empresas para estudiar** — NUNCA se recomienda comprar. Producto = **credibilidad**.
