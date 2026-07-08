@@ -55,6 +55,28 @@
   (@media ≤640px: position fixed + translate; antes salía pegado a la esquina y no se leía —
   queja de Jair) y ahora muestra la PALABRA como título dorado. TMF glosado también en los chips.
 
+## ⚖ COMPARADOR "FRENTE A FRENTE" V2 (08-jul-2026, Fable) — pedido de Jair ("quedó obsoleto, vuélvete loco")
+- **🏁 La carrera:** las DOS acciones en UN solo gráfico, **indexadas a 100** en el arranque
+  (la forma honesta de comparar trayectorias con precios/monedas distintas), rangos 3M/6M/1A,
+  línea de salida punteada en 100, % final por empresa en la leyenda (verde/rojo), nota educativa
+  + aviso si alguna negocia poco. Colores fijos: A dorado / B azul (mismos en todo el duelo).
+- **💰 Duelo de dividendos:** yield GRANDE por lado (comparable entre monedas), frecuencia
+  traducida (semestral/trimestral/mensual/anual), monto por acción, nº de pagos 2025/2026,
+  aviso yield>20% (extraordinario), barras enfrentadas. Si no reparte: "No reparte hoy"
+  (antes decía "Pendiente (SMV)" — ENGAÑOSO, corregido también en la tabla).
+- **⛏️ Duelo minero:** si AMBAS tienen producción BEM, sus familias compiten metal por metal
+  en el mismo gráfico (suma de entidades de cada familia; se aclara que NO incluye minoritarias
+  tipo Cerro Verde para BVN) + **"% del Perú"** de cada una en la leyenda. Solo metales con ≥3
+  meses de dato en ambas.
+- **Tabla mejorada:** barras de magnitud bajo P/E, Yield y Volatilidad (solo números sin unidad
+  mezclada — nunca S/ vs US$) con micro-explicación por fila; aviso ámbar si son de SECTORES
+  DISTINTOS ("sus números se leen diferente"). **📜 La historia de cada una**: tesis lado a lado.
+- **↗ Compartir duelo** (Web Share / copiar link) y el link se actualiza al cambiar los
+  selectores (history.replaceState). **BUG preexistente arreglado:** al llegar otra pareja por
+  URL (link compartido / botón atrás) el comparador no se actualizaba (useState solo al montar;
+  ahora useEffect sincroniza). Sin veredicto, como siempre: "las barras muestran MAGNITUD, no
+  cuál es mejor".
+
 ## 🔧 FIXES POST-LANZAMIENTO (05–08 jul 2026, Opus)
 - **Robot ya no falla al subir ("fetch first"):** el paso "Commit de los datos frescos" del workflow ahora hace
   `git pull --rebase -X theirs origin main` ANTES del `git push`. Antes, si otro commit llegaba mientras el robot

@@ -2599,3 +2599,132 @@ a.link {
     box-shadow: 0 14px 40px rgba(0, 0, 0, 0.65);
   }
 }
+
+/* ⚖ Comparador v2: carrera, duelos y barras */
+.comp-sector-aviso {
+  border: 1px solid rgba(199, 154, 58, 0.5);
+  background: rgba(199, 154, 58, 0.08);
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ambar);
+}
+.comp-carrera {
+  border: 1px solid var(--gris);
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: var(--negro-3);
+  margin: 12px 0;
+}
+.comp-carrera-cab {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.comp-carrera-tit {
+  font-weight: 800;
+  font-size: 14.5px;
+  color: var(--oro);
+}
+.comp-carrera-leyenda {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+.comp-carrera-leyenda .sube { color: var(--verde); }
+.comp-carrera-leyenda .baja { color: var(--rojo); }
+.comp-carrera-nota {
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 8px 0 0;
+}
+.comp-fila-wrap {
+  border-bottom: 1px solid var(--gris);
+}
+.comp-fila-wrap .comp-fila { border-bottom: none; }
+.comp-fila-wrap:last-child { border-bottom: none; }
+.comp-barras {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 0 10px;
+}
+.comp-barra {
+  height: 7px;
+  border-radius: 4px;
+  background: var(--negro-2);
+  overflow: hidden;
+}
+.comp-barra > div {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.comp-fila-nota {
+  font-size: 11.5px;
+  line-height: 1.45;
+  padding: 0 0 10px;
+}
+.comp-duelo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.comp-duelo-lado {
+  border: 1px solid var(--gris);
+  border-top: 3px solid var(--oro);
+  border-radius: 10px;
+  background: var(--negro-3);
+  padding: 12px 14px;
+}
+.comp-duelo-t {
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.4px;
+  margin-bottom: 4px;
+}
+.comp-duelo-big {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+.comp-duelo-sub {
+  font-size: 12px;
+  margin-top: 4px;
+  line-height: 1.45;
+}
+.comp-duelo-nada {
+  color: var(--texto-tenue);
+  font-size: 13px;
+  margin-top: 6px;
+}
+.comp-duelo-aviso {
+  margin-top: 8px;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--ambar);
+}
+.comp-tesis-par {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.comp-tesis {
+  border: 1px solid var(--gris);
+  border-left: 4px solid var(--oro);
+  border-radius: 10px;
+  background: var(--negro-3);
+  padding: 12px 14px;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+@media (max-width: 560px) {
+  .comp-duelo, .comp-tesis-par { grid-template-columns: 1fr; }
+}
