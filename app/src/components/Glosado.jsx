@@ -4,7 +4,12 @@ import terminosData from '../data/terminos.json'
 // Detecta términos técnicos dentro de un texto y los explica al pasar el cursor.
 // No requiere clic: el tooltip aparece en hover (y en foco para teclado/táctil).
 
-const TERMINOS = terminosData.terminos
+// Índice en minúsculas: el texto matchea sin importar mayúsculas ("TMF", "Sunat"),
+// y la clave del JSON también puede venir en mayúsculas (TMF, MINEM, OPA).
+const TERMINOS = {}
+for (const [k, v] of Object.entries(terminosData.terminos)) {
+  TERMINOS[k.toLowerCase()] = v
+}
 
 // Regex con todos los términos, los más largos primero (para cazar "total de activos"
 // antes que "activos"). Límites que respetan acentos y la barra de "p/e".
@@ -29,6 +34,7 @@ function Termino({ palabra, definicion }) {
       {palabra}
       {ver && (
         <span className="termino-pop" role="tooltip">
+          <strong className="termino-pop-t">{palabra}</strong>
           {definicion}
         </span>
       )}

@@ -47,6 +47,13 @@
   FIX de paso: la sección aparece por familia minera y no por sector (Shougang es sector
   "acereras" y se la perdía); y `.lista-limpia li { overflow-wrap:anywhere }` (las Fuentes SMV
   largas desbordaban en 375px — bug preexistente).
+- **V3 gráfico con cuerpo + FIXES de tooltips (pedidos de Jair):** eje Y con números compactos
+  (14 k…), relleno degradado bajo cada línea, frontera punteada "2025 | 2026", último dato con
+  anillo y valor. **BUG Glosado cazado**: buscaba el término en minúsculas → las claves en
+  MAYÚSCULAS del JSON (TMF, MINEM, OPA) NUNCA mostraban tooltip; ahora el índice se normaliza
+  (cualquier clave nueva funciona en cualquier caja). **Tooltip en celular CENTRADO en pantalla**
+  (@media ≤640px: position fixed + translate; antes salía pegado a la esquina y no se leía —
+  queja de Jair) y ahora muestra la PALABRA como título dorado. TMF glosado también en los chips.
 
 ## 🔧 FIXES POST-LANZAMIENTO (05–08 jul 2026, Opus)
 - **Robot ya no falla al subir ("fetch first"):** el paso "Commit de los datos frescos" del workflow ahora hace

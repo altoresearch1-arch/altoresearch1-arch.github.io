@@ -183,7 +183,7 @@ function GraficoMetal({ metal, lineas, meses, conLeyenda }) {
         <div className="prodmin-stats">
           <div className="prodmin-chip">
             <div className="prodmin-chip-k">{mesCorto(meses[iUlt])}{varias ? ' (juntas)' : ''}</div>
-            <div className="prodmin-chip-v">{formatearNum(vUlt)} <span className="prodmin-chip-u">{info.unidad}</span></div>
+            <div className="prodmin-chip-v">{formatearNum(vUlt)} <span className="prodmin-chip-u"><Glosado text={info.unidad} /></span></div>
             {traducir(vUlt, metal) && <div className="prodmin-chip-extra">{traducir(vUlt, metal)}</div>}
           </div>
           {vsPrev && (
