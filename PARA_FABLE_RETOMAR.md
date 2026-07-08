@@ -7,6 +7,16 @@ Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTAD
 
 ---
 
+## ⚡ NUEVO 08-jul (Fable): ⛏️ PRODUCCIÓN MINERA (MINEM/BEM) EN LAS FICHAS DE MINAS
+> Pedido de Jair. Gráficos de producción mensual POR METAL (ene-25→abr-26) en cada ficha minera +
+> bloque "Sus minas / Participaciones" (%, cotiza, dividendos — todo VERIFICADO). Fuente nueva:
+> **MINEM Boletín Estadístico Minero** (receta en `extractor/FUENTES.md`). Piezas: `fetch_bem.py`
+> (→ `mineria.json`, caché en `cache_bem/`, ya en `actualizar_todo.py --rapido`, no commitea ruido
+> si el BEM no publicó), `mineria_familia.json` (MANUAL: participaciones verificadas — BVN vendió
+> Yanacocha 2022; Marcobre 60% de Minsur; Corona→Sierra Metals→Alpayana 2025; Shouxin 49% de
+> Shougang), `ProduccionMinera.jsx` (mini-gráfico por metal, color por entidad, huecos honestos =
+> "no apareció en el top del mes"). Detalle en ESTADO_DEL_PROYECTO.md.
+
 ## ⚡ ÚLTIMO ESTADO (08-jul-2026, Opus) — YA ESTÁ LANZADA + fixes
 > **La app está EN VIVO:** **https://altoresearch1-arch.github.io/** (HTTPS, GitHub Pages).
 > **Cuenta GitHub:** `altoresearch1-arch`. **Repo (público):** `altoresearch1-arch/altoresearch1-arch.github.io`.

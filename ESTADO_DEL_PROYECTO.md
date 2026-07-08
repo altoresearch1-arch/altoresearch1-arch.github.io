@@ -4,6 +4,41 @@
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
 > herramienta), lee esto primero. Última actualización: **08 jul 2026**. Estado: **EN VIVO (beta pública)**.
 
+## ⛏️ PRODUCCIÓN MINERA MENSUAL (MINEM/BEM) EN LAS FICHAS DE MINAS (08-jul-2026, Fable)
+- **Pedido de Jair:** gráficos de producción mensual por metal (estilo líneas con puntos, su imagen
+  de referencia) en el "apartado de minas", ene-2025 → abr-2026, con las minas/participaciones de
+  cada empresa abajo (quién controla qué, %, si cotizan y dan dividendos).
+- **Fuente NUEVA (la pasó Jair): MINEM — Boletín Estadístico Minero** (receta completa en
+  `extractor/FUENTES.md`). El cuadro S01.C02 de cada edición trae producción POR EMPRESA del mes
+  (top ~10 por metal + OTROS) para el año de la edición Y el año anterior → 12 Excels
+  (prepublicaciones jul25-abr26 + anexos may/jun25) arman la serie ene-2025→abr-2026 completa.
+- **Nuevo `extractor/fetch_bem.py`** → `app/src/data/mineria.json` (16 entidades, 37 series).
+  Caché en `extractor/cache_bem/` (committeada — el robot no re-descarga); auto-descubre ediciones
+  nuevas en la colección de gob.pe; NO reescribe el JSON si el BEM no publicó nada (el robot no
+  commitea ruido). Sumado a `actualizar_todo.py` (incluido `--rapido`). gob.pe pide UA de navegador.
+- **Nuevo `app/src/data/mineria_familia.json` (MANUAL, verificado 08-jul):** por ticker minero:
+  entidades BEM a graficar, sus minas y participaciones con %: BVN (Cerro Verde 19.58%, Brocal
+  61.43%, La Zanja 100% —Newmont se la cedió—, Coimolache 40.09%; **vendió Yanacocha a Newmont
+  2022 por US$300M**), Minsur (San Rafael + Pucamarca + **Marcobre/Mina Justa 60%**), Nexa
+  (Cerro Lindo + El Porvenir + Atacocha 62.89%B/99.36%A), Volcan (Yauli + Chungar + Adm. Cerro,
+  que absorbió Óxidos de Pasco oct-2023), Shougang (~98.5% de Shougang Corp; **Shouxin 49%**,
+  relaves de Marcona), Corona (Sierra Metals 81.84% → **comprada por Alpayana 2025**, OPA por
+  Corona anunciada), Santa Luisa (grupo Mitsui ~70/30), SPCC (sucursal 100% de SCCO). Sin
+  producción con explicación honesta: PML/PPX/Andex (juniors), Perubar (ya no mina, almacenes),
+  SIMSA (bajo el top del BEM).
+- **Nuevo `ProduccionMinera.jsx`** en la ficha (solo sector minas, entre Tips y Fundamentos):
+  un mini-gráfico por metal (unidades no se mezclan: TMF / g finos / kg finos), grilla punteada,
+  líneas con puntos y color POR ENTIDAD consistente entre gráficos (ej. Minsur dorado = estaño,
+  Marcobre azul = cobre), leyenda cuando la ficha tiene 2+ entidades (Nexa muestra Cerro Lindo +
+  El Porvenir; Volcan sus 3). **Huecos honestos**: mes sin punto = no apareció en el top (produjo
+  poco o nada — "no se inventa un cero"); metales con <3 datos van como texto puntual (el estaño
+  real de BVN oct-2025: 17.9 TMF — verificado en el Excel crudo). Abajo: "Sus minas" +
+  "Participaciones (quién tiene qué)" con links a las fichas que cotizan y si dan dividendos
+  (afirmaciones respaldadas por nuestro dividendos.json). Escala desde 0 (no exagera).
+- **Términos 164 → 172**: TMF, gramos finos, kg finos, MINEM, relaves, OPA, molibdeno, bismuto.
+- Verificado en preview (desktop + 375px sin desborde, consola limpia), auditorías 0 problemas,
+  build PWA OK.
+
 ## 🔧 FIXES POST-LANZAMIENTO (05–08 jul 2026, Opus)
 - **Robot ya no falla al subir ("fetch first"):** el paso "Commit de los datos frescos" del workflow ahora hace
   `git pull --rebase -X theirs origin main` ANTES del `git push`. Antes, si otro commit llegaba mientras el robot

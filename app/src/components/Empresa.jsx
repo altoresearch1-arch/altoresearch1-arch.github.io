@@ -16,6 +16,7 @@ import Disclaimer from './Disclaimer'
 import Sparkline from './Sparkline'
 import Termometro from './Termometro'
 import HechosImportancia from './HechosImportancia'
+import ProduccionMinera from './ProduccionMinera'
 import { CountUp, Reveal } from '../lib/anim'
 import { useFavoritos, alternarFavorito } from '../lib/favoritos'
 import { useState } from 'react'
@@ -230,6 +231,11 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
               Tips educativos para saber qué mirar — no son recomendación de compra.
             </p>
           </Reveal>
+        )}
+
+        {/* ⛏️ Producción mensual del MINEM + minas y participaciones (solo mineras) */}
+        {e.sector === 'minas' && (
+          <Reveal><ProduccionMinera ticker={e.ticker} /></Reveal>
         )}
 
         {/* Fundamentos */}

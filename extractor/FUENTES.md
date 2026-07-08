@@ -81,3 +81,19 @@
 - Carpeta: `C:\Users\User\Desktop\INFORMES REALIZADOS ALTO RESEARCH`
   - Reportes Q1 2026 (NEXA, MINSUR, BVN, VOLCAN, CVERDE, BACKUS, BROCAL), DATOS_VERIFICADOS.md,
     plan de compra, manual educativo. Base de las tesis y escenarios.
+
+## MINEM — Boletín Estadístico Minero (BEM): producción mensual por empresa (08-jul-2026)
+- Colección (la pasó Jair): https://www.gob.pe/institucion/minem/colecciones/6-boletin-estadistico-minero
+- Lo que sirve: **"Cuadros Estadísticos Mineros – Prepublicación del BEM <MES>"** → Excel
+  `s01-produccion-minera-metalica-*.xlsx`, hoja **S01.C02** = producción POR EMPRESA (top ~10
+  por metal + "OTROS"). Para may/jun-2025 (sin prepublicación) → el "Excel de anexos" del
+  Boletín, hoja "2. PRODUCCIÓN EMPRESAS" (mismo cuadro).
+- **Truco clave:** la edición del mes M año Y trae ese mes para Y **y para Y-1** → con las
+  ediciones jul-2025→hoy se arma la serie mensual desde ene-2025.
+- Quirks: gob.pe devuelve **418 sin User-Agent de navegador** (mandar UA Chrome); nombres de
+  archivo varían (`ed-4`, `ed-04`, `-vf`, `%282%29`); "N/D" = sin dato; nombres de empresa con
+  `*`/nota al pie (limpiar); solo aparecen los TOP por metal → si una empresa no sale un mes,
+  produjo poco (NO es cero: la app lo explica, Regla #1).
+- Lo usa: `fetch_bem.py` → `mineria.json` (caché de Excels en `extractor/cache_bem/`, committeada;
+  auto-descubre ediciones nuevas en la colección). Familia minera (participaciones VERIFICADAS,
+  manual): `app/src/data/mineria_familia.json`. UI: `ProduccionMinera.jsx` (fichas de minas).

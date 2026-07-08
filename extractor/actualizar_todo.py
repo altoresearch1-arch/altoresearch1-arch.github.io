@@ -18,9 +18,10 @@ simultáneas y fetch_anual_eps ya falló una vez así):
   3. fetch_hechos        -> hechos.json         (HI por empresa 📰)
   4. div_stockanalysis   -> dividendos.json     (dividendos base)
   5. fetch_beneficios    -> dividendos.json     (parcha FIBRAs/chicas + CORRIGE moneda)
-  6. fetch_anual_eps     -> eps_anual.json      (ganancia anual + TC, para el P/E)
-  7. fix_eps             -> eps_anual.json      (parcha EPS distorsionados; SIEMPRE tras el 6)
-  8. auditoria           -> reporte             (falla si hay problemas estructurales)
+  6. fetch_bem           -> mineria.json        (producción minera mensual MINEM; solo baja ediciones nuevas)
+  7. fetch_anual_eps     -> eps_anual.json      (ganancia anual + TC, para el P/E)
+  8. fix_eps             -> eps_anual.json      (parcha EPS distorsionados; SIEMPRE tras el 7)
+  9. auditoria           -> reporte             (falla si hay problemas estructurales)
 
 TRIMESTRAL (cuando salga el Q2 2026, ~ago-set):
   0. Editar extractor/empresas_config.json: "trimestre": 2  (y "anio" si cambia)
@@ -42,6 +43,7 @@ PASOS_RAPIDOS = [
     "fetch_hechos.py",
     "div_stockanalysis.py",
     "fetch_beneficios.py",
+    "fetch_bem.py",       # producción minera MINEM (mensual; con caché, solo baja lo nuevo)
 ]
 
 # EPS anual (SMV, ~ESTÁTICO: el 2025 ya cerró) + su corrección. El SMV es LENTO y flaky

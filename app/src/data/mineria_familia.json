@@ -1,0 +1,173 @@
+{
+ "_comment": "MANUAL (no lo pisa ningún extractor). Familia minera por ticker: qué entidades del BEM se grafican en su ficha (claves de mineria.json), sus minas, y participaciones VERIFICADAS (memorias/reportes oficiales + prensa, jul-2026). 'dividendos' sale de nuestro dividendos.json — no afirmar nada que la app no respalde. Yields = último dato de stockanalysis, cambian a diario.",
+ "NEXAPEC1": {
+  "entidades": ["nexa_peru", "nexa_porvenir"],
+  "minas": [
+   "Cerro Lindo (Ica): zinc, cobre, plomo y plata — una de las minas de zinc más grandes del Perú. La opera Nexa Perú directamente.",
+   "El Porvenir (Pasco): zinc, plomo, plata — la opera su subsidiaria Nexa Resources El Porvenir.",
+   "Atacocha (Pasco): la controla el grupo a través de El Porvenir; se está integrando con El Porvenir en un solo complejo (Pasco)."
+  ],
+  "participaciones": [
+   {"nombre": "Nexa Atacocha", "ticker": "ATACOBC1", "pct": "62.89% de las acciones B (99.36% de las A)", "cotiza": true, "dividendos": "no reparte dividendos"}
+  ],
+  "nota": "Nexa Perú es a su vez controlada por Nexa Resources (grupo Votorantim, Brasil). En el BEM aparece con DOS entidades: Nexa Perú (Cerro Lindo) y Nexa El Porvenir — aquí se muestran las dos."
+ },
+ "ATACOBC1": {
+  "entidades": ["atacocha"],
+  "minas": [
+   "Atacocha (Pasco): zinc, plomo, plata y bismuto. En integración con la vecina El Porvenir (Complejo Pasco de Nexa)."
+  ],
+  "participaciones": [
+   {"nombre": "Nexa Perú (su controladora, vía El Porvenir)", "ticker": "NEXAPEC1", "pct": "el grupo Nexa tiene 62.89% de las B y 99.36% de las A", "cotiza": true, "dividendos": "sí reparte (yield ~7%, anual)"}
+  ]
+ },
+ "BVN": {
+  "entidades": ["buenaventura", "la_zanja", "coimolache"],
+  "minas": [
+   "Minas propias: Uchucchacua y Julcani (plata, en la sierra central), Tambomayo (oro-plata, Arequipa) y San Gabriel (oro, Moquegua — en construcción).",
+   "La Zanja (Cajamarca, oro): 100% de BVN desde 2022 (Newmont le cedió su parte).",
+   "Coimolache / Tantahuatay (Cajamarca, oro): 40.09%.",
+   "En 2022 BVN VENDIÓ su 43.65% de Yanacocha a Newmont por US$300M — Yanacocha ya no es parte de la familia."
+  ],
+  "participaciones": [
+   {"nombre": "Cerro Verde", "ticker": "CVERDEC1", "pct": "19.58% (socia minoritaria; Freeport 55.08% y Sumitomo 21%)", "cotiza": true, "dividendos": "sí reparte (yield ~4.8%, semestral)"},
+   {"nombre": "El Brocal", "ticker": "BROCALC1", "pct": "61.43% (BVN la controla)", "cotiza": true, "dividendos": "sí reparte (yield ~6.6%, semestral)"}
+  ],
+  "nota": "Buena parte del valor de BVN viene de sus participaciones: por cada dividendo que pagan Cerro Verde y El Brocal, a BVN le llega su porcentaje."
+ },
+ "CVERDEC1": {
+  "entidades": ["cerro_verde"],
+  "minas": [
+   "Cerro Verde (Arequipa): cobre y molibdeno — uno de los complejos de cobre más grandes del mundo, a tajo abierto."
+  ],
+  "participaciones": [
+   {"nombre": "Freeport-McMoRan (matriz, opera la mina)", "pct": "55.08%", "cotiza": false, "dividendos": "cotiza en NYSE, no en la BVL"},
+   {"nombre": "Sumitomo (Japón)", "pct": "21%", "cotiza": false, "dividendos": "—"},
+   {"nombre": "Buenaventura", "ticker": "BVN", "pct": "19.58%", "cotiza": true, "dividendos": "sí reparte (yield ~3.7%, semestral)"}
+  ]
+ },
+ "BROCALC1": {
+  "entidades": ["brocal"],
+  "minas": [
+   "Colquijirca / Marcapunta (Pasco): cobre, zinc, plomo, plata (y arsénico como subproducto reportado al BEM)."
+  ],
+  "participaciones": [
+   {"nombre": "Buenaventura (su controladora)", "ticker": "BVN", "pct": "61.43%", "cotiza": true, "dividendos": "sí reparte (yield ~3.7%, semestral)"}
+  ]
+ },
+ "VOLCABC1": {
+  "entidades": ["volcan", "chungar", "cerro_sac"],
+  "minas": [
+   "Yauli (Junín): su complejo principal — zinc, plomo, plata (varias minas subterráneas).",
+   "Chungar: Animón y Alpamarca (Pasco) — vía su subsidiaria Cía. Minera Chungar.",
+   "Adm. Cerro (Cerro de Pasco): vía su subsidiaria Empresa Administradora Cerro (absorbió Óxidos de Pasco en oct-2023)."
+  ],
+  "participaciones": [],
+  "nota": "En el BEM Volcan aparece con TRES entidades (Volcan, Chungar y Adm. Cerro) — aquí se muestran las tres. No reparte dividendos desde 2018 (prioriza pagar su deuda). Controlada por Integra Capital (Argentina) desde 2024."
+ },
+ "MINSURI1": {
+  "entidades": ["minsur", "marcobre"],
+  "minas": [
+   "San Rafael (Puno): estaño — la mina de estaño más grande de América y una de las mayores del mundo. Es la única productora de estaño del Perú.",
+   "Pucamarca (Tacna): oro a tajo abierto, de bajo costo (no suele aparecer en el top del BEM de oro — produce menos que las grandes auríferas).",
+   "Mina Justa (Ica, cobre): vía Marcobre, donde Minsur tiene el 60% (el 40% es de Copec/Alxar, Chile).",
+   "También opera Taboca/Pitinga en BRASIL (estaño) — no sale en el BEM porque no es producción peruana."
+  ],
+  "participaciones": [
+   {"nombre": "Marcobre (Mina Justa)", "pct": "60%", "cotiza": false, "dividendos": "no cotiza en bolsa — su aporte llega a Minsur como dividendos intercompañía"}
+  ],
+  "nota": "Minsur es del grupo Breca (familia Brescia). En el BEM aparece con DOS entidades: Minsur (estaño) y Marcobre (cobre)."
+ },
+ "SPCCPI1": {
+  "entidades": ["southern"],
+  "minas": [
+   "Toquepala (Tacna) y Cuajone (Moquegua): cobre y molibdeno a tajo abierto, más la fundición y refinería de Ilo."
+  ],
+  "participaciones": [
+   {"nombre": "Southern Copper Corporation (matriz)", "ticker": "SCCO", "pct": "la sucursal peruana es 100% de SCCO", "cotiza": true, "dividendos": "sí reparte (yield ~2.2%, trimestral)"}
+  ]
+ },
+ "SCCO": {
+  "entidades": ["southern"],
+  "minas": [
+   "En el Perú: Toquepala y Cuajone (vía su sucursal, que también cotiza en la BVL como SPCCPI1).",
+   "En México: Buenavista y La Caridad — NO salen en el BEM porque no son producción peruana (aquí solo ves su lado peruano)."
+  ],
+  "participaciones": [
+   {"nombre": "Southern Perú (sucursal)", "ticker": "SPCCPI1", "pct": "100%", "cotiza": true, "dividendos": "sí repartió en 2025 (yield ~3.3%)"}
+  ],
+  "nota": "SCCO es controlada por Grupo México (~88.9%)."
+ },
+ "PODERC1": {
+  "entidades": ["poderosa"],
+  "minas": [
+   "Pataz (La Libertad): oro subterráneo de alta ley. Zona golpeada por la minería ilegal y la inseguridad (su gran riesgo, ya lo cuentan sus tips)."
+  ],
+  "participaciones": []
+ },
+ "MINCORI1": {
+  "entidades": ["corona"],
+  "minas": [
+   "Yauricocha (Lima): polimetálica subterránea (zinc, plomo, plata, cobre)."
+  ],
+  "participaciones": [
+   {"nombre": "Sierra Metals (su controladora)", "pct": "81.84%", "cotiza": false, "dividendos": "en 2025 Alpayana (grupo peruano, no cotiza) compró Sierra Metals; anunció OPA por las acciones de Corona"}
+  ],
+  "nota": "Corona no reparte dividendos desde 2021 (nuestros datos). Ojo: aparece poco en el top del BEM — produce por debajo de las grandes."
+ },
+ "LUISAI1": {
+  "entidades": ["santa_luisa"],
+  "minas": [
+   "Huanzalá (Áncash): zinc, plomo, plata. Y la unidad Pallca."
+  ],
+  "participaciones": [
+   {"nombre": "Grupo Mitsui (Japón)", "pct": "~70% Mitsui Mining & Smelting + ~30% Mitsui & Co.", "cotiza": false, "dividendos": "las matrices cotizan en Tokio, no en la BVL"}
+  ],
+  "nota": "Aparece poco en el top del BEM (produce por debajo de las 10 grandes de cada metal). Sí reparte dividendos (yield ~6.7%, anual)."
+ },
+ "MOROCOI1": {
+  "entidades": ["simsa"],
+  "minas": [
+   "San Vicente (Junín): zinc y plomo, subterránea."
+  ],
+  "participaciones": [],
+  "sinProduccion": "SIMSA no apareció ni un mes (ene-2025 → hoy) en el top de productores del BEM: produce muy poco a escala nacional. No hay datos publicados por empresa fuera del top — no se inventa un cero."
+ },
+ "PERUBAI1": {
+  "entidades": ["perubar"],
+  "minas": [],
+  "participaciones": [
+   {"nombre": "Glencore (su controladora)", "pct": "mayoría", "cotiza": false, "dividendos": "cotiza en Londres, no en la BVL"}
+  ],
+  "sinProduccion": "Perubar YA NO opera minas (su mina Rosaura cerró). Hoy su negocio son los almacenes de concentrados en el Callao. Por eso no aparece en el BEM de producción."
+ },
+ "PML": {
+  "entidades": [],
+  "minas": [],
+  "participaciones": [],
+  "sinProduccion": "Panoro es una minera JUNIOR: explora (Cotabambas, Apurímac), todavía NO produce. Por eso no tiene producción en el BEM — su valor es la apuesta a que el proyecto avance."
+ },
+ "PPX": {
+  "entidades": [],
+  "minas": [],
+  "participaciones": [],
+  "sinProduccion": "PPX produce oro a escala muy pequeña (proyecto Igor/Callanquitas, La Libertad) — muy por debajo del top del BEM, que solo publica los principales productores por metal. No hay datos mensuales por empresa fuera del top."
+ },
+ "ANDEXBC1": {
+  "entidades": [],
+  "minas": [],
+  "participaciones": [],
+  "sinProduccion": "Andex es una junior local de exploración: NO produce. Sin producción no hay nada que graficar del BEM."
+ },
+ "SHPC1": {
+  "entidades": ["shougang", "shouxin"],
+  "minas": [
+   "Marcona (Ica): hierro — el único gran productor de hierro del Perú (~98% del hierro nacional).",
+   "Minera Shouxin: reprocesa los RELAVES de Marcona (hierro, zinc, cobre) — Shougang tiene el 49% (Baiyin, China, el 51%)."
+  ],
+  "participaciones": [
+   {"nombre": "Shougang Corporation (China, su matriz)", "pct": "~98.5% desde 1992", "cotiza": false, "dividendos": "—"}
+  ],
+  "nota": "Sí reparte dividendos (yield ~5.6%, anual). En el BEM aparece con DOS entidades: Shougang (la mina) y Shouxin (los relaves)."
+ }
+}
