@@ -2553,3 +2553,20 @@ a.link {
 
 /* Fix móvil: textos largos sin espacios (fuentes SMV, links) no deben desbordar */
 .lista-limpia li { overflow-wrap: anywhere; }
+
+/* prodmin v3: eje con números, frontera de año, valor final */
+.prodmin-ytick {
+  fill: var(--texto-tenue);
+  font-size: 9.5px;
+}
+.prodmin-anio {
+  fill: var(--texto-tenue);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.prodmin-anio.oro { fill: var(--oro); }
+.prodmin-vfinal {
+  font-size: 10.5px;
+  font-weight: 800;
+}

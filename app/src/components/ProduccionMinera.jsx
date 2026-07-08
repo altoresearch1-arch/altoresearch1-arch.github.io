@@ -62,6 +62,14 @@ function delMetal(metal, info) {
   return metal === 'plata' ? `de la ${info.nombre.toLowerCase()}` : `del ${info.nombre.toLowerCase()}`
 }
 
+// Números compactos para el eje: 1.1 M · 110 k · 850
+function compacto(v) {
+  if (v >= 1e6) return (v / 1e6).toFixed(v >= 1e7 ? 0 : 1) + ' M'
+  if (v >= 1e3) return (v / 1e3).toFixed(v >= 1e4 ? 0 : 1) + ' k'
+  if (v >= 10) return Math.round(v).toString()
+  return v.toFixed(1)
+}
+
 function pctTexto(actual, base) {
   if (actual == null || base == null || base === 0) return null
   const pct = ((actual - base) / base) * 100
@@ -85,9 +93,9 @@ function GraficoMetal({ metal, lineas, meses, conLeyenda }) {
   const info = METAL_INFO[metal] || { nombre: metal, unidad: '', emoji: '⛏️' }
   const [hover, setHover] = useState(null)
   const W = 620
-  const H = 190
-  const PADL = 8
-  const PADR = 8
+  const H = 200
+  const PADL = 48
+  const PADR = 10
   const PADT = 30
   const PADB = 24
 
@@ -224,12 +232,41 @@ function GraficoMetal({ metal, lineas, meses, conLeyenda }) {
           aria-label={`Producción mensual de ${info.nombre} (${info.unidad})`}
           onMouseMove={moverHover} onMouseLeave={() => setHover(null)}
           onTouchStart={moverHover} onTouchMove={moverHover} onTouchEnd={() => setHover(null)}>
-          {/* grilla horizontal punteada */}
+          {/* degradados para el relleno bajo cada línea */}
+          <defs>
+            {lineas.map((l) => (
+              <linearGradient key={l.clave} id={`pmg-${metal}-${l.clave}`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={l.color} stopOpacity="0.28" />
+                <stop offset="100%" stopColor={l.color} stopOpacity="0" />
+              </linearGradient>
+            ))}
+          </defs>
+          {/* grilla horizontal punteada CON números (eje Y) */}
           {[0.25, 0.5, 0.75, 1].map((f) => (
-            <line key={f} x1={PADL} x2={W - PADR} y1={py(max * f)} y2={py(max * f)}
-              stroke="rgba(212,175,55,0.18)" strokeWidth="1" strokeDasharray="2 4" />
+            <g key={f}>
+              <line x1={PADL} x2={W - PADR} y1={py(max * f)} y2={py(max * f)}
+                stroke="rgba(212,175,55,0.16)" strokeWidth="1" strokeDasharray="2 4" />
+              <text x={PADL - 7} y={py(max * f) + 3.5} textAnchor="end" className="prodmin-ytick">
+                {compacto(max * f)}
+              </text>
+            </g>
           ))}
           <line x1={PADL} x2={W - PADR} y1={py(0)} y2={py(0)} stroke="rgba(212,175,55,0.35)" strokeWidth="1" />
+          <text x={PADL - 7} y={py(0) + 3.5} textAnchor="end" className="prodmin-ytick">0</text>
+          {/* frontera 2025 | 2026 */}
+          {(() => {
+            const i26 = meses.indexOf('2026-01')
+            if (i26 <= 0) return null
+            const x = (px(i26 - 1) + px(i26)) / 2
+            return (
+              <g>
+                <line x1={x} x2={x} y1={PADT - 10} y2={H - PADB}
+                  stroke="rgba(244,241,233,0.16)" strokeWidth="1" strokeDasharray="5 4" />
+                <text x={x - 5} y={PADT - 14} textAnchor="end" className="prodmin-anio">2025</text>
+                <text x={x + 5} y={PADT - 14} textAnchor="start" className="prodmin-anio oro">2026</text>
+              </g>
+            )
+          })()}
           {ticks.map(({ m, i }) => (
             <text key={m} x={px(i)} y={H - 8}
               textAnchor={i === 0 ? 'start' : i === meses.length - 1 ? 'end' : 'middle'}
@@ -242,16 +279,23 @@ function GraficoMetal({ metal, lineas, meses, conLeyenda }) {
             <line x1={px(hover)} x2={px(hover)} y1={PADT - 6} y2={H - PADB}
               stroke="rgba(244,241,233,0.35)" strokeWidth="1" strokeDasharray="3 3" />
           )}
-          {/* una línea por entidad, cortada en los meses sin dato */}
+          {/* una línea por entidad (con relleno degradado), cortada en los meses sin dato */}
           {lineas.map((l) => {
             const color = l.color
             return segmentos(l.valores).map((seg, s) => (
               <g key={`${l.clave}-${s}`}>
                 {seg.length > 1 && (
-                  <polyline
-                    points={seg.map(([i, v]) => `${px(i).toFixed(1)},${py(v).toFixed(1)}`).join(' ')}
-                    fill="none" stroke={color} strokeWidth="2"
-                    strokeLinejoin="round" strokeLinecap="round" />
+                  <>
+                    <polygon
+                      points={`${px(seg[0][0]).toFixed(1)},${py(0).toFixed(1)} ${seg
+                        .map(([i, v]) => `${px(i).toFixed(1)},${py(v).toFixed(1)}`)
+                        .join(' ')} ${px(seg[seg.length - 1][0]).toFixed(1)},${py(0).toFixed(1)}`}
+                      fill={`url(#pmg-${metal}-${l.clave})`} />
+                    <polyline
+                      points={seg.map(([i, v]) => `${px(i).toFixed(1)},${py(v).toFixed(1)}`).join(' ')}
+                      fill="none" stroke={color} strokeWidth="2.2"
+                      strokeLinejoin="round" strokeLinecap="round" />
+                  </>
                 )}
                 {seg.map(([i, v]) => (
                   <circle key={i} cx={px(i)} cy={py(v)} r={hover === i ? 4.5 : 3} fill={color}>
@@ -260,6 +304,27 @@ function GraficoMetal({ metal, lineas, meses, conLeyenda }) {
                 ))}
               </g>
             ))
+          })}
+          {/* último dato de cada línea: anillo + su valor al costado (si hay sitio) */}
+          {lineas.map((l) => {
+            let iFin = -1
+            for (let i = l.valores.length - 1; i >= 0; i--) {
+              if (l.valores[i] != null) { iFin = i; break }
+            }
+            if (iFin < 0) return null
+            const v = l.valores[iFin]
+            return (
+              <g key={`fin-${l.clave}`}>
+                <circle cx={px(iFin)} cy={py(v)} r="5.5" fill="none" stroke={l.color}
+                  strokeWidth="1.5" opacity="0.8" />
+                {lineas.length === 1 && (
+                  <text x={px(iFin) - 9} y={py(v) - 9} textAnchor="end"
+                    className="prodmin-vfinal" fill={l.color}>
+                    {compacto(v)}
+                  </text>
+                )}
+              </g>
+            )
           })}
           {/* récord del período */}
           {record && (
