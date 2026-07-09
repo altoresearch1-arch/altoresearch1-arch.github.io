@@ -76,11 +76,56 @@ const SENALES = [
   { re: /(sanci[oó]n|multa|demanda|arbitraje|litigio|medida cautelar)/i, peso: -3, texto: 'problema legal o sanción' },
   { re: /(suspensi[oó]n|paralizaci[oó]n|huelga|interrupci[oó]n|fuerza mayor|siniestro|accidente)/i, peso: -3, texto: 'operación afectada' },
   { re: /(renuncia)/i, peso: -1, texto: 'renuncia en la plana directiva' },
-  { re: /(incumplimiento|default|insolvencia|liquidaci[oó]n|quiebra)/i, peso: -4, texto: 'problema financiero serio' },
+  // OJO: "liquidación" a secas NO — en derivados significa settlement del contrato
+  { re: /(incumplimiento|insolvencia|quiebra|(?:en|proceso de)\s+liquidaci[oó]n)/i, peso: -4, texto: 'problema financiero serio' },
   { re: /(no .{0,20}repartir[aá]?|sin dividendos)/i, peso: -1, texto: 'no habrá reparto' },
 ]
 
 const sinCola = (n) => n.replace(/\s+(S\.?A\.?A?\.?|S\.?A\.?C\.?)\s*$/i, '').trim()
+
+// Preguntas sugeridas SEGÚN el tipo de documento (estilo NotebookLM, pero las
+// respuestas salen de nuestro glosario y del propio texto — cero invención).
+export const PREGUNTAS_POR_CATEGORIA = {
+  derivados: ['¿Qué es un Zero Cost Collar?', '¿Cuánto lleva ganado o perdido con derivados?', '¿Qué es el monto nocional?'],
+  dividendo: ['¿Cuánto paga por acción?', '¿Qué es la fecha de registro?', '¿Qué es el yield?'],
+  resultados: ['¿Qué montos menciona el documento?', '¿Qué es el margen neto?', '¿Qué es el BPA?'],
+  junta: ['¿Qué se va a decidir en la junta?', '¿Qué es una junta de accionistas?'],
+  adquisicion: ['¿Qué es una OPA?', '¿Quién compra y quién vende?', '¿Qué es un holding?'],
+  directorio: ['¿Quién entra o sale de la empresa?', '¿Qué es el directorio?'],
+  legal: ['¿Qué es un arbitraje?', '¿De cuánto es la multa o demanda?'],
+  operacional: ['¿Qué operación se afectó?', '¿Desde cuándo y hasta cuándo?'],
+  deuda: ['¿Cuánta deuda se emite o refinancia?', '¿Qué es la deuda neta?'],
+}
+
+// Extractores ESPECIALIZADOS por tipo de documento: pescan los datos que un
+// lector experto buscaría (instrumento, onzas cubiertas, resultado acumulado,
+// dividendo por acción, fechas de registro/pago…).
+function extraerDetalles(texto, clave) {
+  const det = {}
+  if (clave === 'derivados') {
+    // en orden de ESPECIFICIDAD (match() devuelve lo primero del texto, no del patrón)
+    const inst = /zero\s*cost\s*collar|collar/i.test(texto) ? 'Zero Cost Collar (banda de precios sin costo inicial)'
+      : /forward/i.test(texto) ? 'forwards (precio pactado a futuro)'
+      : /swap/i.test(texto) ? 'swaps'
+      : /opcion(?:es)?/i.test(texto) ? 'opciones' : null
+    if (inst) det.instrumento = inst
+    const nocionales = [...texto.matchAll(/([\d][\d,]*(?:\.\d+)?)\s*(onzas|oz|toneladas|tm\b|tmf)\s*(?:de\s*)?(plata|oro|zinc|cobre|plomo|estano|estaño)?/gi)]
+      .slice(0, 4).map((m) => `${m[1]} ${m[2]}${m[3] ? ' de ' + m[3] : ''}`)
+    if (nocionales.length) det.nocional = nocionales
+    const acum = texto.match(/(?:acumulad[oa]s?|del\s+ano|del\s+año|anual(?:izado)?)[^.]{0,80}?((?:US\$|\$|S\/)\s?[\d][\d,]*(?:\.\d+)?)/i)
+      || texto.match(/((?:US\$|\$|S\/)\s?[\d][\d,]*(?:\.\d+)?)[^.]{0,60}(?:acumulad[oa]s?)/i)
+    if (acum) det.resultadoAcumulado = acum[1]
+  }
+  if (clave === 'dividendo') {
+    const porAccion = texto.match(/((?:US\$|\$|S\/\.?)\s?[\d]+(?:\.\d+)?)[^.]{0,40}por\s+acci[oó]n/i)
+    if (porAccion) det.porAccion = porAccion[1]
+    const registro = texto.match(/fecha\s+de\s+registro[^\d]{0,20}(\d{1,2}[^\s,.]*(?:\s+de\s+[a-záéíóú]+\s+de(?:l)?\s+\d{4}|[/-]\d{1,2}[/-]\d{2,4}))/i)
+    if (registro) det.fechaRegistro = registro[1]
+    const entrega = texto.match(/fecha\s+de\s+(?:entrega|pago)[^\d]{0,20}(\d{1,2}[^\s,.]*(?:\s+de\s+[a-záéíóú]+\s+de(?:l)?\s+\d{4}|[/-]\d{1,2}[/-]\d{2,4}))/i)
+    if (entrega) det.fechaEntrega = entrega[1]
+  }
+  return det
+}
 
 function detectarEmpresa(textoN) {
   let mejor = null
@@ -129,11 +174,12 @@ export function analizar(texto, nombreArchivo = '') {
   }
   let veredicto = puntaje >= 2 ? 'buena' : puntaje <= -2 ? 'mala' : 'neutra'
   // Los reportes RUTINARIOS (ej. posición mensual en derivados) mencionan
-  // "pérdidas/ganancias" como parte de sus tablas — eso no es noticia. Solo un
-  // puntaje extremo los saca de "neutra".
-  if (categoria?.rutinario && Math.abs(puntaje) < 5) {
+  // "pérdidas/ganancias/liquidación" como parte de sus TABLAS — eso no es
+  // noticia. SIEMPRE neutra (falso 🔴 de Minsur cazado el 09-jul).
+  if (categoria?.rutinario) {
     veredicto = 'neutra'
-    razones.unshift('es un reporte periódico rutinario (informativo, no una noticia)')
+    razones.length = 0
+    razones.push('es un reporte periódico rutinario (informativo, no una noticia)')
   }
 
   // frases clave: oraciones con montos / señales / palabras de la categoría
@@ -159,6 +205,8 @@ export function analizar(texto, nombreArchivo = '') {
     montos,
     fechas,
     frases,
+    detalles: extraerDetalles(texto, categoria?.clave),
+    preguntas: PREGUNTAS_POR_CATEGORIA[categoria?.clave] || null,
     // el texto entero (recortado) viaja a Atlas para responder repreguntas
     texto: texto.slice(0, 15000),
     nombreArchivo,

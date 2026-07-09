@@ -38,6 +38,9 @@ export default defineConfig({
         // la app es estática: todo (HTML, JS, CSS, JSON de datos, logo) se
         // precachea y queda disponible offline
         globPatterns: ['**/*.{js,css,html,png,jpg,svg,webmanifest}'],
+        // el bundle pasó los 2 MiB (default de workbox) al sumar lecturas.json
+        // (las lecturas de hechos del robot, 09-jul); 4 MiB da aire de sobra
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
       },
     }),
   ],

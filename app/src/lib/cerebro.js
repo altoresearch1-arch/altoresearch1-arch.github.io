@@ -5,6 +5,7 @@ import tesisData from '../data/tesis.json'
 import tipsData from '../data/tips.json'
 import hechosData from '../data/hechos.json'
 import conocimientoData from '../data/conocimiento.json'
+import lecturasData from '../data/lecturas.json'
 import { precioDe, peInfo, dividendosDe, yieldNumerico } from './finanzas'
 import { leerContexto, marcarContextoVisto, hechosAprendidos } from './sentinel'
 
@@ -38,13 +39,14 @@ const sinCola = (n) => n.replace(/\s+(S\.?A\.?A?\.?|S\.?A\.?C\.?)\s*$/i, '').tri
 // Índice de empresas: ticker + nombre limpio + palabras "fuertes" del nombre
 // (≥5 letras y no genéricas) para pescar "buenaventura", "backus", "unacem"…
 const GENERICAS = new Set(['compania', 'corporacion', 'sociedad', 'minera', 'minas', 'banco',
-  'grupo', 'empresa', 'peruana', 'peruano', 'holding', 'inversiones', 'industrias',
-  'consorcio', 'financiera', 'seguros', 'andina', 'general', 'nacional', 'agraria',
+  'grupo', 'empresa', 'peruana', 'peruano', 'peru', 'lima', 'corp', 'holding', 'inversiones',
+  'industrias', 'consorcio', 'financiera', 'seguros', 'andina', 'general', 'nacional', 'agraria',
   'agroindustrial', 'azucarera', 'electrica', 'electricidad', 'energia', 'internacional'])
 
 const EMPRESAS = empresasData.empresas.map((e) => {
   const limpio = sinCola(e.nombre)
-  const palabras = norm(limpio).split(' ').filter((w) => w.length >= 5 && !GENERICAS.has(w))
+  // ≥4 letras: "Nexa" o "Auna" también cuentan (los nombres cortos existen)
+  const palabras = norm(limpio).split(' ').filter((w) => w.length >= 4 && !GENERICAS.has(w))
   return { ...e, nombreCorto: limpio, alias: norm(limpio), palabras }
 })
 
@@ -226,14 +228,31 @@ function respuestaRiesgos(e) {
   return { texto: lineas.join('\n'), ticker: e.ticker, chips: [`¿Qué hace ${e.nombreCorto}?`, `Últimas noticias de ${e.nombreCorto}`, '¿Qué es la deuda neta?'] }
 }
 
+// lectura pre-hecha por el ROBOT (gen_lecturas.py) del PDF de un hecho
+const lecturaDe = (pdf) => {
+  const l = pdf && lecturasData.lecturas?.[pdf]
+  return l && !l.escaneado ? l : null
+}
+
 function respuestaHechos(e) {
   const hs = hechosDe(e.ticker).slice(0, 3)
   if (hs.length === 0) {
     return { texto: `No tengo hechos de importancia recientes de **${e.nombreCorto}** en mi registro (últimos 12 meses de la BVL).`, ticker: e.ticker, chips: chipsEmpresa(e) }
   }
   const lineas = [`Últimos hechos de importancia de **${e.nombreCorto}** (comunicados oficiales a la BVL):`]
-  for (const h of hs) lineas.push(`📰 ${h.fecha} · ${h.categoria}${h.titulo ? ' — ' + h.titulo : ''}`)
-  lineas.push('En su ficha están todos, con el PDF oficial de cada uno.')
+  for (const h of hs) {
+    const lec = lecturaDe(h.pdf)
+    const emoji = lec ? ({ buena: ' 🟢', mala: ' 🔴', neutra: ' 🟡' })[lec.veredicto] : ''
+    lineas.push(`📰 ${h.fecha} · ${h.categoria}${h.titulo ? ' — ' + h.titulo : ''}${emoji}`)
+  }
+  // el robot ya LEYÓ los PDF más recientes: sumar su lectura (esto es lo aprendido)
+  const conLectura = hs.map((h) => ({ h, lec: lecturaDe(h.pdf) })).find((x) => x.lec)
+  if (conLectura) {
+    const { lec } = conLectura
+    lineas.push(`🛰️ Ya leí el del ${conLectura.h.fecha}: ${VEREDICTO_TXT[lec.veredicto]}${lec.razones?.length ? ` (${lec.razones[0].replace(/^🟢 |^🔴 /, '')})` : ''}.`)
+    if (lec.frases?.[0]) lineas.push(`📄 «${lec.frases[0].slice(0, 200)}»`)
+  }
+  lineas.push('En su ficha están todos, con el PDF oficial de cada uno (🟢🔴🟡 = mi lectura automática).')
   return { texto: lineas.join('\n'), ticker: e.ticker, chips: [`¿Qué hace ${e.nombreCorto}?`, '¿Qué es un hecho de importancia?'] }
 }
 
@@ -321,16 +340,30 @@ const VEREDICTO_TXT = {
 
 const chipsDoc = (doc) => [
   '¿Es buena o mala noticia?',
-  '¿Qué montos menciona el documento?',
+  ...(doc.preguntas || ['¿Qué montos menciona el documento?']),
   ...(doc.ticker ? [`¿Qué hace ${sinCola(doc.empresa || doc.ticker)}?`] : []),
-]
+].slice(0, 4)
+
+// los datos que pescaron los extractores especializados, en líneas legibles
+function lineasDetalles(doc) {
+  const d = doc.detalles || {}
+  const lineas = []
+  if (d.instrumento) lineas.push(`🛡 Instrumento de cobertura: ${d.instrumento}.`)
+  if (d.nocional?.length) lineas.push(`⚖ Cantidades cubiertas: ${d.nocional.join(' · ')}.`)
+  if (d.resultadoAcumulado) lineas.push(`💰 Resultado acumulado del año con estos contratos: ${d.resultadoAcumulado}.`)
+  if (d.porAccion) lineas.push(`💰 Dividendo: ${d.porAccion} por acción.`)
+  if (d.fechaRegistro) lineas.push(`📅 Fecha de registro (quién cobra): ${d.fechaRegistro}.`)
+  if (d.fechaEntrega) lineas.push(`📅 Fecha de entrega/pago: ${d.fechaEntrega}.`)
+  return lineas
+}
 
 function respDocResumen(doc) {
   const lineas = [
     `🛰️ Sobre el documento que me pasó Sentinel${doc.empresa ? ` (de **${doc.empresa}**)` : ''}:`,
     `📂 Tipo: ${doc.categoria}. Mi lectura: ${VEREDICTO_TXT[doc.veredicto]}.`,
+    ...lineasDetalles(doc),
   ]
-  for (const f of (doc.frases || []).slice(0, 3)) lineas.push(`📄 «${f}»`)
+  for (const f of (doc.frases || []).slice(0, 2)) lineas.push(`📄 «${f}»`)
   if (doc.montos?.length) lineas.push(`💵 Montos que vi: ${doc.montos.slice(0, 5).join(' · ')}`)
   lineas.push('Recuerda: leo por palabras y patrones (beta) — dale una leída tú también.')
   return { texto: lineas.join('\n'), ticker: doc.ticker || undefined, chips: chipsDoc(doc) }
@@ -395,7 +428,7 @@ export function saludoSentinel() {
   return {
     texto: lineas.join('\n'),
     ticker: doc.ticker || undefined,
-    chips: ['¿Es buena o mala noticia?', '¿De qué trata el documento?', '¿Qué montos menciona el documento?'],
+    chips: ['¿De qué trata el documento?', ...chipsDoc(doc).slice(0, 3)],
   }
 }
 
@@ -421,6 +454,16 @@ export function responder(pregunta) {
   if (doc && (hablaDelDoc || !e)) {
     if (/(de que trata|resume|resumen|que dice)/.test(q)) return respDocResumen(doc)
     if (/(buena|mala|como pinta|positiv|negativ)/.test(q) && /(noticia|documento|hecho|pinta)/.test(q)) return respDocVeredicto(doc)
+    // los datos que pescaron los extractores especializados
+    if (/(ganado|perdido|gano|perdio|resultado).{0,30}(derivad|cobertura|contrato)/.test(q) || /derivad.{0,30}(resultado|ganancia|perdida)/.test(q)) {
+      const d = doc.detalles || {}
+      if (d.resultadoAcumulado || d.instrumento || d.nocional) {
+        return { texto: ['Lo que dice el documento sobre sus coberturas:', ...lineasDetalles(doc)].join('\n'), chips: chipsDoc(doc) }
+      }
+    }
+    if (/(cuanto paga|por accion|fecha de (registro|entrega|pago))/.test(q) && (doc.detalles?.porAccion || doc.detalles?.fechaRegistro)) {
+      return { texto: ['Lo que dice el documento sobre el reparto:', ...lineasDetalles(doc)].join('\n'), chips: chipsDoc(doc) }
+    }
     if (/(monto|cifra|cuanto|cantidad|plata|dinero)/.test(q) && hablaDelDoc) return respDocDatos(doc, 'montos')
     if (/fecha/.test(q) && hablaDelDoc) return respDocDatos(doc, 'fechas')
     if (hablaDelDoc) return respDocResumen(doc)

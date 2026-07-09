@@ -4,6 +4,26 @@
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
 > herramienta), lee esto primero. Última actualización: **09 jul 2026**. Estado: **EN VIVO (beta pública)**.
 
+## 🛰️ RONDA 4 del 09-jul (Fable): NUTRICIÓN MASIVA — el robot lee los hechos de TODOS
+Pedido de Jair ("que los dos aprendan de todas las empresas, sus 2 últimos hechos" + conversación
+de NotebookLM como referencia de nivel). Piezas:
+- **`extractor/gen_lecturas.py`**: port a PYTHON del análisis de sentinel.js (MANTENER EN ESPEJO:
+  si cambias reglas en uno, cambia el otro). Baja el PDF de los 2 últimos hechos de cada empresa
+  (pypdf, nuevo en requirements.txt), los analiza y escribe `app/src/data/lecturas.json`
+  (clave = URL del PDF → sirve de CACHÉ incremental: primera corrida ~200 PDFs en minutos, las
+  siguientes solo los hechos nuevos en segundos; PDFs escaneados → `escaneado:true` honesto;
+  los PDF NO se guardan, solo el análisis ~0.5KB c/u). En el orquestador tras fetch_hechos
+  (modos --hechos y --rapido) → el robot de cada 30 min mantiene las lecturas al día.
+- **App**: `HechosImportancia.jsx` muestra badge 🟢/🔴/🟡 junto a cada hecho leído (tooltip con
+  las razones); Atlas en "últimas noticias de X" suma su lectura ("🛰️ Ya leí el del [fecha]:
+  pinta…" + frase clave del PDF).
+- **Nivel NotebookLM**: extractores ESPECIALIZADOS en sentinel.js/gen_lecturas.py — derivados
+  (instrumento Zero Cost Collar, onzas nocionales, resultado acumulado del año) y dividendos
+  (monto por acción, fecha de registro/entrega) → `detalles` en el informe; **preguntas sugeridas
+  POR CATEGORÍA** (PREGUNTAS_POR_CATEGORIA) como chips en Atlas; **términos 176→183** (derivado,
+  zero cost collar, monto nocional, valor razonable, forward, opción put, opción call) para que
+  Atlas explique los conceptos como profesor (con NUESTRAS definiciones, no inventadas).
+
 ## 🛰️ RONDA 3 del 09-jul (Fable): SENTINEL — el lector de hechos de importancia
 Pedido de Jair ("que el usuario descargue el hecho, se lo pegue a una IA, ella lea, y abra un
 chat con Atlas ya con el contexto"). Él eligió el nombre **Sentinel**. Piezas:

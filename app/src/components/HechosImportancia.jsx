@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import hechosData from '../data/hechos.json'
+import lecturasData from '../data/lecturas.json'
 
 // Hechos de Importancia: los comunicados OFICIALES que la empresa está
 // obligada a enviar al regulador (SMV) y que publica la BVL. Es la fuente
@@ -7,6 +8,14 @@ import hechosData from '../data/hechos.json'
 // (extractor/fetch_hechos.py, últimos ~12 meses).
 
 const VISIBLES = 5
+
+// 🛰️ lectura automática pre-hecha por el robot (gen_lecturas.py): veredicto
+// de los 2 hechos más recientes de cada empresa, clave = URL del PDF
+const EMOJI_LECTURA = { buena: '🟢', mala: '🔴', neutra: '🟡' }
+function lecturaDe(pdf) {
+  const l = pdf && lecturasData.lecturas?.[pdf]
+  return l && !l.escaneado ? l : null
+}
 
 function fechaCorta(iso) {
   if (!iso) return ''
@@ -25,11 +34,21 @@ export default function HechosImportancia({ ticker }) {
     <div>
       <div className="seccion-titulo">📰 Hechos de Importancia (comunicados oficiales)</div>
       <div className="hi-lista">
-        {lista.map((x, i) => (
+        {lista.map((x, i) => {
+          const lec = lecturaDe(x.pdf)
+          return (
           <div key={i} className="hi-item">
             <div className="hi-cab">
               <span className="hi-fecha">{fechaCorta(x.fecha)}</span>
               {x.categoria && <span className="hi-cat">{x.categoria}</span>}
+              {lec && (
+                <span
+                  className={`hi-lectura v-${lec.veredicto}`}
+                  title={`🛰️ Lectura automática de Sentinel: pinta ${lec.veredicto === 'buena' ? 'a buena noticia' : lec.veredicto === 'mala' ? 'a mala noticia' : 'neutra/administrativa'}${lec.razones?.length ? ' — ' + lec.razones.join('; ').replace(/🟢 |🔴 /g, '') : ''}`}
+                >
+                  {EMOJI_LECTURA[lec.veredicto]}
+                </span>
+              )}
               {x.pdf && (
                 <a className="hi-pdf" href={x.pdf} target="_blank" rel="noopener noreferrer">
                   PDF ↗
@@ -38,7 +57,8 @@ export default function HechosImportancia({ ticker }) {
             </div>
             {x.titulo && <div className="hi-titulo">{x.titulo}</div>}
           </div>
-        ))}
+          )
+        })}
       </div>
       {h.hechos.length > VISIBLES && (
         <button className="btn btn-fantasma hi-vermas" onClick={() => setAbiertos((v) => !v)}>

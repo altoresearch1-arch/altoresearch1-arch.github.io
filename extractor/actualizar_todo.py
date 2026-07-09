@@ -43,6 +43,7 @@ PASOS_RAPIDOS = [
     "fetch_precios.py",
     "fetch_historicos.py",
     "fetch_hechos.py",
+    "gen_lecturas.py",    # 🛰️ lee los PDF de los 2 últimos hechos de c/u (caché: solo los nuevos)
     "div_stockanalysis.py",
     "fetch_beneficios.py",
     "fetch_bem.py",       # producción minera MINEM (mensual; con caché, solo baja lo nuevo)
@@ -60,7 +61,7 @@ PASOS_DIARIO = PASOS_RAPIDOS + PASOS_EPS
 
 # Modos INTRADÍA del robot (livianos, corren varias veces al día en horario de
 # mercado; el BEM es MENSUAL pero fetch_bem tiene caché y no commitea ruido):
-PASOS_HECHOS = ["fetch_hechos.py", "fetch_bem.py"]
+PASOS_HECHOS = ["fetch_hechos.py", "gen_lecturas.py", "fetch_bem.py"]
 PASOS_PRECIOS = ["fetch_precios.py", "fetch_historicos.py"]
 
 

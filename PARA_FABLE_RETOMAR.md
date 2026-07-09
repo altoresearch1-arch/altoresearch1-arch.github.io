@@ -7,6 +7,16 @@ Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTAD
 
 ---
 
+## ⚡ NUEVO 09-jul ronda 4 (Fable): el robot LEE los hechos de TODOS (lecturas.json)
+> `extractor/gen_lecturas.py` = port Python del análisis de sentinel.js (MANTENER EN ESPEJO)
+> con pypdf: lee los PDF de los 2 últimos hechos de cada empresa → `data/lecturas.json`
+> (clave=URL del PDF, caché incremental; escaneados marcados honesto). Corre tras fetch_hechos
+> en --hechos y --rapido. En la app: badge 🟢/🔴/🟡 en cada hecho (HechosImportancia) y Atlas
+> suma su lectura en "últimas noticias de X". Nivel NotebookLM: extractores de derivados
+> (collar/nocional/resultado acumulado) y dividendos (por acción/registro/entrega), preguntas
+> sugeridas POR CATEGORÍA (chips), términos 176→183 (derivado, zero cost collar, nocional,
+> valor razonable, forward, put, call).
+
 ## ⚡ NUEVO 09-jul ronda 3 (Fable): 🛰️ SENTINEL — lector de hechos (beta)
 > Nombre elegido por Jair. En cada ficha, DEBAJO de los hechos 📰: el usuario descarga el PDF
 > de un hecho (botón PDF ↗), lo suelta en Sentinel, este lo lee EN el navegador (pdf.js,
