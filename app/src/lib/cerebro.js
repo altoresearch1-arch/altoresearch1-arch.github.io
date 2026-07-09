@@ -237,7 +237,7 @@ function respuestaRiesgos(e) {
 // lectura pre-hecha por el ROBOT (gen_lecturas.py) del PDF de un hecho
 const lecturaDe = (pdf) => {
   const l = pdf && lecturasData.lecturas?.[pdf]
-  return l && !l.escaneado ? l : null
+  return l && !l.escaneado && !l.ilegible ? l : null
 }
 
 function respuestaHechos(e) {

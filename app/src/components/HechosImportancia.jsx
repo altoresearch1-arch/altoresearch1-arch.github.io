@@ -14,7 +14,7 @@ const VISIBLES = 5
 const EMOJI_LECTURA = { buena: '🟢', mala: '🔴', neutra: '🟡' }
 function lecturaDe(pdf) {
   const l = pdf && lecturasData.lecturas?.[pdf]
-  return l && !l.escaneado ? l : null
+  return l && !l.escaneado && !l.ilegible ? l : null
 }
 
 function fechaCorta(iso) {

@@ -169,11 +169,18 @@ def analizar(texto):
     }
 
 
+class PdfIlegible(Exception):
+    """PDF roto o que no es PDF (Word disfrazado, stream cortado): error PERMANENTE."""
+
+
 def leer_pdf(sesion, url):
     r = sesion.get(url, timeout=45)
     r.raise_for_status()
-    lector = PdfReader(io.BytesIO(r.content))
-    texto = "\n".join((pag.extract_text() or "") for pag in lector.pages)
+    try:
+        lector = PdfReader(io.BytesIO(r.content))
+        texto = "\n".join((pag.extract_text() or "") for pag in lector.pages)
+    except Exception as e:
+        raise PdfIlegible(str(e)[:60])
     texto = re.sub(r"[ \t]+", " ", texto).strip()
     return texto[:MAX_TEXTO], len(lector.pages)
 
@@ -210,7 +217,13 @@ def main():
                 nuevos += 1
                 print(f"  {ticker:10} {h.get('fecha')} -> {lecturas[url].get('veredicto', 'escaneado')}", flush=True)
                 time.sleep(0.3)
+            except PdfIlegible as e:
+                # roto PARA SIEMPRE (Word disfrazado, stream cortado): se cachea
+                # como ilegible para no re-descargarlo cada 30 minutos
+                lecturas[url] = {"ticker": ticker, "fecha": h.get("fecha"), "ilegible": True}
+                print(f"  {ticker:10} {h.get('fecha')} -> ilegible ({e})", flush=True)
             except Exception as e:
+                # error de RED (transitorio): NO se cachea, se reintenta la próxima
                 fallos += 1
                 print(f"  {ticker:10} {h.get('fecha')} -> ERROR {str(e)[:70]}", flush=True)
 
