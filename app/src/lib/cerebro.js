@@ -300,7 +300,11 @@ export function responder(pregunta) {
 
   const termino = buscarTermino(q)
   if (termino) {
-    const lineas = [`📖 **${termino.clave[0].toUpperCase() + termino.clave.slice(1)}**: ${termino.def}`]
+    // siglas cortas (SAB, P/E, ETF…) van en mayúsculas; el resto solo capitaliza
+    const titulo = termino.clave.length <= 4
+      ? termino.clave.toUpperCase()
+      : termino.clave[0].toUpperCase() + termino.clave.slice(1)
+    const lineas = [`📖 **${titulo}**: ${termino.def}`]
     if (termino.ej) lineas.push(`Ejemplo: ${termino.ej}`)
     return { texto: lineas.join('\n'), chips: ['¿Qué es el P/E?', '¿Qué es el yield?', '¿Cómo empiezo en la bolsa?'] }
   }
