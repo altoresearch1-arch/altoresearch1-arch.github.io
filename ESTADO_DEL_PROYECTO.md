@@ -97,6 +97,19 @@
   para complementar los huecos (los HI son PDFs trimestrales, no mensuales — sería un bloque
   aparte "según su propio reporte").
 
+## 📊 TODAS LAS GRÁFICAS ESTILO BEM (08-jul-2026, Fable, pedido de Jair "absolutamente todas")
+- **Sparkline del precio (toda ficha) reescrito:** eje Y con PRECIOS (formato inteligente:
+  304 / 3.45 / 0.925), grilla punteada, 4 fechas en el eje X, guía + **lectura al pasar el
+  dedo/cursor** (fecha + precio + % desde el inicio del rango), anillo en el último punto.
+  Se quitó `preserveAspectRatio="none"` (deformaba el texto de los ejes). El modo `compacto`
+  quedó sin uso (el Comparador v2 usa La carrera) pero se mantiene por compatibilidad.
+- **La carrera (Comparador):** degradado suave bajo cada línea + hover con lectura de AMBAS
+  ("01/04/2026 · BVN ▲15.9% · VOLCABC1 ▼9.5%") buscando el punto más cercano de cada serie.
+- **Duelo minero:** extraído a componente `ChartDueloMetal` (necesitaba estado propio) con
+  degradados por familia y lectura mensual al hover ("jun 25: BVN 31,816 kg vs Volcan 31,736").
+- **Barras de dividendos (`DividendoGrafico`):** pista con grilla punteada dorada (mismo lenguaje).
+- Todo verificado (hover en los 4 tipos, móvil 375px sin desborde, consola limpia), auditoría 0.
+
 ## 🔧 FIXES POST-LANZAMIENTO (05–08 jul 2026, Opus)
 - **Robot ya no falla al subir ("fetch first"):** el paso "Commit de los datos frescos" del workflow ahora hace
   `git pull --rebase -X theirs origin main` ANTES del `git push`. Antes, si otro commit llegaba mientras el robot

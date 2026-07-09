@@ -112,6 +112,7 @@ const RANGOS = [
 
 function Carrera({ tA, tB }) {
   const [rango, setRango] = useState('6M')
+  const [hover, setHover] = useState(null) // timestamp bajo el cursor
   const hA = historicoDe(tA)
   const hB = historicoDe(tB)
 
@@ -158,6 +159,24 @@ function Carrera({ tA, tB }) {
   const pct = (v) => `${v >= 0 ? '▲' : '▼'} ${Math.abs(v).toFixed(1)}%`
   const desierto = hA.pocoNegociada || hB.pocoNegociada
 
+  // Lectura al pasar el cursor/dedo: el punto más cercano de CADA serie
+  const moverHover = (ev) => {
+    const rect = ev.currentTarget.getBoundingClientRect()
+    const cx = (ev.touches ? ev.touches[0].clientX : ev.clientX) - rect.left
+    const t = t0 + ((cx / rect.width) * W - PADL) / (W - PADL - PADR) * (t1 - t0)
+    setHover(Math.min(t1, Math.max(t0, t)))
+  }
+  const cercano = (s, t) => {
+    let mejor = null
+    for (const p of s) {
+      const d = Math.abs(Date.parse(p[0]) - t)
+      if (!mejor || d < mejor.d) mejor = { p, d }
+    }
+    return mejor?.p || null
+  }
+  const hvA = hover != null ? cercano(sA, hover) : null
+  const hvB = hover != null ? cercano(sB, hover) : null
+
   return (
     <div className="comp-carrera">
       <div className="comp-carrera-cab">
@@ -186,7 +205,19 @@ function Carrera({ tA, tB }) {
         </span>
       </div>
       <svg viewBox={`0 0 ${W} ${H}`} className="prodmin-svg" role="img"
-        aria-label={`Carrera de ${tA} vs ${tB}: ${pct(finA)} vs ${pct(finB)}`}>
+        aria-label={`Carrera de ${tA} vs ${tB}: ${pct(finA)} vs ${pct(finB)}`}
+        onMouseMove={moverHover} onMouseLeave={() => setHover(null)}
+        onTouchStart={moverHover} onTouchMove={moverHover} onTouchEnd={() => setHover(null)}>
+        <defs>
+          <linearGradient id={`cg-a-${tA}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={COLOR_A} stopOpacity="0.16" />
+            <stop offset="100%" stopColor={COLOR_A} stopOpacity="0" />
+          </linearGradient>
+          <linearGradient id={`cg-b-${tB}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={COLOR_B} stopOpacity="0.16" />
+            <stop offset="100%" stopColor={COLOR_B} stopOpacity="0" />
+          </linearGradient>
+        </defs>
         {[0.25, 0.5, 0.75].map((f) => {
           const v = yMin + amp * f
           return (
@@ -201,17 +232,48 @@ function Carrera({ tA, tB }) {
         <line x1={PADL} x2={W - PADR} y1={py(100)} y2={py(100)}
           stroke="rgba(244,241,233,0.35)" strokeWidth="1" strokeDasharray="6 4" />
         <text x={PADL - 6} y={py(100) + 3.5} textAnchor="end" className="prodmin-ytick" fill="#f4f1e9">100</text>
+        {/* guía del hover */}
+        {hover != null && (
+          <line x1={px(new Date(hover).toISOString())} x2={px(new Date(hover).toISOString())}
+            y1={PADT} y2={H - PADB}
+            stroke="rgba(244,241,233,0.35)" strokeWidth="1" strokeDasharray="3 3" />
+        )}
+        <polygon points={`${px(sB[0][0]).toFixed(1)},${H - PADB} ${linea(sB)} ${px(sB[sB.length - 1][0]).toFixed(1)},${H - PADB}`}
+          fill={`url(#cg-b-${tB})`} />
+        <polygon points={`${px(sA[0][0]).toFixed(1)},${H - PADB} ${linea(sA)} ${px(sA[sA.length - 1][0]).toFixed(1)},${H - PADB}`}
+          fill={`url(#cg-a-${tA})`} />
         <polyline points={linea(sB)} fill="none" stroke={COLOR_B} strokeWidth="2"
           strokeLinejoin="round" strokeLinecap="round" />
         <polyline points={linea(sA)} fill="none" stroke={COLOR_A} strokeWidth="2.2"
           strokeLinejoin="round" strokeLinecap="round" />
+        {hvA && <circle cx={px(hvA[0])} cy={py(hvA[1])} r="4" fill={COLOR_A} />}
+        {hvB && <circle cx={px(hvB[0])} cy={py(hvB[1])} r="4" fill={COLOR_B} />}
         <circle cx={px(sA[sA.length - 1][0])} cy={py(sA[sA.length - 1][1])} r="3.5" fill={COLOR_A} />
         <circle cx={px(sB[sB.length - 1][0])} cy={py(sB[sB.length - 1][1])} r="3.5" fill={COLOR_B} />
         <text x={PADL} y={H - 6} textAnchor="start" className="prodmin-tick">{fechaCorta(new Date(t0).toISOString().slice(0, 10))}</text>
         <text x={W - PADR} y={H - 6} textAnchor="end" className="prodmin-tick">{fechaCorta(new Date(t1).toISOString().slice(0, 10))}</text>
       </svg>
+      {/* Lectura del día bajo el cursor/dedo */}
+      {(hvA || hvB) && (
+        <div className="prodmin-lectura">
+          <strong>{fechaCorta((hvA || hvB)[0])}</strong>
+          {hvA && (
+            <span className="prodmin-lectura-item">
+              <span className="prodmin-dot" style={{ background: COLOR_A }} />
+              {tA}: <strong className={hvA[1] >= 100 ? 'sube' : 'baja'}>{pct(hvA[1] - 100)}</strong>
+            </span>
+          )}
+          {hvB && (
+            <span className="prodmin-lectura-item">
+              <span className="prodmin-dot" style={{ background: COLOR_B }} />
+              {tB}: <strong className={hvB[1] >= 100 ? 'sube' : 'baja'}>{pct(hvB[1] - 100)}</strong>
+            </span>
+          )}
+        </div>
+      )}
       <p className="muted comp-carrera-nota">
-        Cierres reales de la BVL. Rentabilidad pasada NO asegura rentabilidad futura — la
+        Cierres reales de la BVL · pasa el dedo o el cursor para leer cada día.
+        Rentabilidad pasada NO asegura rentabilidad futura — la
         carrera cuenta lo que YA pasó, no lo que viene.
         {desierto && ' ⚠ Al menos una negocia poco: su línea se aplana los días sin operaciones.'}
       </p>
@@ -305,85 +367,136 @@ function DueloMinero({ tA, tB }) {
         entidades de su familia que salen en el top del BEM — NO incluye participaciones
         minoritarias como Cerro Verde para BVN).
       </p>
-      {compartidos.map((metal) => {
-        const sA = serieFamilia(tA, metal)
-        const sB = serieFamilia(tB, metal)
-        const unidad = mineriaData.unidades?.[metal] || 'TMF'
-        const totalPais = mineriaData.totalesPais?.[metal]
-        const W = 620; const H = 160; const PADL = 44; const PADR = 10; const PADT = 12; const PADB = 22
-        const todos = [...sA, ...sB].filter((v) => v != null)
-        const max = Math.max(...todos) * 1.08 || 1
-        const px = (i) => PADL + (i * (W - PADL - PADR)) / (meses.length - 1)
-        const py = (v) => PADT + ((max - v) * (H - PADT - PADB)) / max
-        const segs = (s) => {
-          const out = []; let seg = []
-          s.forEach((v, i) => { if (v != null) seg.push([i, v]); else if (seg.length) { out.push(seg); seg = [] } })
-          if (seg.length) out.push(seg)
-          return out
-        }
-        // % del Perú en el último mes con dato de cada una
-        const share = (s) => {
-          for (let i = s.length - 1; i >= 0; i--) {
-            if (s[i] != null && totalPais?.[i]) return { mes: meses[i], pct: (s[i] / totalPais[i]) * 100 }
-          }
-          return null
-        }
-        const shA = share(sA); const shB = share(sB)
-        const ticks = meses.map((m, i) => ({ m, i })).filter(({ i }) => i % 3 === 0 || i === meses.length - 1)
-        return (
-          <div key={metal} className="prodmin-chart">
-            <div className="prodmin-chart-cab">
-              <span className="prodmin-metal">{NOMBRES[metal]}</span>
-              <span className="muted prodmin-unidad"><Glosado text={`producción mensual en ${unidad}`} /></span>
-            </div>
-            <div className="comp-carrera-leyenda">
-              <span className="prodmin-leyenda-item">
-                <span className="prodmin-dot" style={{ background: COLOR_A }} />
-                {tA}{shA && <strong className="oro"> {shA.pct >= 10 ? shA.pct.toFixed(0) : shA.pct.toFixed(1)}% del Perú</strong>}
-              </span>
-              <span className="prodmin-leyenda-item">
-                <span className="prodmin-dot" style={{ background: COLOR_B }} />
-                {tB}{shB && <strong className="oro"> {shB.pct >= 10 ? shB.pct.toFixed(0) : shB.pct.toFixed(1)}% del Perú</strong>}
-              </span>
-            </div>
-            <svg viewBox={`0 0 ${W} ${H}`} className="prodmin-svg" role="img"
-              aria-label={`${NOMBRES[metal]}: ${tA} vs ${tB}`}>
-              {[0.5, 1].map((f) => (
-                <g key={f}>
-                  <line x1={PADL} x2={W - PADR} y1={py(max * f)} y2={py(max * f)}
-                    stroke="rgba(212,175,55,0.14)" strokeWidth="1" strokeDasharray="2 4" />
-                  <text x={PADL - 6} y={py(max * f) + 3.5} textAnchor="end" className="prodmin-ytick">{compacto(max * f)}</text>
-                </g>
-              ))}
-              <line x1={PADL} x2={W - PADR} y1={py(0)} y2={py(0)} stroke="rgba(212,175,55,0.3)" strokeWidth="1" />
-              {ticks.map(({ m, i }) => (
-                <text key={m} x={px(i)} y={H - 6}
-                  textAnchor={i === 0 ? 'start' : i === meses.length - 1 ? 'end' : 'middle'}
-                  className="prodmin-tick">{mesCortoIso(m)}</text>
-              ))}
-              {[[sB, COLOR_B], [sA, COLOR_A]].map(([s, color], k) =>
-                segs(s).map((seg, j) => (
-                  <g key={`${k}-${j}`}>
-                    {seg.length > 1 && (
-                      <polyline points={seg.map(([i, v]) => `${px(i).toFixed(1)},${py(v).toFixed(1)}`).join(' ')}
-                        fill="none" stroke={color} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
-                    )}
-                    {seg.map(([i, v]) => (
-                      <circle key={i} cx={px(i)} cy={py(v)} r="2.6" fill={color}>
-                        <title>{`${mesCortoIso(meses[i])}: ${v >= 1000 ? Math.round(v).toLocaleString('es-PE') : v} ${unidad}`}</title>
-                      </circle>
-                    ))}
-                  </g>
-                ))
-              )}
-            </svg>
-            <div className="prodmin-hueco muted">
-              Meses sin punto = esa familia no apareció en el top del BEM ese mes.
-            </div>
-          </div>
-        )
-      })}
+      {compartidos.map((metal) => (
+        <ChartDueloMetal key={metal} metal={metal} nombre={NOMBRES[metal]}
+          tA={tA} tB={tB} sA={serieFamilia(tA, metal)} sB={serieFamilia(tB, metal)} />
+      ))}
     </Reveal>
+  )
+}
+
+// Un metal del duelo: dos familias en la misma cancha, estilo BEM (grilla con
+// números, degradado, lectura al pasar el dedo/cursor).
+function ChartDueloMetal({ metal, nombre, tA, tB, sA, sB }) {
+  const [hover, setHover] = useState(null)
+  const meses = mineriaData.meses
+  const unidad = mineriaData.unidades?.[metal] || 'TMF'
+  const totalPais = mineriaData.totalesPais?.[metal]
+  const W = 620; const H = 160; const PADL = 44; const PADR = 10; const PADT = 12; const PADB = 22
+  const todos = [...sA, ...sB].filter((v) => v != null)
+  const max = Math.max(...todos) * 1.08 || 1
+  const px = (i) => PADL + (i * (W - PADL - PADR)) / (meses.length - 1)
+  const py = (v) => PADT + ((max - v) * (H - PADT - PADB)) / max
+  const segs = (s) => {
+    const out = []; let seg = []
+    s.forEach((v, i) => { if (v != null) seg.push([i, v]); else if (seg.length) { out.push(seg); seg = [] } })
+    if (seg.length) out.push(seg)
+    return out
+  }
+  // % del Perú en el último mes con dato de cada una
+  const share = (s) => {
+    for (let i = s.length - 1; i >= 0; i--) {
+      if (s[i] != null && totalPais?.[i]) return { mes: meses[i], pct: (s[i] / totalPais[i]) * 100 }
+    }
+    return null
+  }
+  const shA = share(sA); const shB = share(sB)
+  const ticks = meses.map((m, i) => ({ m, i })).filter(({ i }) => i % 3 === 0 || i === meses.length - 1)
+  const fmt = (v) => (v >= 1000 ? Math.round(v).toLocaleString('es-PE') : v)
+
+  const moverHover = (ev) => {
+    const rect = ev.currentTarget.getBoundingClientRect()
+    const cx = (ev.touches ? ev.touches[0].clientX : ev.clientX) - rect.left
+    const i = Math.round((((cx / rect.width) * W - PADL) / (W - PADL - PADR)) * (meses.length - 1))
+    setHover(Math.min(meses.length - 1, Math.max(0, i)))
+  }
+
+  return (
+    <div className="prodmin-chart">
+      <div className="prodmin-chart-cab">
+        <span className="prodmin-metal">{nombre}</span>
+        <span className="muted prodmin-unidad"><Glosado text={`producción mensual en ${unidad}`} /></span>
+      </div>
+      <div className="comp-carrera-leyenda">
+        <span className="prodmin-leyenda-item">
+          <span className="prodmin-dot" style={{ background: COLOR_A }} />
+          {tA}{shA && <strong className="oro"> {shA.pct >= 10 ? shA.pct.toFixed(0) : shA.pct.toFixed(1)}% del Perú</strong>}
+        </span>
+        <span className="prodmin-leyenda-item">
+          <span className="prodmin-dot" style={{ background: COLOR_B }} />
+          {tB}{shB && <strong className="oro"> {shB.pct >= 10 ? shB.pct.toFixed(0) : shB.pct.toFixed(1)}% del Perú</strong>}
+        </span>
+      </div>
+      <svg viewBox={`0 0 ${W} ${H}`} className="prodmin-svg" role="img"
+        aria-label={`${nombre}: ${tA} vs ${tB}`}
+        onMouseMove={moverHover} onMouseLeave={() => setHover(null)}
+        onTouchStart={moverHover} onTouchMove={moverHover} onTouchEnd={() => setHover(null)}>
+        <defs>
+          <linearGradient id={`dg-a-${metal}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={COLOR_A} stopOpacity="0.2" />
+            <stop offset="100%" stopColor={COLOR_A} stopOpacity="0" />
+          </linearGradient>
+          <linearGradient id={`dg-b-${metal}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={COLOR_B} stopOpacity="0.2" />
+            <stop offset="100%" stopColor={COLOR_B} stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        {[0.5, 1].map((f) => (
+          <g key={f}>
+            <line x1={PADL} x2={W - PADR} y1={py(max * f)} y2={py(max * f)}
+              stroke="rgba(212,175,55,0.14)" strokeWidth="1" strokeDasharray="2 4" />
+            <text x={PADL - 6} y={py(max * f) + 3.5} textAnchor="end" className="prodmin-ytick">{compacto(max * f)}</text>
+          </g>
+        ))}
+        <line x1={PADL} x2={W - PADR} y1={py(0)} y2={py(0)} stroke="rgba(212,175,55,0.3)" strokeWidth="1" />
+        {ticks.map(({ m, i }) => (
+          <text key={m} x={px(i)} y={H - 6}
+            textAnchor={i === 0 ? 'start' : i === meses.length - 1 ? 'end' : 'middle'}
+            className="prodmin-tick">{mesCortoIso(m)}</text>
+        ))}
+        {hover != null && (
+          <line x1={px(hover)} x2={px(hover)} y1={PADT} y2={H - PADB}
+            stroke="rgba(244,241,233,0.35)" strokeWidth="1" strokeDasharray="3 3" />
+        )}
+        {[[sB, COLOR_B, `dg-b-${metal}`], [sA, COLOR_A, `dg-a-${metal}`]].map(([s, color, gid], k) =>
+          segs(s).map((seg, j) => (
+            <g key={`${k}-${j}`}>
+              {seg.length > 1 && (
+                <>
+                  <polygon
+                    points={`${px(seg[0][0]).toFixed(1)},${py(0).toFixed(1)} ${seg
+                      .map(([i, v]) => `${px(i).toFixed(1)},${py(v).toFixed(1)}`).join(' ')} ${px(seg[seg.length - 1][0]).toFixed(1)},${py(0).toFixed(1)}`}
+                    fill={`url(#${gid})`} />
+                  <polyline points={seg.map(([i, v]) => `${px(i).toFixed(1)},${py(v).toFixed(1)}`).join(' ')}
+                    fill="none" stroke={color} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+                </>
+              )}
+              {seg.map(([i, v]) => (
+                <circle key={i} cx={px(i)} cy={py(v)} r={hover === i ? 4 : 2.6} fill={color}>
+                  <title>{`${mesCortoIso(meses[i])}: ${fmt(v)} ${unidad}`}</title>
+                </circle>
+              ))}
+            </g>
+          ))
+        )}
+      </svg>
+      {hover != null && (
+        <div className="prodmin-lectura">
+          <strong>{mesCortoIso(meses[hover])}</strong>
+          <span className="prodmin-lectura-item">
+            <span className="prodmin-dot" style={{ background: COLOR_A }} />
+            {tA}: {sA[hover] != null ? `${fmt(sA[hover])} ${unidad}` : 'fuera del top'}
+          </span>
+          <span className="prodmin-lectura-item">
+            <span className="prodmin-dot" style={{ background: COLOR_B }} />
+            {tB}: {sB[hover] != null ? `${fmt(sB[hover])} ${unidad}` : 'fuera del top'}
+          </span>
+        </div>
+      )}
+      <div className="prodmin-hueco muted">
+        Meses sin punto = esa familia no apareció en el top del BEM ese mes.
+      </div>
+    </div>
   )
 }
 

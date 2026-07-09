@@ -2744,3 +2744,18 @@ a.link {
   line-height: 1.55;
   margin: 0 0 8px;
 }
+
+/* Todas las gráficas estilo BEM (pedido de Jair): pista con grilla punteada
+   también en las barras de dividendos, y lecturas de hover con color. */
+.divgraf-pista {
+  border-bottom: 1px solid rgba(212, 175, 55, 0.35);
+  background-image:
+    repeating-linear-gradient(to right, rgba(212, 175, 55, 0.14) 0 2px, transparent 2px 6px),
+    repeating-linear-gradient(to right, rgba(212, 175, 55, 0.14) 0 2px, transparent 2px 6px);
+  background-size: 100% 1px, 100% 1px;
+  background-position: 0 33%, 0 66%;
+  background-repeat: no-repeat;
+}
+.prodmin-lectura-item.sube, .prodmin-lectura .sube { color: var(--verde); }
+.prodmin-lectura-item.baja, .prodmin-lectura .baja { color: var(--rojo); }
+.spark-fecha-eje { font-size: 9.5px; }

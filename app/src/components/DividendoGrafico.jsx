@@ -51,7 +51,7 @@ export default function DividendoGrafico({ dv, ticker }) {
         Dividendo: 2025 vs 2026
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'flex-end', gap: 18, height: 128, padding: '0 6px' }}>
+      <div className="divgraf-pista" style={{ display: 'flex', alignItems: 'flex-end', gap: 18, height: 128, padding: '0 6px' }}>
         <Barra anio="2025" valor={v2025} pagos={n2025} enCurso={false} />
         <Barra anio="2026" valor={v2026} pagos={n2026} enCurso={ANIO_ACTUAL === 2026} />
       </div>
