@@ -4,6 +4,32 @@
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
 > herramienta), lee esto primero. Última actualización: **09 jul 2026**. Estado: **EN VIVO (beta pública)**.
 
+## 🗣 RONDA 5 del 09-jul (Fable): CHARLA DE LA GERENCIA + EL REDACTOR
+Pedido de Jair ("que lean la charla con la gerencia de cada una" + "soluciona la diferencia de
+redactar nuevos párrafos"). Piezas:
+- **`extractor/fetch_gerencia.py`**: baja el **"Análisis y Discusión de la Gerencia"** (la charla
+  trimestral donde la gerencia cuenta cómo le fue) de la SMV para cada empresa → `gerencia.json`
+  (92 empresas, 86 con frases; extractivo: ≤7 frases + ≤6 montos TEXTUALES por empresa, elegidas
+  por scoring de palabras financieras). CLAVES: la grilla de Frm_InformacionFinanciera tiene la
+  fila "Análisis y Discusión de la Gerencia" con link "Descargar Documento"; caché por
+  EXPEDIENTE (si no cambió, no re-baja); **guardado INCREMENTAL cada 10** (si el proceso muere no
+  se pierde nada); corre en PASOS_EPS (modo completo local / --trimestral, NO en el robot de 30
+  min — la SMV es flaky desde la nube). Algunos fallos legítimos: PDFs rotos o Word disfrazado.
+- **`app/src/lib/redactor.js` — EL REDACTOR**: cierra la brecha con NotebookLM componiendo
+  PÁRRAFOS naturales desde "slots" verificados (plantillas por categoría; si el slot está vacío,
+  la frase no se escribe → redacción sin invención, Regla #1). Vive SOLO en JS (la app compone
+  al vuelo desde lecturas.json/gerencia.json → no hay que mantener espejo Python ni engordar
+  los JSON). Usado en: tarjeta de resultados de Sentinel (párrafo dorado), respDocResumen de
+  Atlas, y respuestaGerencia.
+- **Atlas nuevo intent**: "¿qué dice la gerencia de X?" / chip "¿Qué dice la gerencia de…?" →
+  párrafo intro + 4 frases textuales de la charla. El resumen de empresa suma línea 🗣 con la
+  primera frase de la gerencia.
+- **BUG CAZADO por control de calidad (Regla #1)**: el extractor de dividendos capturaba
+  "S/. 20" de "S/. 20,000,000" (el TOTAL truncado en la coma) como dividendo por acción de
+  Paramonga (el real: S/ 0.601124). Fix en espejo (sentinel.js + gen_lecturas.py): número
+  completo con comas Y pegado a "por acción" — ahora prefiere NO capturar antes que mentir.
+  Re-leídos los 211 hechos con las reglas corregidas.
+
 ## 🛰️ RONDA 4 del 09-jul (Fable): NUTRICIÓN MASIVA — el robot lee los hechos de TODOS
 Pedido de Jair ("que los dos aprendan de todas las empresas, sus 2 últimos hechos" + conversación
 de NotebookLM como referencia de nivel). Piezas:

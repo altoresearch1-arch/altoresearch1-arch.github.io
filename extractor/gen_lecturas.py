@@ -84,8 +84,12 @@ def extraer_detalles(texto, clave):
             det["instrumento"] = "swaps"
         elif re.search(r"opcion(?:es)?", texto, re.I):
             det["instrumento"] = "opciones"
-        noc = [f"{m.group(1)} {m.group(2)}{' de ' + m.group(3) if m.group(3) else ''}"
-               for m in re.finditer(r"([\d][\d,]*(?:\.\d+)?)\s*(onzas|oz|toneladas|tm\b|tmf)\s*(?:de\s*)?(plata|oro|zinc|cobre|plomo|estano|estaño)?", texto, re.I)][:4]
+        # el metal puede venir ANTES (tabla: "Plata … 623,015 Onzas") o después
+        con_metal = [f"{m.group(2)} {m.group(3)} de {m.group(1).lower()}"
+                     for m in re.finditer(r"(plata|oro|zinc|cobre|plomo|esta[ñn]o)[^\d\n]{0,50}([\d][\d,]*(?:\.\d+)?)\s*(onzas|oz|toneladas|tm\b|tmf)", texto, re.I)]
+        sin_metal = [f"{m.group(1)} {m.group(2)}{' de ' + m.group(3) if m.group(3) else ''}"
+                     for m in re.finditer(r"([\d][\d,]*(?:\.\d+)?)\s*(onzas|oz|toneladas|tm\b|tmf)\s*(?:de\s*)?(plata|oro|zinc|cobre|plomo|estano|estaño)?", texto, re.I)]
+        noc = (con_metal if con_metal else sin_metal)[:4]
         if noc:
             det["nocional"] = noc
         acum = (re.search(r"(?:acumulad[oa]s?|del\s+ano|del\s+año|anual(?:izado)?)[^.]{0,80}?((?:US\$|\$|S/)\s?[\d][\d,]*(?:\.\d+)?)", texto, re.I)
@@ -93,7 +97,9 @@ def extraer_detalles(texto, clave):
         if acum:
             det["resultadoAcumulado"] = acum.group(1)
     if clave == "dividendo":
-        pa = re.search(r"((?:US\$|\$|S/\.?)\s?[\d]+(?:\.\d+)?)[^.]{0,40}por\s+acci[oó]n", texto, re.I)
+        # número COMPLETO (con comas) y PEGADO a "por acción" — antes "S/.20,000,000 …
+        # por acción" (el total) se truncaba a "S/.20" y salía como dividendo (bug real)
+        pa = re.search(r"((?:US\$|\$|S/\.?)\s?[\d][\d,]*(?:\.\d+)?)\s*(?:brutos?|netos?|nominales?)?\s*por\s+acci[oó]n", texto, re.I)
         if pa:
             det["porAccion"] = pa.group(1)
         reg = re.search(r"fecha\s+de\s+registro[^\d]{0,20}(\d{1,2}[^\s,.]*(?:\s+de\s+[a-záéíóú]+\s+de(?:l)?\s+\d{4}|[/-]\d{1,2}[/-]\d{2,4}))", texto, re.I)

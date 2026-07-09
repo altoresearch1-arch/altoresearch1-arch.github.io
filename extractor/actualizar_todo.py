@@ -55,6 +55,7 @@ PASOS_RAPIDOS = [
 PASOS_EPS = [
     "fetch_anual_eps.py",
     "fix_eps.py",
+    "fetch_gerencia.py",  # 🗣 charla de la gerencia (SMV, trimestral; caché por expediente)
 ]
 
 PASOS_DIARIO = PASOS_RAPIDOS + PASOS_EPS

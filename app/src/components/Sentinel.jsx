@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { leerPdf, analizar, guardarContexto, recordarHecho } from '../lib/sentinel'
+import { redactarLectura } from '../lib/redactor'
 
 // 🛰️ SENTINEL (beta) — vive DEBAJO de los Hechos de Importancia en la ficha.
 // Procedimiento (se le explica al usuario ahí mismo):
@@ -135,6 +136,11 @@ export default function Sentinel({ ticker }) {
               </div>
             </div>
           </div>
+
+          {/* el REDACTOR: párrafo en cristiano armado con lo extraído */}
+          <p className="sentinel-parrafo">
+            {redactarLectura(informe).replace(/\*\*/g, '')}
+          </p>
 
           {informe.razones.length > 0 && (
             <ul className="sentinel-razones">

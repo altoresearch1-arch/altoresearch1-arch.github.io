@@ -109,15 +109,21 @@ function extraerDetalles(texto, clave) {
       : /swap/i.test(texto) ? 'swaps'
       : /opcion(?:es)?/i.test(texto) ? 'opciones' : null
     if (inst) det.instrumento = inst
-    const nocionales = [...texto.matchAll(/([\d][\d,]*(?:\.\d+)?)\s*(onzas|oz|toneladas|tm\b|tmf)\s*(?:de\s*)?(plata|oro|zinc|cobre|plomo|estano|estaño)?/gi)]
-      .slice(0, 4).map((m) => `${m[1]} ${m[2]}${m[3] ? ' de ' + m[3] : ''}`)
+    // el metal puede venir ANTES (tabla: "Plata … 623,015 Onzas") o después
+    const conMetal = [...texto.matchAll(/(plata|oro|zinc|cobre|plomo|esta[ñn]o)[^\d\n]{0,50}([\d][\d,]*(?:\.\d+)?)\s*(onzas|oz|toneladas|tm\b|tmf)/gi)]
+      .map((m) => `${m[2]} ${m[3]} de ${m[1].toLowerCase()}`)
+    const sinMetal = [...texto.matchAll(/([\d][\d,]*(?:\.\d+)?)\s*(onzas|oz|toneladas|tm\b|tmf)\s*(?:de\s*)?(plata|oro|zinc|cobre|plomo|estano|estaño)?/gi)]
+      .map((m) => `${m[1]} ${m[2]}${m[3] ? ' de ' + m[3] : ''}`)
+    const nocionales = (conMetal.length ? conMetal : sinMetal).slice(0, 4)
     if (nocionales.length) det.nocional = nocionales
     const acum = texto.match(/(?:acumulad[oa]s?|del\s+ano|del\s+año|anual(?:izado)?)[^.]{0,80}?((?:US\$|\$|S\/)\s?[\d][\d,]*(?:\.\d+)?)/i)
       || texto.match(/((?:US\$|\$|S\/)\s?[\d][\d,]*(?:\.\d+)?)[^.]{0,60}(?:acumulad[oa]s?)/i)
     if (acum) det.resultadoAcumulado = acum[1]
   }
   if (clave === 'dividendo') {
-    const porAccion = texto.match(/((?:US\$|\$|S\/\.?)\s?[\d]+(?:\.\d+)?)[^.]{0,40}por\s+acci[oó]n/i)
+    // el número COMPLETO (con comas) y PEGADO a "por acción" — antes "S/.20,000,000
+    // … por acción" (el total) se truncaba a "S/.20" y salía como dividendo (bug real)
+    const porAccion = texto.match(/((?:US\$|\$|S\/\.?)\s?[\d][\d,]*(?:\.\d+)?)\s*(?:brutos?|netos?|nominales?)?\s*por\s+acci[oó]n/i)
     if (porAccion) det.porAccion = porAccion[1]
     const registro = texto.match(/fecha\s+de\s+registro[^\d]{0,20}(\d{1,2}[^\s,.]*(?:\s+de\s+[a-záéíóú]+\s+de(?:l)?\s+\d{4}|[/-]\d{1,2}[/-]\d{2,4}))/i)
     if (registro) det.fechaRegistro = registro[1]

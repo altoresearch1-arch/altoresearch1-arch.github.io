@@ -7,6 +7,16 @@ Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTAD
 
 ---
 
+## ⚡ NUEVO 09-jul ronda 5 (Fable): 🗣 CHARLA DE LA GERENCIA + REDACTOR
+> `fetch_gerencia.py` baja el "Análisis y Discusión de la Gerencia" (SMV, grilla de
+> Frm_InformacionFinanciera, link "Descargar Documento") → `gerencia.json` (92 empresas, 86 con
+> frases textuales elegidas por scoring). Caché por expediente + guardado incremental; corre en
+> PASOS_EPS (completo/--trimestral, NO robot 30 min). **`lib/redactor.js`**: párrafos naturales
+> desde slots verificados (plantillas por categoría; slot vacío = frase que no se escribe) —
+> SOLO en JS, la app compone al vuelo. Atlas: "¿qué dice la gerencia de X?" + línea 🗣 en el
+> resumen. BUG cazado: porAccion truncaba "S/.20,000,000"→"S/.20" (Paramonga; real S/0.601124)
+> → regex número completo + pegado a "por acción"; 211 hechos re-leídos.
+
 ## ⚡ NUEVO 09-jul ronda 4 (Fable): el robot LEE los hechos de TODOS (lecturas.json)
 > `extractor/gen_lecturas.py` = port Python del análisis de sentinel.js (MANTENER EN ESPEJO)
 > con pypdf: lee los PDF de los 2 últimos hechos de cada empresa → `data/lecturas.json`

@@ -6,6 +6,8 @@ import tipsData from '../data/tips.json'
 import hechosData from '../data/hechos.json'
 import conocimientoData from '../data/conocimiento.json'
 import lecturasData from '../data/lecturas.json'
+import gerenciaData from '../data/gerencia.json'
+import { redactarLectura, redactarGerencia } from './redactor'
 import { precioDe, peInfo, dividendosDe, yieldNumerico } from './finanzas'
 import { leerContexto, marcarContextoVisto, hechosAprendidos } from './sentinel'
 
@@ -152,6 +154,7 @@ function chipsEmpresa(e) {
     `Últimas noticias de ${e.nombreCorto}`,
   ]
   if (conocimientoDe(e.ticker)) chips.unshift(`Cuéntame más de ${e.nombreCorto}`)
+  if (gerenciaData.gerencia?.[e.ticker]?.frases?.length) chips.push(`¿Qué dice la gerencia de ${e.nombreCorto}?`)
   return chips
 }
 
@@ -179,6 +182,9 @@ function respuestaResumen(e) {
     saber ? `📚 Del informe ALTO: ${saber.datos[0]}` : (tipsDe(e.ticker)[0] ? `💡 Para entenderla: ${tipsDe(e.ticker)[0]}` : null),
     lineaHecho(e.ticker),
   ].filter(Boolean)
+  // la voz de la propia gerencia (charla trimestral de la SMV)
+  const g = gerenciaData.gerencia?.[e.ticker]
+  if (g?.frases?.[0]) lineas.push(`🗣 La gerencia (${String(g.periodo || '').replace('-T', ' T')}): «${g.frases[0].slice(0, 180)}»`)
   // si el usuario me pasó hechos de ESTA empresa por Sentinel, los recuerdo
   const leidos = hechosAprendidos().filter((h) => h.ticker === e.ticker)
   if (leidos.length > 0) {
@@ -254,6 +260,26 @@ function respuestaHechos(e) {
   }
   lineas.push('En su ficha están todos, con el PDF oficial de cada uno (🟢🔴🟡 = mi lectura automática).')
   return { texto: lineas.join('\n'), ticker: e.ticker, chips: [`¿Qué hace ${e.nombreCorto}?`, '¿Qué es un hecho de importancia?'] }
+}
+
+// 🗣 "¿qué dice la gerencia de X?" — la charla trimestral (gerencia.json, SMV)
+function respuestaGerencia(e) {
+  const g = gerenciaData.gerencia?.[e.ticker]
+  if (!g?.frases?.length) {
+    return {
+      texto: `Todavía no tengo la charla de la gerencia de **${e.nombreCorto}** (se extrae de la SMV cada trimestre; algunas empresas no la presentan o llega escaneada).`,
+      ticker: e.ticker,
+      chips: chipsEmpresa(e),
+    }
+  }
+  const lineas = [redactarGerencia(e.nombreCorto, g)]
+  for (const f of g.frases.slice(0, 4)) lineas.push(`🗣 «${f}»`)
+  lineas.push('Todo textual del documento oficial — la versión completa está en la SMV.')
+  return {
+    texto: lineas.join('\n'),
+    ticker: e.ticker,
+    chips: [`¿Qué riesgos tiene ${e.nombreCorto}?`, `Últimas noticias de ${e.nombreCorto}`, '¿Qué es el margen neto?'],
+  }
 }
 
 function respuestaPrecio(e) {
@@ -358,13 +384,12 @@ function lineasDetalles(doc) {
 }
 
 function respDocResumen(doc) {
+  // el REDACTOR compone el párrafo con los datos extraídos (sin inventar)
   const lineas = [
-    `🛰️ Sobre el documento que me pasó Sentinel${doc.empresa ? ` (de **${doc.empresa}**)` : ''}:`,
-    `📂 Tipo: ${doc.categoria}. Mi lectura: ${VEREDICTO_TXT[doc.veredicto]}.`,
-    ...lineasDetalles(doc),
+    redactarLectura(doc),
+    `Mi lectura: ${VEREDICTO_TXT[doc.veredicto]}.`,
   ]
   for (const f of (doc.frases || []).slice(0, 2)) lineas.push(`📄 «${f}»`)
-  if (doc.montos?.length) lineas.push(`💵 Montos que vi: ${doc.montos.slice(0, 5).join(' · ')}`)
   lineas.push('Recuerda: leo por palabras y patrones (beta) — dale una leída tú también.')
   return { texto: lineas.join('\n'), ticker: doc.ticker || undefined, chips: chipsDoc(doc) }
 }
@@ -492,6 +517,7 @@ export function responder(pregunta) {
   }
 
   if (e) {
+    if (/(gerencia|charla|analisis y discusion|como le fue|que dice la (empresa|gerencia))/.test(q)) return respuestaGerencia(e)
     if (/(cuentame mas|mas datos|a fondo|el informe|profundiza|que mas sabes)/.test(q)) return respuestaInforme(e)
     if (/(dividendo|yield|reparte|paga|pagos)/.test(q)) return respuestaDividendos(e)
     if (/(riesgo|peligro|malo|debilidad|cuidado|problema)/.test(q)) return respuestaRiesgos(e)
