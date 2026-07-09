@@ -5,6 +5,8 @@ ORQUESTADOR — un solo comando para actualizar TODO en el orden correcto.
 Uso:
   python extractor/actualizar_todo.py            # DIARIO completo (incluye EPS anual del SMV)
   python extractor/actualizar_todo.py --rapido       # DIARIO del robot: salta el SMV (EPS anual estático)
+  python extractor/actualizar_todo.py --hechos       # SOLO hechos de importancia + BEM (robot cada 30 min)
+  python extractor/actualizar_todo.py --precios      # SOLO precios + históricos (robot 12:00 y 15:00 Perú)
   python extractor/actualizar_todo.py --trimestral   # cambio de trimestre (Q2, Q3…)
   python extractor/actualizar_todo.py --con-build    # además corre npm run build (PWA)
 
@@ -56,6 +58,11 @@ PASOS_EPS = [
 
 PASOS_DIARIO = PASOS_RAPIDOS + PASOS_EPS
 
+# Modos INTRADÍA del robot (livianos, corren varias veces al día en horario de
+# mercado; el BEM es MENSUAL pero fetch_bem tiene caché y no commitea ruido):
+PASOS_HECHOS = ["fetch_hechos.py", "fetch_bem.py"]
+PASOS_PRECIOS = ["fetch_precios.py", "fetch_historicos.py"]
+
 
 def correr(script, args=None):
     inicio = time.time()
@@ -72,6 +79,8 @@ def main():
     trimestral = "--trimestral" in sys.argv
     con_build = "--con-build" in sys.argv
     rapido = "--rapido" in sys.argv
+    solo_hechos = "--hechos" in sys.argv
+    solo_precios = "--precios" in sys.argv
     fallos = []
 
     if trimestral:
@@ -81,13 +90,27 @@ def main():
         if not correr("run_batch.py"):
             fallos.append("run_batch.py — reintentar los caídos con: python extractor/run_uno.py TICKER")
 
-    # --rapido (robot nocturno): salta el EPS anual del SMV (estático + lento desde la nube).
-    pasos = PASOS_RAPIDOS if (rapido and not trimestral) else PASOS_DIARIO
-    if rapido and not trimestral:
+    # Modos intradía (robot cada 30 min / mediodía): solo lo pedido, en 1-2 min.
+    if solo_hechos and not trimestral:
+        print("MODO HECHOS: solo hechos de importancia + BEM (intradía).")
+        pasos = PASOS_HECHOS
+    elif solo_precios and not trimestral:
+        print("MODO PRECIOS: solo precios + históricos (intradía).")
+        pasos = PASOS_PRECIOS
+    elif rapido and not trimestral:
+        # --rapido (robot nocturno): salta el EPS anual del SMV (estático + lento desde la nube).
         print("MODO RÁPIDO: se omiten fetch_anual_eps + fix_eps (SMV). El EPS anual queda como está.")
+        pasos = PASOS_RAPIDOS
+    else:
+        pasos = PASOS_DIARIO
     for p in pasos:
         if not correr(p):
             fallos.append(p)
+
+    # novedades.json (app/public/): resumen liviano que la APP consulta en vivo
+    # para avisar al usuario si una empresa de su lista ★ tiene algo nuevo.
+    if not correr("gen_novedades.py"):
+        fallos.append("gen_novedades.py")
 
     audit_ok = correr("auditoria.py")
 

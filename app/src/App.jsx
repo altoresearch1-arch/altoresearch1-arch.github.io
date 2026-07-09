@@ -15,6 +15,8 @@ import EmpresaDelDia from './components/EmpresaDelDia'
 import MiLista from './components/MiLista'
 import MonedaFidget from './components/MonedaFidget'
 import FondoVivo from './components/FondoVivo'
+import Yachay from './components/Yachay'
+import AvisoNovedades from './components/AvisoNovedades'
 
 // "2026-06-24" -> "24 de junio de 2026"
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio',
@@ -56,6 +58,7 @@ export default function App() {
       else if (ruta === 'resultados') setVista(respuestasRef.current ? 'resultados' : 'quiz')
       else if (ruta === 'glosario') setVista('glosario')
       else if (ruta === 'explorar') setVista('explorar')
+      else if (ruta === 'ia') setVista('ia')
       else if (ruta === 'empresa' && a && existe(a)) {
         setTickerSel(a)
         setVista('empresa')
@@ -98,6 +101,7 @@ export default function App() {
     { id: 'inicio', label: 'Inicio', hash: '#/' },
     { id: 'explorar', label: 'Explorar', hash: '#/explorar' },
     { id: 'glosario', label: 'Glosario', hash: '#/glosario' },
+    { id: 'ia', label: '🧠 Yachay', hash: '#/ia', beta: true },
   ]
 
   return (
@@ -123,6 +127,7 @@ export default function App() {
                 onClick={() => irA(it.hash)}
               >
                 {it.label}
+                {it.beta && <span className="nav-beta">beta</span>}
               </button>
             ))}
             <button className="nav-apoyo" onClick={() => setApoyoAbierto(true)}>
@@ -168,6 +173,9 @@ export default function App() {
                   </button>
                   <button className="btn" onClick={() => irA('#/glosario')}>
                     Ver el glosario
+                  </button>
+                  <button className="btn btn-ia" onClick={() => irA('#/ia')}>
+                    🧠 Aprende con Yachay <span className="nav-beta">beta</span>
                   </button>
                 </div>
                 <button className="btn-aleatoria" onClick={empresaAleatoria}>
@@ -218,6 +226,8 @@ export default function App() {
 
           {vista === 'glosario' && <Glosario />}
 
+          {vista === 'ia' && <Yachay onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />}
+
           {vista === 'explorar' && (
             <Explorar
               onVerEmpresa={(t) => abrirEmpresa(t, 'explorar')}
@@ -237,6 +247,9 @@ export default function App() {
           )}
         </div>
       </div>
+
+      {/* 🔔 Avisos en vivo: hechos nuevos de las empresas guardadas con ★ */}
+      <AvisoNovedades />
 
       {/* Botón flotante de apoyo (siempre visible) */}
       <button className="apoyo-pill" onClick={() => setApoyoAbierto(true)}>

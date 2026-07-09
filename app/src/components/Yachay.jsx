@@ -1,0 +1,141 @@
+import { useEffect, useRef, useState } from 'react'
+import { responder, PREGUNTAS_INICIALES } from '../lib/cerebro'
+import empresasData from '../data/empresas.json'
+
+// YACHAY — "aprende con la IA" (beta). Chat estilo NotebookLM pero 100% nuestro:
+// corre EN el navegador del usuario, sin servidores ni APIs de pago, y responde
+// SOLO con los datos verificados de la app (por eso no puede irse de tema ni
+// inventar). El nombre viene del quechua: yachay = saber / aprender.
+
+// "**negrita**" → <b> (única marca que usa el cerebro)
+function conNegritas(texto) {
+  return texto.split(/\*\*(.+?)\*\*/g).map((p, i) => (i % 2 === 1 ? <b key={i}>{p}</b> : p))
+}
+
+const nombreDe = (t) => {
+  const n = empresasData.empresas.find((e) => e.ticker === t)?.nombre || t
+  return n.replace(/\s+(S\.?A\.?A?\.?|S\.?A\.?C\.?)\s*$/i, '')
+}
+
+export default function Yachay({ onVerEmpresa }) {
+  const [mensajes, setMensajes] = useState(() => {
+    const bienvenida = responder('')
+    return [{ de: 'yachay', ...bienvenida }]
+  })
+  const [texto, setTexto] = useState('')
+  const [pensando, setPensando] = useState(false)
+  const finRef = useRef(null)
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    finRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
+  }, [mensajes, pensando])
+
+  const preguntar = (q) => {
+    const limpia = String(q || '').trim()
+    if (!limpia || pensando) return
+    setTexto('')
+    setMensajes((prev) => [...prev, { de: 'usuario', texto: limpia }])
+    setPensando(true)
+    // pequeña pausa "de pensar": la respuesta es instantánea (es local),
+    // pero sin pausa el chat se siente irreal
+    setTimeout(() => {
+      const resp = responder(limpia)
+      setMensajes((prev) => [...prev, { de: 'yachay', ...resp }])
+      setPensando(false)
+    }, 350 + Math.random() * 350)
+  }
+
+  const ultimo = mensajes.length - 1
+
+  return (
+    <div className="yachay">
+      <div className="yachay-cab card">
+        <div className="yachay-avatar" aria-hidden="true">🧠</div>
+        <div>
+          <h1 style={{ margin: 0 }}>
+            Yachay <span className="yachay-beta">IA · BETA</span>
+          </h1>
+          <p className="muted" style={{ margin: '4px 0 0' }}>
+            "Saber", en quechua. Responde <b>solo</b> con los datos verificados de ALTO:
+            las {empresasData.empresas.length} empresas de la BVL y el glosario completo.
+            Educa, <b>no recomienda</b> — y si no sabe algo, te lo dice.
+          </p>
+        </div>
+      </div>
+
+      <div className="yachay-chat card">
+        {mensajes.map((m, i) => (
+          <div key={i} className={`ya-msg ya-${m.de}`}>
+            {m.de === 'yachay' && <span className="ya-quien">🧠 Yachay</span>}
+            <div className="ya-burbuja">
+              {String(m.texto).split('\n').map((linea, j) => (
+                <div key={j} className="ya-linea">{conNegritas(linea)}</div>
+              ))}
+              {m.ticker && (
+                <button className="ya-ficha" onClick={() => onVerEmpresa(m.ticker)}>
+                  📄 Ver la ficha completa de {nombreDe(m.ticker)} →
+                </button>
+              )}
+              {m.accion && (
+                <button className="ya-ficha" onClick={() => { location.hash = m.accion.hash }}>
+                  {m.accion.label}
+                </button>
+              )}
+            </div>
+            {m.de === 'yachay' && i === ultimo && !pensando && (m.chips?.length > 0) && (
+              <div className="ya-chips">
+                {m.chips.map((c) => (
+                  <button key={c} className="ya-chip" onClick={() => preguntar(c)}>{c}</button>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+        {pensando && (
+          <div className="ya-msg ya-yachay">
+            <span className="ya-quien">🧠 Yachay</span>
+            <div className="ya-burbuja ya-pensando">
+              <span className="ya-punto" /><span className="ya-punto" /><span className="ya-punto" />
+            </div>
+          </div>
+        )}
+        <div ref={finRef} />
+      </div>
+
+      <form
+        className="yachay-form"
+        onSubmit={(e) => { e.preventDefault(); preguntar(texto) }}
+      >
+        <input
+          ref={inputRef}
+          value={texto}
+          onChange={(e) => setTexto(e.target.value)}
+          placeholder="Pregúntame por una empresa o un término… (ej. ¿qué hace Alicorp?)"
+          aria-label="Escribe tu pregunta para Yachay"
+          maxLength={140}
+        />
+        <button type="submit" className="btn btn-oro" disabled={pensando || !texto.trim()}>
+          Preguntar
+        </button>
+      </form>
+
+      <div className="yachay-pie muted">
+        Yachay es una beta que responde con la base de datos de ALTO (BVL/SMV, verificada a mano).
+        No usa internet ni servicios externos: tus preguntas no salen de tu dispositivo.
+        Puede quedarse corto, pero nunca inventa. Nada de esto es recomendación de inversión.
+        <br />
+        💡 ¿Quieres analizar a fondo los PDF de una empresa? En cada ficha hay un botón
+        «Estudiar con NotebookLM» que te prepara el paquete.
+      </div>
+
+      {mensajes.length === 1 && (
+        <div className="ya-sugerencias-extra">
+          {PREGUNTAS_INICIALES.filter((p) => !mensajes[0].chips?.includes(p)).map((p) => (
+            <button key={p} className="ya-chip" onClick={() => preguntar(p)}>{p}</button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}

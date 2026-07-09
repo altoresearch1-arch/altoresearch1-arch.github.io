@@ -16,6 +16,7 @@ import Sparkline from './Sparkline'
 import Termometro from './Termometro'
 import HechosImportancia from './HechosImportancia'
 import ProduccionMinera from './ProduccionMinera'
+import EstudioNotebookLM from './EstudioNotebookLM'
 import { CountUp, Reveal } from '../lib/anim'
 import { useFavoritos, alternarFavorito } from '../lib/favoritos'
 import { peInfo } from '../lib/finanzas'
@@ -145,6 +146,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
         </button>
         <div className="row" style={{ gap: 8 }}>
           <BotonFavorito ticker={e.ticker} />
+          <EstudioNotebookLM empresa={e} />
           <BotonCompartir empresa={e} />
         </div>
       </div>

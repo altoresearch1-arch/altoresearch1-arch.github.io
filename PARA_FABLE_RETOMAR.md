@@ -7,7 +7,20 @@ Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTAD
 
 ---
 
-## ⚡ NUEVO 08-jul (Fable): ⛏️ PRODUCCIÓN MINERA (MINEM/BEM) + COMPARADOR V2 + GRÁFICAS
+## ⚡ NUEVO 09-jul (Fable): 🧠 YACHAY (IA beta) + ROBOT INTRADÍA + AVISOS 🔔 + NOTEBOOKLM
+> Pedido de Jair. TODO sin backend (sigue siendo estática, cero costos): **Yachay** = IA local
+> (`lib/cerebro.js` + `Yachay.jsx`, ruta `#/ia`) que responde SOLO con nuestros datos (114
+> empresas + 174 términos); no inventa, no recomienda (Regla #9), chips estilo NotebookLM.
+> NotebookLM NO se puede incrustar (sin API/embed) → botón **📓 NotebookLM** en cada ficha
+> (`EstudioNotebookLM.jsx`): descarga paquete .txt de estudio + guía de 4 pasos. **Robot
+> intradía**: hechos+BEM cada 30 min (8:00-16:30 Perú, modo `--hechos`), precios 12:05/15:05
+> (`--precios`); modo elegido por `github.event.schedule`; solo commitea/despliega SI HAY
+> CAMBIOS. **Avisos 🔔**: `gen_novedades.py` → `app/public/novedades.json` (suelto, fuera del
+> bundle y del precache SW); la app lo re-pide cada 5 min (`lib/novedades.js` +
+> `AvisoNovedades.jsx`) y si una empresa ★ tiene hecho nuevo → toast con sonido → clic → ficha.
+> Detalle completo arriba de ESTADO_DEL_PROYECTO.md.
+
+## ⚡ 08-jul (Fable): ⛏️ PRODUCCIÓN MINERA (MINEM/BEM) + COMPARADOR V2 + GRÁFICAS
 > Pedido de Jair. Gráficos de producción mensual POR METAL (ene-25→abr-26) en cada ficha minera +
 > bloque "Sus minas / Participaciones" (%, cotiza, dividendos — todo VERIFICADO). Fuente nueva:
 > **MINEM Boletín Estadístico Minero** (receta en `extractor/FUENTES.md`). Piezas: `fetch_bem.py`

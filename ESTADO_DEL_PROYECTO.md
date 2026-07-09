@@ -2,7 +2,49 @@
 
 > **Documento maestro vivo.** Captura TODO lo construido para que nada se pierda, sin
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
-> herramienta), lee esto primero. Última actualización: **08 jul 2026**. Estado: **EN VIVO (beta pública)**.
+> herramienta), lee esto primero. Última actualización: **09 jul 2026**. Estado: **EN VIVO (beta pública)**.
+
+## 🧠 YACHAY (IA beta) + ROBOT INTRADÍA + AVISOS 🔔 + NOTEBOOKLM (09-jul-2026, Fable)
+Pedido de Jair ("IA que ayude a los nuevos", "actualizar cada media hora", "aviso con sonido
+a los que guardaron la acción", "NotebookLM"). Cuatro piezas, TODAS sin backend (sigue siendo
+web estática, cero secretos, cero costos):
+- **🧠 YACHAY — "aprende con la IA" (beta).** `app/src/lib/cerebro.js` + `components/Yachay.jsx`,
+  ruta `#/ia`, botón en nav y en el hero (con chip BETA). NO llama a ninguna API: responde SOLO
+  con los datos verificados ya empaquetados (114 empresas, 174 términos + glosario, tesis, tips,
+  dividendos, precios, P/E, hechos). Por diseño: no se sale del tema, no inventa (si no sabe lo
+  dice — Regla #1) y RECHAZA "qué compro" (Regla #9, respuesta educada + quiz). Intenciones:
+  resumen de empresa, dividendos, riesgos (tips con palabras de riesgo), precio/P/E, noticias
+  (hechos), término ("¿qué es X?" → terminos.json + glosario.json), top yields (con ⚠ de
+  extraordinarios), "cómo empiezo", comparar X vs Y (→ link al Comparador), saludo/fallback con
+  chips sugeridos estilo NotebookLM. El nombre es quechua: yachay = saber/aprender.
+  **Por qué no NotebookLM incrustado:** no tiene API ni embed (cada usuario necesita su cuenta
+  Google y subir fuentes a mano) — se le explicó a Jair; en su lugar:
+- **📓 "Estudiar con NotebookLM"** (`components/EstudioNotebookLM.jsx`, botón en la ficha junto a
+  Compartir): genera EN el navegador un .txt "paquete de estudio" (fundamentos, precio, P/E,
+  dividendos, tesis, tips, catalizadores y los hechos 12m CON el link al PDF oficial de cada uno
+  + preguntas sugeridas) y un modal con los 4 pasos para subirlo a notebooklm.google.com.
+- **🤖 ROBOT INTRADÍA** (`deploy.yml` + `actualizar_todo.py`): 3 crones — cierre nocturno
+  `0 3 * * 2-6` (--rapido, igual que antes), **hechos+BEM cada 30 min** `*/30 13-21 * * 1-5`
+  (8:00-16:30 Perú, modo nuevo `--hechos` ≈ 1-2 min) y **precios 12:05/15:05 Perú**
+  `5 17,20 * * 1-5` (modo nuevo `--precios`; el :05 evita chocar con el run de hechos de la hora
+  en punto). El modo se elige con `github.event.schedule` (trae el cron que disparó). **Solo se
+  commitea Y despliega si los datos cambiaron** (output `cambios` del job; si no, el run muere en
+  ~1 min sin ruido). El BEM es MENSUAL: revisarlo cada 30 min no trae nada — fetch_bem ya no
+  escribe si no hay edición nueva, así que es gratis. Repo público = minutos de Actions ilimitados.
+- **🔔 AVISOS EN VIVO para favoritos** (`extractor/gen_novedades.py` + `app/src/lib/novedades.js`
+  + `components/AvisoNovedades.jsx` en App.jsx): gen_novedades corre al final de TODOS los modos
+  del orquestador y escribe `app/public/novedades.json` (~20 KB: último hecho por ticker +
+  preciosFecha + bemUltimoMes). Clave: va en **public/**, NO en src/data → se sirve SUELTO
+  (fuera del bundle y FUERA del precache del SW, verificado) → la app abierta lo re-pide con
+  `cache:'no-store'` al cargar, al volver a la pestaña y cada 5 min. Si una empresa con ★ tiene
+  hecho nuevo → toast dorado con SONIDO ("din-don" Web Audio sintetizado, como la moneda) que al
+  tocarlo abre la ficha; si sale BEM nuevo y sigues mineras → aviso ⛏️. Lo visto se guarda en
+  localStorage `alto-novedades-vistas`; la PRIMERA visita solo toma la foto (no spamea hechos
+  viejos) y también se fotografían los no-favoritos (guardar ★ después no dispara avisos viejos).
+  El archivo es DETERMINÍSTICO (sin timestamps de reloj) → si no hay novedades queda byte-idéntico
+  y el robot no commitea. VERIFICADO en preview: toast + clic → ficha + marca de visto + móvil 375px.
+- Auditoría estructural OK (mismos avisos legítimos de siempre). Build PWA OK (novedades.json en
+  dist/, fuera del precache del SW).
 
 ## ⛏️ PRODUCCIÓN MINERA MENSUAL (MINEM/BEM) EN LAS FICHAS DE MINAS (08-jul-2026, Fable)
 - **Pedido de Jair:** gráficos de producción mensual por metal (estilo líneas con puntos, su imagen

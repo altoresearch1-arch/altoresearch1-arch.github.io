@@ -2,21 +2,30 @@ name: Robot diario y despliegue
 
 # ─────────────────────────────────────────────────────────────────────────
 #  ¿Qué hace esto?
-#  - De LUNES a VIERNES por la noche (hora de Perú), un robot en la nube baja
-#    los datos frescos de la BVL (precios, históricos, dividendos, EPS, hechos),
-#    corre la auditoría, los commitea de vuelta al repo y REPUBLICA la web.
-#  - La PC de Jair NO necesita estar prendida: todo corre en los servidores de
-#    GitHub (gratis para repos públicos).
-#  - También publica al hacer push a main (deploy inmediato) y hay un botón
-#    "Run workflow" para dispararlo a mano.
+#  - CIERRE (noche, Lun-Vie): baja TODO lo diario (precios, históricos,
+#    dividendos, hechos, BEM), commitea y republica. Igual que siempre.
+#  - HECHOS (cada 30 min, horario de mercado): solo Hechos de Importancia +
+#    BEM. El BEM es MENSUAL (fetch_bem tiene caché y no hace ruido), pero los
+#    hechos sí caen a cualquier hora → la web los muestra casi en vivo.
+#  - PRECIOS (12:05 y 15:05 hora Perú): refresca precio y históricos a media
+#    rueda, como pidió Jair ("a las 12 y a las 3").
+#  - Solo se COMMITEA Y REPUBLICA si los datos realmente cambiaron (si no,
+#    el run termina en ~1 min sin tocar nada — cero ruido en el historial).
+#  - La PC de Jair NO necesita estar prendida: todo corre en GitHub
+#    (gratis e ilimitado para repos públicos).
+#  - También publica al hacer push a main y hay botón "Run workflow".
 # ─────────────────────────────────────────────────────────────────────────
 
 on:
   schedule:
-    # 03:00 UTC de MARTES a SÁBADO  ==  22:00 (10 p.m.) de LUNES a VIERNES en
-    # Perú (UTC-5). Corre tras el cierre de la BVL y deja los datos listos para
-    # la mañana siguiente. (GitHub usa siempre UTC; por eso el desfase de día.)
+    # GitHub usa UTC; Perú es UTC-5 todo el año. Por eso el desfase.
+    # 1) CIERRE: 03:00 UTC mar-sáb == 22:00 Lun-Vie en Perú (tras el cierre BVL).
     - cron: '0 3 * * 2-6'
+    # 2) HECHOS+BEM: cada 30 min de 13:00 a 21:30 UTC == 8:00 a 16:30 Perú, Lun-Vie.
+    - cron: '*/30 13-21 * * 1-5'
+    # 3) PRECIOS: 17:05 y 20:05 UTC == 12:05 y 15:05 Perú, Lun-Vie (el :05 evita
+    #    chocar con el run de hechos de la hora en punto).
+    - cron: '5 17,20 * * 1-5'
   push:
     branches: [main]
   workflow_dispatch: {}   # botón manual "Run workflow" en la pestaña Actions
@@ -35,10 +44,12 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # 1) Solo de noche o a mano: refresca los datos y los guarda en el repo.
+  # 1) En los runs programados o a mano: refresca los datos y los guarda en el repo.
   actualizar-datos:
     if: github.event_name != 'push'
     runs-on: ubuntu-latest
+    outputs:
+      cambios: ${{ steps.commit.outputs.cambios }}
     steps:
       - uses: actions/checkout@v4
 
@@ -49,34 +60,54 @@ jobs:
       - name: Instalar dependencias del extractor
         run: pip install -r extractor/requirements.txt
 
-      - name: Correr el robot (precios, históricos, dividendos, auditoría)
-        # --rapido: solo datos diarios de BVL/stockanalysis (~3-4 min). Salta el EPS anual del
-        # SMV: es ~estático (el 2025 ya cerró) y el SMV es lento/flaky desde la nube. El EPS se
-        # refresca en el run TRIMESTRAL o corriendo el comando completo a mano.
-        run: python extractor/actualizar_todo.py --rapido
+      - name: Elegir el modo según qué cron disparó
+        id: modo
+        # github.event.schedule trae el cron EXACTO que disparó este run.
+        # A mano (workflow_dispatch) se corre el modo completo del robot (--rapido).
+        run: |
+          case "${{ github.event.schedule }}" in
+            '*/30 13-21 * * 1-5') echo "flag=--hechos"  >> "$GITHUB_OUTPUT"; echo "etiqueta=hechos/BEM intradía" >> "$GITHUB_OUTPUT" ;;
+            '5 17,20 * * 1-5')    echo "flag=--precios" >> "$GITHUB_OUTPUT"; echo "etiqueta=precios intradía"    >> "$GITHUB_OUTPUT" ;;
+            *)                    echo "flag=--rapido"  >> "$GITHUB_OUTPUT"; echo "etiqueta=cierre del día"      >> "$GITHUB_OUTPUT" ;;
+          esac
+
+      - name: Correr el robot (${{ steps.modo.outputs.etiqueta }})
+        # --rapido: datos diarios BVL/stockanalysis (~3-4 min), salta el EPS anual del SMV
+        #   (estático + flaky desde la nube; se refresca con --trimestral o a mano).
+        # --hechos / --precios: modos intradía livianos (~1-2 min).
+        run: python extractor/actualizar_todo.py ${{ steps.modo.outputs.flag }}
 
       - name: Commit de los datos frescos (si cambiaron)
+        id: commit
         run: |
           git config user.name  "robot-alto"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add app/src/data
+          git add app/src/data app/public/novedades.json
           if git diff --cached --quiet; then
-            echo "Sin cambios en los datos: nada que commitear."
+            echo "Sin cambios en los datos: nada que commitear ni desplegar."
+            echo "cambios=false" >> "$GITHUB_OUTPUT"
           else
-            git commit -m "datos: actualización automática $(date -u +%Y-%m-%d) [skip ci]"
+            git commit -m "datos: ${{ steps.modo.outputs.etiqueta }} $(TZ=America/Lima date +'%Y-%m-%d %H:%M') [skip ci]"
             # Ponerse al día con el remoto ANTES de subir (evita el rechazo 'fetch first'
             # cuando llegó otro commit mientras el robot trabajaba). -X theirs: si hubiera
             # choque en los JSON, gana el dato FRESCO del robot.
             git pull --rebase -X theirs origin main
             git push
+            echo "cambios=true" >> "$GITHUB_OUTPUT"
           fi
 
   # 2) Build de la PWA y publicación en GitHub Pages.
-  #    Corre tras 'actualizar-datos' (para tomar los datos frescos) y también
-  #    en push (donde 'actualizar-datos' se salta).
+  #    Corre tras 'actualizar-datos' SOLO si los datos cambiaron (o en push /
+  #    disparo manual). Así los runs de cada 30 min sin novedades no gastan
+  #    un despliegue de Pages.
   desplegar:
     needs: [actualizar-datos]
-    if: always() && (needs.actualizar-datos.result == 'success' || needs.actualizar-datos.result == 'skipped')
+    if: |
+      always() && (
+        github.event_name == 'push' ||
+        (github.event_name == 'workflow_dispatch' && needs.actualizar-datos.result == 'success') ||
+        (needs.actualizar-datos.result == 'success' && needs.actualizar-datos.outputs.cambios == 'true')
+      )
     runs-on: ubuntu-latest
     environment:
       name: github-pages

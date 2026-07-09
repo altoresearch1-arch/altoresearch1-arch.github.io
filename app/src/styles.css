@@ -2759,3 +2759,239 @@ a.link {
 .prodmin-lectura-item.sube, .prodmin-lectura .sube { color: var(--verde); }
 .prodmin-lectura-item.baja, .prodmin-lectura .baja { color: var(--rojo); }
 .spark-fecha-eje { font-size: 9.5px; }
+
+/* ══════════ 🧠 YACHAY — la IA de ALTO (beta) ══════════ */
+.nav-beta {
+  display: inline-block;
+  margin-left: 5px;
+  padding: 1px 6px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--negro);
+  background: var(--oro);
+  border-radius: 999px;
+  vertical-align: middle;
+}
+
+.btn-ia {
+  border-color: var(--oro);
+  color: var(--oro-suave);
+}
+
+.yachay-cab {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+.yachay-avatar {
+  font-size: 38px;
+  filter: drop-shadow(0 0 12px var(--oro-tenue));
+}
+.yachay-beta {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 9px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--negro);
+  background: linear-gradient(135deg, var(--oro), var(--oro-suave));
+  border-radius: 999px;
+  vertical-align: middle;
+}
+
+.yachay-chat {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 200px;
+  max-height: 60vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+.ya-msg { display: flex; flex-direction: column; }
+.ya-quien {
+  font-size: 11px;
+  color: var(--oro-suave);
+  margin-bottom: 4px;
+  letter-spacing: 0.04em;
+}
+.ya-burbuja {
+  max-width: 92%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  line-height: 1.5;
+  font-size: 14.5px;
+}
+.ya-yachay .ya-burbuja {
+  align-self: flex-start;
+  background: var(--oro-tenue);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  border-top-left-radius: 4px;
+}
+.ya-usuario { align-items: flex-end; }
+.ya-usuario .ya-burbuja {
+  background: var(--gris);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top-right-radius: 4px;
+}
+.ya-linea { margin: 2px 0; }
+.ya-linea:empty { height: 6px; }
+.ya-ficha {
+  display: block;
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: transparent;
+  border: 1px solid var(--oro);
+  border-radius: 10px;
+  color: var(--oro-suave);
+  cursor: pointer;
+  font-size: 13.5px;
+  text-align: left;
+}
+.ya-ficha:hover { background: var(--oro-tenue); }
+.ya-chips, .ya-sugerencias-extra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.ya-chip {
+  padding: 7px 12px;
+  background: transparent;
+  border: 1px dashed rgba(212, 175, 55, 0.5);
+  border-radius: 999px;
+  color: var(--texto);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.ya-chip:hover {
+  background: var(--oro-tenue);
+  border-color: var(--oro);
+  border-style: solid;
+}
+.ya-pensando { display: flex; gap: 5px; padding: 14px 16px; }
+.ya-punto {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--oro);
+  animation: ya-late 1s ease-in-out infinite;
+}
+.ya-punto:nth-child(2) { animation-delay: 0.18s; }
+.ya-punto:nth-child(3) { animation-delay: 0.36s; }
+@keyframes ya-late {
+  0%, 100% { opacity: 0.25; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-3px); }
+}
+
+.yachay-form {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+.yachay-form input {
+  flex: 1;
+  padding: 12px 14px;
+  background: var(--gris);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: var(--radio);
+  color: var(--texto);
+  font-size: 15px;
+  outline: none;
+}
+.yachay-form input:focus { border-color: var(--oro); }
+.yachay-pie {
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+/* ══════════ 🔔 AVISOS EN VIVO (favoritos con novedades) ══════════ */
+.avisos-novedades {
+  position: fixed;
+  right: 16px;
+  bottom: 76px; /* encima del botón de apoyo */
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: min(360px, calc(100vw - 32px));
+}
+.aviso-novedad {
+  position: relative;
+  background: linear-gradient(180deg, var(--negro-2, #141414), var(--negro));
+  border: 1px solid var(--oro);
+  border-radius: 14px;
+  padding: 12px 30px 10px 14px;
+  box-shadow: var(--sombra);
+  animation: aviso-entra 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+@keyframes aviso-entra {
+  from { opacity: 0; transform: translateY(14px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.aviso-cuerpo { cursor: pointer; }
+.aviso-titulo { font-size: 13.5px; line-height: 1.4; }
+.aviso-detalle {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--texto-tenue);
+  line-height: 1.4;
+}
+.aviso-cat { color: var(--oro-suave); }
+.aviso-ir {
+  margin-top: 6px;
+  font-size: 11.5px;
+  color: var(--oro);
+}
+.aviso-cerrar {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  color: var(--texto-tenue);
+  font-size: 18px;
+  cursor: pointer;
+}
+.aviso-cerrar:hover { color: var(--oro); }
+
+/* ══════════ 📓 MODAL NOTEBOOKLM ══════════ */
+.modal-nblm {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  max-height: 92vh;
+  overflow-y: auto;
+  background: linear-gradient(180deg, var(--negro-2, #141414), var(--negro));
+  border: 1px solid var(--oro);
+  border-radius: 18px;
+  padding: 24px 22px 20px;
+  box-shadow: var(--sombra);
+}
+.modal-nblm a { color: var(--oro-suave); }
+.nblm-pasos {
+  margin: 14px 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  line-height: 1.5;
+}
+
+@media (max-width: 560px) {
+  .yachay-cab { flex-direction: column; text-align: center; gap: 8px; }
+  .ya-burbuja { max-width: 100%; }
+  .yachay-chat { max-height: 55vh; }
+  .avisos-novedades { right: 10px; left: 10px; bottom: 84px; max-width: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aviso-novedad { animation: none; }
+  .ya-punto { animation: none; opacity: 0.7; }
+}
