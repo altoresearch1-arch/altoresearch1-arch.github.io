@@ -1,4 +1,4 @@
-# ESTADO DEL PROYECTO — ALTO Research (app educativa BVL)
+﻿# ESTADO DEL PROYECTO — ALTO Research (app educativa BVL)
 
 > **Documento maestro vivo.** Captura TODO lo construido para que nada se pierda, sin
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
@@ -55,10 +55,9 @@ web estática, cero secretos, cero costos):
   dividendos, tesis, tips, catalizadores y los hechos 12m CON el link al PDF oficial de cada uno
   + preguntas sugeridas) y un modal con los 4 pasos para subirlo a notebooklm.google.com.
 - **🤖 ROBOT INTRADÍA** (`deploy.yml` + `actualizar_todo.py`): 3 crones — cierre nocturno
-  `0 3 * * 2-6` (--rapido, igual que antes), **hechos+BEM cada 30 min** `*/30 13-21 * * 1-5`
-  (8:00-16:30 Perú, modo nuevo `--hechos` ≈ 1-2 min) y **precios 12:05/15:05 Perú**
-  `5 17,20 * * 1-5` (modo nuevo `--precios`; el :05 evita chocar con el run de hechos de la hora
-  en punto). El modo se elige con `github.event.schedule` (trae el cron que disparó). **Solo se
+  `0 3 * * 2-6` (--rapido, igual que antes), **hechos+BEM cada 30 min** `7,37 13-21 * * 1-5`
+  (8:00-16:30 Perú, modo nuevo `--hechos` ≈ 1-2 min) y **precios ~12:15/15:15 Perú**
+  `15 17,20 * * 1-5` (modo nuevo `--precios`). El modo se elige con `github.event.schedule` (trae el cron que disparó). **Solo se
   commitea Y despliega si los datos cambiaron** (output `cambios` del job; si no, el run muere en
   ~1 min sin ruido). El BEM es MENSUAL: revisarlo cada 30 min no trae nada — fetch_bem ya no
   escribe si no hay edición nueva, así que es gratis. Repo público = minutos de Actions ilimitados.

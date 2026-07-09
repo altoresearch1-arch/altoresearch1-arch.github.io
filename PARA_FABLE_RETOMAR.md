@@ -1,4 +1,4 @@
-# 🔁 RETOMAR EL PROYECTO — Handoff (act. 01-jul-2026 por Fable)
+﻿# 🔁 RETOMAR EL PROYECTO — Handoff (act. 01-jul-2026 por Fable)
 
 Hola. Este archivo es el **punto de entrada**. Lo empezó Opus y lo actualizó Fable tras el
 "pase premium" del 01-jul (detalle completo arriba de `ESTADO_DEL_PROYECTO.md`).
@@ -16,7 +16,7 @@ Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTAD
 > altoresearch1@gmail.com, sin backend). "Cuéntame más de X" = intent de informes. NotebookLM se
 > agregó y Jair lo hizo QUITAR (no volver a ponerlo). **"Actualizaciones"** reemplazó al "mensaje
 > del día" (config.json → actualizaciones.items). **Robot intradía**: hechos+BEM cada 30 min
-> (8:00-16:30 Perú, `--hechos`), precios 12:05/15:05 (`--precios`), cierre 22:00 (`--rapido`);
+> (8:00-16:30 Perú, `--hechos`), precios ~12:15/15:15 (`--precios`), cierre ~22:23 (`--rapido`);
 > modo por `github.event.schedule`; solo commitea/despliega SI HAY CAMBIOS. **Avisos 🔔**:
 > `gen_novedades.py` → `app/public/novedades.json` (fuera del bundle y del precache SW); la app
 > lo re-pide cada 5 min y avisa con sonido si una empresa ★ tiene HI nuevo (clic → ficha).
