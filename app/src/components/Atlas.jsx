@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { responder, PREGUNTAS_INICIALES } from '../lib/cerebro'
+import { responder, saludoSentinel, PREGUNTAS_INICIALES } from '../lib/cerebro'
+import { marcarContextoVisto } from '../lib/sentinel'
 import empresasData from '../data/empresas.json'
 
 // ATLAS — la IA de ALTO (beta). Enseña y aprende. Chat estilo NotebookLM pero
@@ -21,13 +22,17 @@ const nombreDe = (t) => {
 
 export default function Atlas({ onVerEmpresa }) {
   const [mensajes, setMensajes] = useState(() => {
-    const bienvenida = responder('')
+    // si Sentinel acaba de pasarle un documento, Atlas saluda YA con el contexto
+    const bienvenida = saludoSentinel() || responder('')
     return [{ de: 'atlas', ...bienvenida }]
   })
   const [texto, setTexto] = useState('')
   const [pensando, setPensando] = useState(false)
   const finRef = useRef(null)
   const inputRef = useRef(null)
+
+  // ya saludó con el documento de Sentinel → marcarlo visto (idempotente)
+  useEffect(() => { marcarContextoVisto() }, [])
 
   useEffect(() => {
     finRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })

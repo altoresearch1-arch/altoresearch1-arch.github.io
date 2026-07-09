@@ -7,6 +7,16 @@ Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTAD
 
 ---
 
+## ⚡ NUEVO 09-jul ronda 3 (Fable): 🛰️ SENTINEL — lector de hechos (beta)
+> Nombre elegido por Jair. En cada ficha, DEBAJO de los hechos 📰: el usuario descarga el PDF
+> de un hecho (botón PDF ↗), lo suelta en Sentinel, este lo lee EN el navegador (pdf.js,
+> import dinámico, cero servidores) y da veredicto 🟢/🔴/🟡 con razones (extractivo honesto;
+> reportes rutinarios como derivados → forzados a neutra). Botón → abre Atlas que saluda YA
+> con el contexto (sessionStorage; saludo PURO + marcar visto en useEffect por StrictMode) y
+> responde repreguntas buscando dentro del texto. Cada hecho leído queda en localStorage →
+> "¿qué hechos te he pasado?". Piezas: `lib/sentinel.js`, `components/Sentinel.jsx`, hooks en
+> `cerebro.js`/`Atlas.jsx`. Verificado con PDF real de Nexa.
+
 ## ⚡ NUEVO 09-jul (Fable): 🧠 ATLAS (IA beta) + ROBOT INTRADÍA + AVISOS 🔔 + COMENTARIOS
 > Pedido de Jair, en DOS rondas la misma noche. TODO sin backend (estática, cero costos):
 > **ATLAS** (antes Yachay; Jair lo rebautizó) = IA local (`lib/cerebro.js` + `Atlas.jsx`, ruta

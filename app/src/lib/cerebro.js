@@ -6,6 +6,7 @@ import tipsData from '../data/tips.json'
 import hechosData from '../data/hechos.json'
 import conocimientoData from '../data/conocimiento.json'
 import { precioDe, peInfo, dividendosDe, yieldNumerico } from './finanzas'
+import { leerContexto, marcarContextoVisto, hechosAprendidos } from './sentinel'
 
 // ─────────────────────────────────────────────────────────────────────────
 // EL CEREBRO DE ATLAS — la IA de ALTO (beta). Enseña y aprende.
@@ -176,6 +177,12 @@ function respuestaResumen(e) {
     saber ? `📚 Del informe ALTO: ${saber.datos[0]}` : (tipsDe(e.ticker)[0] ? `💡 Para entenderla: ${tipsDe(e.ticker)[0]}` : null),
     lineaHecho(e.ticker),
   ].filter(Boolean)
+  // si el usuario me pasó hechos de ESTA empresa por Sentinel, los recuerdo
+  const leidos = hechosAprendidos().filter((h) => h.ticker === e.ticker)
+  if (leidos.length > 0) {
+    const u = leidos[leidos.length - 1]
+    lineas.push(`🛰️ Además me pasaste un hecho suyo por Sentinel (${u.cuando}): ${u.categoria} → ${VEREDICTO_TXT[u.veredicto] || u.veredicto}.`)
+  }
   return {
     texto: lineas.join('\n'),
     ticker: e.ticker,
@@ -304,6 +311,94 @@ function respuestaFallback(q, original) {
   }
 }
 
+// ── 🛰️ el documento que Sentinel le pasó a Atlas (sessionStorage) ────────
+
+const VEREDICTO_TXT = {
+  buena: '🟢 pinta a BUENA noticia',
+  mala: '🔴 pinta a MALA noticia',
+  neutra: '🟡 pinta neutra / administrativa',
+}
+
+const chipsDoc = (doc) => [
+  '¿Es buena o mala noticia?',
+  '¿Qué montos menciona el documento?',
+  ...(doc.ticker ? [`¿Qué hace ${sinCola(doc.empresa || doc.ticker)}?`] : []),
+]
+
+function respDocResumen(doc) {
+  const lineas = [
+    `🛰️ Sobre el documento que me pasó Sentinel${doc.empresa ? ` (de **${doc.empresa}**)` : ''}:`,
+    `📂 Tipo: ${doc.categoria}. Mi lectura: ${VEREDICTO_TXT[doc.veredicto]}.`,
+  ]
+  for (const f of (doc.frases || []).slice(0, 3)) lineas.push(`📄 «${f}»`)
+  if (doc.montos?.length) lineas.push(`💵 Montos que vi: ${doc.montos.slice(0, 5).join(' · ')}`)
+  lineas.push('Recuerda: leo por palabras y patrones (beta) — dale una leída tú también.')
+  return { texto: lineas.join('\n'), ticker: doc.ticker || undefined, chips: chipsDoc(doc) }
+}
+
+function respDocVeredicto(doc) {
+  const lineas = [`Mi lectura del documento: ${VEREDICTO_TXT[doc.veredicto]}.`]
+  if (doc.razones?.length) {
+    lineas.push('Por qué lo digo:')
+    for (const r of doc.razones) lineas.push(`· ${r}`)
+  } else {
+    lineas.push('No encontré señales fuertes en ningún sentido (suele pasar con los comunicados rutinarios).')
+  }
+  lineas.push('Esto NO es recomendación: es un resaltado automático para que sepas con qué ánimo leerlo.')
+  return { texto: lineas.join('\n'), ticker: doc.ticker || undefined, chips: ['¿De qué trata el documento?', '¿Qué montos menciona el documento?'] }
+}
+
+function respDocDatos(doc, tipo) {
+  const lista = tipo === 'montos' ? doc.montos : doc.fechas
+  const icono = tipo === 'montos' ? '💵' : '📅'
+  if (!lista?.length) {
+    return { texto: `No encontré ${tipo} claros en el documento — puede que sea un comunicado sin cifras.`, chips: chipsDoc(doc) }
+  }
+  return {
+    texto: [`${icono} ${tipo === 'montos' ? 'Montos' : 'Fechas'} que encontré en el documento:`, ...lista.map((x) => `· ${x}`)].join('\n'),
+    chips: chipsDoc(doc),
+  }
+}
+
+// búsqueda libre DENTRO del texto del documento (repreguntas)
+function buscarEnDoc(doc, q) {
+  const palabras = q.split(' ').filter((w) => w.length >= 5)
+  if (!palabras.length || !doc.texto) return null
+  const oraciones = doc.texto.split(/(?<=[.;])\s+|\n+/).filter((o) => o.length >= 30)
+  let mejor = null
+  for (const o of oraciones) {
+    const oN = norm(o)
+    const aciertos = palabras.filter((w) => oN.includes(w)).length
+    if (aciertos > 0 && (!mejor || aciertos > mejor.aciertos)) mejor = { o: o.trim(), aciertos }
+  }
+  if (!mejor || mejor.aciertos < 1) return null
+  return {
+    texto: [`📄 En el documento encontré esto relacionado:`, `«${mejor.o.slice(0, 300)}»`].join('\n'),
+    chips: chipsDoc(doc),
+  }
+}
+
+// Saludo especial cuando Sentinel ACABA de pasarle un documento (Atlas.jsx lo
+// usa al montar el chat). Devuelve null si no hay documento nuevo.
+// PURO a propósito: NO marca el contexto como visto (StrictMode corre los
+// inicializadores 2 veces en dev y la 2ª lo encontraba "usado") — Atlas.jsx
+// lo marca en un useEffect al montar.
+export function saludoSentinel() {
+  const doc = leerContexto()
+  if (!doc?.nuevo) return null
+  const lineas = [
+    `🛰️ **Sentinel me pasó un documento** y ya lo leí${doc.paginasLeidas ? ` (${doc.paginasLeidas} página${doc.paginasLeidas === 1 ? '' : 's'})` : ''}.`,
+    `${doc.empresa ? `Es de **${doc.empresa}**` : 'No identifiqué la empresa con certeza'} · ${doc.categoria}.`,
+    `Mi lectura rápida: ${VEREDICTO_TXT[doc.veredicto]}.`,
+    'Pregúntame sobre él — o sobre cualquier otra cosa de la bolsa.',
+  ]
+  return {
+    texto: lineas.join('\n'),
+    ticker: doc.ticker || undefined,
+    chips: ['¿Es buena o mala noticia?', '¿De qué trata el documento?', '¿Qué montos menciona el documento?'],
+  }
+}
+
 // ── el despachador principal ─────────────────────────────────────────────
 export function responder(pregunta) {
   const q = norm(pregunta)
@@ -318,6 +413,31 @@ export function responder(pregunta) {
 
   const empresas = buscarEmpresas(q)
   const e = empresas[0]
+
+  // 🛰️ ¿Hay un documento que Sentinel le pasó? Responder sobre ÉL cuando la
+  // pregunta lo menciona (o cuando no menciona ninguna empresa concreta).
+  const doc = leerContexto()
+  const hablaDelDoc = /(documento|el hecho|el pdf|la noticia|lo que leiste|lo que te paso|sentinel)/.test(q)
+  if (doc && (hablaDelDoc || !e)) {
+    if (/(de que trata|resume|resumen|que dice)/.test(q)) return respDocResumen(doc)
+    if (/(buena|mala|como pinta|positiv|negativ)/.test(q) && /(noticia|documento|hecho|pinta)/.test(q)) return respDocVeredicto(doc)
+    if (/(monto|cifra|cuanto|cantidad|plata|dinero)/.test(q) && hablaDelDoc) return respDocDatos(doc, 'montos')
+    if (/fecha/.test(q) && hablaDelDoc) return respDocDatos(doc, 'fechas')
+    if (hablaDelDoc) return respDocResumen(doc)
+  }
+
+  // "¿qué hechos te he pasado?" — la memoria local de Sentinel
+  if (/(que (hechos|documentos) (te|he)|que has (aprendido|leido)|que aprendiste)/.test(q)) {
+    const lista = hechosAprendidos()
+    if (lista.length === 0) {
+      return { texto: 'Todavía no me has pasado ningún hecho de importancia por Sentinel. En la ficha de cualquier empresa, abajo de sus hechos 📰, está el recuadro 🛰️ para soltarme un PDF.', chips: PREGUNTAS_INICIALES.slice(0, 3) }
+    }
+    const lineas = ['Esto es lo que me has pasado por Sentinel (lo recuerdo en TU navegador):']
+    for (const h of lista.slice(-6).reverse()) {
+      lineas.push(`🛰️ ${h.cuando} · ${h.empresa || 'empresa no identificada'} · ${h.categoria} → ${VEREDICTO_TXT[h.veredicto] || h.veredicto}`)
+    }
+    return { texto: lineas.join('\n'), chips: ['¿De qué trata el documento?', '¿Qué hace Buenaventura?'] }
+  }
 
   // comparar dos empresas → mandarlo al Comparador
   if (empresas.length === 2 && /(compara|comparar|versus|vs|contra|o mejor)/.test(q)) {
@@ -356,6 +476,12 @@ export function responder(pregunta) {
   }
 
   if (/(que sabes|que puedes|quien eres|que eres|ayuda|como funcionas|como aprendes)/.test(q)) return respuestaBienvenida()
+
+  // último recurso antes de rendirse: ¿la respuesta está DENTRO del documento de Sentinel?
+  if (doc) {
+    const enDoc = buscarEnDoc(doc, q)
+    if (enDoc) return enDoc
+  }
 
   return respuestaFallback(q, pregunta)
 }

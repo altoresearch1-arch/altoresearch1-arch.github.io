@@ -4,6 +4,31 @@
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
 > herramienta), lee esto primero. Última actualización: **09 jul 2026**. Estado: **EN VIVO (beta pública)**.
 
+## 🛰️ RONDA 3 del 09-jul (Fable): SENTINEL — el lector de hechos de importancia
+Pedido de Jair ("que el usuario descargue el hecho, se lo pegue a una IA, ella lea, y abra un
+chat con Atlas ya con el contexto"). Él eligió el nombre **Sentinel**. Piezas:
+- **`lib/sentinel.js`**: `leerPdf()` extrae el texto con **pdf.js** (pdfjs-dist v6, IMPORT
+  DINÁMICO → chunk aparte, solo pesa al usarlo; el worker via `?url`; ojo: `destroy()` vive en
+  la TAREA, no en el doc). `analizar()` = extractivo honesto: detecta empresa (contra
+  empresas.json), categoría (9 patrones, de específico a genérico, "resultados" AL FINAL),
+  montos/fechas/frases clave y **veredicto buena/mala/neutra** por señales con peso + prior de
+  categoría. Las categorías `rutinario: true` (posición mensual en derivados) se fuerzan a
+  NEUTRA salvo puntaje extremo — mencionan "pérdidas" en sus tablas y daban falso 🔴.
+  PDF escaneado sin texto → error honesto "no hago OCR". TODO corre en el navegador del
+  usuario (el PDF no se sube a ningún lado — privacidad).
+- **`Sentinel.jsx`** en la ficha, DEBAJO de HechosImportancia: procedimiento en 4 pasos (toca
+  PDF ↗ arriba → descarga → vuelve → suéltalo), dropzone + input, animación "leyendo página X
+  de Y", tarjeta de veredicto con razones, y botón "🧠 Abrir el chat con Atlas".
+- **Traspaso a Atlas**: contexto por sessionStorage `alto-sentinel-contexto`; `saludoSentinel()`
+  en cerebro.js hace que Atlas salude YA conociendo el doc (⚠ GOTCHA StrictMode: el saludo es
+  PURO y `marcarContextoVisto()` va en un useEffect de Atlas.jsx — los inicializadores de
+  useState corren 2 veces en dev y el 2º encontraba el contexto "usado"). Intents del doc:
+  "¿de qué trata?", "¿buena o mala?", montos, fechas, y búsqueda libre DENTRO del texto antes
+  del fallback. **Atlas "aprende"**: cada hecho leído queda en localStorage
+  `alto-sentinel-aprendidos` (máx 15) → "¿qué hechos te he pasado?" los lista y el resumen de
+  la empresa menciona el último. VERIFICADO con el PDF real de Nexa (hedging jun-26, 3 págs):
+  detectó empresa, categoría rutinaria, veredicto neutra, chat con contexto y repreguntas.
+
 ## 🧠 RONDA 2 del 09-jul (Fable, feedback de Jair EN LA MISMA NOCHE)
 - **Yachay → ATLAS** (a Jair no le gustó el nombre quechua; él eligió Atlas). Archivo ahora es
   `components/Atlas.jsx`; clases CSS siguen siendo `yachay-*`/`ya-*` (solo cambió el nombre visible).

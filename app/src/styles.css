@@ -3049,6 +3049,99 @@ a.link {
   margin: 14px 0 12px;
 }
 
+/* ══════════ 🛰️ SENTINEL — lector de hechos de importancia ══════════ */
+.sentinel { margin-top: 14px; }
+.sentinel-cab {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.sentinel-icono {
+  font-size: 30px;
+  filter: drop-shadow(0 0 10px var(--oro-tenue));
+}
+.sentinel-pasos {
+  margin: 0 0 14px;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.sentinel-zona {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 26px 14px;
+  border: 2px dashed rgba(212, 175, 55, 0.45);
+  border-radius: var(--radio);
+  cursor: pointer;
+  text-align: center;
+  font-size: 14.5px;
+  transition: border-color 0.15s, background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.sentinel-zona:hover, .sentinel-zona.activa {
+  border-color: var(--oro);
+  background: var(--oro-tenue);
+}
+.sentinel-zona .muted { font-size: 12px; }
+.sentinel-leyendo {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 18px 8px;
+}
+.sentinel-ojo {
+  font-size: 30px;
+  animation: sentinel-escanea 1.2s ease-in-out infinite;
+}
+@keyframes sentinel-escanea {
+  0%, 100% { transform: translateX(-6px) rotate(-8deg); }
+  50% { transform: translateX(6px) rotate(8deg); }
+}
+.sentinel-error {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 4px;
+  color: var(--ambar);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.sentinel-informe { display: flex; flex-direction: column; gap: 10px; }
+.sentinel-veredicto {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: var(--radio);
+  border: 1px solid var(--gris);
+}
+.sentinel-veredicto.v-buena { border-color: rgba(79, 157, 107, 0.6); background: rgba(79, 157, 107, 0.10); }
+.sentinel-veredicto.v-mala { border-color: rgba(192, 86, 63, 0.6); background: rgba(192, 86, 63, 0.10); }
+.sentinel-veredicto.v-neutra { border-color: rgba(199, 154, 58, 0.5); background: rgba(199, 154, 58, 0.08); }
+.sentinel-veredicto-emoji { font-size: 26px; }
+.sentinel-razones {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.sentinel-datos { font-size: 12.5px; line-height: 1.6; }
+.sentinel-atlas { width: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sentinel-ojo { animation: none; }
+}
+
 /* 🆕 Actualizaciones en el inicio (reemplaza al mensaje del día) */
 .actualizaciones-lista {
   margin: 8px 0 0;

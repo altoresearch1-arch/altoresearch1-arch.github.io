@@ -15,6 +15,7 @@ import Disclaimer from './Disclaimer'
 import Sparkline from './Sparkline'
 import Termometro from './Termometro'
 import HechosImportancia from './HechosImportancia'
+import Sentinel from './Sentinel'
 import ProduccionMinera from './ProduccionMinera'
 import { CountUp, Reveal } from '../lib/anim'
 import { useFavoritos, alternarFavorito } from '../lib/favoritos'
@@ -332,6 +333,9 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
 
         {/* Hechos de Importancia: comunicados oficiales SMV/BVL (hechos.json) */}
         <Reveal><HechosImportancia ticker={e.ticker} /></Reveal>
+
+        {/* 🛰️ Sentinel: suelta el PDF de un hecho y te dice si pinta buena o mala */}
+        <Reveal><Sentinel ticker={e.ticker} /></Reveal>
 
         {/* Escenarios (solo si Jair los llenó; si no, ya está el Simulador arriba) */}
         {e.escenarios &&
