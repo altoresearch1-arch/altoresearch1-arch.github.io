@@ -7,15 +7,23 @@ Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTAD
 
 ---
 
-## ⚡ NUEVO 08-jul (Fable): ⛏️ PRODUCCIÓN MINERA (MINEM/BEM) EN LAS FICHAS DE MINAS
+## ⚡ NUEVO 08-jul (Fable): ⛏️ PRODUCCIÓN MINERA (MINEM/BEM) + COMPARADOR V2 + GRÁFICAS
 > Pedido de Jair. Gráficos de producción mensual POR METAL (ene-25→abr-26) en cada ficha minera +
 > bloque "Sus minas / Participaciones" (%, cotiza, dividendos — todo VERIFICADO). Fuente nueva:
 > **MINEM Boletín Estadístico Minero** (receta en `extractor/FUENTES.md`). Piezas: `fetch_bem.py`
-> (→ `mineria.json`, caché en `cache_bem/`, ya en `actualizar_todo.py --rapido`, no commitea ruido
-> si el BEM no publicó), `mineria_familia.json` (MANUAL: participaciones verificadas — BVN vendió
-> Yanacocha 2022; Marcobre 60% de Minsur; Corona→Sierra Metals→Alpayana 2025; Shouxin 49% de
-> Shougang), `ProduccionMinera.jsx` (mini-gráfico por metal, color por entidad, huecos honestos =
-> "no apareció en el top del mes"). Detalle en ESTADO_DEL_PROYECTO.md.
+> (→ `mineria.json` con `totalesPais` para el "% del Perú", caché en `cache_bem/` committeada, ya
+> en `actualizar_todo.py --rapido`, auto-descubre ediciones nuevas, no commitea ruido si el BEM no
+> publicó), `mineria_familia.json` (MANUAL: participaciones verificadas — BVN vendió Yanacocha
+> 2022; Marcobre 60% de Minsur; Corona→Sierra Metals→Alpayana 2025; Shouxin 49% de Shougang),
+> `ProduccionMinera.jsx` (chips con números + % del Perú, 🏆 si domina, ★ récord, hover).
+> **COMPARADOR V2**: 🏁 carrera indexada a 100 (con "¿Qué es esto?"), 💰 duelo de dividendos,
+> ⛏️ duelo minero con % del Perú, barras de magnitud, tesis lado a lado, ↗ compartir duelo.
+> **TODAS las gráficas estilo BEM** (Sparkline del precio incluido: eje con precios, fechas,
+> lectura al pasar el dedo). **P/E rescatado**: `peInfo()` en lib/finanzas — si el precio es
+> viejo se muestra "⚠ referencial" (33 ilíquidas, ej. Santa Luisa 7.4); PODERC1 y SCCO al
+> `fix_eps`. **FIX Glosado**: claves en MAYÚSCULAS (TMF/MINEM/OPA) nunca mostraban tooltip;
+> y en celular el tooltip va CENTRADO en pantalla (antes se salía por los bordes).
+> Detalle completo en ESTADO_DEL_PROYECTO.md.
 
 ## ⚡ ÚLTIMO ESTADO (08-jul-2026, Opus) — YA ESTÁ LANZADA + fixes
 > **La app está EN VIVO:** **https://altoresearch1-arch.github.io/** (HTTPS, GitHub Pages).
