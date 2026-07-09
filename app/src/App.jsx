@@ -154,7 +154,7 @@ export default function App() {
                     </span>
                   </div>
                   <ul className="actualizaciones-lista">
-                    {config.actualizaciones.items.slice(0, 5).map((it, i) => (
+                    {config.actualizaciones.items.slice(0, 6).map((it, i) => (
                       <li key={i}>{it.texto}</li>
                     ))}
                   </ul>

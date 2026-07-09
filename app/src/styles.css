@@ -2311,6 +2311,35 @@ a.link {
   background: transparent;
 }
 
+/* La moneda (wrap del logo): difícil de voltear y SIN el destello azul del
+   toque en celular (tap-highlight) ni selección al machacarla a clics. */
+.hero-logo-wrap {
+  position: relative; /* ancla de las partículas */
+  display: inline-block;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation; /* sin zoom por doble tap al insistir */
+  outline: none;
+}
+.hero-logo-wrap:focus-visible .hero-logo {
+  border-color: var(--oro);
+}
+
+/* 🎉 Partículas doradas del giro logrado (las crea MonedaFidget.jsx) */
+.moneda-particula {
+  position: absolute;
+  pointer-events: none;
+  z-index: 5;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ffe9a8, var(--oro) 60%, rgba(212, 175, 55, 0) 100%);
+  color: var(--oro-suave);
+  line-height: 1;
+  text-shadow: 0 0 8px rgba(212, 175, 55, 0.8);
+  will-change: transform, opacity;
+}
+
 /* ---------- Logo del hero: aura dorada que respira ---------- */
 .hero-logo {
   width: 185px;
