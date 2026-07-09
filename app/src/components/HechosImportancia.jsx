@@ -36,7 +36,7 @@ export default function HechosImportancia({ ticker }) {
                 </a>
               )}
             </div>
-            <div className="hi-titulo">{x.titulo}</div>
+            {x.titulo && <div className="hi-titulo">{x.titulo}</div>}
           </div>
         ))}
       </div>

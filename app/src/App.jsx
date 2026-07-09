@@ -15,7 +15,8 @@ import EmpresaDelDia from './components/EmpresaDelDia'
 import MiLista from './components/MiLista'
 import MonedaFidget from './components/MonedaFidget'
 import FondoVivo from './components/FondoVivo'
-import Yachay from './components/Yachay'
+import Atlas from './components/Atlas'
+import Comentarios from './components/Comentarios'
 import AvisoNovedades from './components/AvisoNovedades'
 
 // "2026-06-24" -> "24 de junio de 2026"
@@ -59,6 +60,7 @@ export default function App() {
       else if (ruta === 'glosario') setVista('glosario')
       else if (ruta === 'explorar') setVista('explorar')
       else if (ruta === 'ia') setVista('ia')
+      else if (ruta === 'comentarios') setVista('comentarios')
       else if (ruta === 'empresa' && a && existe(a)) {
         setTickerSel(a)
         setVista('empresa')
@@ -101,7 +103,8 @@ export default function App() {
     { id: 'inicio', label: 'Inicio', hash: '#/' },
     { id: 'explorar', label: 'Explorar', hash: '#/explorar' },
     { id: 'glosario', label: 'Glosario', hash: '#/glosario' },
-    { id: 'ia', label: '🧠 Yachay', hash: '#/ia', beta: true },
+    { id: 'ia', label: '🧠 Atlas', hash: '#/ia', beta: true },
+    { id: 'comentarios', label: '💬 Comentarios', hash: '#/comentarios' },
   ]
 
   return (
@@ -140,15 +143,21 @@ export default function App() {
         <div key={vista + (tickerSel || '')} className="vista-anim">
           {vista === 'inicio' && (
             <div>
-              {config.mensajeDia?.texto && config.mensajeDia.texto.trim() !== '' && (
+              {/* 🆕 Actualizaciones (reemplaza al "mensaje del día", pedido de Jair 09-jul):
+                  las mejoras REALES de la app, editables en config.json */}
+              {config.actualizaciones?.items?.length > 0 && (
                 <div className="mensaje-dia">
                   <div className="mensaje-dia-cab">
-                    📣 Mensaje del día
-                    {config.mensajeDia.fecha && (
-                      <span className="mensaje-dia-fecha">{fechaLegible(config.mensajeDia.fecha)}</span>
-                    )}
+                    🆕 Actualizaciones
+                    <span className="mensaje-dia-fecha">
+                      {fechaLegible(config.actualizaciones.items[0].fecha)}
+                    </span>
                   </div>
-                  <div className="mensaje-dia-texto">{config.mensajeDia.texto}</div>
+                  <ul className="actualizaciones-lista">
+                    {config.actualizaciones.items.slice(0, 5).map((it, i) => (
+                      <li key={i}>{it.texto}</li>
+                    ))}
+                  </ul>
                 </div>
               )}
               <div className="hero">
@@ -175,7 +184,7 @@ export default function App() {
                     Ver el glosario
                   </button>
                   <button className="btn btn-ia" onClick={() => irA('#/ia')}>
-                    🧠 Aprende con Yachay <span className="nav-beta">beta</span>
+                    🧠 Aprende con Atlas <span className="nav-beta">beta</span>
                   </button>
                 </div>
                 <button className="btn-aleatoria" onClick={empresaAleatoria}>
@@ -226,7 +235,9 @@ export default function App() {
 
           {vista === 'glosario' && <Glosario />}
 
-          {vista === 'ia' && <Yachay onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />}
+          {vista === 'ia' && <Atlas onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />}
+
+          {vista === 'comentarios' && <Comentarios />}
 
           {vista === 'explorar' && (
             <Explorar

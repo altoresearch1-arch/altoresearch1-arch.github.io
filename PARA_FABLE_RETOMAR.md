@@ -7,18 +7,24 @@ Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTAD
 
 ---
 
-## ⚡ NUEVO 09-jul (Fable): 🧠 YACHAY (IA beta) + ROBOT INTRADÍA + AVISOS 🔔 + NOTEBOOKLM
-> Pedido de Jair. TODO sin backend (sigue siendo estática, cero costos): **Yachay** = IA local
-> (`lib/cerebro.js` + `Yachay.jsx`, ruta `#/ia`) que responde SOLO con nuestros datos (114
-> empresas + 174 términos); no inventa, no recomienda (Regla #9), chips estilo NotebookLM.
-> NotebookLM NO se puede incrustar (sin API/embed) → botón **📓 NotebookLM** en cada ficha
-> (`EstudioNotebookLM.jsx`): descarga paquete .txt de estudio + guía de 4 pasos. **Robot
-> intradía**: hechos+BEM cada 30 min (8:00-16:30 Perú, modo `--hechos`), precios 12:05/15:05
-> (`--precios`); modo elegido por `github.event.schedule`; solo commitea/despliega SI HAY
-> CAMBIOS. **Avisos 🔔**: `gen_novedades.py` → `app/public/novedades.json` (suelto, fuera del
-> bundle y del precache SW); la app lo re-pide cada 5 min (`lib/novedades.js` +
-> `AvisoNovedades.jsx`) y si una empresa ★ tiene hecho nuevo → toast con sonido → clic → ficha.
-> Detalle completo arriba de ESTADO_DEL_PROYECTO.md.
+## ⚡ NUEVO 09-jul (Fable): 🧠 ATLAS (IA beta) + ROBOT INTRADÍA + AVISOS 🔔 + COMENTARIOS
+> Pedido de Jair, en DOS rondas la misma noche. TODO sin backend (estática, cero costos):
+> **ATLAS** (antes Yachay; Jair lo rebautizó) = IA local (`lib/cerebro.js` + `Atlas.jsx`, ruta
+> `#/ia`) que ENSEÑA con nuestros datos (114 empresas, 176 términos, + `conocimiento.json` =
+> hechos curados de los INFORMES de Jair, sin recomendaciones) y APRENDE: pregunta sin respuesta
+> → botón "enviar al equipo" → pestaña **💬 Comentarios** (`#/comentarios`, mailto a
+> altoresearch1@gmail.com, sin backend). "Cuéntame más de X" = intent de informes. NotebookLM se
+> agregó y Jair lo hizo QUITAR (no volver a ponerlo). **"Actualizaciones"** reemplazó al "mensaje
+> del día" (config.json → actualizaciones.items). **Robot intradía**: hechos+BEM cada 30 min
+> (8:00-16:30 Perú, `--hechos`), precios 12:05/15:05 (`--precios`), cierre 22:00 (`--rapido`);
+> modo por `github.event.schedule`; solo commitea/despliega SI HAY CAMBIOS. **Avisos 🔔**:
+> `gen_novedades.py` → `app/public/novedades.json` (fuera del bundle y del precache SW); la app
+> lo re-pide cada 5 min y avisa con sonido si una empresa ★ tiene HI nuevo (clic → ficha).
+> **BUGS CAZADOS (reclamos reales de Jair):** (1) fetch_hechos BOTABA los HI con observación en
+> blanco (el de Nexa 08-jul) → ahora basta categoría; (2) el celular quedaba "muerto": el tooltip
+> centrado nunca se cerraba en iPhone (sin blur) + `.vista-anim` con fill-mode `both` dejaba un
+> transform eterno que anclaba el tooltip FUERA de pantalla → Glosado cierra por pointerdown y
+> fill-mode es `backwards`. Detalle completo arriba de ESTADO_DEL_PROYECTO.md.
 
 ## ⚡ 08-jul (Fable): ⛏️ PRODUCCIÓN MINERA (MINEM/BEM) + COMPARADOR V2 + GRÁFICAS
 > Pedido de Jair. Gráficos de producción mensual POR METAL (ene-25→abr-26) en cada ficha minera +

@@ -1465,15 +1465,23 @@ a.link {
 /* ---------- Micro-animaciones base ---------- */
 @keyframes subeFade {
   from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  /* OJO: el final es "none", NO translateY(0). Con fill-mode "both", translateY(0)
+     dejaba un transform identidad PARA SIEMPRE en .vista-anim → cualquier
+     position:fixed de adentro (el tooltip centrado del celular) se anclaba a la
+     PÁGINA entera en vez de a la pantalla y aparecía fuera de la vista. */
+  to { opacity: 1; transform: none; }
 }
 
+/* fill-mode "backwards", NO "both": con "both" la animación sigue APLICANDO el
+   transform final (aunque sea identidad) para siempre → el elemento se vuelve
+   "containing block" y cualquier position:fixed de adentro (tooltip centrado
+   del celular, avisos) se ancla a la página en vez de a la pantalla. */
 .anim-sube {
-  animation: subeFade 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  animation: subeFade 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
 }
 
 .vista-anim {
-  animation: subeFade 0.35s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  animation: subeFade 0.35s cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
 }
 
 /* Reveal al hacer scroll (lib/anim.js le pone .reveal-visto al entrar) */
@@ -2961,26 +2969,64 @@ a.link {
 }
 .aviso-cerrar:hover { color: var(--oro); }
 
-/* ══════════ 📓 MODAL NOTEBOOKLM ══════════ */
-.modal-nblm {
-  position: relative;
-  width: 100%;
-  max-width: 460px;
-  max-height: 92vh;
-  overflow-y: auto;
-  background: linear-gradient(180deg, var(--negro-2, #141414), var(--negro));
-  border: 1px solid var(--oro);
-  border-radius: 18px;
-  padding: 24px 22px 20px;
-  box-shadow: var(--sombra);
-}
-.modal-nblm a { color: var(--oro-suave); }
-.nblm-pasos {
+/* ══════════ 💬 COMENTARIOS Y FEEDBACK ══════════ */
+.coment-tipos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin: 14px 0;
+}
+.coment-tipo {
+  padding: 8px 12px;
+  background: transparent;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 999px;
+  color: var(--texto);
+  font-size: 13px;
+  cursor: pointer;
+}
+.coment-tipo.activo {
+  background: var(--oro-tenue);
+  border-color: var(--oro);
+  color: var(--oro-suave);
+  font-weight: 700;
+}
+.coment-texto {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  background: var(--gris);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: var(--radio);
+  color: var(--texto);
+  font-size: 15px;
+  font-family: inherit;
+  line-height: 1.5;
+  resize: vertical;
+  outline: none;
+}
+.coment-texto:focus { border-color: var(--oro); }
+.coment-pendientes {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.coment-acciones {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 14px 0 12px;
+}
+
+/* 🆕 Actualizaciones en el inicio (reemplaza al mensaje del día) */
+.actualizaciones-lista {
+  margin: 8px 0 0;
   padding-left: 20px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 7px;
   line-height: 1.5;
 }
 

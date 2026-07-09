@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import terminosData from '../data/terminos.json'
 
 // Detecta términos técnicos dentro de un texto y los explica al pasar el cursor.
@@ -22,13 +22,32 @@ const RE = new RegExp(
 
 function Termino({ palabra, definicion }) {
   const [ver, setVer] = useState(false)
+  const ref = useRef(null)
+
+  // BUG CAZADO 09-jul (celular "muerto"): en iPhone, tocar FUERA de un elemento
+  // enfocado NO dispara blur → el tooltip (fijo y centrado, z-index 300) quedaba
+  // abierto para siempre tapando la pantalla y "nada se podía tocar". Ahora
+  // CUALQUIER toque fuera de la palabra lo cierra (pointerdown a nivel documento),
+  // incluido tocar el propio tooltip.
+  useEffect(() => {
+    if (!ver) return
+    const cerrar = (ev) => {
+      if (ref.current && ev.target === ref.current) return // el 2º tap en la palabra no lo re-cierra en falso
+      setVer(false)
+    }
+    document.addEventListener('pointerdown', cerrar, true)
+    return () => document.removeEventListener('pointerdown', cerrar, true)
+  }, [ver])
+
   return (
     <span
+      ref={ref}
       className="termino"
       tabIndex={0}
       onMouseEnter={() => setVer(true)}
       onMouseLeave={() => setVer(false)}
       onFocus={() => setVer(true)}
+      onClick={() => setVer(true)}
       onBlur={() => setVer(false)}
     >
       {palabra}

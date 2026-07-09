@@ -4,7 +4,38 @@
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
 > herramienta), lee esto primero. Última actualización: **09 jul 2026**. Estado: **EN VIVO (beta pública)**.
 
-## 🧠 YACHAY (IA beta) + ROBOT INTRADÍA + AVISOS 🔔 + NOTEBOOKLM (09-jul-2026, Fable)
+## 🧠 RONDA 2 del 09-jul (Fable, feedback de Jair EN LA MISMA NOCHE)
+- **Yachay → ATLAS** (a Jair no le gustó el nombre quechua; él eligió Atlas). Archivo ahora es
+  `components/Atlas.jsx`; clases CSS siguen siendo `yachay-*`/`ya-*` (solo cambió el nombre visible).
+- **NOTEBOOKLM ELIMINADO** (pedido de Jair): se borró `EstudioNotebookLM.jsx`, su botón en la ficha
+  y su CSS. No volver a agregarlo salvo que él lo pida.
+- **BUG NEXA CAZADO (el reclamo de Jair era REAL):** el API de la BVL SÍ tenía el HI de Nexa del
+  08-jul (derivados jun-26) pero `fetch_hechos.py` lo BOTABA: exigía `observation` no vacío y muchos
+  HI estándar vienen con observación EN BLANCO (la categoría es el contenido). Fix: basta titulo O
+  categoría; "titulo" ahora es clave opcional en hechos.json (la app ya lo tolera).
+- **BUG CELULAR CAZADO (el "no puedo tocar nada"):** DOS causas reales: (1) en iPhone tocar fuera
+  NO dispara blur → el tooltip centrado (fixed, z-index 300) quedaba abierto PARA SIEMPRE tapando
+  la pantalla → fix en `Glosado.jsx`: cierre por `pointerdown` a nivel documento (cualquier toque
+  fuera lo cierra). (2) `.vista-anim` usaba `animation-fill-mode: both` → el transform final
+  (aunque identidad) se seguía APLICANDO para siempre → el elemento era "containing block" y
+  cualquier `position:fixed` de adentro (el tooltip) se anclaba a la PÁGINA (aparecía en top:7000px,
+  fuera de pantalla) → fix: fill-mode `backwards` + keyframe termina en `transform: none`.
+  VERIFICADO en preview móvil: tooltip centrado EN pantalla (top 367/812) y cierra al tocar fuera.
+- **ATLAS APRENDE + CONOCIMIENTO PROPIO:** nuevo `data/conocimiento.json` = hechos CURADOS de los
+  informes de Jair (Desktop/INFORMES REALIZADOS ALTO RESEARCH: BVN, Nexa, Minsur, CVerde, Backus,
+  Brocal, Corona/MINCORI1, Volcan — SIN precios objetivo ni recomendaciones, Regla #9). Atlas lo usa
+  en el resumen ("📚 Del informe ALTO"), en riesgos y en el intent nuevo "Cuéntame más de X".
+  Fallback ahora ANOTA la pregunta (localStorage `alto-atlas-sin-respuesta`) y ofrece botón
+  "📨 Enviar mi pregunta al equipo" → abre Comentarios con el texto listo. Identidad: "enseña y aprende".
+- **💬 PESTAÑA COMENTARIOS** (`Comentarios.jsx`, ruta `#/comentarios`, en el nav): tipos (agregar/
+  gusta/no gusta/pregunta para Atlas/error), textarea, "Enviar por correo" (mailto a
+  `config.feedback.correo` = altoresearch1@gmail.com, SIN backend) + "Copiar mensaje". Recibe el
+  borrador de Atlas por sessionStorage `alto-feedback-borrador`.
+- **🆕 "ACTUALIZACIONES" reemplaza al "Mensaje del día"** en el inicio: `config.json` →
+  `actualizaciones.items` (fecha+texto, la más nueva primero, se muestran 5). Jair las edita ahí.
+- Términos 174 → 176 (sab, hecho de importancia). Siglas ≤4 letras en MAYÚSCULAS en Atlas.
+
+## 🧠 YACHAY→ATLAS (IA beta) + ROBOT INTRADÍA + AVISOS 🔔 (09-jul-2026, Fable — ronda 1)
 Pedido de Jair ("IA que ayude a los nuevos", "actualizar cada media hora", "aviso con sonido
 a los que guardaron la acción", "NotebookLM"). Cuatro piezas, TODAS sin backend (sigue siendo
 web estática, cero secretos, cero costos):

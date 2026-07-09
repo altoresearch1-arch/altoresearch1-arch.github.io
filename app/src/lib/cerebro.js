@@ -4,16 +4,21 @@ import glosarioData from '../data/glosario.json'
 import tesisData from '../data/tesis.json'
 import tipsData from '../data/tips.json'
 import hechosData from '../data/hechos.json'
+import conocimientoData from '../data/conocimiento.json'
 import { precioDe, peInfo, dividendosDe, yieldNumerico } from './finanzas'
 
 // ─────────────────────────────────────────────────────────────────────────
-// EL CEREBRO DE YACHAY ("saber/aprender" en quechua) — la IA de ALTO (beta).
+// EL CEREBRO DE ATLAS — la IA de ALTO (beta). Enseña y aprende.
 //
-// No llama a ningún servidor ni API externa: responde SOLO con los datos
-// verificados que ya viven en la app (114 empresas, 172 términos, tesis,
-// tips, dividendos, hechos de importancia). Por diseño no puede irse de
-// tema ni inventar cifras — si no sabe, lo dice (Regla de Oro #1) — y NUNCA
-// recomienda comprar (Regla #9). Gratis, privado y funciona sin conexión.
+// ENSEÑA: no llama a ningún servidor ni API externa; responde SOLO con los
+// datos verificados que ya viven en la app (114 empresas, 176 términos,
+// tesis, tips, dividendos, hechos de importancia y el conocimiento curado
+// de los INFORMES propios de ALTO — conocimiento.json). Por diseño no puede
+// irse de tema ni inventar cifras — si no sabe, lo dice (Regla de Oro #1) —
+// y NUNCA recomienda comprar (Regla #9).
+// APRENDE: las preguntas que no sabe responder se pueden enviar al equipo
+// con un toque (pestaña Comentarios) y se guardan en localStorage; con cada
+// actualización, Jair las convierte en conocimiento nuevo.
 // ─────────────────────────────────────────────────────────────────────────
 
 // minúsculas + sin tildes + sin signos: "¿Qué es el P/E?" -> "que es el p/e"
@@ -135,30 +140,60 @@ const SECTOR_LEGIBLE = {
   afp: 'AFP', aseguradoras: 'seguros',
 }
 
+const conocimientoDe = (t) => conocimientoData.conocimiento?.[t] || null
+
 function chipsEmpresa(e) {
-  return [
+  const chips = [
     `¿${e.nombreCorto} paga dividendos?`,
     `¿Qué riesgos tiene ${e.nombreCorto}?`,
     `Últimas noticias de ${e.nombreCorto}`,
   ]
+  if (conocimientoDe(e.ticker)) chips.unshift(`Cuéntame más de ${e.nombreCorto}`)
+  return chips
+}
+
+// Guardar la pregunta sin respuesta (APRENDER): queda en el navegador del
+// usuario y la pestaña Comentarios la ofrece para enviarla al equipo.
+export function anotarPreguntaSinRespuesta(pregunta) {
+  try {
+    const clave = 'alto-atlas-sin-respuesta'
+    const lista = JSON.parse(localStorage.getItem(clave)) || []
+    if (!lista.includes(pregunta)) lista.push(pregunta)
+    localStorage.setItem(clave, JSON.stringify(lista.slice(-20)))
+  } catch { /* sin storage no pasa nada */ }
 }
 
 // ── respuestas por intención ─────────────────────────────────────────────
 
 function respuestaResumen(e) {
+  const saber = conocimientoDe(e.ticker)
   const lineas = [
     `🏢 **${e.nombreCorto}** (${e.ticker}) — sector ${SECTOR_LEGIBLE[e.sector] || e.sector}.`,
     lineaPrecio(e.ticker),
     lineaPE(e.ticker),
     lineaDividendos(e.ticker),
     tesisDe(e.ticker) ? `🧭 Tesis ALTO: ${tesisDe(e.ticker)}` : null,
-    tipsDe(e.ticker)[0] ? `💡 Para entenderla: ${tipsDe(e.ticker)[0]}` : null,
+    saber ? `📚 Del informe ALTO: ${saber.datos[0]}` : (tipsDe(e.ticker)[0] ? `💡 Para entenderla: ${tipsDe(e.ticker)[0]}` : null),
     lineaHecho(e.ticker),
   ].filter(Boolean)
   return {
     texto: lineas.join('\n'),
     ticker: e.ticker,
     chips: chipsEmpresa(e),
+  }
+}
+
+// "Cuéntame más de X" — el conocimiento curado de los INFORMES propios de ALTO
+// (los que Jair arma a mano desde las notas SMV). Solo hechos, cero recomendación.
+function respuestaInforme(e) {
+  const saber = conocimientoDe(e.ticker)
+  if (!saber) return respuestaResumen(e)
+  const lineas = [`Lo que ALTO investigó a fondo sobre **${e.nombreCorto}** (${saber.fuente}):`]
+  saber.datos.forEach((d) => lineas.push(`📚 ${d}`))
+  return {
+    texto: lineas.join('\n'),
+    ticker: e.ticker,
+    chips: [`¿Qué riesgos tiene ${e.nombreCorto}?`, `¿${e.nombreCorto} paga dividendos?`, `Últimas noticias de ${e.nombreCorto}`],
   }
 }
 
@@ -173,9 +208,13 @@ function respuestaRiesgos(e) {
   const lineas = [`Riesgos y puntos a vigilar de **${e.nombreCorto}** (según los datos, no opinión):`]
   const tesis = tesisDe(e.ticker)
   if (tesis) lineas.push(`🧭 ${tesis}`)
-  const RIESGO_RE = /(riesgo|deuda|cae|caida|ojo|cuidado|depende|volatil|ciclo|apalanc|perdida|negativo|sunat|juicio|conflicto)/i
+  const RIESGO_RE = /(riesgo|deuda|cae|caida|ojo|cuidado|depende|volatil|ciclo|apalanc|perdida|negativo|sunat|juicio|conflicto|suspend|concentra|bandera)/i
   const avisos = tipsDe(e.ticker).filter((t) => RIESGO_RE.test(t)).slice(0, 3)
   for (const a of avisos) lineas.push(`⚠ ${a}`)
+  const saber = conocimientoDe(e.ticker)
+  if (saber) {
+    for (const d of saber.datos.filter((x) => RIESGO_RE.test(x)).slice(0, 2)) lineas.push(`📚 ${d}`)
+  }
   if (lineas.length === 1) lineas.push('No tengo riesgos específicos registrados; revisa su ficha completa y sus hechos de importancia 📰.')
   return { texto: lineas.join('\n'), ticker: e.ticker, chips: [`¿Qué hace ${e.nombreCorto}?`, `Últimas noticias de ${e.nombreCorto}`, '¿Qué es la deuda neta?'] }
 }
@@ -241,22 +280,28 @@ function respuestaRegla9() {
 function respuestaBienvenida() {
   return {
     texto: [
-      '¡Hola! Soy **Yachay** (significa "saber" en quechua), la IA de ALTO Research — versión beta.',
-      'Sé TODO lo que hay en esta app: las ' + EMPRESAS.length + ' empresas de la BVL (precios, P/E, dividendos, tesis, riesgos, hechos de importancia) y ' + TERMINOS.length + '+ términos de bolsa explicados en simple.',
-      'Solo hablo de eso — no invento, no me salgo del tema y jamás te diré qué comprar. Pregúntame algo:',
+      '¡Hola! Soy **Atlas**, la IA de ALTO Research — versión beta. **Enseño y aprendo.**',
+      'ENSEÑO con lo que hay en esta app: las ' + EMPRESAS.length + ' empresas de la BVL (precios, P/E, dividendos, tesis, riesgos, hechos de importancia), ' + TERMINOS.length + '+ términos explicados en simple y el conocimiento de los informes propios de ALTO.',
+      'Y APRENDO: si me preguntas algo que aún no sé, puedes mandárselo al equipo con un toque — en la siguiente actualización ya lo sabré.',
+      'Solo hablo de la bolsa peruana — no invento y jamás te diré qué comprar. Pregúntame algo:',
     ].join('\n'),
-    chips: ['¿Qué hace Buenaventura?', '¿Qué es un dividendo?', '¿Cómo empiezo en la bolsa?', 'Ver quién paga más dividendos'],
+    chips: ['¿Qué hace Buenaventura?', 'Cuéntame más de Backus', '¿Cómo empiezo en la bolsa?', 'Ver quién paga más dividendos'],
   }
 }
 
-function respuestaFallback(q) {
+function respuestaFallback(q, original) {
+  anotarPreguntaSinRespuesta(original)
   const parecidas = buscarEmpresas(q, 3)
-  const lineas = ['Esa no la sé — y prefiero decírtelo a inventar una respuesta 🙂.',
-    'Solo sé de la Bolsa de Valores de Lima: sus empresas y los términos para entenderlas.']
+  const lineas = ['Esa todavía no la sé — y prefiero decírtelo a inventar una respuesta 🙂.',
+    'Pero así APRENDO: mándasela al equipo de ALTO con el botón de abajo y en la siguiente actualización ya la sabré.']
   const chips = parecidas.length > 0
     ? parecidas.map((e) => `¿Qué hace ${e.nombreCorto}?`)
     : ['¿Qué hace Buenaventura?', '¿Qué es un dividendo?', '¿Cómo empiezo en la bolsa?']
-  return { texto: lineas.join('\n'), chips }
+  return {
+    texto: lineas.join('\n'),
+    aprender: original, // Atlas.jsx muestra el botón "enviar al equipo"
+    chips,
+  }
 }
 
 // ── el despachador principal ─────────────────────────────────────────────
@@ -284,6 +329,7 @@ export function responder(pregunta) {
   }
 
   if (e) {
+    if (/(cuentame mas|mas datos|a fondo|el informe|profundiza|que mas sabes)/.test(q)) return respuestaInforme(e)
     if (/(dividendo|yield|reparte|paga|pagos)/.test(q)) return respuestaDividendos(e)
     if (/(riesgo|peligro|malo|debilidad|cuidado|problema)/.test(q)) return respuestaRiesgos(e)
     if (/(noticia|hecho|novedad|comunicado|paso algo|ultimas|ultimo)/.test(q)) return respuestaHechos(e)
@@ -309,9 +355,9 @@ export function responder(pregunta) {
     return { texto: lineas.join('\n'), chips: ['¿Qué es el P/E?', '¿Qué es el yield?', '¿Cómo empiezo en la bolsa?'] }
   }
 
-  if (/(que sabes|que puedes|quien eres|que eres|ayuda|como funcionas)/.test(q)) return respuestaBienvenida()
+  if (/(que sabes|que puedes|quien eres|que eres|ayuda|como funcionas|como aprendes)/.test(q)) return respuestaBienvenida()
 
-  return respuestaFallback(q)
+  return respuestaFallback(q, pregunta)
 }
 
 export const PREGUNTAS_INICIALES = [

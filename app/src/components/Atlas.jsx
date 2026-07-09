@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from 'react'
 import { responder, PREGUNTAS_INICIALES } from '../lib/cerebro'
 import empresasData from '../data/empresas.json'
 
-// YACHAY — "aprende con la IA" (beta). Chat estilo NotebookLM pero 100% nuestro:
-// corre EN el navegador del usuario, sin servidores ni APIs de pago, y responde
-// SOLO con los datos verificados de la app (por eso no puede irse de tema ni
-// inventar). El nombre viene del quechua: yachay = saber / aprender.
+// ATLAS — la IA de ALTO (beta). Enseña y aprende. Chat estilo NotebookLM pero
+// 100% nuestro: corre EN el navegador del usuario, sin servidores ni APIs de
+// pago, y responde SOLO con los datos verificados de la app (por eso no puede
+// irse de tema ni inventar). Lo que no sabe, el usuario lo manda al equipo con
+// un toque (pestaña Comentarios) y Atlas lo aprende en la siguiente
+// actualización. (Antes se llamó Yachay; Jair lo bautizó Atlas el 09-jul.)
 
 // "**negrita**" → <b> (única marca que usa el cerebro)
 function conNegritas(texto) {
@@ -17,10 +19,10 @@ const nombreDe = (t) => {
   return n.replace(/\s+(S\.?A\.?A?\.?|S\.?A\.?C\.?)\s*$/i, '')
 }
 
-export default function Yachay({ onVerEmpresa }) {
+export default function Atlas({ onVerEmpresa }) {
   const [mensajes, setMensajes] = useState(() => {
     const bienvenida = responder('')
-    return [{ de: 'yachay', ...bienvenida }]
+    return [{ de: 'atlas', ...bienvenida }]
   })
   const [texto, setTexto] = useState('')
   const [pensando, setPensando] = useState(false)
@@ -41,9 +43,18 @@ export default function Yachay({ onVerEmpresa }) {
     // pero sin pausa el chat se siente irreal
     setTimeout(() => {
       const resp = responder(limpia)
-      setMensajes((prev) => [...prev, { de: 'yachay', ...resp }])
+      setMensajes((prev) => [...prev, { de: 'atlas', ...resp }])
       setPensando(false)
     }, 350 + Math.random() * 350)
+  }
+
+  // APRENDER: la pregunta sin respuesta viaja a la pestaña Comentarios ya escrita
+  const enviarAlEquipo = (pregunta) => {
+    try {
+      sessionStorage.setItem('alto-feedback-borrador',
+        `Atlas no supo responder esto y quiero que lo aprenda: "${pregunta}"`)
+    } catch { /* sin storage: la pestaña abre vacía */ }
+    location.hash = '#/comentarios'
   }
 
   const ultimo = mensajes.length - 1
@@ -54,20 +65,21 @@ export default function Yachay({ onVerEmpresa }) {
         <div className="yachay-avatar" aria-hidden="true">🧠</div>
         <div>
           <h1 style={{ margin: 0 }}>
-            Yachay <span className="yachay-beta">IA · BETA</span>
+            Atlas <span className="yachay-beta">IA · BETA</span>
           </h1>
           <p className="muted" style={{ margin: '4px 0 0' }}>
-            "Saber", en quechua. Responde <b>solo</b> con los datos verificados de ALTO:
-            las {empresasData.empresas.length} empresas de la BVL y el glosario completo.
-            Educa, <b>no recomienda</b> — y si no sabe algo, te lo dice.
+            La IA de ALTO que <b>enseña y aprende</b>. Responde <b>solo</b> con los datos
+            verificados de la app ({empresasData.empresas.length} empresas de la BVL, el glosario
+            completo y nuestros informes). Educa, <b>no recomienda</b> — y lo que no sabe,
+            se lo mandas al equipo con un toque y lo aprende.
           </p>
         </div>
       </div>
 
       <div className="yachay-chat card">
         {mensajes.map((m, i) => (
-          <div key={i} className={`ya-msg ya-${m.de}`}>
-            {m.de === 'yachay' && <span className="ya-quien">🧠 Yachay</span>}
+          <div key={i} className={`ya-msg ya-${m.de === 'usuario' ? 'usuario' : 'yachay'}`}>
+            {m.de === 'atlas' && <span className="ya-quien">🧠 Atlas</span>}
             <div className="ya-burbuja">
               {String(m.texto).split('\n').map((linea, j) => (
                 <div key={j} className="ya-linea">{conNegritas(linea)}</div>
@@ -82,8 +94,13 @@ export default function Yachay({ onVerEmpresa }) {
                   {m.accion.label}
                 </button>
               )}
+              {m.aprender && (
+                <button className="ya-ficha" onClick={() => enviarAlEquipo(m.aprender)}>
+                  📨 Enviar mi pregunta al equipo (para que Atlas la aprenda)
+                </button>
+              )}
             </div>
-            {m.de === 'yachay' && i === ultimo && !pensando && (m.chips?.length > 0) && (
+            {m.de === 'atlas' && i === ultimo && !pensando && (m.chips?.length > 0) && (
               <div className="ya-chips">
                 {m.chips.map((c) => (
                   <button key={c} className="ya-chip" onClick={() => preguntar(c)}>{c}</button>
@@ -94,7 +111,7 @@ export default function Yachay({ onVerEmpresa }) {
         ))}
         {pensando && (
           <div className="ya-msg ya-yachay">
-            <span className="ya-quien">🧠 Yachay</span>
+            <span className="ya-quien">🧠 Atlas</span>
             <div className="ya-burbuja ya-pensando">
               <span className="ya-punto" /><span className="ya-punto" /><span className="ya-punto" />
             </div>
@@ -112,7 +129,7 @@ export default function Yachay({ onVerEmpresa }) {
           value={texto}
           onChange={(e) => setTexto(e.target.value)}
           placeholder="Pregúntame por una empresa o un término… (ej. ¿qué hace Alicorp?)"
-          aria-label="Escribe tu pregunta para Yachay"
+          aria-label="Escribe tu pregunta para Atlas"
           maxLength={140}
         />
         <button type="submit" className="btn btn-oro" disabled={pensando || !texto.trim()}>
@@ -121,12 +138,10 @@ export default function Yachay({ onVerEmpresa }) {
       </form>
 
       <div className="yachay-pie muted">
-        Yachay es una beta que responde con la base de datos de ALTO (BVL/SMV, verificada a mano).
-        No usa internet ni servicios externos: tus preguntas no salen de tu dispositivo.
+        Atlas es una beta que responde con la base de datos de ALTO (BVL/SMV e informes propios,
+        verificados a mano). No usa internet ni servicios externos: tus preguntas no salen de tu
+        dispositivo, salvo que TÚ decidas enviarlas al equipo para que Atlas las aprenda.
         Puede quedarse corto, pero nunca inventa. Nada de esto es recomendación de inversión.
-        <br />
-        💡 ¿Quieres analizar a fondo los PDF de una empresa? En cada ficha hay un botón
-        «Estudiar con NotebookLM» que te prepara el paquete.
       </div>
 
       {mensajes.length === 1 && (

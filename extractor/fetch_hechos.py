@@ -58,9 +58,14 @@ def hechos_de(s, rpj, desde, hasta):
         categoria = (cods[0].get("descCodeHHII") or "").strip() if cods else ""
         docs = it.get("documents") or []
         pdf = (PDF_BASE + docs[0]["path"]) if docs and docs[0].get("path") else None
-        if fecha and titulo:
+        # OJO (bug cazado por Jair 09-jul): muchos HI llegan con observation EN BLANCO
+        # (ej. "Posición Mensual en Derivados" de Nexa del 08-jul) — la categoría ES el
+        # contenido. Antes se exigía titulo y se BOTABAN; ahora basta titulo O categoría.
+        if fecha and (titulo or categoria):
             # sin claves nulas: cada byte cuenta dentro del bundle de la app
-            h = {"fecha": fecha, "titulo": titulo}
+            h = {"fecha": fecha}
+            if titulo:
+                h["titulo"] = titulo
             if categoria:
                 h["categoria"] = categoria
             if pdf:
