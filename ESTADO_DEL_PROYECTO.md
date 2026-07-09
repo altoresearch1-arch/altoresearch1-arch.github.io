@@ -77,6 +77,26 @@
   ahora useEffect sincroniza). Sin veredicto, como siempre: "las barras muestran MAGNITUD, no
   cuál es mejor".
 
+## 💎 P/E RESCATADO + SIGNIFICADO DE LA CARRERA + NOTA BVN (08-jul-2026, Fable, pedidos de Jair)
+- **P/E que se ocultaba (hallazgo de Jair con Santa Luisa):** 33 empresas tenían BPA anual (SMV)
+  y precio, pero el P/E se ESCONDÍA porque el precio era viejo (ilíquidas). Nuevo `peInfo()` en
+  `lib/finanzas.js` (único cálculo de P/E, reemplaza a peNumerico/calcularPE duplicados): ahora se
+  MUESTRA con **⚠ "referencial: su último precio es del dd/mm (negocia poco)"** en la guía de la
+  ficha y el Comparador (la Valoración ya lo mostraba con aviso). La nota del P/E en el Comparador
+  trae la fórmula completa: **P/E = precio ÷ BPA; BPA = utilidad neta ÷ acciones en circulación**.
+- **PODERC1 y SCCO al `fix_eps.py`:** les faltaba el EPS anual (Poderosa no parseó; SCCO
+  sin_documentos) → EPS ttm implícito de stockanalysis con fuente. Poderosa P/E 11.3, SCCO 27.8.
+  Pendiente si Jair quiere más: para sin_documentos restantes (AUNA/PML/PPX/Pucalá y fondos) el
+  P/E no aplica o no hay dato; la vía "N acciones de internet + utilidad SMV" queda anotada.
+- **Términos 172 → 174:** "acciones en circulación", "indexado a 100".
+- **"La carrera" explicada** en el Comparador: bloque visible "¿Qué es esto?" (ambas arrancan en
+  100 = indexado a 100, se compara el % desde ahí).
+- **Nota en la producción de BVN** (`notaProduccion` en mineria_familia.json, render nuevo):
+  explica los huecos (top-10 del BEM) y manda a sus 📰 HI ("resultados de producción y volúmenes
+  de venta" trimestrales). IDEA de Jair anotada: extraer producción trimestral de esos reportes
+  para complementar los huecos (los HI son PDFs trimestrales, no mensuales — sería un bloque
+  aparte "según su propio reporte").
+
 ## 🔧 FIXES POST-LANZAMIENTO (05–08 jul 2026, Opus)
 - **Robot ya no falla al subir ("fetch first"):** el paso "Commit de los datos frescos" del workflow ahora hace
   `git pull --rebase -X theirs origin main` ANTES del `git push`. Antes, si otro commit llegaba mientras el robot

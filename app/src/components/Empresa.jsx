@@ -6,7 +6,6 @@ import tesisData from '../data/tesis.json'
 import catalizadoresData from '../data/catalizadores.json'
 import guiasData from '../data/guias.json'
 import dividendosData from '../data/dividendos.json'
-import epsAnualData from '../data/eps_anual.json'
 import Glosado from './Glosado'
 import Valoracion from './Valoracion'
 import Simulador from './Simulador'
@@ -19,27 +18,20 @@ import HechosImportancia from './HechosImportancia'
 import ProduccionMinera from './ProduccionMinera'
 import { CountUp, Reveal } from '../lib/anim'
 import { useFavoritos, alternarFavorito } from '../lib/favoritos'
+import { peInfo } from '../lib/finanzas'
 import { useState } from 'react'
 
-// Calcula el P/E = precio actual ÷ ganancia anual por acción (en la misma moneda).
-// Convierte con el tipo de cambio cuando precio y EPS están en monedas distintas.
+// P/E = precio ÷ BPA anual (SMV), vía peInfo de lib/finanzas. Si el precio es
+// viejo (ilíquida) el P/E se MUESTRA igual, con ⚠ — pedido de Jair: el BPA
+// existe (ej. Santa Luisa) y ocultarlo era perder el dato.
 function calcularPE(ticker) {
-  const px = preciosData.precios?.[ticker]
-  const ea = epsAnualData.eps?.[ticker]
-  if (!px || px.precio == null || !ea || ea.epsAnual == null) return null
-  if (ea.epsAnual <= 0) return 'No aplica: tuvo pérdida en 2025 (no hay P/E).'
-  if (px.sinNegociacionReciente) return 'No confiable: el precio está desactualizado.'
-  const monedaPrecio = px.moneda === 'US$' ? 'USD' : 'PEN'
-  let eps = ea.epsAnual
-  if (monedaPrecio !== ea.moneda) {
-    const fx = epsAnualData.tipoCambioUSDPEN
-    if (!fx) return null
-    if (ea.moneda === 'USD' && monedaPrecio === 'PEN') eps = eps * fx
-    else if (ea.moneda === 'PEN' && monedaPrecio === 'USD') eps = eps / fx
+  const info = peInfo(ticker)
+  if (!info) return null
+  if (info.perdida) return 'No aplica: tuvo pérdida en 2025 (no hay P/E).'
+  if (info.referencial) {
+    return `P/E ≈ ${info.pe.toFixed(1)} ⚠ referencial: su último precio es del ${fechaCorta(info.fechaPrecio)} (negocia poco)`
   }
-  const pe = px.precio / eps
-  if (!isFinite(pe) || pe <= 0) return null
-  return `P/E ≈ ${pe.toFixed(1)} (precio de hoy ÷ ganancia anual 2025)`
+  return `P/E ≈ ${info.pe.toFixed(1)} (precio de hoy ÷ BPA anual 2025)`
 }
 
 // Formatea "2026-06-22" -> "22/06/2026"

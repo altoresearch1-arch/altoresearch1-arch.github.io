@@ -22,8 +22,10 @@ DATA = os.path.normpath(os.path.join(AQUI, "..", "app", "src", "data"))
 
 # Tickers cuyo EPS del XBRL individual NO representa a la acción que cotiza.
 # (los 6 primeros ya se habían corregido el 26-jun; el rerun del extractor los pisó)
+# PODERC1 y SCCO (08-jul): a fetch_anual_eps les FALTA el EPS anual (Poderosa no
+# parseó; SCCO es sin_documentos) pero stockanalysis sí tiene su P/E → EPS implícito.
 TICKERS = ["MINSURI1", "BACKUSI1", "INRETC1", "IFS", "VOLCABC1", "MINCORI1",
-           "BAP", "COCESUI1"]
+           "BAP", "COCESUI1", "PODERC1", "SCCO"]
 
 
 def eps_ttm(s, ticker):

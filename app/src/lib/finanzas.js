@@ -3,16 +3,18 @@ import epsAnualData from '../data/eps_anual.json'
 import dividendosData from '../data/dividendos.json'
 import historicosData from '../data/historicos.json'
 
-// P/E numérico = precio de cierre ÷ ganancia anual por acción, en la misma
-// moneda (convierte con el tipo de cambio si hace falta). Devuelve null si el
-// dato no es confiable: sin precio, sin EPS, pérdida en el año, o precio
-// desactualizado (acción que no negocia). Regla de Oro #1: null, no inventar.
-export function peNumerico(ticker) {
+// P/E CON CONTEXTO (pedido de Jair 08-jul): P/E = precio ÷ BPA anual (SMV).
+// Antes, si el precio era viejo (acción ilíquida) el P/E se OCULTABA — pero el
+// BPA sí existe (ej. Santa Luisa: BPA S/ 41.02, precio S/ 304 → P/E ~7.4).
+// Ahora se muestra CON advertencia. Devuelve:
+//   { pe, referencial, fechaPrecio }  · referencial=true → precio viejo, ⚠
+//   { perdida: true }                 · BPA anual ≤ 0 (no hay P/E)
+//   null                              · sin precio o sin BPA anual
+export function peInfo(ticker) {
   const px = preciosData.precios?.[ticker]
   const ea = epsAnualData.eps?.[ticker]
   if (!px || px.precio == null || !ea || ea.epsAnual == null) return null
-  if (ea.epsAnual <= 0) return null
-  if (px.sinNegociacionReciente) return null
+  if (ea.epsAnual <= 0) return { perdida: true }
   const monedaPrecio = px.moneda === 'US$' ? 'USD' : 'PEN'
   let eps = ea.epsAnual
   if (monedaPrecio !== ea.moneda) {
@@ -23,7 +25,7 @@ export function peNumerico(ticker) {
   }
   const pe = px.precio / eps
   if (!isFinite(pe) || pe <= 0) return null
-  return pe
+  return { pe, referencial: !!px.sinNegociacionReciente, fechaPrecio: px.fecha || null }
 }
 
 export function precioDe(ticker) {

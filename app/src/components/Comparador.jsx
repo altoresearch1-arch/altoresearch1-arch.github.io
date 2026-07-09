@@ -6,7 +6,7 @@ import mineriaData from '../data/mineria.json'
 import familiaData from '../data/mineria_familia.json'
 import Glosado from './Glosado'
 import Disclaimer from './Disclaimer'
-import { peNumerico, precioDe, dividendosDe, historicoDe, yieldNumerico, pagaDividendos } from '../lib/finanzas'
+import { peInfo, precioDe, dividendosDe, historicoDe, yieldNumerico, pagaDividendos } from '../lib/finanzas'
 import { Reveal } from '../lib/anim'
 
 // Comparador "frente a frente": 2 empresas cara a cara, solo HECHOS de
@@ -45,7 +45,7 @@ function datosDe(ticker) {
   const px = precioDe(ticker)
   const dv = dividendosDe(ticker)
   const h = historicoDe(ticker)
-  const pe = peNumerico(ticker)
+  const pe = peInfo(ticker)
   const f = e.fundamentos
   return {
     e,
@@ -169,6 +169,12 @@ function Carrera({ tA, tB }) {
           ))}
         </div>
       </div>
+      <p className="comp-carrera-que muted">
+        <strong>¿Qué es esto?</strong> Pusimos a las dos acciones a correr desde la misma línea
+        de salida: ambas arrancan en <strong>100</strong> (<Glosado text="indexado a 100" />) y la
+        línea muestra cuánto <strong>% sube o baja</strong> cada una desde ahí. Así se comparan
+        limpio aunque una cueste S/ 3 y la otra US$ 40.
+      </p>
       <div className="comp-carrera-leyenda">
         <span className="prodmin-leyenda-item">
           <span className="prodmin-dot" style={{ background: COLOR_A }} />
@@ -205,9 +211,8 @@ function Carrera({ tA, tB }) {
         <text x={W - PADR} y={H - 6} textAnchor="end" className="prodmin-tick">{fechaCorta(new Date(t1).toISOString().slice(0, 10))}</text>
       </svg>
       <p className="muted comp-carrera-nota">
-        Las dos arrancan en <strong>100</strong> y corren con sus cierres reales de la BVL:
-        se compara el <Glosado text="cambio porcentual" />, no el precio (una puede costar S/ 3
-        y la otra US$ 40). Rentabilidad pasada NO asegura rentabilidad futura.
+        Cierres reales de la BVL. Rentabilidad pasada NO asegura rentabilidad futura — la
+        carrera cuenta lo que YA pasó, no lo que viene.
         {desierto && ' ⚠ Al menos una negocia poco: su línea se aplana los días sin operaciones.'}
       </p>
     </div>
@@ -482,10 +487,10 @@ export default function Comparador({ tickers, onVolver, onVerEmpresa }) {
               glosar={false}
             />
             <Fila nombre="P/E" glosar={false}
-              a={A.pe != null ? A.pe.toFixed(1) : null}
-              b={B.pe != null ? B.pe.toFixed(1) : null}
-              barras={<Barras a={A.pe} b={B.pe} />}
-              nota="P/E: cuántos años de su ganancia 2025 cuesta la acción — más bajo suele leerse como más barata, pero en cíclicas engaña."
+              a={A.pe?.pe != null ? `${A.pe.pe.toFixed(1)}${A.pe.referencial ? ' ⚠' : ''}` : A.pe?.perdida ? 'Sin P/E (tuvo pérdida)' : null}
+              b={B.pe?.pe != null ? `${B.pe.pe.toFixed(1)}${B.pe.referencial ? ' ⚠' : ''}` : B.pe?.perdida ? 'Sin P/E (tuvo pérdida)' : null}
+              barras={<Barras a={A.pe?.pe} b={B.pe?.pe} />}
+              nota="P/E = precio de la acción ÷ BPA (la ganancia anual que le toca a cada acción, de los estados SMV). Más bajo suele leerse como más barata — pero en cíclicas engaña. ⚠ = calculado con un precio viejo (la acción negocia poco): tómalo como referencia."
             />
             <Fila nombre="Dividendo anual" glosar={false}
               a={A.divAnual || (!A.reparte ? 'No reparte hoy' : null)}

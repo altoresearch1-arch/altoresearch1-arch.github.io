@@ -416,6 +416,11 @@ export default function ProduccionMinera({ ticker }) {
             <GraficoMetal key={metal} metal={metal} lineas={lineas} meses={meses}
               conLeyenda={entidades.length > 1} />
           ))}
+          {fam.notaProduccion && (
+            <div className="prodmin-notaprod">
+              <Glosado text={fam.notaProduccion} />
+            </div>
+          )}
           {puntuales.length > 0 && (
             <div className="prodmin-hueco muted">
               También apareció de forma puntual (muy pocos meses con dato, no da para una gráfica):{' '}
