@@ -26,6 +26,7 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.normpath(os.path.join(AQUI, ".."))
 DATA = os.path.join(RAIZ, "app", "src", "data")
 SALIDA = os.path.join(DATA, "lecturas.json")
+PDF_BASE = "https://documents.bvl.com.pe"
 POR_EMPRESA = 2          # los N hechos más recientes de cada una
 MAX_TEXTO = 60000        # por si un PDF viene gigante
 
@@ -195,37 +196,80 @@ def main():
             viejas = json.load(f).get("lecturas", {})
 
     s = requests.Session()
-    s.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/126.0 Safari/537.36"})
+    s.headers.update({
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/126.0 Safari/537.36",
+        "Origin": "https://www.bvl.com.pe",
+        "Referer": "https://www.bvl.com.pe/",
+    })
 
     lecturas, nuevos, fallos = {}, 0, 0
+
+    def guardar_parcial():
+        with open(SALIDA, "w", encoding="utf-8", newline="\n") as f:
+            json.dump({"_comment": "parcial en curso (gen_lecturas.py)", "lecturas": {**viejas, **lecturas}},
+                      f, ensure_ascii=False, indent=1, sort_keys=True)
+
+    def procesar_url(ticker, fecha, url):
+        nonlocal nuevos, fallos
+        if url in viejas:                   # caché: ya leído en una corrida anterior
+            lecturas[url] = viejas[url]
+            return
+        if url in lecturas:
+            return
+        try:
+            texto, paginas = leer_pdf(s, url)
+            if len(texto) < 120:            # escaneado sin capa de texto: sin OCR, honesto
+                lecturas[url] = {"ticker": ticker, "fecha": fecha, "escaneado": True}
+            else:
+                lec = analizar(texto)
+                lec.update({"ticker": ticker, "fecha": fecha, "paginas": paginas})
+                lecturas[url] = lec
+            nuevos += 1
+            print(f"  {ticker:10} {fecha} -> {lecturas[url].get('veredicto', 'escaneado')}", flush=True)
+            if nuevos % 25 == 0:
+                guardar_parcial()  # el 2025 minero son cientos de PDFs: no perder avance
+            time.sleep(0.3)
+        except PdfIlegible as e:
+            # roto PARA SIEMPRE (Word disfrazado, stream cortado): se cachea
+            # como ilegible para no re-descargarlo cada 30 minutos
+            lecturas[url] = {"ticker": ticker, "fecha": fecha, "ilegible": True}
+            print(f"  {ticker:10} {fecha} -> ilegible ({e})", flush=True)
+        except Exception as e:
+            # error de RED (transitorio): NO se cachea, se reintenta la próxima
+            fallos += 1
+            print(f"  {ticker:10} {fecha} -> ERROR {str(e)[:70]}", flush=True)
+
     for ticker, info in hechos.items():
         for h in (info.get("hechos") or [])[:POR_EMPRESA]:
-            url = h.get("pdf")
-            if not url:
-                continue
-            if url in viejas:               # caché: ya leído en una corrida anterior
-                lecturas[url] = viejas[url]
-                continue
-            try:
-                texto, paginas = leer_pdf(s, url)
-                if len(texto) < 120:        # escaneado sin capa de texto: sin OCR, honesto
-                    lecturas[url] = {"ticker": ticker, "fecha": h.get("fecha"), "escaneado": True}
-                else:
-                    lec = analizar(texto)
-                    lec.update({"ticker": ticker, "fecha": h.get("fecha"), "paginas": paginas})
-                    lecturas[url] = lec
-                nuevos += 1
-                print(f"  {ticker:10} {h.get('fecha')} -> {lecturas[url].get('veredicto', 'escaneado')}", flush=True)
-                time.sleep(0.3)
-            except PdfIlegible as e:
-                # roto PARA SIEMPRE (Word disfrazado, stream cortado): se cachea
-                # como ilegible para no re-descargarlo cada 30 minutos
-                lecturas[url] = {"ticker": ticker, "fecha": h.get("fecha"), "ilegible": True}
-                print(f"  {ticker:10} {h.get('fecha')} -> ilegible ({e})", flush=True)
-            except Exception as e:
-                # error de RED (transitorio): NO se cachea, se reintenta la próxima
-                fallos += 1
-                print(f"  {ticker:10} {h.get('fecha')} -> ERROR {str(e)[:70]}", flush=True)
+            if h.get("pdf"):
+                procesar_url(ticker, h.get("fecha"), h["pdf"])
+
+    # ⛏ MINAS: además TODOS sus hechos de 2025 (historia completa para Atlas,
+    # pedido de Jair 09-jul). Con la caché por URL solo se baja lo nuevo.
+    with open(os.path.join(DATA, "empresas.json"), encoding="utf-8") as f:
+        sectores = {e["ticker"]: e["sector"] for e in json.load(f)["empresas"]}
+    with open(os.path.join(AQUI, "empresas_config.json"), encoding="utf-8") as f:
+        cfg = json.load(f)
+    for c in cfg["empresas"]:
+        ticker = c["ticker"]
+        if sectores.get(ticker) != "minas" or not c.get("bvlRpj"):
+            continue
+        try:
+            r = s.post("https://dataondemand.bvl.com.pe/v1/corporate-actions",
+                       json={"rpjCode": c["bvlRpj"], "page": 1, "size": 100, "search": "",
+                             "startDate": "2025-01-01", "endDate": "2025-12-31"},
+                       timeout=45)
+            r.raise_for_status()
+            items = r.json().get("content") or []
+        except Exception as e:
+            fallos += 1
+            print(f"  {ticker:10} 2025 -> ERROR en el listado: {str(e)[:60]}", flush=True)
+            continue
+        for it in items:
+            docs = it.get("documents") or []
+            path = docs[0].get("path") if docs and docs[0].get("path") else None
+            if path:
+                procesar_url(ticker, (it.get("registerDate") or "")[:10], PDF_BASE + path)
 
     doc = {
         "_comment": ("Lectura automática (estilo Sentinel) de los 2 últimos hechos de importancia de cada "

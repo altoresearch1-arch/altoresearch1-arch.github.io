@@ -7,6 +7,7 @@ import hechosData from '../data/hechos.json'
 import conocimientoData from '../data/conocimiento.json'
 import lecturasData from '../data/lecturas.json'
 import gerenciaData from '../data/gerencia.json'
+import notasData from '../data/notas.json'
 import { redactarLectura, redactarGerencia } from './redactor'
 import { precioDe, peInfo, dividendosDe, yieldNumerico } from './finanzas'
 import { leerContexto, marcarContextoVisto, hechosAprendidos } from './sentinel'
@@ -155,7 +156,9 @@ function chipsEmpresa(e) {
   ]
   if (conocimientoDe(e.ticker)) chips.unshift(`Cuéntame más de ${e.nombreCorto}`)
   if (gerenciaData.gerencia?.[e.ticker]?.frases?.length) chips.push(`¿Qué dice la gerencia de ${e.nombreCorto}?`)
-  return chips
+  if (notasData.notas?.[e.ticker]?.actual?.frases?.length) chips.push(`¿Qué dicen las notas de ${e.nombreCorto}?`)
+  if (notasData.notas?.[e.ticker]?.['2025-T4'] || notasData.notas?.[e.ticker]?.['2025-T1']) chips.push(`¿Cómo le fue a ${e.nombreCorto} en 2025?`)
+  return chips.slice(0, 5)
 }
 
 // Guardar la pregunta sin respuesta (APRENDER): queda en el navegador del
@@ -260,6 +263,59 @@ function respuestaHechos(e) {
   }
   lineas.push('En su ficha están todos, con el PDF oficial de cada uno (🟢🔴🟡 = mi lectura automática).')
   return { texto: lineas.join('\n'), ticker: e.ticker, chips: [`¿Qué hace ${e.nombreCorto}?`, '¿Qué es un hecho de importancia?'] }
+}
+
+// 📝 "¿qué dicen las notas de X?" — Notas a los EEFF digeridas (notas.json, SMV)
+function respuestaNotas(e) {
+  const n = notasData.notas?.[e.ticker]?.actual
+  if (!n?.frases?.length) {
+    return {
+      texto: `Todavía no tengo las Notas a los Estados Financieros de **${e.nombreCorto}** digeridas (se extraen de la SMV cada trimestre; algunas llegan escaneadas).`,
+      ticker: e.ticker,
+      chips: chipsEmpresa(e),
+    }
+  }
+  const lineas = [
+    `Las **Notas a los Estados Financieros** son donde ${e.nombreCorto} EXPLICA sus números (deudas, juicios, partes relacionadas). De las del ${String(n.periodo || '').replace('-T', ' T')} (${n.paginas} páginas), esto es lo que subrayé:`,
+  ]
+  for (const f of n.frases.slice(0, 4)) lineas.push(`📝 «${f}»`)
+  lineas.push('Todo textual del documento oficial de la SMV.')
+  return {
+    texto: lineas.join('\n'),
+    ticker: e.ticker,
+    chips: [`¿Qué dice la gerencia de ${e.nombreCorto}?`, `¿Qué riesgos tiene ${e.nombreCorto}?`, '¿Qué es la deuda neta?'],
+  }
+}
+
+// ⛏ "¿cómo le fue a X en 2025?" — solo minas: notas Q1-Q4 2025 + sus hechos del año
+function respuestaMinera2025(e) {
+  const reg = notasData.notas?.[e.ticker] || {}
+  const trimestres = ['2025-T1', '2025-T2', '2025-T3', '2025-T4'].filter((k) => reg[k]?.frases?.length)
+  const hechos2025 = Object.values(lecturasData.lecturas || {})
+    .filter((l) => l.ticker === e.ticker && String(l.fecha || '').startsWith('2025') && !l.escaneado && !l.ilegible)
+  if (trimestres.length === 0 && hechos2025.length === 0) {
+    return {
+      texto: `Aún no tengo la historia 2025 de **${e.nombreCorto}** cargada (notas trimestrales y hechos del año — se están cosechando de la SMV/BVL).`,
+      ticker: e.ticker,
+      chips: chipsEmpresa(e),
+    }
+  }
+  const lineas = [`El 2025 de **${e.nombreCorto}**, contado por sus documentos oficiales:`]
+  for (const k of trimestres) {
+    lineas.push(`📅 **${k.replace('2025-T', 'Trimestre ')} 2025** (notas de ${reg[k].paginas} pág.): «${reg[k].frases[0].slice(0, 220)}»`)
+  }
+  if (hechos2025.length > 0) {
+    const buenas = hechos2025.filter((l) => l.veredicto === 'buena')
+    const malas = hechos2025.filter((l) => l.veredicto === 'mala')
+    lineas.push(`📰 Comunicó ${hechos2025.length} hechos de importancia en 2025: ${buenas.length} 🟢 buenos, ${malas.length} 🔴 malos y ${hechos2025.length - buenas.length - malas.length} 🟡 rutinarios.`)
+    const destacado = buenas[0] || malas[0]
+    if (destacado) lineas.push(`El que destaco (${destacado.fecha}): ${destacado.categoria} → ${VEREDICTO_TXT[destacado.veredicto]}${destacado.frases?.[0] ? ` — «${destacado.frases[0].slice(0, 160)}»` : ''}`)
+  }
+  return {
+    texto: lineas.join('\n'),
+    ticker: e.ticker,
+    chips: [`¿Qué dice la gerencia de ${e.nombreCorto}?`, `¿Qué dicen las notas de ${e.nombreCorto}?`, `¿Qué riesgos tiene ${e.nombreCorto}?`],
+  }
 }
 
 // 🗣 "¿qué dice la gerencia de X?" — la charla trimestral (gerencia.json, SMV)
@@ -517,6 +573,8 @@ export function responder(pregunta) {
   }
 
   if (e) {
+    if (/(2025|ano pasado)/.test(q) && /(como le fue|que paso|historia|resumen|hechos|notas)/.test(q)) return respuestaMinera2025(e)
+    if (/(notas? (a|de) los estados|que dicen las notas|las notas de)/.test(q)) return respuestaNotas(e)
     if (/(gerencia|charla|analisis y discusion|como le fue|que dice la (empresa|gerencia))/.test(q)) return respuestaGerencia(e)
     if (/(cuentame mas|mas datos|a fondo|el informe|profundiza|que mas sabes)/.test(q)) return respuestaInforme(e)
     if (/(dividendo|yield|reparte|paga|pagos)/.test(q)) return respuestaDividendos(e)
