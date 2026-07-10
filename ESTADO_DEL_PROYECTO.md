@@ -4,6 +4,26 @@
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
 > herramienta), lee esto primero. Última actualización: **09 jul 2026**. Estado: **EN VIVO (beta pública)**.
 
+## 📝 RONDA 6 del 09-jul (Fable): NOTAS A LOS EEFF + EL 2025 MINERO COMPLETO
+Pedido de Jair ("que lean las Notas a los EEFF; para minas también Q1-Q4 2025 con sus hechos").
+- **`extractor/fetch_notas.py`** → `notas.json` (170 KB): las "Notas a los Estados Financieros"
+  digeridas — trimestre ACTUAL para 93 empresas (88 con frases) + **Q1-Q4 2025 para las minas**
+  (10 minas × 4 = 40 trimestres; las otras 7 no presentan a la SMV: juniors/SCCO-NYSE). Digest
+  extractivo con señales de analista (deuda, juicios, partes relacionadas, covenants, negocio en
+  marcha). Caché por expediente; **la historia 2025 congelada NO se re-consulta**; guardado
+  incremental. En PASOS_EPS (completo/--trimestral).
+- **`gen_lecturas.py` ampliado**: además de los 2 últimos hechos de cada empresa, lee TODOS los
+  hechos 2025 de las 17 minas (API BVL corporate-actions con startDate/endDate 2025) →
+  **714 lecturas** (492 de 2025: 83 🟢 / 17 🔴 / 350 🟡 / 42 escaneados-ilegibles). lecturas.json
+  381 KB. PDF_BASE agregado (NameError cazado). Guardado incremental cada 25.
+- **Atlas intents nuevos**: "¿qué dicen las notas de X?" (frases textuales) y "¿cómo le fue a X
+  en 2025?" (minas: notas por trimestre + conteo de hechos del año con el más destacado — ej.
+  BVN: venta de Chaupiloma por US$210M en el T3). Chips por empresa (máx 5).
+- **EL ROBOT YA VIVE SOLO**: mientras se construía esto, él mismo commiteó "precios intradía
+  17:12" y "hechos/BEM intradía 18:50" — los crones :07/:37 y :15 ya disparan (con el retraso
+  natural de GitHub). El fix de openpyxl (ronda anterior) fue la llave.
+- PWA precache: 3.48 MB (límite 4 MiB — si crece más, subir maximumFileSizeToCacheInBytes).
+
 ## 🗣 RONDA 5 del 09-jul (Fable): CHARLA DE LA GERENCIA + EL REDACTOR
 Pedido de Jair ("que lean la charla con la gerencia de cada una" + "soluciona la diferencia de
 redactar nuevos párrafos"). Piezas:
