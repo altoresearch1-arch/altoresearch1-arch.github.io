@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { responder, saludoSentinel, PREGUNTAS_INICIALES } from '../lib/cerebro'
+import { responder, saludoSentinel, saludoBiblioteca, marcarBibliotecaVista, PREGUNTAS_INICIALES } from '../lib/cerebro'
 import { marcarContextoVisto } from '../lib/sentinel'
 import empresasData from '../data/empresas.json'
 
@@ -22,8 +22,9 @@ const nombreDe = (t) => {
 
 export default function Atlas({ onVerEmpresa }) {
   const [mensajes, setMensajes] = useState(() => {
-    // si Sentinel acaba de pasarle un documento, Atlas saluda YA con el contexto
-    const bienvenida = saludoSentinel() || responder('')
+    // si Sentinel acaba de pasarle un documento (o la biblioteca 📚 recién
+    // cargada), Atlas saluda YA con ese contexto
+    const bienvenida = saludoSentinel() || saludoBiblioteca() || responder('')
     return [{ de: 'atlas', ...bienvenida }]
   })
   const [texto, setTexto] = useState('')
@@ -31,8 +32,8 @@ export default function Atlas({ onVerEmpresa }) {
   const finRef = useRef(null)
   const inputRef = useRef(null)
 
-  // ya saludó con el documento de Sentinel → marcarlo visto (idempotente)
-  useEffect(() => { marcarContextoVisto() }, [])
+  // ya saludó con el documento de Sentinel / la biblioteca → marcarlos vistos (idempotente)
+  useEffect(() => { marcarContextoVisto(); marcarBibliotecaVista() }, [])
 
   useEffect(() => {
     finRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })

@@ -7,6 +7,16 @@ Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTAD
 
 ---
 
+## ⚡ NUEVO 10-jul ronda 8 (Fable): 📚 LA BIBLIOTECA (multi-documento estilo NotebookLM)
+> Pedido de Jair (prompt RAG profesional). **Diseño completo: `ARQUITECTURA_BIBLIOTECA.md`**
+> (RAG 100% en el navegador — sin backend por cero-costos/privacidad; Qdrant si algún día hay
+> presupuesto). `lib/lectores.js` (PDF/foto-OCR/DOCX/XLSX/PPTX/TXT — JSZip y SheetJS por CDN)
+> + `lib/biblioteca.js` (12 docs máx, chunks con página/sección, BM25+sinónimos ES↔EN,
+> métricas ingresos/EBITDA/utilidad/flujo/deuda con cita, comparación con delta % y
+> contradicciones, cronología, riesgos, resumen para inversionistas). Citas: `Doc.pdf ·
+> Página 12`. Si no está: "No encontré esa información en los documentos." Atlas: chips e
+> intents nuevos; Sentinel: multi-archivo + panel 📚. ⚠ Precache 3.81/4 MiB — VIGILAR.
+
 ## ⚡ NUEVO 10-jul ronda 7 (Fable): 🧠 SENTINEL/ATLAS BILINGÜES + 📷 OCR (leen fotos)
 > Reclamo de Jair: el HI de Nexa sobre BOLIDEN (02-jul) daba lectura VACÍA → estaba EN INGLÉS
 > (matriz de Luxemburgo) y las reglas eran solo español. Fix en ESPEJO (sentinel.js ⇄

@@ -66,7 +66,7 @@ export async function leerImagen(archivo, onEstado) {
     const { data } = await worker.recognize(archivo)
     const texto = limpiar(data.text || '')
     if (texto.length < 60) throw new Error('OCR_ILEGIBLE')
-    return { texto, paginas: 1, ocr: true }
+    return { texto, paginas: 1, ocr: true, porPagina: [{ n: 1, texto }] }
   } finally {
     await worker.terminate()
   }
@@ -82,17 +82,22 @@ export async function leerPdf(archivo, onEstado) {
   const doc = await tarea.promise
   try {
     let texto = ''
+    const porPagina = [] // texto por página: la Biblioteca cita "Doc.pdf · Página N"
     for (let p = 1; p <= doc.numPages; p++) {
       onEstado?.(`leyendo página ${p} de ${doc.numPages}…`)
       const pagina = await doc.getPage(p)
       const contenido = await pagina.getTextContent()
       // hasEOL conserva los saltos de línea reales (con eso se pesca el TÍTULO)
-      texto += contenido.items.map((it) => it.str + (it.hasEOL ? '\n' : ' ')).join('') + '\n'
+      const textoPag = limpiar(
+        contenido.items.map((it) => it.str + (it.hasEOL ? '\n' : ' ')).join('')
+      ).replace(/(\d)\s*,\s*(?=\d)/g, '$1,')
+      porPagina.push({ n: p, texto: textoPag })
+      texto += textoPag + '\n'
     }
     // números que el PDF parte con espacios o saltos ("623 , 015 Onzas") se re-pegan
     texto = limpiar(texto).replace(/(\d)\s*,\s*(?=\d)/g, '$1,')
     if (texto.length >= 120) {
-      return { texto, paginas: doc.numPages, ocr: false }
+      return { texto, paginas: doc.numPages, ocr: false, porPagina }
     }
 
     // PDF escaneado (imagen sin capa de texto): se dibuja cada página en un
@@ -100,6 +105,7 @@ export async function leerPdf(archivo, onEstado) {
     const worker = await crearLectorOcr(onEstado)
     try {
       let textoOcr = ''
+      const porPaginaOcr = []
       const total = Math.min(doc.numPages, MAX_PAGINAS_OCR)
       for (let p = 1; p <= total; p++) {
         onEstado?.(`página ${p} de ${total} — pasándola por OCR…`)
@@ -111,11 +117,13 @@ export async function leerPdf(archivo, onEstado) {
         canvas.height = Math.ceil(viewport.height)
         await pagina.render({ canvasContext: canvas.getContext('2d'), canvas, viewport }).promise
         const { data } = await worker.recognize(canvas)
-        textoOcr += (data.text || '') + '\n'
+        const textoPag = limpiar(data.text || '')
+        porPaginaOcr.push({ n: p, texto: textoPag })
+        textoOcr += textoPag + '\n'
       }
       textoOcr = limpiar(textoOcr)
       if (textoOcr.length < 60) throw new Error('OCR_ILEGIBLE')
-      return { texto: textoOcr, paginas: doc.numPages, ocr: true }
+      return { texto: textoOcr, paginas: doc.numPages, ocr: true, porPagina: porPaginaOcr }
     } finally {
       await worker.terminate()
     }

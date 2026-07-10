@@ -11,6 +11,11 @@ import notasData from '../data/notas.json'
 import { redactarLectura, redactarGerencia } from './redactor'
 import { precioDe, peInfo, dividendosDe, yieldNumerico } from './finanzas'
 import { leerContexto, marcarContextoVisto, hechosAprendidos, partirOraciones } from './sentinel'
+import {
+  losDocumentos, bibliotecaEsNueva, marcarBibliotecaVista, respuestaBusqueda,
+  respuestaMetrica, compararDocumentos, cronologiaDocumentos, riesgosDocumentos,
+  resumenInversionistas,
+} from './biblioteca'
 
 // ─────────────────────────────────────────────────────────────────────────
 // EL CEREBRO DE ATLAS — la IA de ALTO (beta). Enseña y aprende.
@@ -386,14 +391,21 @@ function respuestaRegla9() {
 }
 
 function respuestaBienvenida() {
+  const bib = losDocumentos()
+  const lineas = [
+    '¡Hola! Soy **Atlas**, la IA de ALTO Research — versión beta. **Enseño y aprendo.**',
+    'ENSEÑO con lo que hay en esta app: las ' + EMPRESAS.length + ' empresas de la BVL (precios, P/E, dividendos, tesis, riesgos, hechos de importancia), ' + TERMINOS.length + '+ términos explicados en simple y el conocimiento de los informes propios de ALTO.',
+    'Y APRENDO: si me preguntas algo que aún no sé, puedes mandárselo al equipo con un toque — en la siguiente actualización ya lo sabré.',
+  ]
+  if (bib.length > 0) {
+    lineas.push(`📚 Además tengo tu biblioteca: ${bib.length} documento${bib.length === 1 ? '' : 's'} que me cargaste en Sentinel — pregúntame sobre ellos y te respondo con la fuente exacta.`)
+  }
+  lineas.push('Solo hablo de la bolsa peruana — no invento y jamás te diré qué comprar. Pregúntame algo:')
   return {
-    texto: [
-      '¡Hola! Soy **Atlas**, la IA de ALTO Research — versión beta. **Enseño y aprendo.**',
-      'ENSEÑO con lo que hay en esta app: las ' + EMPRESAS.length + ' empresas de la BVL (precios, P/E, dividendos, tesis, riesgos, hechos de importancia), ' + TERMINOS.length + '+ términos explicados en simple y el conocimiento de los informes propios de ALTO.',
-      'Y APRENDO: si me preguntas algo que aún no sé, puedes mandárselo al equipo con un toque — en la siguiente actualización ya lo sabré.',
-      'Solo hablo de la bolsa peruana — no invento y jamás te diré qué comprar. Pregúntame algo:',
-    ].join('\n'),
-    chips: ['¿Qué hace Buenaventura?', 'Cuéntame más de Backus', '¿Cómo empiezo en la bolsa?', 'Ver quién paga más dividendos'],
+    texto: lineas.join('\n'),
+    chips: bib.length > 0
+      ? CHIPS_BIBLIOTECA
+      : ['¿Qué hace Buenaventura?', 'Cuéntame más de Backus', '¿Cómo empiezo en la bolsa?', 'Ver quién paga más dividendos'],
   }
 }
 
@@ -513,6 +525,34 @@ function buscarEnDoc(doc, q) {
   }
 }
 
+// ── 📚 la BIBLIOTECA de Sentinel (varios documentos a la vez) ─────────────
+
+const CHIPS_BIBLIOTECA = [
+  'Resumen para inversionistas',
+  'Compara mis documentos',
+  'Cronología de los documentos',
+  '¿Qué riesgos mencionan los documentos?',
+]
+
+const conChipsBib = (r) => ({ ...r, chips: r.chips || CHIPS_BIBLIOTECA })
+
+// Saludo cuando el usuario ACABA de cargar su biblioteca en Sentinel.
+// PURO (no marca nada) por el mismo motivo StrictMode que saludoSentinel.
+export function saludoBiblioteca() {
+  if (!bibliotecaEsNueva()) return null
+  const bib = losDocumentos()
+  const nombres = bib.map((d) => d.nombre).slice(0, 4).join(' · ')
+  return conChipsBib({
+    texto: [
+      `📚 **Tengo tu biblioteca cargada**: ${bib.length} documento${bib.length === 1 ? '' : 's'} (${nombres}${bib.length > 4 ? '…' : ''}).`,
+      'Ya los leí e indexé en tu propio navegador. Pregúntame lo que quieras sobre ellos: respondo SOLO con lo que dicen y te doy la fuente exacta (documento y página o sección).',
+      'Si algo no está en ellos, te lo digo tal cual — no invento.',
+    ].join('\n'),
+  })
+}
+
+export { marcarBibliotecaVista }
+
 // Saludo especial cuando Sentinel ACABA de pasarle un documento (Atlas.jsx lo
 // usa al montar el chat). Devuelve null si no hay documento nuevo.
 // PURO a propósito: NO marca el contexto como visto (StrictMode corre los
@@ -551,6 +591,33 @@ export function responder(pregunta) {
 
   const empresas = buscarEmpresas(q)
   const e = empresas[0]
+
+  // 📚 la BIBLIOTECA (varios documentos): intents explícitos primero
+  const bib = losDocumentos()
+  if (bib.length > 0) {
+    if (/(resumen|informe|resume|analiza).{0,30}(inversionista|documentos|archivos|biblioteca)/.test(q)) {
+      return conChipsBib(resumenInversionistas())
+    }
+    if (/(compara|comparar|diferencias?|contradiccion).{0,35}(documentos|archivos|informes|entre)|contradiccion(es)? /.test(q) && !e) {
+      return conChipsBib(compararDocumentos())
+    }
+    if (/(cronolog|linea de tiempo)/.test(q)) {
+      return conChipsBib(cronologiaDocumentos())
+    }
+    if (/riesgos?.{0,25}(documentos|archivos|biblioteca|mencionan|segun)/.test(q)) {
+      return conChipsBib(riesgosDocumentos())
+    }
+    // métrica puntual (ingresos, EBITDA, utilidad, flujo, deuda) sin nombrar empresa
+    if (!e) {
+      const met = respuestaMetrica(q)
+      if (met) return conChipsBib(met)
+    }
+    // "según los documentos…" (plural): la biblioteca manda, antes que el glosario
+    if (/(documentos|archivos|biblioteca|segun (los|mis))/.test(q)) {
+      const enBib = respuestaBusqueda(pregunta)
+      if (!enBib.sinRespuesta) return conChipsBib(enBib)
+    }
+  }
 
   // 🛰️ ¿Hay un documento que Sentinel le pasó? Responder sobre ÉL cuando la
   // pregunta lo menciona (o cuando no menciona ninguna empresa concreta).
@@ -631,6 +698,14 @@ export function responder(pregunta) {
   }
 
   if (/(que sabes|que puedes|quien eres|que eres|ayuda|como funcionas|como aprendes)/.test(q)) return respuestaBienvenida()
+
+  // ¿la respuesta está DENTRO de la biblioteca? (búsqueda con sinónimos + citas)
+  if (bib.length > 0) {
+    const enBib = respuestaBusqueda(pregunta)
+    if (!enBib.sinRespuesta) return conChipsBib(enBib)
+    // preguntó explícitamente por sus documentos y no está: decirlo tal cual
+    if (/(documento|archivo|informe|biblioteca)/.test(q)) return conChipsBib(enBib)
+  }
 
   // último recurso antes de rendirse: ¿la respuesta está DENTRO del documento de Sentinel?
   if (doc) {

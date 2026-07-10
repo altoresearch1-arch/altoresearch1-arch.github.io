@@ -4,6 +4,34 @@
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
 > herramienta), lee esto primero. Última actualización: **10 jul 2026**. Estado: **EN VIVO (beta pública)**.
 
+## 📚 RONDA 8 del 10-jul (Fable): LA BIBLIOTECA — asistente de documentos estilo NotebookLM
+Pedido de Jair (prompt de "asistente profesional de documentos con RAG"): que Atlas y Sentinel
+analicen VARIOS documentos a la vez, con citas exactas. **Arquitectura completa en
+`ARQUITECTURA_BIBLIOTECA.md`** (decisión: RAG 100% EN EL NAVEGADOR — un backend Node +
+vector DB + LLM rompería cero-costos/cero-secretos/privacidad; si algún día se aprueba con
+presupuesto, la elección sería Qdrant). Piezas:
+- **`lib/lectores.js`**: PDF (pdf.js por página), fotos/escaneados (OCR), **Word (.docx)**
+  (JSZip CDN + DOMParser, headings = secciones), **Excel (.xlsx)** (SheetJS CDN, por hoja),
+  **PowerPoint (.pptx)** (por diapositiva), TXT/CSV. Librerías 100% por CDN (cero bundle).
+- **`lib/biblioteca.js`**: hasta 12 docs; chunks ~900 chars de oraciones completas con
+  {página, sección}; búsqueda BM25 + SINÓNIMOS financieros ES↔EN (utilidad↔net income,
+  cobre↔copper…; palabra RARA sola basta — caso "Boliden"); métricas con cita (ingresos,
+  EBITDA, utilidad neta, flujo de caja, deuda) + período (Q/año) + comparación entre docs
+  (delta %, "cambio importante" ≥15%, ⚠ contradicción si mismo período difiere), cronología
+  (fechas+oración ordenadas), riesgos textuales, **resumen para inversionistas**. Citas
+  formato pedido: `Doc.pdf · Página 12` / `Archivo.xlsx · Hoja «Resultados»`. Si no está:
+  **"No encontré esa información en los documentos."** literal. Persistencia sessionStorage
+  (sobrevive recarga) + historial de nombres en localStorage.
+- **Atlas**: intents nuevos (Resumen para inversionistas / Compara mis documentos /
+  Cronología / ¿Qué riesgos mencionan?) + métrica puntual + pregunta libre → cita la ORACIÓN
+  que mejor responde; "según los documentos" le gana al glosario; saludo especial al llegar
+  desde Sentinel con la biblioteca; bienvenida menciona la biblioteca si existe.
+- **Sentinel.jsx**: acepta MÚLTIPLES archivos (drop o selector); 1 archivo = informe clásico
+  (+ botón "súmalo a la biblioteca"), varios = panel 📚 (lista, quitar, agregar, vaciar,
+  "Analizar juntos con Atlas"). Verificado en navegador: PDF real de Nexa + TXT Q1 + XLSX Q4
+  → comparaciones con delta correcto por período, Boliden hallado, litio → "No encontré…".
+  Móvil OK. Precache 3.81/4 MiB ⚠ VIGILAR (el límite está cerca).
+
 ## 🧠 RONDA 7 del 10-jul (Fable): SENTINEL/ATLAS MÁS INTELIGENTES + OCR (leen FOTOS)
 Reclamo real de Jair: el penúltimo HI de Nexa (02-jul, el comunicado sobre BOLIDEN) daba una
 "descripción breve" — la lectura del robot salía VACÍA ("Sin categoría clara", 0 frases).
