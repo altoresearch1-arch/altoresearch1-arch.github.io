@@ -242,6 +242,14 @@ export function buscarEnBiblioteca(pregunta, k = 3) {
     if (porDoc[p.doc.id] <= 2) top.push(p)
     if (top.length >= k) break
   }
+  // rastro para "¿cómo lo supiste?" (explicación del razonamiento, trazable)
+  anotarRazonamiento({
+    tipo: 'busqueda', pregunta,
+    docsRevisados: docs.length, chunksEvaluados: N,
+    buscado: grupos.map((g) => g[0]),
+    candidatos: puntuados.length,
+    usados: top.map((t) => ({ cita: cita(t.doc, t.chunk), puntos: t.puntos.toFixed(1), aciertos: t.aciertos, gruposTotal: t.gruposTotal })),
+  })
   return top
 }
 
@@ -251,25 +259,54 @@ export const SIN_RESPUESTA = 'No encontré esa información en los documentos.'
 
 const RE_MONTO = String.raw`(?:(?:S\/\.?|US\$|USD|\$)\s?\(?-?[\d][\d,.]*\)?(?:\s?(?:millones|mill[oó]n|millions?|miles de|miles|mil|billions?|MM|bn))?|[\d][\d,.]*\s?(?:millones|mill[oó]n|millions?|billions?|MM|bn)\b)`
 
+// Cada indicador declara su TIPO de valor: monto (con moneda/magnitud),
+// porcentaje, ratio (P/E 12.5x) o cantidad física (onzas/toneladas) — así el
+// extractor no pesca basura (un % donde va un monto, etc.).
+const VALOR_POR_TIPO = {
+  monto: RE_MONTO,
+  pct: String.raw`[\d]{1,3}(?:\.\d+)?\s?%`,
+  ratio: String.raw`[\d]{1,3}(?:\.\d+)?\s?x?\b`,
+  cantidad: String.raw`[\d][\d,.]*\s?(?:millones de |miles de )?(?:onzas|oz|koz|moz|toneladas|tm[fhd]?\b|libras|lbs|barriles)`,
+}
+
 export const METRICAS = [
-  { clave: 'ingresos', nombre: 'Ingresos / ventas', re: String.raw`(?:ingresos(?: netos| totales| de actividades ordinarias)?|ventas(?: netas)?|total revenues?|revenues?|net sales)` },
-  { clave: 'ebitda', nombre: 'EBITDA', re: String.raw`(?:adjusted ebitda|ebitda(?: ajustado)?)` },
-  { clave: 'utilidad', nombre: 'Utilidad neta', re: String.raw`(?:utilidad neta|ganancia neta|resultado neto|p[eé]rdida neta|net (?:income|profit|loss|earnings))` },
-  { clave: 'flujo', nombre: 'Flujo de caja', re: String.raw`(?:flujo de (?:caja|efectivo)(?: operativo| libre)?|free cash flow|operating cash flow|cash flow (?:from|used in) operations)` },
-  { clave: 'deuda', nombre: 'Deuda', re: String.raw`(?:deuda(?: financiera| neta| total| bruta)?|total debt|net debt|gross debt)` },
+  { clave: 'ingresos', nombre: 'Ingresos / ventas', tipo: 'monto', re: String.raw`(?:ingresos(?: netos| totales| de actividades ordinarias)?|ventas(?: netas)?|total revenues?|revenues?|net sales)` },
+  { clave: 'ebitda', nombre: 'EBITDA', tipo: 'monto', re: String.raw`(?:adjusted ebitda|ebitda(?: ajustado)?)` },
+  { clave: 'utilidad', nombre: 'Utilidad neta', tipo: 'monto', re: String.raw`(?:utilidad neta|ganancia neta|resultado neto|p[eé]rdida neta|net (?:income|profit|loss|earnings))` },
+  { clave: 'bpa', nombre: 'BPA (utilidad por acción)', tipo: 'monto', re: String.raw`(?:utilidad por acci[oó]n|p[eé]rdida por acci[oó]n|\bbpa\b|earnings per share|\beps\b)` },
+  { clave: 'flujoLibre', nombre: 'Flujo de caja libre', tipo: 'monto', re: String.raw`(?:flujo de caja libre|free cash flow)` },
+  { clave: 'flujo', nombre: 'Flujo de caja', tipo: 'monto', re: String.raw`(?:flujo de (?:caja|efectivo)(?: operativo)?|operating cash flow|cash flow (?:from|used in) operations)` },
+  { clave: 'capex', nombre: 'CAPEX (inversión de capital)', tipo: 'monto', re: String.raw`(?:\bcapex\b|inversi[oó]n(?:es)? de capital|capital expenditures?)` },
+  { clave: 'opex', nombre: 'OPEX (gastos operativos)', tipo: 'monto', re: String.raw`(?:\bopex\b|gastos? operativos?|operating expenses?)` },
+  { clave: 'deuda', nombre: 'Deuda', tipo: 'monto', re: String.raw`(?:deuda(?: financiera| neta| total| bruta)?|total debt|net debt|gross debt)` },
+  { clave: 'caja', nombre: 'Caja disponible', tipo: 'monto', re: String.raw`(?:caja disponible|efectivo y equivalentes(?: de efectivo)?|cash and cash equivalents)` },
+  { clave: 'dividendoPagado', nombre: 'Dividendo', tipo: 'monto', re: String.raw`(?:dividendos?(?: en efectivo)?(?: por acci[oó]n)?|dividends? per share|cash dividends?)` },
+  { clave: 'costos', nombre: 'Costo de producción', tipo: 'monto', re: String.raw`(?:cash cost|\baisc\b|all.in sustaining cost|costos? de producci[oó]n)` },
+  { clave: 'margenBruto', nombre: 'Margen bruto', tipo: 'pct', re: String.raw`(?:margen bruto|gross margin)` },
+  { clave: 'margenOperativo', nombre: 'Margen operativo', tipo: 'pct', re: String.raw`(?:margen operativo|operating margin)` },
+  { clave: 'margenEbitda', nombre: 'Margen EBITDA', tipo: 'pct', re: String.raw`(?:margen ebitda|ebitda margin)` },
+  { clave: 'margenNeto', nombre: 'Margen neto', tipo: 'pct', re: String.raw`(?:margen neto|net margin|profit margin)` },
+  { clave: 'variacion', nombre: 'Variación interanual', tipo: 'pct', re: String.raw`(?:creci[oó]|aument[oó]|cay[oó]|disminuy[oó]|se redujo|increased|grew|rose|fell|declined|decreased|interanual|year.over.year|\byoy\b)` },
+  { clave: 'pe', nombre: 'P/E', tipo: 'ratio', re: String.raw`(?:\bp\/e\b|price.to.earnings)` },
+  { clave: 'evEbitda', nombre: 'EV/EBITDA', tipo: 'ratio', re: String.raw`(?:\bev\/ebitda\b)` },
+  { clave: 'produccion', nombre: 'Producción', tipo: 'cantidad', re: String.raw`(?:producci[oó]n(?: de (?:oro|plata|cobre|zinc|plomo|esta[ñn]o|hierro|litio))?|production)` },
+  { clave: 'reservas', nombre: 'Reservas', tipo: 'cantidad', re: String.raw`(?:reservas(?: minerales| probadas| probables)?|mineral reserves|proven and probable)` },
+  { clave: 'recursos', nombre: 'Recursos minerales', tipo: 'cantidad', re: String.raw`(?:recursos minerales|mineral resources|measured and indicated)` },
 ]
 
 function extraerMetricas(chunks) {
   const halladas = []
   for (const m of METRICAS) {
-    const re = new RegExp(`(${m.re})[^.\\n]{0,80}?(${RE_MONTO})`, 'i')
+    // % y ratios van PEGADOS a su nombre (gap corto); los montos aguantan más texto
+    const gap = m.tipo === 'monto' ? 80 : 40
+    const re = new RegExp(`(${m.re})[^.\\n]{0,${gap}}?(${VALOR_POR_TIPO[m.tipo]})`, 'i')
     for (const c of chunks) {
       const hit = c.texto.match(re)
       if (!hit) continue
       const esPerdida = /p[eé]rdida|net loss/i.test(hit[1])
       halladas.push({
-        clave: m.clave, nombre: m.nombre,
-        etiqueta: hit[1].trim(), valorTexto: hit[2].trim(),
+        clave: m.clave, nombre: m.nombre, tipo: m.tipo,
+        etiqueta: hit[1].trim(), valorTexto: hit[2].trim().replace(/[.,]$/, ''),
         valorNum: montoANumero(hit[2]), esPerdida,
         pagina: c.pagina, seccion: c.seccion,
         frase: hit[0].slice(0, 160),
@@ -333,7 +370,8 @@ function periodoPreguntado(pregunta) {
 function contradiccionEn(clave) {
   const entradas = docs
     .map((d) => ({ d, hit: d.metricas.find((x) => x.clave === clave) }))
-    .filter((x) => x.hit && x.hit.valorNum != null)
+    // cantidades físicas no se comparan a ciegas (onzas vs toneladas)
+    .filter((x) => x.hit && x.hit.valorNum != null && x.hit.tipo !== 'cantidad')
   for (let i = 0; i < entradas.length; i++) {
     for (let j = i + 1; j < entradas.length; j++) {
       const a = entradas[i], b = entradas[j]
@@ -347,6 +385,60 @@ function contradiccionEn(clave) {
   }
   return null
 }
+
+// 📏 NIVEL DE CONFIANZA: porcentaje HONESTO (heurística declarada, no magia)
+// con sus motivos — nº de fuentes, cobertura de la pregunta, contradicciones,
+// si el texto vino de OCR y si el período cuadra con lo preguntado.
+function lineaConfianza({ fuentes = 1, cobertura = null, contradiccion = false, periodoMal = false, conOcr = false }) {
+  let pts = 55
+  const motivos = []
+  if (fuentes >= 2) { pts += 20; motivos.push(`${fuentes} fuentes coinciden`) } else { motivos.push('1 sola fuente') }
+  if (cobertura != null) {
+    if (cobertura >= 1) { pts += 15; motivos.push('cubre toda la pregunta') }
+    else if (cobertura < 0.5) { pts -= 15; motivos.push('cubre solo parte de la pregunta') }
+  }
+  if (contradiccion) { pts -= 30; motivos.push('hay cifras contradictorias') }
+  else if (fuentes >= 2) { pts += 5; motivos.push('sin contradicciones') }
+  if (periodoMal) { pts -= 20; motivos.push('el período no es el preguntado') }
+  if (conOcr) { pts -= 10; motivos.push('parte del texto salió de OCR') }
+  pts = Math.max(25, Math.min(95, pts))
+  return `📏 Confianza: ~${pts}% (${motivos.join(' · ')})`
+}
+
+// 🧾 EXPLICACIÓN DEL RAZONAMIENTO: cada respuesta de la biblioteca deja su
+// rastro ("¿cómo lo supiste?" → Atlas muestra el paso a paso, trazable)
+let ultimoRazonamiento = null
+const anotarRazonamiento = (r) => { ultimoRazonamiento = r }
+
+export function explicarRazonamiento() {
+  const r = ultimoRazonamiento
+  if (!r) return null
+  const lineas = ['🧾 Así llegué a mi última respuesta sobre tus documentos:']
+  lineas.push(`1. Revisé ${r.docsRevisados} documento${r.docsRevisados === 1 ? '' : 's'} partido${r.docsRevisados === 1 ? '' : 's'} en ${r.chunksEvaluados} fragmentos indexados.`)
+  if (r.tipo === 'busqueda') {
+    lineas.push(`2. Busqué: ${r.buscado.join(', ')} — cada término con sus sinónimos en español e inglés.`)
+    lineas.push(`3. ${r.candidatos} fragmento${r.candidatos === 1 ? ' pasó' : 's pasaron'} el filtro de relevancia; los demás se descartaron por no contener esos términos (o solo palabras muy comunes).`)
+    for (const u of r.usados) {
+      lineas.push(`4. Usé 📎 ${u.cita} — relevancia ${u.puntos}, acertó ${u.aciertos} de ${u.gruposTotal} término${u.gruposTotal === 1 ? '' : 's'} buscados.`)
+    }
+  } else {
+    lineas.push(`2. Busqué los indicadores: ${r.buscado.join(', ')} — con patrones de analista (la cifra tiene que estar PEGADA al nombre del indicador, con su moneda o unidad).`)
+    lineas.push(`3. Los encontré en: ${r.usados.join(' · ')}.`)
+  }
+  lineas.push('Regla de hierro: solo cito texto literal de tus documentos — lo que no está, no aparece.')
+  return { texto: lineas.join('\n') }
+}
+
+// 🎛 PREFERENCIA DE FORMATO (corto/detallado): solo cambia la PRESENTACIÓN,
+// jamás los hechos. Se guarda en el navegador del usuario.
+const CLAVE_FORMATO = 'alto-atlas-formato'
+export function fijarFormato(f) {
+  try { localStorage.setItem(CLAVE_FORMATO, f) } catch { /* sin storage */ }
+}
+export function formatoPreferido() {
+  try { return localStorage.getItem(CLAVE_FORMATO) || 'normal' } catch { return 'normal' }
+}
+const esCorto = () => formatoPreferido() === 'corto'
 
 // corre las verificaciones y devuelve los avisos que correspondan
 function supervisar({ pregunta, usados = [], claves = [] }) {
@@ -372,7 +464,7 @@ function supervisar({ pregunta, usados = [], claves = [] }) {
 const lineaCita = (doc, chunk) => `   📎 ${cita(doc, chunk)}`
 
 export function respuestaBusqueda(pregunta) {
-  const top = buscarEnBiblioteca(pregunta, 3)
+  const top = buscarEnBiblioteca(pregunta, esCorto() ? 1 : 3) // preferencia de formato
   if (!top.length) return { texto: SIN_RESPUESTA, sinRespuesta: true }
   const grupos = gruposDe(pregunta)
   const lineas = ['Esto es lo que dicen tus documentos (textual, con su fuente):']
@@ -394,16 +486,46 @@ export function respuestaBusqueda(pregunta) {
   if (mejor.gruposTotal >= 3 && mejor.aciertos <= Math.floor(mejor.gruposTotal / 2)) {
     lineas.push('🕵️ Supervisora: tu pregunta tiene más elementos de los que logré juntar en un solo pasaje — esto es lo MÁS CERCANO que hay; puede no responderla completa.')
   }
-  lineas.push(...supervisar({ pregunta, usados: top.map((t) => t.doc) }))
+  const avisos = supervisar({ pregunta, usados: top.map((t) => t.doc) })
+  lineas.push(...avisos)
+  lineas.push(lineaConfianza({
+    fuentes: new Set(top.map((t) => t.doc.id)).size,
+    cobertura: mejor.aciertos / mejor.gruposTotal,
+    contradiccion: avisos.some((a) => a.includes('DISTINTAS')),
+    periodoMal: avisos.some((a) => a.includes('OTRO período')),
+    conOcr: top.some((t) => t.doc.ocr),
+  }))
   return { texto: lineas.join('\n') }
 }
 
+// qué indicadores pide la pregunta (una intención puede abrir varias claves)
+const INTENCION_METRICA = [
+  [/(ingreso|venta|revenue|sales|facturacion)/, ['ingresos']],
+  [/margen/, ['margenBruto', 'margenOperativo', 'margenEbitda', 'margenNeto']],
+  [/ev\/ebitda/, ['evEbitda']],
+  [/ebitda/, ['ebitda', 'margenEbitda']],
+  [/(utilidad|ganancia|resultado neto|net income|profit)/, ['utilidad']],
+  [/(bpa|por accion|eps)/, ['bpa', 'dividendoPagado']],
+  [/(flujo|efectivo|cash)/, ['flujo', 'flujoLibre', 'caja']],
+  [/caja/, ['caja', 'flujo']],
+  [/(deuda|debt|endeudamiento)/, ['deuda']],
+  [/(capex|inversion(es)? de capital)/, ['capex']],
+  [/(opex|gasto operativo)/, ['opex']],
+  [/dividendo/, ['dividendoPagado']],
+  [/(costo|cash cost|aisc)/, ['costos']],
+  [/(produccion|onzas|toneladas)/, ['produccion']],
+  [/(reservas?|recursos? mineral)/, ['reservas', 'recursos']],
+  [/p\/e|price to earnings/, ['pe']],
+  [/(crecimiento|variacion|interanual|cuanto (crecio|cayo))/, ['variacion']],
+]
+
 export function respuestaMetrica(pregunta) {
   const q = norm(pregunta)
-  const pedidas = METRICAS.filter((m) =>
-    ({ ingresos: /(ingreso|venta|revenue|sales|facturacion)/, ebitda: /ebitda/,
-      utilidad: /(utilidad|ganancia|resultado neto|net income|profit)/,
-      flujo: /(flujo|caja|efectivo|cash)/, deuda: /(deuda|debt|endeudamiento)/ })[m.clave].test(q))
+  const claves = new Set()
+  for (const [re, cs] of INTENCION_METRICA) {
+    if (re.test(q)) cs.forEach((c) => claves.add(c))
+  }
+  const pedidas = METRICAS.filter((m) => claves.has(m.clave))
   if (!pedidas.length) return null
   const lineas = []
   const usados = []
@@ -418,8 +540,22 @@ export function respuestaMetrica(pregunta) {
     }
   }
   if (!lineas.length) return { texto: SIN_RESPUESTA, sinRespuesta: true }
+  anotarRazonamiento({
+    tipo: 'metricas', pregunta,
+    docsRevisados: docs.length,
+    chunksEvaluados: docs.reduce((s, d) => s + d.chunks.length, 0),
+    buscado: pedidas.map((m) => m.nombre),
+    usados: [...new Set(usados.map((d) => d.nombre))],
+  })
   // 🕵️ verificaciones: contradicciones entre documentos + período preguntado
-  lineas.push(...supervisar({ pregunta, usados, claves: pedidas.map((m) => m.clave) }))
+  const avisos = supervisar({ pregunta, usados, claves: pedidas.map((m) => m.clave) })
+  lineas.push(...avisos)
+  lineas.push(lineaConfianza({
+    fuentes: new Set(usados.map((d) => d.id)).size,
+    contradiccion: avisos.some((a) => a.includes('DISTINTAS')),
+    periodoMal: avisos.some((a) => a.includes('OTRO período')),
+    conOcr: usados.some((d) => d.ocr),
+  }))
   return { texto: [`Lo que encontré sobre ${pedidas.map((m) => m.nombre.toLowerCase()).join(' y ')} en tus documentos:`, ...lineas].join('\n') }
 }
 
@@ -536,7 +672,7 @@ export function resumenInversionistas() {
   for (const d of docs) {
     const a = d.analisis || {}
     lineas.push(`📄 **${d.nombre}**${d.periodo ? ` (${legiblePeriodo(d.periodo)})` : ''}: ${a.titulo ? `«${a.titulo}» — ` : ''}${a.categoria || 'documento'} ${V[a.veredicto] || ''}`)
-    for (const met of d.metricas.slice(0, 3)) {
+    for (const met of d.metricas.slice(0, esCorto() ? 1 : 3)) {
       lineas.push(`   💵 ${met.etiqueta}: ${met.valorTexto}${met.esPerdida ? ' (pérdida)' : ''} — 📎 ${cita(d, met)}`)
     }
   }

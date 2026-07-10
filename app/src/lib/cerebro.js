@@ -14,8 +14,12 @@ import { leerContexto, marcarContextoVisto, hechosAprendidos, partirOraciones } 
 import {
   losDocumentos, bibliotecaEsNueva, marcarBibliotecaVista, respuestaBusqueda,
   respuestaMetrica, compararDocumentos, cronologiaDocumentos, riesgosDocumentos,
-  resumenInversionistas,
+  resumenInversionistas, explicarRazonamiento, fijarFormato,
 } from './biblioteca'
+
+// 🧠 memoria conversacional: la última empresa de la que hablamos, para
+// entender "esa empresa", "¿y paga dividendos?" sin pedir aclaraciones
+let ultimaEmpresa = null
 
 // ─────────────────────────────────────────────────────────────────────────
 // EL CEREBRO DE ATLAS — la IA de ALTO (beta). Enseña y aprende.
@@ -589,8 +593,38 @@ export function responder(pregunta) {
     return respuestaRegla9()
   }
 
+  // 🎛 preferencia de formato: solo cambia la PRESENTACIÓN, jamás los hechos
+  if (/(respond|respuesta)[a-z]*.{0,12}(corta|corto|breve)|se breve|^mas corto/.test(q)) {
+    fijarFormato('corto')
+    return { texto: 'Listo: de ahora en adelante te respondo CORTO 👍. Solo cambia la presentación — los datos siguen siendo los mismos, con su fuente. Dime «respuestas detalladas» para volver.', chips: PREGUNTAS_INICIALES.slice(0, 3) }
+  }
+  if (/(respond|respuesta)[a-z]*.{0,12}(detallad|larga|completa)/.test(q)) {
+    fijarFormato('normal')
+    return { texto: 'Listo: vuelvo a las respuestas DETALLADAS 👍.', chips: PREGUNTAS_INICIALES.slice(0, 3) }
+  }
+
+  // 🧾 "¿cómo lo supiste?" — la explicación del razonamiento (trazabilidad)
+  if (/(como (lo )?(supiste|sabes|hiciste|obtuviste)|explica (tu|el) razonamiento|de donde (lo )?(sacaste|salio)|por que respondiste)/.test(q)) {
+    const r = explicarRazonamiento()
+    if (r) return conChipsBib(r)
+    return {
+      texto: 'Respondo solo con los datos verificados de la app (BVL/SMV e informes propios de ALTO) y, si me cargas documentos en Sentinel 📚, con su texto literal citando documento y página. Hazme una pregunta sobre tus documentos y luego dime «¿cómo lo supiste?» — te muestro el paso a paso.',
+      chips: PREGUNTAS_INICIALES.slice(0, 3),
+    }
+  }
+
   const empresas = buscarEmpresas(q)
-  const e = empresas[0]
+  let e = empresas[0]
+
+  // 🧠 memoria conversacional: no nombraste empresa pero venimos hablando de
+  // una y la pregunta es "de empresa" ("¿y paga dividendos?", "esa empresa…").
+  // Corre ANTES que la biblioteca: la conversación activa manda.
+  if (!e && ultimaEmpresa
+      && /((esa|esta|misma|dicha) empresa|^y |^pero |tambien|de ella)/.test(q)
+      && /(dividendo|riesgo|precio|cotiza|vale|noticia|hecho|gerencia|nota|paga|hace|cuentame|p\/e|2025)/.test(q)) {
+    e = EMPRESAS.find((x) => x.ticker === ultimaEmpresa) || null
+  }
+  if (e) ultimaEmpresa = e.ticker
 
   // 📚 la BIBLIOTECA (varios documentos): intents explícitos primero
   const bib = losDocumentos()

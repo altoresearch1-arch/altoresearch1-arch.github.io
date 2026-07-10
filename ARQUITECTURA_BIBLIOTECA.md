@@ -121,7 +121,31 @@ bundle y en el precache de la PWA.
 { texto, citas: ['Doc.pdf · Página 12', …] }      // o null → "No encontré…"
 ```
 
-## 4. Escalabilidad y límites honestos
+## 4. Las 10 capacidades obligatorias → dónde vive cada una
+
+Pedido de Jair (10-jul, segunda tanda). En este sistema **los "agentes" son módulos**: no
+hay varios procesos ni varias IAs porque todo corre en el navegador del usuario — pero las
+responsabilidades SÍ están separadas (cada módulo con un contrato claro), que es lo que de
+verdad da calidad y escalabilidad. Distribución:
+
+| # | Capacidad | Dónde vive | Estado |
+|---|---|---|---|
+| 1 | Verificación automática | 🕵️ Supervisora (`supervisar()` en biblioteca.js) + por construcción (extractivo = todo respaldado) | ✓ |
+| 2 | Nivel de confianza con motivos | `lineaConfianza()` en biblioteca.js (nº fuentes, cobertura de la pregunta, contradicciones, OCR, período) | ✓ |
+| 3 | Adaptación al usuario | La app ENTERA habla "en simple" (Regla 5); la profundidad se maneja con la preferencia corto/detallado (#9). Perfiles finos (abogado/contador…) = plantillas futuras, solo presentación | parcial |
+| 4 | Detección de inconsistencias | `contradiccionEn()` (misma métrica + mismo período + cifra distinta → aviso con ambas fuentes) | ✓ |
+| 5 | Cronologías automáticas | `cronologiaDocumentos()` | ✓ |
+| 6 | Comparaciones inteligentes | `compararDocumentos()` (métrica por métrica, delta %, cambios importantes) + el Comparador de empresas ya existente | ✓ |
+| 7 | Memoria conversacional | `ultimaEmpresa` en cerebro.js ("esa empresa", "¿y paga dividendos?") + doc activo y biblioteca en sessionStorage | ✓ |
+| 8 | Explicación del razonamiento | `explicarRazonamiento()` en biblioteca.js — "¿cómo lo supiste?" → docs revisados, fragmentos evaluados/descartados, relevancia de los usados | ✓ |
+| 9 | Preferencias de formato | `fijarFormato()` — "respóndeme corto"/"detallado" (localStorage; solo presentación, jamás los hechos) | ✓ |
+| 10 | Extracción especializada | `METRICAS` ampliadas: EBITDA, utilidad, ingresos, flujos (operativo/libre), BPA, P/E, EV/EBITDA, márgenes (bruto/operativo/EBITDA/neto), CAPEX, OPEX, deuda, caja, dividendos, producción, reservas, recursos, onzas/toneladas, cash cost/AISC, variaciones % | ✓ |
+
+Límite honesto que se mantiene: los GRÁFICOS dentro de un PDF (imágenes) no se interpretan
+— eso requiere un modelo con visión, que no existe sin servidor ni costo. Las tablas sí
+(Excel entero y tablas con texto en PDF).
+
+## 5. Escalabilidad y límites honestos
 - ~10 documentos / ~200 páginas cómodos en un celular (todo en memoria; tope de
   60k caracteres por doc, chunks capados).
 - sessionStorage con try/catch: si el doc es enorme sobrevive en memoria pero no a

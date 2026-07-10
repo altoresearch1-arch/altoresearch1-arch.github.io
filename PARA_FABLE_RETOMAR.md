@@ -16,6 +16,16 @@ Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTAD
 > contradicciones, cronología, riesgos, resumen para inversionistas). Citas: `Doc.pdf ·
 > Página 12`. Si no está: "No encontré esa información en los documentos." Atlas: chips e
 > intents nuevos; Sentinel: multi-archivo + panel 📚.
+> **+ 10 CAPACIDADES (mismo día, 3ª tanda de Jair)**: mapa completo en
+> ARQUITECTURA_BIBLIOTECA.md §4 (módulos = agentes, justificado). Nuevo: 📏 CONFIANZA con
+> motivos (lineaConfianza: nº fuentes/cobertura/contradicción/OCR/período), 🧾 "¿cómo lo
+> supiste?" (explicarRazonamiento: docs revisados, fragmentos evaluados/descartados,
+> relevancia), 🧠 MEMORIA CONVERSACIONAL ("¿y paga dividendos?" → última empresa; corre ANTES
+> que la biblioteca), 🎛 formato corto/detallado (fijarFormato, localStorage, solo
+> presentación), MÉTRICAS 5→22 (BPA, P/E, EV/EBITDA, márgenes, CAPEX, OPEX, caja, producción,
+> reservas, cash cost, variación % — con TIPO de valor: monto/pct/ratio/cantidad).
+> Verificado en Node vía esbuild (el navegador-extensión se desconectó; receta: bundle de
+> los libs + fake File de texto). Límite honesto: gráficos-imagen no se interpretan (sin visión).
 > **+ LA SUPERVISORA 🕵️ (mismo día)**: capa de verificación EN CÓDIGO (Atlas no es LLM, no
 > lee prompts) sobre cada respuesta de la biblioteca: evidencia débil, período preguntado ≠
 > período del doc, y contradicciones de cifras entre docs (misma métrica+período, >2% de
