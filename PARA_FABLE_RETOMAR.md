@@ -15,7 +15,11 @@ Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTAD
 > métricas ingresos/EBITDA/utilidad/flujo/deuda con cita, comparación con delta % y
 > contradicciones, cronología, riesgos, resumen para inversionistas). Citas: `Doc.pdf ·
 > Página 12`. Si no está: "No encontré esa información en los documentos." Atlas: chips e
-> intents nuevos; Sentinel: multi-archivo + panel 📚. ⚠ Precache 3.81/4 MiB — VIGILAR.
+> intents nuevos; Sentinel: multi-archivo + panel 📚.
+> **PWA RESUELTO (mismo día)**: el tope de 4 MiB del precache es POR ARCHIVO y todo iba en un
+> index.js de 2.9 MB que crecía a diario → `manualChunks` en vite.config.js parte los datos
+> (datos-historicos / datos-lecturas / datos-hechos / datos): el mayor quedó en 0.98 MB y el
+> código en 0.33 MB. Yapa: el usuario que vuelve solo re-descarga el trozo que cambió ese día.
 
 ## ⚡ NUEVO 10-jul ronda 7 (Fable): 🧠 SENTINEL/ATLAS BILINGÜES + 📷 OCR (leen fotos)
 > Reclamo de Jair: el HI de Nexa sobre BOLIDEN (02-jul) daba lectura VACÍA → estaba EN INGLÉS

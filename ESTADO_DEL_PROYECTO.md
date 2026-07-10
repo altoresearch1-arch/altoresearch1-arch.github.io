@@ -30,7 +30,15 @@ presupuesto, la elección sería Qdrant). Piezas:
   (+ botón "súmalo a la biblioteca"), varios = panel 📚 (lista, quitar, agregar, vaciar,
   "Analizar juntos con Atlas"). Verificado en navegador: PDF real de Nexa + TXT Q1 + XLSX Q4
   → comparaciones con delta correcto por período, Boliden hallado, litio → "No encontré…".
-  Móvil OK. Precache 3.81/4 MiB ⚠ VIGILAR (el límite está cerca).
+  Móvil OK.
+- **PWA RESUELTO (mismo día, pedido de Jair)**: el tope de 4 MiB (`maximumFileSizeToCacheInBytes`)
+  es POR ARCHIVO, y TODO iba en un solo index.js de 2.9 MB que crece con cada actualización
+  diaria del robot (historicos/lecturas/hechos) → al cruzar 4 MiB el SW lo excluiría en
+  SILENCIO. Fix: `manualChunks` en vite.config.js parte los datos en trozos propios
+  (datos-historicos 0.69 MB / datos-lecturas 0.51 MB / datos-hechos 0.41 MB / datos 0.98 MB;
+  código 0.33 MB) — años de margen, y el usuario que vuelve solo re-descarga el trozo que
+  cambió ese día. Verificado con `vite preview` (launch.json → `alto-dist`): render completo,
+  consola limpia.
 
 ## 🧠 RONDA 7 del 10-jul (Fable): SENTINEL/ATLAS MÁS INTELIGENTES + OCR (leen FOTOS)
 Reclamo real de Jair: el penúltimo HI de Nexa (02-jul, el comunicado sobre BOLIDEN) daba una

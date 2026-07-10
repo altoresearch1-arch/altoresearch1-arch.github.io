@@ -5,6 +5,24 @@ import { VitePWA } from 'vite-plugin-pwa'
 // base relativa para que funcione hospedado en GitHub Pages / Netlify / subcarpeta
 export default defineConfig({
   base: './',
+  build: {
+    rollupOptions: {
+      output: {
+        // Los DATOS van en trozos propios, separados del código. Motivo (10-jul):
+        // todo iba en UN index.js de ~2.9 MB que CRECE con cada actualización
+        // diaria del robot — al cruzar los 4 MiB (tope POR ARCHIVO del precache)
+        // el service worker lo excluiría en silencio y la PWA se rompería.
+        // Partido así: ningún archivo se acerca al tope, y el usuario que
+        // vuelve solo re-descarga el trozo que cambió ese día (no todo).
+        manualChunks(id) {
+          if (id.includes('src/data/historicos.json')) return 'datos-historicos'
+          if (id.includes('src/data/lecturas.json')) return 'datos-lecturas'
+          if (id.includes('src/data/hechos.json')) return 'datos-hechos'
+          if (id.includes('src/data/')) return 'datos'
+        },
+      },
+    },
+  },
   plugins: [
     react(),
     // PWA: instalable en el celular (ícono en pantalla) y funciona offline con
