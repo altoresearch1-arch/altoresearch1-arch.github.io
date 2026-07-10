@@ -57,6 +57,7 @@ PASOS_EPS = [
     "fix_eps.py",
     "fetch_gerencia.py",  # 🗣 charla de la gerencia (SMV, trimestral; caché por expediente)
     "fetch_notas.py",     # 📝 notas a los EEFF: actual todas + 2025 minas (SMV, caché)
+    "fetch_docs_urls.py", # 📚 links directos a los originales (SMV, caché 2025)
 ]
 
 PASOS_DIARIO = PASOS_RAPIDOS + PASOS_EPS

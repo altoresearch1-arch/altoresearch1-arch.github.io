@@ -16,6 +16,7 @@ import Sparkline from './Sparkline'
 import Termometro from './Termometro'
 import HechosImportancia from './HechosImportancia'
 import Sentinel from './Sentinel'
+import DocumentosOficiales from './DocumentosOficiales'
 import ProduccionMinera from './ProduccionMinera'
 import { CountUp, Reveal } from '../lib/anim'
 import { useFavoritos, alternarFavorito } from '../lib/favoritos'
@@ -336,6 +337,9 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
 
         {/* 🛰️ Sentinel: suelta el PDF de un hecho y te dice si pinta buena o mala */}
         <Reveal><Sentinel ticker={e.ticker} /></Reveal>
+
+        {/* 📚 Los documentos ORIGINALES de la SMV (gerencia, EEFF, notas; minas +2025) */}
+        <Reveal><DocumentosOficiales ticker={e.ticker} /></Reveal>
 
         {/* Escenarios (solo si Jair los llenó; si no, ya está el Simulador arriba) */}
         {e.escenarios &&
