@@ -83,6 +83,15 @@ bundle y en el precache de la PWA.
   - resumen para inversionistas: título/categoría/veredicto por doc (reutiliza
     `analizar()`) + métricas + cambios + riesgos, todo citado.
 
+- **La Supervisora 🕵️ (capa de verificación)**: Atlas no es un LLM al que se le pueda dar
+  un "prompt mental" — es código, así que la supervisión también es código que corre sobre
+  cada respuesta ANTES de entregarla: (1) evidencia débil → "esto es lo MÁS CERCANO, puede
+  no responder completa"; (2) período del documento ≠ período preguntado → "es OTRO período,
+  tómalo con pinzas"; (3) misma métrica + mismo período + cifra distinta en dos documentos →
+  ⚠ contradicción con ambas fuentes citadas. El resto del checklist clásico de supervisión
+  (solo evidencia, citar todo, orden por relevancia, no alucinar, decir "No encontré…") ya
+  está garantizado por construcción del sistema extractivo.
+
 ### Integración Atlas (cerebro.js)
 - Intents nuevos (solo si hay documentos cargados): resumen para inversionistas,
   comparar documentos / contradicciones, cronología, riesgos, métricas puntuales.

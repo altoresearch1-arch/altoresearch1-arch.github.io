@@ -16,6 +16,11 @@ Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTAD
 > contradicciones, cronología, riesgos, resumen para inversionistas). Citas: `Doc.pdf ·
 > Página 12`. Si no está: "No encontré esa información en los documentos." Atlas: chips e
 > intents nuevos; Sentinel: multi-archivo + panel 📚.
+> **+ LA SUPERVISORA 🕵️ (mismo día)**: capa de verificación EN CÓDIGO (Atlas no es LLM, no
+> lee prompts) sobre cada respuesta de la biblioteca: evidencia débil, período preguntado ≠
+> período del doc, y contradicciones de cifras entre docs (misma métrica+período, >2% de
+> diferencia) — con ambas fuentes citadas. `supervisar()` en biblioteca.js. Verificada con
+> contradicción sintética (deuda 800 vs 850 mismo Q1) y sin falsos avisos.
 > **PWA RESUELTO (mismo día)**: el tope de 4 MiB del precache es POR ARCHIVO y todo iba en un
 > index.js de 2.9 MB que crecía a diario → `manualChunks` en vite.config.js parte los datos
 > (datos-historicos / datos-lecturas / datos-hechos / datos): el mayor quedó en 0.98 MB y el

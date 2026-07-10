@@ -230,7 +230,7 @@ export function buscarEnBiblioteca(pregunta, k = 3) {
     // voleo sin ponerse sordo a lo puntual.
     const esRara = dfMin <= Math.max(2, Math.ceil(N * 0.15))
     if (puntos > 0 && (aciertos >= 2 || (aciertos === 1 && esRara))) {
-      puntuados.push({ doc: x.d, chunk: x.c, puntos })
+      puntuados.push({ doc: x.d, chunk: x.c, puntos, aciertos, gruposTotal: grupos.length })
     }
   }
   puntuados.sort((a, b) => b.puntos - a.puntos)
@@ -307,6 +307,66 @@ function periodoDe(texto) {
   return null
 }
 
+// ── 🕵️ LA SUPERVISORA — verificación programada antes de cada respuesta ──
+// Atlas no es un LLM al que se le pueda dar un "prompt mental": es código.
+// Así que la supervisión también es CÓDIGO que corre sobre cada respuesta de
+// la biblioteca antes de entregarla: (1) ¿la evidencia es débil? avisar;
+// (2) ¿el período del documento NO cuadra con el que preguntaron? avisar;
+// (3) ¿otro documento contradice la cifra? avisar con ambas fuentes.
+// Lo demás del checklist ya está por construcción: solo evidencia textual,
+// cita siempre, orden por relevancia, y "No encontré…" si no está.
+// La precisión tiene prioridad absoluta sobre la velocidad (pedido de Jair).
+
+// el período que el usuario PREGUNTÓ ("…en el primer trimestre 2026?")
+function periodoPreguntado(pregunta) {
+  const q = norm(pregunta)
+  let m = q.match(/\bq([1-4])[\s-]?(20\d\d)/)
+  if (m) return `${m[2]}-T${m[1]}`
+  m = q.match(/(primer|segundo|tercer|cuarto)\s+trimestre[^\d]{0,20}(20\d\d)/)
+  if (m) return `${m[2]}-T${({ primer: 1, segundo: 2, tercer: 3, cuarto: 4 })[m[1]]}`
+  m = q.match(/\b(20\d\d)\b/)
+  if (m) return m[1]
+  return null
+}
+
+// misma métrica + MISMO período + cifra distinta en dos documentos = contradicción
+function contradiccionEn(clave) {
+  const entradas = docs
+    .map((d) => ({ d, hit: d.metricas.find((x) => x.clave === clave) }))
+    .filter((x) => x.hit && x.hit.valorNum != null)
+  for (let i = 0; i < entradas.length; i++) {
+    for (let j = i + 1; j < entradas.length; j++) {
+      const a = entradas[i], b = entradas[j]
+      if (!a.d.periodo || a.d.periodo !== b.d.periodo) continue
+      if (monedaDe(a.hit.valorTexto) !== monedaDe(b.hit.valorTexto)) continue
+      const delta = (Math.abs(b.hit.valorNum - a.hit.valorNum) / Math.max(Math.abs(a.hit.valorNum), 1)) * 100
+      if (delta > 2) {
+        return `⚠ 🕵️ Supervisora: para el MISMO período (${legiblePeriodo(a.d.periodo)}) tus documentos dan cifras DISTINTAS de ${a.hit.nombre.toLowerCase()}: ${a.hit.valorTexto} (📎 ${a.d.nombre}) vs ${b.hit.valorTexto} (📎 ${b.d.nombre}). Revisa cuál es la fuente correcta antes de usar el dato.`
+      }
+    }
+  }
+  return null
+}
+
+// corre las verificaciones y devuelve los avisos que correspondan
+function supervisar({ pregunta, usados = [], claves = [] }) {
+  const avisos = []
+  const pp = periodoPreguntado(pregunta)
+  if (pp) {
+    const conPeriodo = usados.filter((d) => d.periodo)
+    const cuadra = conPeriodo.some((d) => String(d.periodo).startsWith(pp) || pp.startsWith(String(d.periodo)))
+    if (conPeriodo.length > 0 && !cuadra) {
+      const vienenDe = [...new Set(conPeriodo.map((d) => legiblePeriodo(d.periodo)))].join(' y ')
+      avisos.push(`🕵️ Supervisora: preguntaste por ${legiblePeriodo(pp)}, pero lo que encontré viene de ${vienenDe} — es OTRO período, tómalo con pinzas.`)
+    }
+  }
+  for (const clave of claves) {
+    const c = contradiccionEn(clave)
+    if (c) avisos.push(c)
+  }
+  return [...new Set(avisos)]
+}
+
 // ── respuestas armadas (todas con cita, todas extractivas) ────────────────
 
 const lineaCita = (doc, chunk) => `   📎 ${cita(doc, chunk)}`
@@ -329,6 +389,12 @@ export function respuestaBusqueda(pregunta) {
     lineas.push(`📄 «${citaTexto}${(mejor?.o || chunk.texto).length > 300 ? '…' : ''}»`)
     lineas.push(lineaCita(doc, chunk))
   }
+  // 🕵️ verificaciones: evidencia débil + período que no cuadra con la pregunta
+  const mejor = top[0]
+  if (mejor.gruposTotal >= 3 && mejor.aciertos <= Math.floor(mejor.gruposTotal / 2)) {
+    lineas.push('🕵️ Supervisora: tu pregunta tiene más elementos de los que logré juntar en un solo pasaje — esto es lo MÁS CERCANO que hay; puede no responderla completa.')
+  }
+  lineas.push(...supervisar({ pregunta, usados: top.map((t) => t.doc) }))
   return { texto: lineas.join('\n') }
 }
 
@@ -340,16 +406,20 @@ export function respuestaMetrica(pregunta) {
       flujo: /(flujo|caja|efectivo|cash)/, deuda: /(deuda|debt|endeudamiento)/ })[m.clave].test(q))
   if (!pedidas.length) return null
   const lineas = []
+  const usados = []
   for (const m of pedidas) {
     for (const d of docs) {
       const hit = d.metricas.find((x) => x.clave === m.clave)
       if (hit) {
         lineas.push(`💵 ${hit.etiqueta}: ${hit.valorTexto}${hit.esPerdida ? ' (pérdida)' : ''}${d.periodo ? ` — período ${legiblePeriodo(d.periodo)}` : ''}`)
         lineas.push(lineaCita(d, hit))
+        usados.push(d)
       }
     }
   }
   if (!lineas.length) return { texto: SIN_RESPUESTA, sinRespuesta: true }
+  // 🕵️ verificaciones: contradicciones entre documentos + período preguntado
+  lineas.push(...supervisar({ pregunta, usados, claves: pedidas.map((m) => m.clave) }))
   return { texto: [`Lo que encontré sobre ${pedidas.map((m) => m.nombre.toLowerCase()).join(' y ')} en tus documentos:`, ...lineas].join('\n') }
 }
 
