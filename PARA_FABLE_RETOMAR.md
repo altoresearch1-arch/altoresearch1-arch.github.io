@@ -7,6 +7,19 @@ Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTAD
 
 ---
 
+## ⚡ NUEVO 10-jul ronda 7 (Fable): 🧠 SENTINEL/ATLAS BILINGÜES + 📷 OCR (leen fotos)
+> Reclamo de Jair: el HI de Nexa sobre BOLIDEN (02-jul) daba lectura VACÍA → estaba EN INGLÉS
+> (matriz de Luxemburgo) y las reglas eran solo español. Fix en ESPEJO (sentinel.js ⇄
+> gen_lecturas.py `VERSION_ANALISIS=2`): categorías/señales bilingües, categorías nuevas
+> rating/auditoría, TÍTULO del doc, frases líder si nada puntúa, recorte del legalese inglés,
+> oraciones que no se parten en "S.A.", extractores nuevos (partes de la negociación,
+> enNegociacion, cambioControl, montos legal/deuda/operación, persona/cargo, utilidad).
+> **OCR**: Sentinel ahora lee FOTOS (JPG/PNG) y PDF escaneados — tesseract.js 6 spa+eng 100%
+> por CDN (cero bundle, precache PWA intacto 3.66 MiB), máx 8 págs, errores honestos, marca
+> "📷 descifrado con OCR". La ficha donde sueltas el archivo sirve de PISTA de empresa.
+> Atlas: resumen con título+frases+detalles, "¿quién compra y quién vende?", buscarEnDoc top-2.
+> terminos 183→187. ⚠ Si subes VERSION_ANALISIS: correr gen_lecturas.py LOCAL antes de push.
+
 ## ⚡ NUEVO 09-jul ronda 5 (Fable): 🗣 CHARLA DE LA GERENCIA + REDACTOR
 > `fetch_gerencia.py` baja el "Análisis y Discusión de la Gerencia" (SMV, grilla de
 > Frm_InformacionFinanciera, link "Descargar Documento") → `gerencia.json` (92 empresas, 86 con

@@ -2,7 +2,47 @@
 
 > **Documento maestro vivo.** Captura TODO lo construido para que nada se pierda, sin
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
-> herramienta), lee esto primero. Última actualización: **09 jul 2026**. Estado: **EN VIVO (beta pública)**.
+> herramienta), lee esto primero. Última actualización: **10 jul 2026**. Estado: **EN VIVO (beta pública)**.
+
+## 🧠 RONDA 7 del 10-jul (Fable): SENTINEL/ATLAS MÁS INTELIGENTES + OCR (leen FOTOS)
+Reclamo real de Jair: el penúltimo HI de Nexa (02-jul, el comunicado sobre BOLIDEN) daba una
+"descripción breve" — la lectura del robot salía VACÍA ("Sin categoría clara", 0 frases).
+CAUSA: el comunicado viene de la matriz de Luxemburgo EN INGLÉS y todas las reglas eran solo
+en español. Además pidió que lean fotos. Lo hecho (espejo sentinel.js ⇄ gen_lecturas.py, v2):
+- **Análisis BILINGÜE (ES+EN)**: CATEGORIAS y SENALES ahora también en inglés (acquisition,
+  negotiations, net loss, dividend declared…). Categorías NUEVAS: "rating" (clasificación de
+  riesgo) y "auditoria" (auditoría externa). Montos/fechas también en formato inglés.
+- **Resumen de verdad**: TÍTULO del documento (línea EN MAYÚSCULAS del arranque, se pesca con
+  hasEOL de pdf.js), frases LÍDER cuando ninguna puntúa (antes quedaba vacío), recorte del
+  legalese inglés ("forward-looking statements" — llenaba de falsas señales rojas), oraciones
+  que no se parten en "S.A." ni en números ("623 , 015" → "623,015"), idioma detectado (el
+  redactor avisa "el comunicado está en inglés").
+- **Extractores nuevos**: adquisicion → partes ("Votorantim S.A. y Boliden"), enNegociacion,
+  cambioControl, montoOperacion; legal → montoLegal; deuda → montoDeuda + tasa; directorio →
+  persona + cargo; resultados → utilidad + ingresos. El redactor y Atlas los narran.
+- **El caso Nexa-Boliden AHORA**: título «NEXA RESOURCES STATEMENT REGARDING BOLIDEN'S
+  ANNOUNCEMENT», categoría Compra/venta/reorganización, partes detectadas, razones "negociación
+  EN CURSO" + "podría cambiar quién CONTROLA la empresa", frase líder citada. Verificado en
+  navegador (Sentinel + Atlas) y en Python.
+- **📷 OCR — Sentinel lee FOTOS y PDF escaneados**: tesseract.js 6 (spa+eng) cargado 100% desde
+  CDN jsdelivr con import dinámico → CERO peso en el bundle y el precache PWA (sigue 3.66 MiB).
+  `leerDocumento()` decide: PDF con texto → pdf.js; PDF escaneado → render a canvas + OCR (máx
+  8 págs, escala ≤2.2); imagen (JPG/PNG/WebP) → OCR directo. Necesita internet la primera vez
+  (motor ~ unos MB del CDN); errores honestos (OCR_SIN_INTERNET / OCR_ILEGIBLE). El informe
+  marca "📷 descifrado con OCR" y advierte posibles erratas. Verificado: foto y PDF escaneado
+  de un HI sintético de dividendos → 🟢 con S/ 0.15 por acción y fechas correctas en ~3-8 s.
+- **detectarEmpresa mejor**: palabras distintivas ≥4 letras (antes ≥6: "Nexa" no contaba),
+  norm() colapsa saltos de línea (el OCR partía "Minera\nPoderosa"), y la FICHA donde el
+  usuario suelta el archivo entra como pista (desempata Nexa Perú vs Nexa Atacocha; fallback
+  si no se detecta nada).
+- **Atlas**: respDocResumen con título + hasta 3 frases + aviso OCR; buscarEnDoc top-2
+  oraciones con raíz simple y stopwords; intent nuevo "¿quién compra/vende/negocia?" (usa
+  partes/cambioControl); saludoSentinel muestra el título. `terminos.json` 183→187
+  (clasificación de riesgo, clasificadora, auditoría externa, OCR).
+- **gen_lecturas.py v2**: `VERSION_ANALISIS = 2` — las lecturas cacheadas de versión vieja se
+  re-analizan (escaneado/ilegible quedan cacheados). ⚠ Al subir la versión, correr LOCAL
+  (`python extractor/gen_lecturas.py`) antes de push: si no, el robot de 30 min se pondría a
+  re-bajar ~700 PDFs en la nube.
 
 ## 📝 RONDA 6 del 09-jul (Fable): NOTAS A LOS EEFF + EL 2025 MINERO COMPLETO
 Pedido de Jair ("que lean las Notas a los EEFF; para minas también Q1-Q4 2025 con sus hechos").

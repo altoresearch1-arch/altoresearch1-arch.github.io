@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react'
-import { leerPdf, analizar, guardarContexto, recordarHecho } from '../lib/sentinel'
+import { leerDocumento, analizar, guardarContexto, recordarHecho } from '../lib/sentinel'
 import { redactarLectura } from '../lib/redactor'
 
 // 🛰️ SENTINEL (beta) — vive DEBAJO de los Hechos de Importancia en la ficha.
 // Procedimiento (se le explica al usuario ahí mismo):
 //   1. Toca "PDF ↗" en un hecho de arriba → se abre el PDF oficial de la BVL.
-//   2. Descárgalo y vuelve aquí.
+//   2. Descárgalo y vuelve aquí (también vale una FOTO del documento).
 //   3. Suéltalo en Sentinel: lo lee EN tu equipo (no se sube a ningún lado).
 //   4. Te dice si pinta a buena o mala noticia (con sus razones, sin recomendar).
 //   5. Abres el chat con Atlas, que ya conoce el documento, y le preguntas.
@@ -20,8 +20,10 @@ export default function Sentinel({ ticker }) {
 
   const procesar = async (archivo) => {
     if (!archivo) return
-    if (!/\.pdf$/i.test(archivo.name) && archivo.type !== 'application/pdf') {
-      setError('Solo leo PDF (el formato de los hechos de importancia de la BVL).')
+    const esPdf = /\.pdf$/i.test(archivo.name) || archivo.type === 'application/pdf'
+    const esFoto = /^image\//.test(archivo.type) || /\.(png|jpe?g|webp|bmp|gif)$/i.test(archivo.name)
+    if (!esPdf && !esFoto) {
+      setError('Leo PDF y fotos (JPG/PNG) — el formato de los hechos de importancia de la BVL o una foto del documento.')
       setEstado('error')
       return
     }
@@ -29,24 +31,24 @@ export default function Sentinel({ ticker }) {
     setError('')
     setProgreso('abriendo el documento…')
     try {
-      let paginas = 0
-      const texto = await leerPdf(archivo, (p, total) => {
-        paginas = total
-        setProgreso(`leyendo página ${p} de ${total}…`)
-      })
+      const { texto, paginas, ocr } = await leerDocumento(archivo, setProgreso)
       setProgreso('analizando lo leído…')
       // mini-pausa teatral: que se sienta que Sentinel "se toma su tiempo"
       await new Promise((r) => setTimeout(r, 600))
-      const inf = analizar(texto, archivo.name)
+      const inf = analizar(texto, archivo.name, ticker)
       inf.paginasLeidas = paginas
+      inf.ocr = ocr
       setInforme(inf)
       recordarHecho(inf) // Atlas lo recuerda en este navegador
       setEstado('listo')
     } catch (e) {
       setEstado('error')
-      setError(e?.message === 'PDF_ESCANEADO'
-        ? 'Este PDF es una imagen escaneada (sin texto). Sentinel aún no hace OCR — léelo directo de la BVL 🙏.'
-        : 'No pude leer ese PDF. Prueba descargarlo de nuevo desde el hecho de importancia.')
+      const msg = e?.message
+      setError(msg === 'OCR_SIN_INTERNET'
+        ? 'Para leer fotos o escaneados necesito internet: el motor de OCR se descarga de un CDN la primera vez. Conéctate e inténtalo de nuevo.'
+        : msg === 'OCR_ILEGIBLE'
+        ? 'Pasé la imagen por OCR pero no logré descifrar texto legible. Prueba con una foto más nítida, derecha y con buena luz.'
+        : 'No pude leer ese archivo. Prueba descargar el PDF de nuevo desde el hecho de importancia, o con una foto más nítida.')
     }
   }
 
@@ -70,7 +72,7 @@ export default function Sentinel({ ticker }) {
             Sentinel <span className="yachay-beta">lector · BETA</span>
           </div>
           <div className="muted" style={{ fontSize: 12.5 }}>
-            ¿Un hecho de arriba te intriga? Sentinel lee el PDF y te dice si pinta a buena o mala noticia.
+            ¿Un hecho de arriba te intriga? Sentinel lee el PDF (o una foto del documento) y te dice si pinta a buena o mala noticia.
           </div>
         </div>
       </div>
@@ -78,9 +80,9 @@ export default function Sentinel({ ticker }) {
       {estado === 'espera' && (
         <>
           <ol className="sentinel-pasos">
-            <li>Toca <b>«PDF ↗»</b> en el hecho de importancia que quieras (arriba 📰) y <b>descárgalo</b>.</li>
+            <li>Toca <b>«PDF ↗»</b> en el hecho de importancia que quieras (arriba 📰) y <b>descárgalo</b> — o <b>tómale una foto</b> al documento.</li>
             <li><b>Vuelve aquí</b> y suelta el archivo en el recuadro (o tócalo para elegirlo).</li>
-            <li>Sentinel lo lee <b>en tu equipo</b> (el PDF no se sube a ningún servidor) y te da su lectura.</li>
+            <li>Sentinel lo lee <b>en tu equipo</b> (nada se sube a ningún servidor); si es foto o escaneado lo descifra con OCR 📷.</li>
             <li>Abre el chat con <b>Atlas</b>, que ya conocerá el documento, y pregúntale lo que quieras.</li>
           </ol>
           <div
@@ -92,15 +94,15 @@ export default function Sentinel({ ticker }) {
             role="button"
             tabIndex={0}
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inputRef.current?.click() } }}
-            aria-label="Soltar o elegir el PDF del hecho de importancia"
+            aria-label="Soltar o elegir el PDF o la foto del hecho de importancia"
           >
-            📎 Suelta aquí el PDF del hecho de importancia
-            <span className="muted">o toca para elegir el archivo</span>
+            📎 Suelta aquí el PDF o la foto del hecho de importancia
+            <span className="muted">o toca para elegir el archivo (PDF · JPG · PNG)</span>
           </div>
           <input
             ref={inputRef}
             type="file"
-            accept="application/pdf,.pdf"
+            accept="application/pdf,.pdf,image/*"
             style={{ display: 'none' }}
             onChange={(e) => { procesar(e.target.files?.[0]); e.target.value = '' }}
           />
@@ -133,14 +135,28 @@ export default function Sentinel({ ticker }) {
               <div className="muted" style={{ fontSize: 12 }}>
                 {informe.empresa ? `${informe.empresa}` : 'Empresa no identificada'} · {informe.categoria}
                 {informe.paginasLeidas ? ` · ${informe.paginasLeidas} pág.` : ''}
+                {informe.ocr ? ' · 📷 descifrado con OCR' : ''}
+                {informe.idioma === 'en' ? ' · documento en inglés' : ''}
               </div>
             </div>
           </div>
+
+          {informe.titulo && (
+            <p className="sentinel-parrafo" style={{ fontWeight: 600, marginBottom: 4 }}>
+              «{informe.titulo}»
+            </p>
+          )}
 
           {/* el REDACTOR: párrafo en cristiano armado con lo extraído */}
           <p className="sentinel-parrafo">
             {redactarLectura(informe).replace(/\*\*/g, '')}
           </p>
+
+          {informe.frases?.[0] && (
+            <p className="sentinel-parrafo muted" style={{ fontStyle: 'italic' }}>
+              📄 «{informe.frases[0].slice(0, 260)}{informe.frases[0].length > 260 ? '…' : ''}»
+            </p>
+          )}
 
           {informe.razones.length > 0 && (
             <ul className="sentinel-razones">
@@ -164,7 +180,8 @@ export default function Sentinel({ ticker }) {
 
           <p className="muted" style={{ fontSize: 11.5, marginBottom: 0 }}>
             Lectura automática por palabras y patrones (beta): resalta y organiza, no reemplaza
-            leer el documento ni es recomendación. El PDF se procesó en tu equipo y no se subió a ningún lado.
+            leer el documento ni es recomendación. El archivo se procesó en tu equipo y no se subió a ningún lado.
+            {informe.ocr ? ' Ojo: el texto salió de un OCR — puede traer erratas de lectura.' : ''}
           </p>
         </div>
       )}

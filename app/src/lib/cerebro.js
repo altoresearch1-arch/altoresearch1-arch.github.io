@@ -10,7 +10,7 @@ import gerenciaData from '../data/gerencia.json'
 import notasData from '../data/notas.json'
 import { redactarLectura, redactarGerencia } from './redactor'
 import { precioDe, peInfo, dividendosDe, yieldNumerico } from './finanzas'
-import { leerContexto, marcarContextoVisto, hechosAprendidos } from './sentinel'
+import { leerContexto, marcarContextoVisto, hechosAprendidos, partirOraciones } from './sentinel'
 
 // ─────────────────────────────────────────────────────────────────────────
 // EL CEREBRO DE ATLAS — la IA de ALTO (beta). Enseña y aprende.
@@ -436,16 +436,30 @@ function lineasDetalles(doc) {
   if (d.porAccion) lineas.push(`💰 Dividendo: ${d.porAccion} por acción.`)
   if (d.fechaRegistro) lineas.push(`📅 Fecha de registro (quién cobra): ${d.fechaRegistro}.`)
   if (d.fechaEntrega) lineas.push(`📅 Fecha de entrega/pago: ${d.fechaEntrega}.`)
+  if (d.partes) lineas.push(`🤝 Las partes que negocian: ${d.partes}.`)
+  if (d.montoOperacion) lineas.push(`💵 Monto mencionado en la operación: ${d.montoOperacion}.`)
+  if (d.cambioControl) lineas.push(`👀 Podría cambiar quién CONTROLA la empresa.`)
+  if (d.enNegociacion) lineas.push(`⏳ Negociación en curso: sin acuerdo cerrado, ni precio ni fecha definidos.`)
+  if (d.montoLegal) lineas.push(`⚖ Monto en disputa o sanción: ${d.montoLegal}.`)
+  if (d.montoDeuda) lineas.push(`💳 Monto de la deuda o emisión: ${d.montoDeuda}.`)
+  if (d.tasa) lineas.push(`📈 Tasa mencionada: ${d.tasa}.`)
+  if (d.persona) lineas.push(`👤 Persona involucrada: ${d.persona}${d.cargo ? ` (${d.cargo.toLowerCase()})` : ''}.`)
+  if (!d.persona && d.cargo) lineas.push(`👤 Cargo involucrado: ${d.cargo.toLowerCase()}.`)
+  if (d.utilidad) lineas.push(`💰 Utilidad neta reportada: ${d.utilidad}.`)
+  if (d.ingresos) lineas.push(`🏭 Ingresos mencionados: ${d.ingresos}.`)
   return lineas
 }
 
 function respDocResumen(doc) {
   // el REDACTOR compone el párrafo con los datos extraídos (sin inventar)
-  const lineas = [
-    redactarLectura(doc),
-    `Mi lectura: ${VEREDICTO_TXT[doc.veredicto]}.`,
-  ]
-  for (const f of (doc.frases || []).slice(0, 2)) lineas.push(`📄 «${f}»`)
+  const lineas = []
+  if (doc.titulo) lineas.push(`El documento se titula: «${doc.titulo}».`)
+  lineas.push(redactarLectura(doc))
+  lineas.push(`Mi lectura: ${VEREDICTO_TXT[doc.veredicto]}.`)
+  for (const f of (doc.frases || []).slice(0, 3)) {
+    lineas.push(`📄 «${f.slice(0, 280)}${f.length > 280 ? '…' : ''}»`)
+  }
+  if (doc.ocr) lineas.push('📷 El texto salió de un OCR (foto o escaneado) — puede traer alguna errata de lectura.')
   lineas.push('Recuerda: leo por palabras y patrones (beta) — dale una leída tú también.')
   return { texto: lineas.join('\n'), ticker: doc.ticker || undefined, chips: chipsDoc(doc) }
 }
@@ -474,20 +488,27 @@ function respDocDatos(doc, tipo) {
   }
 }
 
-// búsqueda libre DENTRO del texto del documento (repreguntas)
+// búsqueda libre DENTRO del texto del documento (repreguntas).
+// Palabras de relleno que no aportan al buscar (ES + EN):
+const RELLENO_DOC = new Set(['sobre', 'para', 'como', 'donde', 'cuando', 'cual', 'cuanto',
+  'esta', 'este', 'esto', 'tiene', 'dice', 'documento', 'empresa', 'hecho', 'importancia',
+  'pasa', 'paso', 'sabes', 'puedes', 'quiero', 'saber', 'menciona', 'acerca'])
 function buscarEnDoc(doc, q) {
-  const palabras = q.split(' ').filter((w) => w.length >= 5)
+  const palabras = q.split(' ').filter((w) => w.length >= 4 && !RELLENO_DOC.has(w))
   if (!palabras.length || !doc.texto) return null
-  const oraciones = doc.texto.split(/(?<=[.;])\s+|\n+/).filter((o) => o.length >= 30)
-  let mejor = null
-  for (const o of oraciones) {
+  // los saltos de línea del PDF parten oraciones: se pegan antes de trocear
+  const oraciones = partirOraciones(doc.texto.replace(/\n+/g, ' '))
+    .filter((o) => o.length >= 30 && o.length <= 500)
+  const puntuadas = oraciones.map((o) => {
     const oN = norm(o)
-    const aciertos = palabras.filter((w) => oN.includes(w)).length
-    if (aciertos > 0 && (!mejor || aciertos > mejor.aciertos)) mejor = { o: o.trim(), aciertos }
-  }
-  if (!mejor || mejor.aciertos < 1) return null
+    // raíz simple: "dividendos" encuentra "dividendo" (y viceversa)
+    const aciertos = palabras.filter((w) => oN.includes(w) || oN.includes(w.slice(0, Math.max(4, w.length - 2)))).length
+    return { o, aciertos }
+  }).filter((x) => x.aciertos > 0).sort((a, b) => b.aciertos - a.aciertos)
+  if (!puntuadas.length) return null
+  const top = puntuadas.slice(0, 2).map((x) => x.o)
   return {
-    texto: [`📄 En el documento encontré esto relacionado:`, `«${mejor.o.slice(0, 300)}»`].join('\n'),
+    texto: [`📄 En el documento encontré esto relacionado:`, ...top.map((o) => `«${o.slice(0, 300)}${o.length > 300 ? '…' : ''}»`)].join('\n'),
     chips: chipsDoc(doc),
   }
 }
@@ -501,11 +522,14 @@ export function saludoSentinel() {
   const doc = leerContexto()
   if (!doc?.nuevo) return null
   const lineas = [
-    `🛰️ **Sentinel me pasó un documento** y ya lo leí${doc.paginasLeidas ? ` (${doc.paginasLeidas} página${doc.paginasLeidas === 1 ? '' : 's'})` : ''}.`,
+    `🛰️ **Sentinel me pasó un documento** y ya lo leí${doc.paginasLeidas ? ` (${doc.paginasLeidas} página${doc.paginasLeidas === 1 ? '' : 's'}${doc.ocr ? ', con OCR 📷' : ''})` : ''}.`,
     `${doc.empresa ? `Es de **${doc.empresa}**` : 'No identifiqué la empresa con certeza'} · ${doc.categoria}.`,
+  ]
+  if (doc.titulo) lineas.push(`Se titula: «${doc.titulo}».`)
+  lineas.push(
     `Mi lectura rápida: ${VEREDICTO_TXT[doc.veredicto]}.`,
     'Pregúntame sobre él — o sobre cualquier otra cosa de la bolsa.',
-  ]
+  )
   return {
     texto: lineas.join('\n'),
     ticker: doc.ticker || undefined,
@@ -533,8 +557,12 @@ export function responder(pregunta) {
   const doc = leerContexto()
   const hablaDelDoc = /(documento|el hecho|el pdf|la noticia|lo que leiste|lo que te paso|sentinel)/.test(q)
   if (doc && (hablaDelDoc || !e)) {
-    if (/(de que trata|resume|resumen|que dice)/.test(q)) return respDocResumen(doc)
+    if (/(de que trata|resume|resumen|que dice|explica|entiendo|entender|significa esto)/.test(q)) return respDocResumen(doc)
     if (/(buena|mala|como pinta|positiv|negativ)/.test(q) && /(noticia|documento|hecho|pinta)/.test(q)) return respDocVeredicto(doc)
+    // ¿quién compra / vende / negocia? (docs de adquisición o cambio de control)
+    if (/(quien(es)? )?(compra|vende|negocia|involucrad|las partes)/.test(q) && (doc.detalles?.partes || doc.detalles?.cambioControl)) {
+      return { texto: ['Lo que dice el documento sobre la operación:', ...lineasDetalles(doc)].join('\n'), ticker: doc.ticker || undefined, chips: chipsDoc(doc) }
+    }
     // los datos que pescaron los extractores especializados
     if (/(ganado|perdido|gano|perdio|resultado).{0,30}(derivad|cobertura|contrato)/.test(q) || /derivad.{0,30}(resultado|ganancia|perdida)/.test(q)) {
       const d = doc.detalles || {}
