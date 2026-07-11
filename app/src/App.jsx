@@ -17,6 +17,7 @@ import MonedaFidget from './components/MonedaFidget'
 import FondoVivo from './components/FondoVivo'
 import Atlas from './components/Atlas'
 import Comentarios from './components/Comentarios'
+import Gracias from './components/Gracias'
 import AvisoNovedades from './components/AvisoNovedades'
 
 // "2026-06-24" -> "24 de junio de 2026"
@@ -71,6 +72,7 @@ export default function App() {
       else if (ruta === 'explorar') setVista('explorar')
       else if (ruta === 'ia') setVista('ia')
       else if (ruta === 'comentarios') setVista('comentarios')
+      else if (ruta === 'gracias') setVista('gracias')
       else if (ruta === 'empresa' && a && existe(a)) {
         setTickerSel(a)
         setVista('empresa')
@@ -115,6 +117,7 @@ export default function App() {
     { id: 'glosario', label: 'Glosario', hash: '#/glosario' },
     { id: 'ia', label: '🧠 Atlas', hash: '#/ia', beta: true },
     { id: 'comentarios', label: '💬 Comentarios', hash: '#/comentarios' },
+    { id: 'gracias', label: '💛 Gracias', hash: '#/gracias' },
   ]
 
   return (
@@ -262,6 +265,8 @@ export default function App() {
           {vista === 'ia' && <Atlas onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />}
 
           {vista === 'comentarios' && <Comentarios />}
+
+          {vista === 'gracias' && <Gracias onApoyar={() => setApoyoAbierto(true)} />}
 
           {vista === 'explorar' && (
             <Explorar

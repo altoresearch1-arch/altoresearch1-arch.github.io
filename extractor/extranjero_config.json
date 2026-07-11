@@ -1,0 +1,88 @@
+{
+  "_comment": "🌎 EMPRESAS DEL EXTRANJERO — recetas para localizar sus documentos oficiales. Estas empresas cotizan en la BVL pero NO presentan estados financieros a la SMV (son emisores extranjeros: NYSE / TSX-V de Canadá), así que su información se saca del regulador de su país o de su web de inversionistas. AGREGAR UNA NUEVA = añadir un objeto aquí. Lo usa extractor/fetch_extranjero.py. Ver playbook completo en extractor/FUENTES_EXTRANJERO.md.",
+  "periodo": "2026-T1",
+  "empresas": [
+    {
+      "ticker": "AUNA",
+      "nombre": "Auna S.A.",
+      "mercado": "NYSE",
+      "bvlNemonico": "AUNA",
+      "moneda": "PEN",
+      "regulador": "SEC EDGAR (Form 6-K / 20-F)",
+      "estrategia": "sec_edgar",
+      "secCik": "1799207",
+      "sitioIR": "https://aunainvestors.com/Spanish/",
+      "_nota": "Emisor privado extranjero: reporta en SOLES/IFRS y presenta 6-K (interino) y 20-F (anual) a la SEC. Su web corre sobre plataforma Q4 Inc. (CDN s203.q4cdn.com/408268012). El earnings release trae todas las cifras.",
+      "docsSeed": {
+        "eeff": "https://s203.q4cdn.com/408268012/files/doc_financials/2026/q1/Auna-Q1-2026-Condensed-Consolidated-Interim-Financial-Statements.pdf",
+        "release": "https://s203.q4cdn.com/408268012/files/doc_financials/2026/q1/Auna_1Q26-Earnings_Release.pdf",
+        "presentacion": "https://s203.q4cdn.com/408268012/files/doc_financials/2026/q1/Auna_1Q26-Earnings-Presentation.pdf"
+      }
+    },
+    {
+      "ticker": "PPX",
+      "nombre": "PPX Mining Corp.",
+      "mercado": "TSX-V / BVL",
+      "bvlNemonico": "PPX",
+      "moneda": "CAD",
+      "periodo": "al 31-dic-2025",
+      "regulador": "SEDAR+ (Canadá)",
+      "estrategia": "urls_fijas",
+      "sitioIR": "https://www.ppxmining.com/investors",
+      "_nota": "Junior oro/plata (proyecto Igor, La Libertad, Perú). URLs FIJAS: la empresa reemplaza el mismo PDF cada trimestre — lo más fácil de automatizar. 'Exploration Stage': no factura mina, su ingreso es el Net Profit Interest del JV 75% Callanquitas.",
+      "docsFijos": {
+        "eeff": "https://www.ppxmining.com/documents/ppx-financial-statements.pdf",
+        "gerencia": "https://www.ppxmining.com/documents/ppx-mda.pdf"
+      },
+      "noticias": {
+        "url": "https://www.ppxmining.com/news",
+        "linkPat": "/news/.+-(?:qm|doc)-",
+        "fecha": "url"
+      }
+    },
+    {
+      "ticker": "PML",
+      "nombre": "Panoro Minerals Ltd.",
+      "mercado": "TSX-V / BVL / Frankfurt",
+      "bvlNemonico": "PML",
+      "moneda": "USD",
+      "regulador": "SEDAR+ (Canadá)",
+      "estrategia": "scrape_patron",
+      "sitioIR": "https://panoro.com/en/investors/financials/",
+      "docsPage": "https://panoro.com/en/investors/financials/",
+      "patronPdf": "pml_{anio}_q{tri}",
+      "_nota": "Explorador de cobre (Cotabambas, Apurímac), PRE-INGRESOS. La página de financials es JS: requests casi nunca ve los links (por eso hay docsSeed). Los PDF viven en panoro.com/site/assets/files/{id}/pml_{anio}_q{n}_{fs|mda}_...pdf",
+      "docsSeed": {
+        "eeff": "https://panoro.com/site/assets/files/4394/pml_2026_q1_fs_final_28may2026.pdf",
+        "gerencia": "https://panoro.com/site/assets/files/4394/pml_2026_q1_mda_final_28may2026.pdf"
+      },
+      "_notaNoticias": "Panoro cotiza en BVL → sus noticias ya llegan por Hechos de Importancia (fetch_hechos). No se scrapea su web (su página de noticias es JS y desordenada)."
+    },
+    {
+      "ticker": "RIO",
+      "nombre": "Rio2 Limited",
+      "mercado": "TSX",
+      "bvlNemonico": null,
+      "moneda": "USD",
+      "regulador": "SEDAR+ (Canadá)",
+      "estrategia": "scrape_texto_wix",
+      "sitioIR": "https://www.rio2.com.pe/",
+      "docsPage": "https://www.rio2.com.pe/",
+      "selectoresTexto": {
+        "eeff": "estados financieros",
+        "gerencia": "discusi"
+      },
+      "_nota": "Minera canadiense: oro Fenix (Atacama, Chile, vertió primer oro ene-2026) + compra de Cía. Minera Condestable (cobre, Perú). NO cotiza en BVL. Sitio Wix (rio2.com.pe): los PDF están en el HTML crudo pero con URLs opacas (_files/ugd/HASH.pdf) → se mapean por el TEXTO del enlace.",
+      "docsSeed": {
+        "eeff": "https://www.rio2.com.pe/_files/ugd/d7ae14_336b2301e8ea49338cd740d4b2d1c2da.pdf",
+        "gerencia": "https://www.rio2.com.pe/_files/ugd/d7ae14_c9b25e14cbfe4f9cb9f728a59bcf6318.pdf"
+      },
+      "noticias": {
+        "url": "https://www.rio2.com.pe/",
+        "linkPat": "/post/",
+        "skipTitulos": ["leer comunicado", "leer mas", "leer más", "ver mas", "ver más"],
+        "fecha": "orden"
+      }
+    }
+  ]
+}

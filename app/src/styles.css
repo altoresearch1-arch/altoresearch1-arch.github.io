@@ -1379,6 +1379,34 @@ a.link {
   color: var(--texto);
 }
 
+.apoyo-beneficios {
+  margin: 14px 0 4px;
+  padding: 12px;
+  background: var(--oro-tenue);
+  border: 1px solid var(--oro);
+  border-radius: 12px;
+  text-align: left;
+}
+.apoyo-beneficios-tit {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--oro);
+  margin-bottom: 8px;
+}
+.apoyo-beneficio {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 13px;
+  line-height: 1.45;
+  margin-bottom: 6px;
+}
+.apoyo-beneficio:last-child { margin-bottom: 0; }
+.apoyo-beneficio-icono { flex: 0 0 auto; }
+.apoyo-beneficio strong { color: var(--texto); }
+
 .yape-card-img {
   display: block;
   width: 100%;
@@ -3328,3 +3356,147 @@ a.link {
   line-height: 1.5;
   color: var(--texto-tenue);
 }
+
+/* 💵 Reloj de precios (en Explorar) */
+.reloj-precios {
+  margin: 12px 0 6px;
+  padding: 11px 14px;
+  border: 1px solid var(--oro-tenue);
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.06), rgba(212, 175, 55, 0.02));
+  border-radius: 12px;
+}
+.reloj-precios-cab {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--texto);
+}
+.reloj-precios-filas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin-top: 7px;
+  font-size: 13px;
+}
+.reloj-precios-item strong { color: var(--oro); }
+.reloj-precios-nota {
+  margin: 7px 0 0;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--texto-tenue);
+}
+/* Precio en la tarjeta de Explorar */
+.explorar-precio {
+  font-size: 14px;
+  white-space: nowrap;
+}
+.explorar-precio strong { color: var(--oro); }
+
+/* 📰 Noticias de la web oficial (extranjeras) */
+.noticias-ext { margin-top: 6px; }
+.noticia-ext { padding: 8px 0; border-bottom: 1px solid var(--borde, rgba(255,255,255,0.08)); }
+.noticia-ext:last-of-type { border-bottom: none; }
+.noticia-ext a {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  color: inherit;
+  text-decoration: none;
+}
+.noticia-ext a:hover .noticia-ext-tit { color: var(--oro); text-decoration: underline; }
+.noticia-ext-fecha {
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--oro);
+  min-width: 66px;
+}
+.noticia-ext-tit { flex: 1; font-size: 14px; line-height: 1.45; }
+.noticia-ext-flecha { color: var(--oro); }
+
+/* ===== 💛 Pestaña Gracias / Apoyo ===== */
+.gracias { display: flex; flex-direction: column; gap: 16px; }
+
+.gracias-hero { text-align: center; }
+.gracias-corazon { font-size: 44px; line-height: 1; margin-bottom: 6px; }
+.gracias-hero .muted { max-width: 560px; margin: 0 auto 4px; }
+
+.gracias-acciones {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  justify-content: center; margin-top: 14px;
+}
+
+.gracias-h2 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  color: var(--oro);
+}
+
+/* Recompensas */
+.gracias-recompensas { display: flex; flex-direction: column; gap: 12px; }
+.recompensa { display: flex; gap: 12px; align-items: flex-start; }
+.recompensa-icono {
+  font-size: 22px; line-height: 1.4;
+  flex: 0 0 auto; width: 34px; text-align: center;
+}
+.recompensa-titulo { font-weight: 600; color: var(--texto); margin-bottom: 2px; }
+.recompensa-texto { font-size: 13.5px; line-height: 1.5; }
+
+.gracias-legal {
+  margin: 16px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--gris);
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--texto-tenue);
+}
+
+/* Roadmap */
+.roadmap { display: flex; flex-direction: column; gap: 10px; }
+.roadmap-item {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 12px;
+  background: var(--negro-2);
+  border: 1px solid var(--gris);
+  border-radius: var(--radio);
+}
+.roadmap-icono { font-size: 22px; flex: 0 0 auto; width: 30px; text-align: center; }
+.roadmap-cuerpo { flex: 1 1 auto; min-width: 0; }
+.roadmap-cab {
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap; margin-bottom: 3px;
+}
+.roadmap-titulo { font-weight: 600; color: var(--texto); }
+.roadmap-texto { font-size: 13px; line-height: 1.5; }
+.roadmap-estado {
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.3px;
+  text-transform: uppercase;
+  padding: 2px 8px; border-radius: 999px;
+  border: 1px solid currentColor;
+}
+.roadmap-estado.trabajando { color: var(--verde); }
+.roadmap-estado.pronto { color: var(--oro-suave); }
+.roadmap-estado.idea { color: var(--texto-tenue); }
+
+/* Muro de apoyo: personaje 8-bit + nombre al lado */
+.muro { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.muro-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 16px 6px 6px;
+  background: var(--negro-2);
+  border: 1px solid var(--gris);
+  border-radius: 999px;
+}
+.muro-card .pixel-avatar {
+  display: block; flex: 0 0 auto;
+  image-rendering: pixelated;
+}
+.muro-nombre { font-size: 14px; font-weight: 600; color: var(--texto); }
+
+.muro-ejemplo-tit {
+  margin: 14px 0 8px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.4px; text-transform: uppercase;
+  color: var(--texto-tenue);
+}
+.muro.es-ejemplo { opacity: 0.85; }

@@ -2,7 +2,46 @@
 
 > **Documento maestro vivo.** Captura TODO lo construido para que nada se pierda, sin
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
-> herramienta), lee esto primero. Última actualización: **10 jul 2026**. Estado: **EN VIVO (beta pública)**.
+> herramienta), lee esto primero. Última actualización: **11 jul 2026**. Estado: **EN VIVO (beta pública)**.
+
+## 🌎 RONDA 9 del 11-jul: EMPRESAS DEL EXTRANJERO (AUNA/PPX/PML + Rio2 nueva)
+Pedido de Jair: "a AUNA le falta info; aprende a sacar lo mismo de las webs de PPX, PML y Rio2, y
+piensa cómo agilizar futuras extranjeras." Estas cotizan en BVL pero **NO presentan a la SMV**
+(emisores extranjeros: NYSE / TSX-V de Canadá). Investigado con Chrome + pypdf; datos Q1 2026
+verificados leyendo cada PDF. Lo construido:
+- **`extractor/fetch_extranjero.py` + `extranjero_config.json`** (el ÚNICO lugar a editar para
+  agregar una): localizador config-driven con 4 estrategias — `sec_edgar` (API data.sec.gov,
+  headless, AUNA CIK 1799207), `urls_fijas` (PPX: la empresa reemplaza el mismo PDF cada trim),
+  `scrape_patron` (Panoro, página JS → cae a docsSeed), `scrape_texto_wix` (Rio2: URLs opacas Wix
+  → mapea por texto del enlace). Salidas: `documentos_extranjero.json` (links, lo muestra la ficha)
+  + `extranjero_digest.json` (cifras "por revisar", NO se muestra — Regla #1). Corre a mano / PASOS_EPS,
+  NO en el robot de 30 min (los reportes salen 1×/trimestre). Playbook completo en **`extractor/FUENTES_EXTRANJERO.md`**.
+- **Datos poblados** en empresas.json (fundamentos/metricas/balanceDestacado/monedaEstados +
+  campo nuevo `fundamentosFuente`): AUNA (PEN, ingresos S/1,178M, Adj.EBITDA S/217M, deuda neta
+  S/3,407M, apalanc. 3.7x), PPX (CAD, patrimonio NEGATIVO -9.5M, going concern, ingreso vía Net
+  Profit Interest del JV Callanquitas), PML (USD, explorador cobre pre-ingresos), **Rio2 NUEVA**
+  (USD, TSX: RIO, no BVL: oro Fenix Chile + compra Cía. Minera Condestable cobre Perú; ya factura
+  US$65.9M, utilidad US$22.5M). Total **115 valores**.
+- **App**: `DocumentosOficiales.jsx` fusiona SMV + extranjero (pie de fuente correcto: SEC/SEDAR+,
+  no "SMV"); `Empresa.jsx` usa `fundamentosFuente` para el encabezado. Sin `eps_anual` cargado →
+  la app NO calcula P/E ni EV/EBITDA (evita valoraciones engañosas entre monedas/mercados).
+  Verificado en navegador (AUNA/PPX/PML/Rio2): render completo, consola limpia.
+- **Catalizadores = sus noticias reales** (pedido de Jair, mismo día): catalizadores.json con las
+  últimas noticias fechadas de AUNA/PPX/PML/RIO. OJO honestidad: PPX y PML SÍ llegan por Hechos de
+  Importancia de la BVL (ya se ven en la ficha), pero **Rio2 NO cotiza en BVL** (no está en
+  hechos.json ni en empresas_config) → sus noticias solo salen en rio2.com.pe / SEDAR+; por eso su
+  catalizador lo aclara.
+- **Reloj de precios en Explorar** (`RelojPrecios.jsx`): banner que avisa que los precios se
+  actualizan a **mediodía (12:15) y al cierre (15:15)** hora Perú (espeja el cron `15 17,20` del
+  robot) + cuenta regresiva a la próxima + "última vez" (= __BUILD_TIME__). Cada tarjeta de Explorar
+  muestra el precio (dorado) o "Sin cotización". Verificado en navegador.
+- **📰 Noticias automáticas de la web oficial** (`NoticiasExtranjero.jsx` + `noticias_extranjero.json`):
+  `fetch_extranjero.py` ahora SCRAPEA los titulares de la web de cada extranjera (config `noticias`
+  por empresa: `url`/`linkPat`/`fecha`=url|orden|texto). Esencial para **Rio2** (no cotiza en BVL →
+  no tiene Hechos): su ficha muestra los 4 últimos comunicados de rio2.com.pe con fecha. PPX igual
+  (fecha en la URL). Panoro/AUNA se omiten (cotizan en BVL → ya llegan por Hechos). Corre en el robot
+  DIARIO (`actualizar_todo.py` → `fetch_extranjero.py --solo-noticias`), no en el intradía. Los
+  catalizadores volvieron a temático/a-futuro (el feed 📰 lleva las noticias fechadas). Verificado.
 
 ## 📚 RONDA 8 del 10-jul (Fable): LA BIBLIOTECA — asistente de documentos estilo NotebookLM
 Pedido de Jair (prompt de "asistente profesional de documentos con RAG"): que Atlas y Sentinel

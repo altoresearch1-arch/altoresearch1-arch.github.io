@@ -111,6 +111,13 @@ def main():
         if not correr(p):
             fallos.append(p)
 
+    # 🌎 Noticias de empresas EXTRANJERAS (Rio2 etc.): salen en su web, no en la BVL.
+    # Diario basta (no en el intradía de 30 min, para no golpear los sitios externos).
+    # Headless y con caché por empresa: si un sitio se cae, conserva lo anterior.
+    if not (solo_hechos or solo_precios):
+        if not correr("fetch_extranjero.py", ["--solo-noticias"]):
+            fallos.append("fetch_extranjero.py --solo-noticias")
+
     # novedades.json (app/public/): resumen liviano que la APP consulta en vivo
     # para avisar al usuario si una empresa de su lista ★ tiene algo nuevo.
     if not correr("gen_novedades.py"):

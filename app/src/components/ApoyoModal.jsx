@@ -4,7 +4,7 @@ import config from '../data/config.json'
 // Modal de apoyo voluntario (Yape + PayPal), estilo ALTO.
 // Regla A.4: donación voluntaria al contenido educativo, NO pago por recomendación.
 export default function ApoyoModal({ onCerrar }) {
-  const { yapeNombre, yapeNumero, yapeQr, paypalCorreo, frase, subfrase } = config.apoyo
+  const { yapeNombre, yapeNumero, yapeQr, paypalCorreo, frase, subfrase, beneficios } = config.apoyo
   const [copiado, setCopiado] = useState('')
   const [qrFalla, setQrFalla] = useState(false)
 
@@ -31,6 +31,23 @@ export default function ApoyoModal({ onCerrar }) {
         <div className="apoyo-corazon">💛</div>
         <h2 className="apoyo-titulo">{frase}</h2>
         <p className="muted center">{subfrase}</p>
+
+        {/* Beneficios simbólicos (mismos que la pestaña Gracias, desde config) */}
+        {beneficios?.length > 0 && (
+          <div className="apoyo-beneficios">
+            <div className="apoyo-beneficios-tit">Al apoyar, además:</div>
+            {beneficios.map((b) => (
+              <div key={b.titulo} className="apoyo-beneficio">
+                <span className="apoyo-beneficio-icono">{b.icono}</span>
+                <span>
+                  <strong>{b.titulo}</strong>
+                  {' — '}
+                  <span className="muted">{b.corto}</span>
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Tarjeta Yape: si hay QR, mostramos la imagen oficial (ya trae logo, QR y nombre) */}
         {qrSrc && !qrFalla ? (

@@ -5197,6 +5197,7 @@
       ],
       "smvId": 185076,
       "bvlNemonico": "AUNA",
+      "mercado": "NYSE (emisor extranjero) · también BVL",
       "tipoLectura": "consumo",
       "tesis": {
         "texto": "Pendiente: Jair escribe la tesis en una línea.",
@@ -5204,15 +5205,62 @@
       },
       "precio": {
         "valor": null,
-        "moneda": "PEN",
+        "moneda": "US$",
         "fuente": "BVL (en vivo)"
       },
       "perfilesTentativos": true,
       "urlXbrl": null,
-      "fundamentos": null,
+      "monedaEstados": "PEN",
+      "fundamentosFuente": "consolidado · NYSE/SEC (en soles)",
+      "fundamentos": {
+        "deuda": {
+          "valor": "Deuda neta S/ 3,407 M (bruta S/ 3,815 M) · apalancamiento 3.7x",
+          "moneda": "PEN",
+          "fuente": "Earnings Release Q1 2026 (cierre 31-mar-2026, soles/IFRS)",
+          "verificado": true
+        },
+        "fcf": {
+          "valor": "Flujo operativo S/ 175 M (+48% YoY) · CapEx ~S/ 34 M",
+          "moneda": "PEN",
+          "fuente": "Earnings Release Q1 2026 — estado de flujos",
+          "verificado": true
+        },
+        "eps": {
+          "valor": "S/ 0.09 básico (trimestre) · Adj. EPS S/ 0.18",
+          "moneda": "PEN",
+          "fuente": "Earnings Release Q1 2026 (74.2 M acciones)",
+          "verificado": true
+        },
+        "margen": {
+          "valor": "Adjusted EBITDA S/ 217 M · margen 18.4%",
+          "moneda": "PEN",
+          "fuente": "Earnings Release Q1 2026",
+          "verificado": true
+        }
+      },
+      "metricas": {
+        "eps": "S/ 0.09 (trim.) · Adj. S/ 0.18",
+        "deuda": "S/ 3,407 M neta (3.7x)",
+        "margen": "18.4% (Adj. EBITDA)"
+      },
+      "balanceDestacado": [
+        { "k": "Ingresos del trimestre", "v": "S/ 1,178 M", "nota": "+13% YoY (Q1 2026, a 2026-03-31)" },
+        { "k": "Adjusted EBITDA", "v": "S/ 217 M", "nota": "margen 18.4% (−2 p.p. YoY)" },
+        { "k": "Utilidad neta del trimestre", "v": "S/ 9 M", "nota": "a los dueños S/ 7 M · Adj. net income S/ 16 M" },
+        { "k": "Deuda neta / bruta", "v": "S/ 3,407 M / S/ 3,815 M", "nota": "apalancamiento 3.7x (meta: <3.0x)" },
+        { "k": "Caja y equivalentes", "v": "S/ 409 M" },
+        { "k": "Total activos", "v": "S/ 7,688 M", "nota": "al 2026-03-31" },
+        { "k": "Total pasivos", "v": "S/ 5,769 M" },
+        { "k": "Patrimonio", "v": "S/ 1,918 M" },
+        { "k": "Red asistencial", "v": "31 centros · 2,337 camas · 1.4 M planes", "nota": "México, Perú y Colombia" }
+      ],
+      "catalizadores": [
+        { "texto": "Pendiente: catalizadores documentados.", "pendiente": true }
+      ],
       "_extraccion": {
-        "ok": false,
-        "motivo": "sin_documentos"
+        "ok": true,
+        "motivo": "extranjero",
+        "fuente": "Web IR (aunainvestors.com) + SEC EDGAR (6-K) — Q1 2026, en soles"
       }
     },
     {
@@ -7455,6 +7503,7 @@
       ],
       "smvId": 118035,
       "bvlNemonico": "PML",
+      "mercado": "TSX-V (Canadá) · también BVL y Frankfurt",
       "tipoLectura": "minera",
       "tesis": {
         "texto": "Pendiente: Jair escribe la tesis en una línea.",
@@ -7462,15 +7511,59 @@
       },
       "precio": {
         "valor": null,
-        "moneda": "PEN",
+        "moneda": "US$",
         "fuente": "BVL (en vivo)"
       },
       "perfilesTentativos": true,
       "urlXbrl": null,
-      "fundamentos": null,
+      "monedaEstados": "USD",
+      "fundamentosFuente": "consolidado · TSX-V/SEDAR+ (USD)",
+      "fundamentos": {
+        "deuda": {
+          "valor": "Sin deuda bancaria · pasivos US$ 21.4 M (incl. US$ 12 M acuerdo de metales preciosos + warrants US$ 5.4 M)",
+          "moneda": "USD",
+          "fuente": "EE.FF. interinos Q1 2026 (31-mar-2026, USD/IFRS)",
+          "verificado": true
+        },
+        "fcf": {
+          "valor": "Explorador PRE-INGRESOS: gasta caja en exploración (proyecto Cotabambas)",
+          "moneda": "USD",
+          "fuente": "EE.FF. interinos Q1 2026",
+          "verificado": true
+        },
+        "eps": {
+          "valor": "US$ -0.01 (pérdida trimestral US$ 3.5 M, dominada por revaluación de warrants)",
+          "moneda": "USD",
+          "fuente": "EE.FF. interinos Q1 2026 (280 M acciones)",
+          "verificado": true
+        },
+        "margen": {
+          "valor": "No aplica: todavía no genera ingresos (es un explorador)",
+          "moneda": "USD",
+          "fuente": "EE.FF. interinos Q1 2026",
+          "verificado": true
+        }
+      },
+      "metricas": {
+        "eps": "US$ -0.01 (trim.)",
+        "deuda": "Sin deuda bancaria"
+      },
+      "balanceDestacado": [
+        { "k": "Caja y equivalentes", "v": "US$ 1.3 M", "nota": "al 2026-03-31" },
+        { "k": "Activos de exploración", "v": "US$ 52.4 M", "nota": "proyecto Cotabambas (Cu/Au/Ag, Apurímac)" },
+        { "k": "Total activos", "v": "US$ 55.4 M" },
+        { "k": "Total pasivos", "v": "US$ 21.4 M" },
+        { "k": "Patrimonio", "v": "US$ 34.0 M", "nota": "déficit acumulado US$ 47.9 M" },
+        { "k": "Pérdida del trimestre", "v": "US$ 3.5 M" },
+        { "k": "Movimientos recientes", "v": "Colocación C$ 21 M (may-2026) · venta activo no-core US$ 5.2 M" }
+      ],
+      "catalizadores": [
+        { "texto": "Pendiente: catalizadores documentados.", "pendiente": true }
+      ],
       "_extraccion": {
-        "ok": false,
-        "motivo": "sin_documentos"
+        "ok": true,
+        "motivo": "extranjero",
+        "fuente": "Web IR (panoro.com) / SEDAR+ — Q1 2026, en dólares"
       }
     },
     {
@@ -13042,6 +13135,7 @@
       ],
       "smvId": 149388,
       "bvlNemonico": "PPX",
+      "mercado": "TSX-V (Canadá) · también BVL",
       "tipoLectura": "minera",
       "tesis": {
         "texto": "Pendiente: Jair escribe la tesis en una línea.",
@@ -13049,15 +13143,131 @@
       },
       "precio": {
         "valor": null,
-        "moneda": "PEN",
+        "moneda": "US$",
         "fuente": "BVL (en vivo)"
       },
       "perfilesTentativos": true,
       "urlXbrl": null,
-      "fundamentos": null,
+      "monedaEstados": "CAD",
+      "fundamentosFuente": "consolidado · TSX-V/SEDAR+ (dólares canadienses)",
+      "fundamentos": {
+        "deuda": {
+          "valor": "Pasivos CAD 48.0 M · patrimonio NEGATIVO CAD -9.5 M (déficit acumulado CAD -114 M)",
+          "moneda": "CAD",
+          "fuente": "EE.FF. interinos al 31-dic-2025 (CAD/IFRS)",
+          "verificado": true
+        },
+        "fcf": {
+          "valor": "Quema caja operativa; se financió con private placement de Glencore (US$ 20 M CAD)",
+          "moneda": "CAD",
+          "fuente": "EE.FF. interinos al 31-dic-2025 — flujos",
+          "verificado": true
+        },
+        "eps": {
+          "valor": "CAD -0.01 (pérdida trimestral CAD 10.1 M)",
+          "moneda": "CAD",
+          "fuente": "EE.FF. interinos al 31-dic-2025 (841.9 M acciones)",
+          "verificado": true
+        },
+        "margen": {
+          "valor": "No factura mina directo: su ingreso es el Net Profit Interest del JV 75% Callanquitas (CAD 5.3 M)",
+          "moneda": "CAD",
+          "fuente": "EE.FF. interinos al 31-dic-2025",
+          "verificado": true
+        }
+      },
+      "metricas": {
+        "eps": "CAD -0.01 (trim.)",
+        "deuda": "Patrimonio negativo CAD -9.5 M"
+      },
+      "balanceDestacado": [
+        { "k": "Caja y equivalentes", "v": "CAD 25.7 M", "nota": "al 31-dic-2025, tras Glencore US$ 20 M CAD" },
+        { "k": "Total activos", "v": "CAD 54.9 M" },
+        { "k": "Total pasivos", "v": "CAD 48.0 M" },
+        { "k": "Patrimonio (déficit)", "v": "CAD -9.5 M", "nota": "⚠ nota de going concern (negocio en marcha en duda)" },
+        { "k": "Pérdida del trimestre", "v": "CAD 10.1 M" },
+        { "k": "Net Profit Interest (JV Callanquitas)", "v": "CAD 5.3 M", "nota": "oro/plata, La Libertad, Perú" }
+      ],
+      "catalizadores": [
+        { "texto": "Pendiente: catalizadores documentados.", "pendiente": true }
+      ],
       "_extraccion": {
-        "ok": false,
-        "motivo": "sin_documentos"
+        "ok": true,
+        "motivo": "extranjero",
+        "fuente": "Web IR (ppxmining.com) / SEDAR+ — trimestre al 31-dic-2025, en dólares canadienses"
+      }
+    },
+    {
+      "ticker": "RIO",
+      "nombre": "Rio2 Limited",
+      "sector": "minas",
+      "perfiles": [
+        "apuesta"
+      ],
+      "smvId": null,
+      "bvlNemonico": null,
+      "mercado": "TSX (Canadá) — no cotiza en BVL",
+      "tipoLectura": "minera",
+      "tesis": {
+        "texto": "Pendiente: Jair escribe la tesis en una línea.",
+        "pendiente": true
+      },
+      "precio": {
+        "valor": null,
+        "moneda": "US$",
+        "fuente": "No cotiza en BVL (TSX: RIO)"
+      },
+      "perfilesTentativos": true,
+      "urlXbrl": null,
+      "monedaEstados": "USD",
+      "fundamentosFuente": "consolidado · TSX/SEDAR+ (USD)",
+      "fundamentos": {
+        "deuda": {
+          "valor": "Préstamos US$ 75 M + obligación de stream US$ 272 M + ingreso diferido US$ 176 M",
+          "moneda": "USD",
+          "fuente": "EE.FF. interinos Q1 2026 (31-mar-2026, USD/IFRS)",
+          "verificado": true
+        },
+        "fcf": {
+          "valor": "Recién produce: ingreso de operaciones mina US$ 24.6 M en Q1 2026",
+          "moneda": "USD",
+          "fuente": "EE.FF. interinos Q1 2026",
+          "verificado": true
+        },
+        "eps": {
+          "valor": "US$ 0.04 (utilidad neta US$ 22.5 M en el trimestre)",
+          "moneda": "USD",
+          "fuente": "EE.FF. interinos Q1 2026 (501.8 M acciones)",
+          "verificado": true
+        },
+        "margen": {
+          "valor": "Ingreso de mina ≈ 37% de ventas (US$ 24.6 M sobre US$ 65.9 M)",
+          "moneda": "USD",
+          "fuente": "EE.FF. interinos Q1 2026",
+          "verificado": true
+        }
+      },
+      "metricas": {
+        "eps": "US$ 0.04 (trim.)",
+        "margen": "≈ 37% (ingreso mina/ventas)"
+      },
+      "balanceDestacado": [
+        { "k": "Ingresos del trimestre", "v": "US$ 65.9 M", "nota": "primer trimestre con producción (antes US$ 0)" },
+        { "k": "Ingreso de operaciones mina", "v": "US$ 24.6 M" },
+        { "k": "Utilidad neta del trimestre", "v": "US$ 22.5 M", "nota": "EPS US$ 0.04" },
+        { "k": "Caja y equivalentes", "v": "US$ 93.1 M", "nota": "al 2026-03-31" },
+        { "k": "Total activos", "v": "US$ 1,220 M", "nota": "propiedades mineras US$ 1,021 M (salto por Condestable)" },
+        { "k": "Total pasivos", "v": "US$ 883 M" },
+        { "k": "Patrimonio", "v": "US$ 337 M" },
+        { "k": "Activos", "v": "Oro Fenix (Atacama, Chile) + compra de Cía. Minera Condestable (cobre, Perú)" }
+      ],
+      "catalizadores": [
+        { "texto": "Pendiente: catalizadores documentados.", "pendiente": true }
+      ],
+      "_extraccion": {
+        "ok": true,
+        "motivo": "extranjero",
+        "fuente": "Web IR (rio2.com.pe) / SEDAR+ — Q1 2026, en dólares"
       }
     }
   ]

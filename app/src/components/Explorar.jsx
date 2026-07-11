@@ -5,6 +5,7 @@ import tipsData from '../data/tips.json'
 import { precioDe, pagaDividendos, yieldNumerico, historicoDe } from '../lib/finanzas'
 import { Reveal } from '../lib/anim'
 import { useFavoritos, alternarFavorito } from '../lib/favoritos'
+import RelojPrecios from './RelojPrecios'
 
 // Explorador: buscador + filtros + orden sobre las 48 empresas, y selección
 // de 2 para el comparador. Solo hechos (precio, yield, liquidez) — sin ranking
@@ -93,6 +94,8 @@ export default function Explorar({ onVerEmpresa, onComparar }) {
           Busca, filtra y elige 2 para compararlas lado a lado. Todo para{' '}
           <strong>estudiar</strong> — no es recomendación.
         </p>
+
+        <RelojPrecios />
 
         <input
           className="explorar-busqueda"
@@ -183,9 +186,13 @@ export default function Explorar({ onVerEmpresa, onComparar }) {
                   )}
                 </div>
                 <div className="explorar-derecha">
-                  {px?.precio != null && (
-                    <span className="muted">{px.moneda} {px.precio}</span>
-                  )}
+                  <span className="explorar-precio">
+                    {px?.precio != null ? (
+                      <>{px.moneda} <strong>{px.precio}</strong></>
+                    ) : (
+                      <span className="muted">Sin cotización</span>
+                    )}
+                  </span>
                   <button
                     className={'btn-estrella' + (favoritos.includes(e.ticker) ? ' on' : '')}
                     title={favoritos.includes(e.ticker) ? 'Quitar de mi lista' : 'Guardar en mi lista'}

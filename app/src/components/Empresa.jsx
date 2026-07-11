@@ -18,6 +18,7 @@ import HechosImportancia from './HechosImportancia'
 import RelojDatos from './RelojDatos'
 import Sentinel from './Sentinel'
 import DocumentosOficiales from './DocumentosOficiales'
+import NoticiasExtranjero from './NoticiasExtranjero'
 import ProduccionMinera from './ProduccionMinera'
 import { CountUp, Reveal } from '../lib/anim'
 import { useFavoritos, alternarFavorito } from '../lib/favoritos'
@@ -234,7 +235,9 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
 
         {/* Fundamentos */}
         <Reveal>
-          <div className="seccion-titulo">Fundamentos · <Glosado text="individual" /> (<Glosado text="SMV" />)</div>
+          <div className="seccion-titulo">Fundamentos · {e.fundamentosFuente
+            ? <Glosado text={e.fundamentosFuente} />
+            : <><Glosado text="individual" /> (<Glosado text="SMV" />)</>}</div>
           {f ? (
             <div className="grid-fund">
               <Valor dato={f.deuda} etiqueta="Deuda" />
@@ -338,6 +341,9 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
 
         {/* Hechos de Importancia: comunicados oficiales SMV/BVL (hechos.json) */}
         <Reveal><HechosImportancia ticker={e.ticker} /></Reveal>
+
+        {/* 📰 Noticias de la web oficial (extranjeras: Rio2 no tiene Hechos BVL) */}
+        <Reveal><NoticiasExtranjero ticker={e.ticker} /></Reveal>
 
         {/* 🛰️ Sentinel: suelta el PDF de un hecho y te dice si pinta buena o mala */}
         <Reveal><Sentinel ticker={e.ticker} /></Reveal>
