@@ -243,6 +243,10 @@ export function buscarEnBiblioteca(pregunta, k = 3) {
     if (porDoc[p.doc.id] <= 2) top.push(p)
     if (top.length >= k) break
   }
+  ultimaDiag = {
+    vivos: grupos.filter((_, i) => dfs[i] > 0).map((g) => g[0]),
+    muertos: grupos.filter((_, i) => dfs[i] === 0).map((g) => g[0]),
+  }
   // rastro para "¿cómo lo supiste?" (explicación del razonamiento, trazable)
   anotarRazonamiento({
     tipo: 'busqueda', pregunta,
@@ -370,6 +374,35 @@ export async function recuperarEvidencia(pregunta, k = 15, onProgreso) {
 }
 
 export const SIN_RESPUESTA = 'No encontré esa información en los documentos.'
+
+// Respuesta HONESTA y matizada cuando no hay un dato que dar. Distingue:
+//  (a) biblioteca vacía / nada relevante en ningún lado → el "No encontré…" seco;
+//  (b) SÍ revisé documentos con menciones relacionadas pero el dato puntual no
+//      está → lo digo explícito (pedido de Jair: no un "no sé" genérico).
+// `queBuscaba` (opcional) = el indicador concreto que se buscó (ej. "EBITDA").
+function sinDato(queBuscaba = null) {
+  if (!docs.length) return { texto: SIN_RESPUESTA, sinRespuesta: true }
+  const diag = ultimaDiag
+  const hayPistas = diag && diag.vivos.length > 0
+  const nDocs = docs.length
+  // "tu documento" (1) vs "tus 3 documentos" (varios) — gramática correcta
+  const cuantos = nDocs === 1 ? 'tu documento' : `tus ${nDocs} documentos`
+  // nada relacionado aparece siquiera → sin fragmento relevante
+  if (!queBuscaba && (!diag || diag.vivos.length === 0)) {
+    return { texto: SIN_RESPUESTA, sinRespuesta: true }
+  }
+  const lineas = []
+  if (queBuscaba) {
+    lineas.push(`Revisé ${cuantos} y ${nDocs === 1 ? 'no menciona' : 'ninguno menciona'} ${queBuscaba} con una cifra. Esa información no está presente en lo que cargaste — no la invento.`)
+  } else if (hayPistas) {
+    lineas.push(`Revisé ${cuantos}: aparecen menciones de ${diag.vivos.slice(0, 4).join(', ')}, pero el dato puntual que preguntas no está escrito ahí. No lo invento.`)
+    if (diag.muertos.length) lineas.push(`De lo que preguntaste, no encontré nada sobre: ${diag.muertos.slice(0, 4).join(', ')}.`)
+  } else {
+    return { texto: SIN_RESPUESTA, sinRespuesta: true }
+  }
+  lineas.push('Si crees que sí está, prueba con otras palabras o revisa que el documento correcto esté cargado 📚.')
+  return { texto: lineas.join('\n'), sinDato: true }
+}
 
 // ── el ANALISTA: métricas financieras con cita ────────────────────────────
 
@@ -526,6 +559,10 @@ function lineaConfianza({ fuentes = 1, cobertura = null, contradiccion = false, 
 let ultimoRazonamiento = null
 const anotarRazonamiento = (r) => { ultimoRazonamiento = r }
 
+// diagnóstico de la última búsqueda: qué términos SÍ viven en los documentos
+// y cuáles no aparecen ni una vez (distingue "no está el dato" de "no hay nada")
+let ultimaDiag = null
+
 export function explicarRazonamiento() {
   const r = ultimoRazonamiento
   if (!r) return null
@@ -586,7 +623,8 @@ const lineaCita = (doc, chunk) => `   📎 ${cita(doc, chunk)}`
 
 export function respuestaBusqueda(pregunta) {
   const top = buscarEnBiblioteca(pregunta, esCorto() ? 1 : 3) // preferencia de formato
-  if (!top.length) return { texto: SIN_RESPUESTA, sinRespuesta: true }
+  // sin match: si había menciones relacionadas lo digo explícito; si no, el seco
+  if (!top.length) return sinDato()
   const grupos = gruposDe(pregunta)
   const lineas = ['Esto es lo que dicen tus documentos (textual, con su fuente):']
   for (const { doc, chunk } of top) {
@@ -660,7 +698,8 @@ export function respuestaMetrica(pregunta) {
       }
     }
   }
-  if (!lineas.length) return { texto: SIN_RESPUESTA, sinRespuesta: true }
+  // pidió un indicador que NINGÚN documento trae: lo digo explícito (revisé y no está)
+  if (!lineas.length) return sinDato(pedidas.map((m) => m.nombre.toLowerCase()).join(' ni '))
   anotarRazonamiento({
     tipo: 'metricas', pregunta,
     docsRevisados: docs.length,
