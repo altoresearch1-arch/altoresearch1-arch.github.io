@@ -2,9 +2,18 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
+// Momento del build en hora de Perú (America/Lima, UTC-5 todo el año). El robot
+// solo reconstruye/despliega cuando los datos REALMENTE cambiaron, así que este
+// sello ≈ "última vez que el robot trajo datos nuevos". Formato ISO local
+// "YYYY-MM-DD HH:mm:ss" gracias al locale sueco (sv-SE).
+const HORA_BUILD = new Date().toLocaleString('sv-SE', { timeZone: 'America/Lima' })
+
 // base relativa para que funcione hospedado en GitHub Pages / Netlify / subcarpeta
 export default defineConfig({
   base: './',
+  define: {
+    __BUILD_TIME__: JSON.stringify(HORA_BUILD),
+  },
   build: {
     rollupOptions: {
       output: {

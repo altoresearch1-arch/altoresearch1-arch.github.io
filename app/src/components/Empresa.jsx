@@ -15,6 +15,7 @@ import Disclaimer from './Disclaimer'
 import Sparkline from './Sparkline'
 import Termometro from './Termometro'
 import HechosImportancia from './HechosImportancia'
+import RelojDatos from './RelojDatos'
 import Sentinel from './Sentinel'
 import DocumentosOficiales from './DocumentosOficiales'
 import ProduccionMinera from './ProduccionMinera'
@@ -331,6 +332,9 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
             )}
           </Reveal>
         )}
+
+        {/* 🕐 Reloj: cuándo vuelve a revisar el robot (hechos + BEM) + última actualización */}
+        <Reveal><RelojDatos /></Reveal>
 
         {/* Hechos de Importancia: comunicados oficiales SMV/BVL (hechos.json) */}
         <Reveal><HechosImportancia ticker={e.ticker} /></Reveal>
