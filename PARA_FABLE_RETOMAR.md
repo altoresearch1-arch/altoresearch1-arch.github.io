@@ -16,6 +16,12 @@ Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTAD
 > contradicciones, cronología, riesgos, resumen para inversionistas). Citas: `Doc.pdf ·
 > Página 12`. Si no está: "No encontré esa información en los documentos." Atlas: chips e
 > intents nuevos; Sentinel: multi-archivo + panel 📚.
+> **+ "NO ESTÁ" MATIZADO (mismo día)**: `sinDato()` en biblioteca.js distingue 3 casos —
+> (a) biblioteca vacía / nada relevante → "No encontré esa información en los documentos."
+> (seco); (b) pediste un INDICADOR que ningún doc trae → "Revisé tu documento y no menciona
+> EBITDA con una cifra. Esa información no está presente…"; (c) hay menciones relacionadas
+> pero no el dato puntual → lo dice con las pistas que sí vio. Reserva el "no encontré" seco
+> solo para (a). Pedido de Jair: no dar un "no sé" genérico cuando SÍ revisó el documento.
 > **+ 10 CAPACIDADES (mismo día, 3ª tanda de Jair)**: mapa completo en
 > ARQUITECTURA_BIBLIOTECA.md §4 (módulos = agentes, justificado). Nuevo: 📏 CONFIANZA con
 > motivos (lineaConfianza: nº fuentes/cobertura/contradicción/OCR/período), 🧾 "¿cómo lo
