@@ -7,6 +7,18 @@ Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTAD
 
 ---
 
+## ⚡ NUEVO 10-jul ronda 9 (Fable): 3 PULIDOS DE UI (pedido de Jair)
+> (1) **Advertencia de límites en Sentinel**: componente `AvisoLimitaciones` (Sentinel.jsx,
+> en los 3 estados: espera/biblioteca/informe) + intent en Atlas — dice claro que NO lee
+> gráficos/imágenes (son dibujos; pesca números sueltos pero no interpreta la curva), que las
+> tablas SÍ, y recomienda leer el documento igual. (2) **Actualizaciones plegable**: la
+> cabecera es botón, GUARDADA (colapsada) por defecto con contador "(8)", recuerda la
+> elección en localStorage `alto-actualizaciones-abiertas`. (3) **Explorar aleatorio**: la 1ª
+> empresa ya no es siempre Nexa — `mezcla` (Math.random por visita, useMemo []) desempata
+> dentro de cada sector; sigue minas primero pero cambia cuál. Verificado en navegador
+> (PPX→SCCO, Actualizaciones colapsa/despliega, aviso renderiza). Va DIRECTO a main (PR #1
+> sigue aparte, solo con el "no encontré" matizado).
+
 ## ⚡ NUEVO 10-jul ronda 8 (Fable): 📚 LA BIBLIOTECA (multi-documento estilo NotebookLM)
 > Pedido de Jair (prompt RAG profesional). **Diseño completo: `ARQUITECTURA_BIBLIOTECA.md`**
 > (RAG 100% en el navegador — sin backend por cero-costos/privacidad; Qdrant si algún día hay

@@ -15,6 +15,21 @@ import { redactarLectura } from '../lib/redactor'
 
 const ICONO_TIPO = { pdf: '📄', imagen: '📷', docx: '📝', xlsx: '📊', pptx: '📽', txt: '🗒' }
 
+// Advertencia honesta de lo que Sentinel NO puede leer (pedido de Jair):
+// los GRÁFICOS (barras, tortas, líneas) son imágenes — se leen sus rótulos y
+// números sueltos, pero no "entiende" la curva. Recomienda leer igual el doc.
+function AvisoLimitaciones() {
+  return (
+    <p className="sentinel-limites muted">
+      ⚠ <b>Lo que Sentinel no lee bien:</b> los <b>gráficos e imágenes</b> (barras, tortas, curvas)
+      son dibujos, no texto — puedo pescar los números y rótulos sueltos, pero no interpreto la
+      tendencia que muestran. Las <b>tablas</b> sí las leo (Excel completo, y tablas de texto en PDF).
+      Por eso, aunque te dé mi lectura, <b>abre y lee tú también el documento</b>: soy una ayuda para
+      orientarte, no un reemplazo de leerlo.
+    </p>
+  )
+}
+
 const MENSAJE_ERROR = {
   OCR_SIN_INTERNET: 'Para leer fotos o escaneados necesito internet: el motor de OCR se descarga de un CDN la primera vez. Conéctate e inténtalo de nuevo.',
   OCR_ILEGIBLE: 'Pasé la imagen por OCR pero no logré descifrar texto legible. Prueba con una foto más nítida, derecha y con buena luz.',
@@ -165,6 +180,7 @@ export default function Sentinel({ ticker }) {
             📎 Suelta aquí el PDF o la foto del hecho de importancia
             <span className="muted">o toca para elegir — PDF · JPG · Word · Excel · PPT · TXT (varios a la vez = 📚 biblioteca)</span>
           </div>
+          <AvisoLimitaciones />
         </>
       )}
 
@@ -238,6 +254,7 @@ export default function Sentinel({ ticker }) {
           <button className="btn btn-fantasma" onClick={() => { vaciarBiblioteca(); setBibDocs([]); setAvisoBib(''); setEstado('espera') }}>
             🗑 Vaciar la biblioteca
           </button>
+          <AvisoLimitaciones />
         </div>
       )}
 
@@ -296,6 +313,7 @@ export default function Sentinel({ ticker }) {
             📎 Leer otro documento
           </button>
 
+          <AvisoLimitaciones />
           <p className="muted" style={{ fontSize: 11.5, marginBottom: 0 }}>
             Lectura automática por palabras y patrones (beta): resalta y organiza, no reemplaza
             leer el documento ni es recomendación. El archivo se procesó en tu equipo y no se subió a ningún lado.

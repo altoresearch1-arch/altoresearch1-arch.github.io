@@ -45,6 +45,16 @@ export default function App() {
   const [origenEmpresa, setOrigenEmpresa] = useState('inicio')
   const [compararTickers, setCompararTickers] = useState(null)
   const [apoyoAbierto, setApoyoAbierto] = useState(false)
+  // Panel de Actualizaciones: plegable, y GUARDADO (colapsado) por defecto
+  // (pedido de Jair). Recuerda la elección del usuario entre visitas.
+  const [actualizAbiertas, setActualizAbiertas] = useState(() => {
+    try { return localStorage.getItem('alto-actualizaciones-abiertas') === '1' } catch { return false }
+  })
+  const toggleActualiz = () => setActualizAbiertas((v) => {
+    const n = !v
+    try { localStorage.setItem('alto-actualizaciones-abiertas', n ? '1' : '0') } catch { /* sin storage */ }
+    return n
+  })
 
   // el listener de hashchange necesita leer las respuestas actuales
   const respuestasRef = useRef(null)
@@ -147,17 +157,31 @@ export default function App() {
                   las mejoras REALES de la app, editables en config.json */}
               {config.actualizaciones?.items?.length > 0 && (
                 <div className="mensaje-dia">
-                  <div className="mensaje-dia-cab">
-                    🆕 Actualizaciones
+                  <button
+                    className="mensaje-dia-cab actualizaciones-toggle"
+                    onClick={toggleActualiz}
+                    aria-expanded={actualizAbiertas}
+                  >
+                    <span>
+                      🆕 Actualizaciones
+                      {!actualizAbiertas && (
+                        <span className="actualizaciones-cuenta">
+                          {' '}({config.actualizaciones.items.length})
+                        </span>
+                      )}
+                    </span>
                     <span className="mensaje-dia-fecha">
                       {fechaLegible(config.actualizaciones.items[0].fecha)}
+                      <span className="actualizaciones-flecha">{actualizAbiertas ? '▲' : '▼'}</span>
                     </span>
-                  </div>
-                  <ul className="actualizaciones-lista">
-                    {config.actualizaciones.items.slice(0, 6).map((it, i) => (
-                      <li key={i}>{it.texto}</li>
-                    ))}
-                  </ul>
+                  </button>
+                  {actualizAbiertas && (
+                    <ul className="actualizaciones-lista">
+                      {config.actualizaciones.items.slice(0, 6).map((it, i) => (
+                        <li key={i}>{it.texto}</li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               )}
               <div className="hero">

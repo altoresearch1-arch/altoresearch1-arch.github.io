@@ -638,6 +638,16 @@ export function responder(pregunta) {
     if (/(cronolog|linea de tiempo)/.test(q)) {
       return conChipsBib(cronologiaDocumentos())
     }
+    // límite honesto: los gráficos/imágenes no se interpretan (pedido de Jair)
+    if (/(grafico|grafica|figura|imagen|diagrama|chart)/.test(q)) {
+      return conChipsBib({
+        texto: [
+          'Con los gráficos tengo un límite honesto: son **imágenes**, no texto. Puedo leer los números y rótulos que estén escritos cerca, pero **no “veo” la curva ni interpreto la tendencia** que dibuja un gráfico de barras o líneas.',
+          'Las **tablas** sí las leo bien (un Excel entero, o una tabla de texto dentro de un PDF).',
+          'Mi consejo: **abre el gráfico y léelo tú** — yo te ayudo con las cifras y el texto alrededor, pero para la foto completa nada reemplaza tu ojo sobre el documento.',
+        ].join('\n'),
+      })
+    }
     if (/riesgos?.{0,25}(documentos|archivos|biblioteca|mencionan|segun)/.test(q)) {
       return conChipsBib(riesgosDocumentos())
     }

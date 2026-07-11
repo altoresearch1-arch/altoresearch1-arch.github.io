@@ -28,6 +28,16 @@ export default function Explorar({ onVerEmpresa, onComparar }) {
   const [paraComparar, setParaComparar] = useState([])
   const favoritos = useFavoritos()
 
+  // Orden aleatorio FIJO por visita (una sola vez al entrar): así la primera
+  // empresa que ves cambia cada vez —antes siempre salía Nexa— sin re-barajar
+  // mientras filtras o buscas. Se usa como desempate dentro de cada sector.
+  const mezcla = useMemo(() => {
+    const m = {}
+    for (const e of empresasData.empresas) m[e.ticker] = Math.random()
+    return m
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const sectores = ORDEN_SECTORES.filter((s) =>
     empresasData.empresas.some((e) => e.sector === s)
   )
@@ -49,12 +59,15 @@ export default function Explorar({ onVerEmpresa, onComparar }) {
         (a, b) => (yieldNumerico(b.ticker) ?? -1) - (yieldNumerico(a.ticker) ?? -1)
       )
     } else {
-      lista = [...lista].sort(
-        (a, b) => ORDEN_SECTORES.indexOf(a.sector) - ORDEN_SECTORES.indexOf(b.sector)
-      )
+      // por sector, pero DENTRO de cada sector el orden es aleatorio por visita
+      // (antes quedaba fijo el de empresas.json → siempre Nexa primero)
+      lista = [...lista].sort((a, b) => {
+        const d = ORDEN_SECTORES.indexOf(a.sector) - ORDEN_SECTORES.indexOf(b.sector)
+        return d !== 0 ? d : mezcla[a.ticker] - mezcla[b.ticker]
+      })
     }
     return lista
-  }, [busqueda, sectorSel, soloDividendos, soloLiquidas, soloGuardadas, favoritos, orden])
+  }, [busqueda, sectorSel, soloDividendos, soloLiquidas, soloGuardadas, favoritos, orden, mezcla])
 
   const alternarComparar = (ticker) => {
     setParaComparar((sel) => {
