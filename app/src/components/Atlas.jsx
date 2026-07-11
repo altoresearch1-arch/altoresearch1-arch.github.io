@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { responder, saludoSentinel, saludoBiblioteca, marcarBibliotecaVista, PREGUNTAS_INICIALES } from '../lib/cerebro'
+import { responder, responderAnalitico, necesitaAnalisis, saludoSentinel, saludoBiblioteca, marcarBibliotecaVista, PREGUNTAS_INICIALES } from '../lib/cerebro'
 import { marcarContextoVisto } from '../lib/sentinel'
 import empresasData from '../data/empresas.json'
 
@@ -29,6 +29,7 @@ export default function Atlas({ onVerEmpresa }) {
   })
   const [texto, setTexto] = useState('')
   const [pensando, setPensando] = useState(false)
+  const [progreso, setProgreso] = useState(null) // mensaje mientras el razonador trabaja
   const finRef = useRef(null)
   const inputRef = useRef(null)
 
@@ -45,6 +46,16 @@ export default function Atlas({ onVerEmpresa }) {
     setTexto('')
     setMensajes((prev) => [...prev, { de: 'usuario', texto: limpia }])
     setPensando(true)
+    // 🧠 pregunta analítica → EL RAZONADOR (paso 2 del RAG). Es async: puede
+    // usar el modelo semántico sobre tus documentos, con progreso a la vista.
+    if (necesitaAnalisis(limpia)) {
+      setProgreso('razonando sobre la evidencia…')
+      responderAnalitico(limpia, (msg) => setProgreso(msg))
+        .then((resp) => setMensajes((prev) => [...prev, { de: 'atlas', ...resp }]))
+        .catch(() => setMensajes((prev) => [...prev, { de: 'atlas', texto: 'Se me complicó razonar eso ahora mismo (quizá el modelo no llegó a cargar). Intenta de nuevo, o pregúntame algo más puntual.' }]))
+        .finally(() => { setPensando(false); setProgreso(null) })
+      return
+    }
     // pequeña pausa "de pensar": la respuesta es instantánea (es local),
     // pero sin pausa el chat se siente irreal
     setTimeout(() => {
@@ -119,7 +130,9 @@ export default function Atlas({ onVerEmpresa }) {
           <div className="ya-msg ya-yachay">
             <span className="ya-quien">🧠 Atlas</span>
             <div className="ya-burbuja ya-pensando">
-              <span className="ya-punto" /><span className="ya-punto" /><span className="ya-punto" />
+              {progreso
+                ? <span className="ya-progreso muted">{progreso}</span>
+                : <><span className="ya-punto" /><span className="ya-punto" /><span className="ya-punto" /></>}
             </div>
           </div>
         )}

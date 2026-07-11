@@ -1,5 +1,5 @@
 {
- "_comment": "Conocimiento CURADO de los informes propios de ALTO Research (Desktop/INFORMES REALIZADOS ALTO RESEARCH, Q1 2026, datos SMV verificados a mano por Jair). Lo usa Atlas (lib/cerebro.js) para responder 'cuéntame más'. REGLA #9: aquí NO van precios objetivo ni recomendaciones de compra/venta de los informes — solo hechos verificados y banderas de gobernanza, que educan. Editable por Jair.",
+ "_comment": "Conocimiento CURADO de los informes propios de ALTO Research (Desktop/INFORMES REALIZADOS ALTO RESEARCH, Q1 2026, datos SMV verificados a mano por Jair). Lo usa Atlas (lib/cerebro.js) para responder 'cuéntame más'. REGLA #9: aquí NO van precios objetivo ni recomendaciones de compra/venta de los informes — solo hechos verificados y banderas de gobernanza, que educan. Editable por Jair. Algunas entradas (p.ej. extranjeras que no reportan a la SMV) llevan campos EXTRA que Atlas sabe leer: 'crudo' (veredicto a lo crudo, buena/mala noticia — NO es recomendacion de compra), 'analisis' (desglose hecho por hecho al estilo analista: tipo, que paso, a favor, en contra, incertidumbre, cifras) y 'preguntas' (chips sugeridos). Modelo de estilo: una conversacion con NotebookLM sobre los PDF de PPX (jul-2026), verificada contra los comunicados oficiales.",
  "conocimiento": {
   "BVN": {
    "fuente": "Informe ALTO BVN Q1 2026 (may-2026, SMV individual)",
@@ -9,6 +9,51 @@
     "En Q1 2026 su ganancia por acción creció +140% (US$ 1.32) con flujo de caja libre de US$ 309M — trimestre brillante por el oro y la plata caros.",
     "Riesgos que vigila ALTO: el precio del oro/plata, su historial de conflictos sociales y el capex de San Gabriel.",
     "Ojo: BVN no es 'individual pura' — parte de su valor está en participaciones no consolidadas (Cerro Verde, El Brocal)."
+   ],
+   "crudo": {
+    "veredicto": "buenas",
+    "texto": "Viene en su mejor momento: Q1 2026 fue brillante (ganancia por acción +140%, mucho flujo de caja) por el oro y la plata caros, y en 2026 arranca su mina estrella San Gabriel. Lo que hay que vigilar: es cíclica (depende del precio de los metales), tiene historial de conflictos sociales y el capex de San Gabriel. Sus últimos comunicados (cambio de estatutos, Form 20-F) son trámite, no drama. «Va bien» NO es «compra»."
+   },
+   "analisis": [
+    {
+     "titulo": "Q1 2026 brillante por el oro y la plata",
+     "tipo": "Resultados financieros",
+     "impacto": "positivo",
+     "que": "La ganancia por acción creció +140% con un fuerte flujo de caja libre en el primer trimestre.",
+     "positivo": "El oro y la plata caros le dispararon el resultado.",
+     "negativo": "Es un gran trimestre montado sobre precios altos que no controla.",
+     "incertidumbre": "Si el oro/plata sostienen estos niveles el resto del año.",
+     "cifras": "EPS US$1.32 (+140%); flujo de caja libre US$309M (Q1 2026).",
+     "cronologia": "Q1 2026 (aprobado el 29-abr-2026)."
+    },
+    {
+     "titulo": "Arranca San Gabriel (su catalizador estrella)",
+     "tipo": "Producción · catalizador",
+     "impacto": "positivo",
+     "que": "Su mina de oro San Gabriel arranca producción en 2026.",
+     "positivo": "Nueva fuente de producción y de caja para los próximos años.",
+     "negativo": "Los arranques de mina suelen traer sobrecostos y curvas de aprendizaje; hay que vigilar el capex.",
+     "incertidumbre": "Cumplir plazos y presupuesto del arranque.",
+     "cifras": "Meta de ~150 mil onzas de oro al año.",
+     "cronologia": "Arranque previsto en 2026."
+    },
+    {
+     "titulo": "Parte de su valor está en participaciones",
+     "tipo": "Estructura",
+     "impacto": "neutro",
+     "que": "Buena parte de su valor está en participaciones no consolidadas: Cerro Verde (19.58%) y El Brocal (61.43%).",
+     "positivo": "Le da exposición a una de las minas de cobre más grandes del mundo (Cerro Verde) y a la plata de El Brocal.",
+     "negativo": "Ese valor no aparece entero en sus estados individuales — es fácil subestimarla o malinterpretarla.",
+     "incertidumbre": "Cuántos dividendos le lleguen de esas asociadas.",
+     "cifras": "Cerro Verde 19.58%; El Brocal 61.43%.",
+     "cronologia": "Estructura vigente."
+    }
+   ],
+   "preguntas": [
+    "¿Es buena o mala noticia lo de Buenaventura?",
+    "Desglosa Buenaventura hecho por hecho",
+    "¿Buenaventura paga dividendos?",
+    "¿Qué riesgos tiene Buenaventura?"
    ]
   },
   "NEXAPEC1": {
@@ -18,7 +63,53 @@
     "En Q1 2026: ventas US$ 186.7M y utilidad neta US$ 65.1M (+266%) — el zinc caro le cambió la cara.",
     "Vive del zinc y la plata: cuando esos metales suben, Nexa vuela; cuando bajan, sufre.",
     "Riesgos que vigila ALTO: precio del zinc, conflictos sociales y la ley del mineral que declina con los años.",
-    "Julio 2026: Boliden (Suecia) confirmó CONVERSACIONES para comprarle a Votorantim su control (~65%) de la matriz Nexa (~US$1,300M). Sin acuerdo cerrado aún — es conversación, no hecho."
+    "Julio 2026: Boliden (Suecia) confirmó CONVERSACIONES para comprarle a Votorantim su control (~65%) de la matriz Nexa (~US$1,300M). Sin acuerdo cerrado aún — es conversación, no hecho.",
+    "Reportes de derivados (rutina contable): usa «Zero Cost Collar» para asegurar precios de venta de plata y oro, no para especular. Al 30-jun-2026 tenía cubiertas 623,015 oz de plata y 338 oz de oro; según el reporte, esos contratos acumulaban +US$5.33M en el año."
+   ],
+   "crudo": {
+    "veredicto": "mixtas",
+    "texto": "Lo más gordo ahora es la posible venta de su matriz: Boliden (Suecia) negocia comprarle a Votorantim el control (~65%) de Nexa (se habla de ~US$1,300M). Todavía es CONVERSACIÓN, sin acuerdo cerrado — de esas noticias que hay que seguir de cerca porque podrían cambiar quién manda. Operativamente viene bien (el zinc caro le disparó la utilidad en Q1) y sus reportes de derivados son rutina contable, no drama. Ojo: «hay que seguirla» NO es «compra»."
+   },
+   "analisis": [
+    {
+     "titulo": "Posible cambio de control: Boliden negocia comprar a Votorantim",
+     "tipo": "Fusiones y adquisiciones · control",
+     "impacto": "neutro",
+     "que": "Boliden AB anunció conversaciones para comprarle a Votorantim su participación de control (~65%) en la matriz Nexa Resources; Nexa lo confirmó el 2-jul-2026.",
+     "positivo": "Un operador minero global (Boliden) como dueño podría traer disciplina, tecnología y respaldo financiero.",
+     "negativo": "Todo cambio de control abre incertidumbre de estrategia, y el accionista minoritario local suele quedar a la expectativa.",
+     "incertidumbre": "Es CONVERSACIÓN: no hay acuerdo, ni precio ni fecha definidos.",
+     "cifras": "Partes: Votorantim S.A. y Boliden AB; ~65% de la matriz; se menciona ~US$1,300M.",
+     "cronologia": "Comunicado el 2-jul-2026."
+    },
+    {
+     "titulo": "Coberturas de plata y oro (Zero Cost Collar)",
+     "tipo": "Derivados · cobertura",
+     "impacto": "neutro",
+     "que": "Reporte mensual de su posición en derivados al 30-jun-2026: usa collares sin costo para fijar bandas de precio de venta futura, no para especular.",
+     "positivo": "Le da previsibilidad a sus ingresos si el metal baja.",
+     "negativo": "Si el metal sube fuerte, el collar le pone un techo a la ganancia.",
+     "incertidumbre": "El resultado final depende del precio del metal al vencimiento de cada contrato.",
+     "cifras": "Cubiertas 623,015 oz de plata y 338 oz de oro; resultado acumulado del año con estos contratos: +US$5.33M (según el reporte).",
+     "cronologia": "Posición al 30-jun-2026 (reportada el 8-jul-2026)."
+    },
+    {
+     "titulo": "Q1 2026 apalancado al zinc",
+     "tipo": "Resultados financieros",
+     "impacto": "positivo",
+     "que": "En el primer trimestre de 2026 la utilidad neta saltó con fuerza gracias al zinc y la plata caros.",
+     "positivo": "Cuando el zinc y la plata suben, Nexa vuela.",
+     "negativo": "La otra cara del mismo motor: cuando esos metales bajan, sufre igual de rápido (es cíclica).",
+     "incertidumbre": "El ciclo de precios del zinc/plata, que la empresa no controla.",
+     "cifras": "Ventas US$186.7M y utilidad neta US$65.1M (+266%) en Q1 2026.",
+     "cronologia": "Primer trimestre de 2026."
+    }
+   ],
+   "preguntas": [
+    "¿Es buena o mala noticia lo de Nexa?",
+    "Desglosa Nexa hecho por hecho",
+    "¿Qué es un Zero Cost Collar?",
+    "¿Qué riesgos tiene Nexa?"
    ]
   },
   "MINSURI1": {
@@ -64,7 +155,53 @@
     "Opera la mina Yauricocha (Yauyos, Lima; cobre/plomo/zinc). En 2025 cambió de dueño: el grupo peruano ALPAYANA compró a su matriz canadiense Sierra Metals.",
     "Q1 2026 de récord: ventas +76.6% (US$ 92.1M), utilidad neta +112% (US$ 29.5M), margen bruto 59.5% y ROE ~47% — el más alto que midió ALTO en el sector.",
     "Su caja se TRIPLICÓ en el trimestre (US$ 69M) y su deuda financiera es prácticamente cero.",
-    "Banderas que vigila ALTO: le tiene prestados US$ 66M a su matriz (~25% del patrimonio), UN cliente concentra 61% de las ventas, y hay una OPA pendiente que solo aplica a las acciones comunes (MINCORC1), no a las de inversión."
+    "Banderas que vigila ALTO: le tiene prestados US$ 66M a su matriz (~25% del patrimonio), UN cliente concentra 61% de las ventas, y hay una OPA pendiente que solo aplica a las acciones comunes (MINCORC1), no a las de inversión.",
+    "Marzo 2026: el Sindicato Único de Trabajadores Mineros inició una HUELGA (comunicada el 25-mar-2026) — un riesgo laboral que puede frenar producción. En la Junta del 30-mar aprobó la memoria y estados 2025 y acordó reparto de utilidades."
+   ],
+   "crudo": {
+    "veredicto": "mixtas",
+    "texto": "Números de récord y una bandera. Por un lado, Q1 2026 fue brillante (ventas +76.6%, utilidad +112%, uno de los ROE más altos del sector) y aprobó repartir utilidades de 2025. Por otro, en marzo hubo una HUELGA del sindicato, y arrastra banderas de gobernanza (le prestó ~US$66M a su matriz, un solo cliente le compra el 61%). Máquina rentable, pero con temas de gobierno y laborales que vigilar. Nada de esto es «compra»."
+   },
+   "analisis": [
+    {
+     "titulo": "Q1 2026 de récord",
+     "tipo": "Resultados financieros",
+     "impacto": "positivo",
+     "que": "Ventas +76.6%, utilidad neta +112% y uno de los ROE más altos que midió ALTO en el sector.",
+     "positivo": "Rentabilidad altísima; su caja se triplicó en el trimestre y casi no tiene deuda.",
+     "negativo": "Está montado sobre precios de cobre/plomo/zinc altos que no controla.",
+     "incertidumbre": "Sostener el ritmo si el metal cede.",
+     "cifras": "Ventas US$92.1M (+76.6%); utilidad neta US$29.5M (+112%); ROE ~47%.",
+     "cronologia": "Q1 2026 (28-abr-2026)."
+    },
+    {
+     "titulo": "Huelga del sindicato (marzo)",
+     "tipo": "Riesgos · laboral",
+     "impacto": "negativo",
+     "que": "El Sindicato Único de Trabajadores Mineros inició una huelga, comunicada el 25-mar-2026.",
+     "positivo": null,
+     "negativo": "Una huelga frena producción y puede golpear el trimestre en que ocurre.",
+     "incertidumbre": "Duración y desenlace del conflicto laboral.",
+     "cifras": "El comunicado no cuantifica el impacto en producción.",
+     "cronologia": "25-mar-2026."
+    },
+    {
+     "titulo": "Banderas de gobernanza",
+     "tipo": "Estructura · gobernanza",
+     "impacto": "negativo",
+     "que": "Le tiene prestados ~US$66M a su matriz (Alpayana) y un solo cliente concentra el 61% de sus ventas; hay una OPA pendiente que aplica solo a las acciones comunes (MINCORC1).",
+     "positivo": "La nueva matriz peruana, Alpayana, le da respaldo local.",
+     "negativo": "Préstamos a la matriz y concentración en un cliente son riesgos clásicos para el minoritario.",
+     "incertidumbre": "Los términos de la OPA y si el préstamo a la matriz se recupera en buenas condiciones.",
+     "cifras": "Préstamo ~US$66M (~25% del patrimonio); 1 cliente = 61% de las ventas.",
+     "cronologia": "Situación al Q1 2026."
+    }
+   ],
+   "preguntas": [
+    "¿Es buena o mala noticia lo de Corona?",
+    "Desglosa Corona hecho por hecho",
+    "¿Qué riesgos tiene Corona?",
+    "¿Cómo le fue a Corona en 2025?"
    ]
   },
   "VOLCABC1": {
@@ -73,7 +210,212 @@
     "Zinc, plata y plomo en la sierra central (Yauli, Chungar, Alpamarca, Cerro de Pasco). Desde may-2024 la controla Transition Metals AG — Glencore YA NO es el controlador (error común).",
     "VOLCABC1 es acción Clase B: sin voto pero con dividendo preferencial. NO es 'acción de inversión' (otro error común).",
     "En Q1 2026 el EBITDA creció +59.4% (US$ 178.1M), pero carga deuda neta de US$ 620M — ese es SU tema: opera bien, debe mucho.",
-    "Catalizadores que vigila ALTO: mejores precios de metales y su plan de minería submarina en Cerro de Pasco."
+    "Catalizadores que vigila ALTO: mejores precios de metales y su plan de minería submarina en Cerro de Pasco.",
+    "Jun-2026: emitió US$220M ADICIONALES de sus bonos «8.500% Senior Secured Notes due 2032» (calificados B1/B+ por Moody's/Fitch), consolidándolos con los US$750M ya emitidos = una serie de US$970M. Es su tema de siempre: opera bien pero maneja MUCHA deuda cara."
+   ],
+   "crudo": {
+    "veredicto": "mixtas",
+    "texto": "Su historia de siempre: opera bien pero DEBE mucho. La novedad es que emitió US$220M más de sus bonos al 8.5% (vencen 2032), sumándolos a los US$750M que ya tenía en esa serie. Más caja/refinanciación, pero también más deuda cara que pagar. Operativamente el EBITDA viene creciendo fuerte. En crudo: la palanca (la deuda) es su gran tema, y este bono la mantiene en el centro. «Ojo con la deuda» NO es «no compres» — es dónde mirar."
+   },
+   "analisis": [
+    {
+     "titulo": "Emisión adicional de bonos por US$220M al 8.5%",
+     "tipo": "Financiamiento · deuda",
+     "impacto": "neutro",
+     "que": "Concluyó una emisión ADICIONAL de sus «8.500% Senior Secured Notes due 2032» por US$220M, que se consolidan en una serie única con los US$750M emitidos antes.",
+     "positivo": "Consigue caja / refinancia y deja una serie más grande y líquida; el mercado le compró deuda garantizada.",
+     "negativo": "8.5% es una tasa alta: es más deuda cara sobre una empresa que ya carga mucha.",
+     "incertidumbre": "Si es dinero NUEVO o refinanciación de deuda vieja cambia el efecto neto sobre su apalancamiento.",
+     "cifras": "US$220M adicionales + US$750M previos = serie de US$970M; cupón 8.500%, vencen 2032; calificación B1/B+ (Moody's/Fitch).",
+     "cronologia": "Emisión concluida al 24-jun-2026."
+    },
+    {
+     "titulo": "Opera bien, debe mucho",
+     "tipo": "Resultados · estructura financiera",
+     "impacto": "neutro",
+     "que": "El EBITDA creció con fuerza en Q1 2026, pero la empresa arrastra una deuda neta grande.",
+     "positivo": "El negocio genera caja creciente (EBITDA +59.4%).",
+     "negativo": "La deuda neta (~US$620M) es grande; buena parte del flujo operativo se va en intereses.",
+     "incertidumbre": "Los precios de zinc/plata/plomo y su plan de minería submarina en Cerro de Pasco.",
+     "cifras": "EBITDA US$178.1M (+59.4%) en Q1 2026; deuda neta ~US$620M.",
+     "cronologia": "Q1 2026."
+    }
+   ],
+   "preguntas": [
+    "¿Es buena o mala noticia lo de Volcan?",
+    "Desglosa Volcan hecho por hecho",
+    "¿Qué es la deuda neta?",
+    "¿Qué riesgos tiene Volcan?"
+   ]
+  },
+  "PPX": {
+   "fuente": "Comunicados oficiales de PPX Mining Corp. (ppxmining.com): «Operational Update / récord mensual de NPI» del 6-jul-2026 y «Resumption of Diamond Drilling» del 30-jun-2026",
+   "datos": [
+    "PPX no opera la mina directo: cobra un «Net Profit Interest» (NPI) del 75% del JV de la mina Callanquitas (oro/plata, proyecto Igor, La Libertad, Perú). Por eso su ingreso ES ese NPI, no ventas de mineral.",
+    "Mayo 2026 fue su mejor mes histórico: NPI de PEN 14.67 millones, +16.5% sobre el récord anterior (abril, PEN 12.59 M). Dos meses seguidos rompiendo récord.",
+    "En solo 5 meses de 2026 (PEN 50.56 M) ya ganó más que en TODO el 2025 completo (PEN 47.69 M). El NPI de los últimos 12 meses llegó a PEN 91.41 M, el más alto de su historia.",
+    "El motor: la veta subterránea Callanquitas Este, con leyes de oro cerca de 8.72 g/t, más precios de metales altos y control de costos.",
+    "Bandera: la construcción de su nueva planta de procesamiento tiene retrasos (dice trabajar «constructivamente» con comunidades y autoridades locales). Hasta tenerla lista, depende de plantas de terceros.",
+    "Estacionalidad: en febrero y marzo el NPI bajó porque las lluvias restringieron el envío de mineral. Su caja depende del clima.",
+    "El 30-jun-2026 reinició la perforación diamantina en Callanquitas: 4,860 m iniciales (opción a 9,810 m con una 2ª máquina), ~265 días, con RAMPERU S.A.C. contratada por su socio peruano PLP. Busca ampliar recursos de alta ley para que la mina dure más años.",
+    "⚠ Ojo al balance de la matriz (al 31-dic-2025): patrimonio NEGATIVO (déficit) y nota de «going concern». La mina genera caja récord hoy, pero la estructura financiera de la corporación sigue frágil."
+   ],
+   "crudo": {
+    "veredicto": "buenas",
+    "texto": "Sus ÚLTIMAS NOTICIAS pintan BUENAS. Operativamente la mina Callanquitas es una máquina de caja ahora mismo —récords de NPI mes tras mes— y encima están invirtiendo en perforar para que dure más años. Lo que hay que vigilar: los retrasos de la planta nueva, la dependencia del clima y que el balance de la matriz todavía está en déficit (nota de «going concern»). Ojo: «buena noticia» NO es «compra» — es solo cómo pinta lo que acaban de comunicar; qué hacer con eso lo decides tú."
+   },
+   "analisis": [
+    {
+     "titulo": "Récord histórico mensual de NPI (mayo 2026)",
+     "tipo": "Resultados financieros",
+     "impacto": "positivo",
+     "que": "PPX fijó un nuevo récord mensual de Net Profit Interest en mayo de 2026, segundo mes seguido rompiendo su propio récord.",
+     "positivo": "Superó el récord que acababa de fijar el mes anterior (abril): tendencia de crecimiento inmediata.",
+     "negativo": "El NPI depende de factores externos como el precio de los metales, que PPX no controla.",
+     "incertidumbre": "Si el precio del oro/plata y el desempeño de la planta de terceros se sostienen.",
+     "cifras": "NPI de mayo: PEN 14.67 M (+16.5% sobre el récord de abril, PEN 12.59 M).",
+     "cronologia": "Resultado de mayo 2026; comunicado el 6-jul-2026."
+    },
+    {
+     "titulo": "El acumulado de 2026 ya superó todo 2025",
+     "tipo": "Resultados financieros · comparativa",
+     "impacto": "positivo",
+     "que": "En los primeros 5 meses de 2026 el NPI acumulado ya pasó el total de todo el año 2025.",
+     "positivo": "Aceleración fuerte de la rentabilidad y la eficiencia frente al año anterior.",
+     "negativo": null,
+     "incertidumbre": "Mantener ese ritmo en los 7 meses que faltan del año.",
+     "cifras": "PEN 50.56 M (ene-may 2026) vs PEN 47.69 M (todo 2025). NPI de los últimos 12 meses: PEN 91.41 M, récord histórico.",
+     "cronologia": "Comparativa ene-may 2026 vs año calendario 2025."
+    },
+    {
+     "titulo": "Caída estacional por lluvias (febrero y marzo)",
+     "tipo": "Riesgos · operaciones",
+     "impacto": "negativo",
+     "que": "El NPI bajó en febrero y marzo de 2026 porque la temporada de lluvias restringió los envíos de mineral y se procesó menos.",
+     "positivo": null,
+     "negativo": "El flujo de caja es sensible al clima: las lluvias frenan el transporte del mineral.",
+     "incertidumbre": "Qué tan severas serán las próximas temporadas de lluvia y cuánto golpean el transporte.",
+     "cifras": "Feb y marzo fueron los meses flojos (≈ PEN 6.9 M y ≈ 7.4 M, leídos del GRÁFICO del comunicado — no del texto, tómalos como aproximados).",
+     "cronologia": "Febrero y marzo de 2026."
+    },
+    {
+     "titulo": "Mineral de alta ley en la veta Callanquitas Este",
+     "tipo": "Producción · geología",
+     "impacto": "positivo",
+     "que": "Extracción continua en la veta Callanquitas Este manteniendo leyes de oro altas.",
+     "positivo": "La ley alta de oro es el principal motor de los márgenes de utilidad.",
+     "negativo": null,
+     "incertidumbre": "Continuidad de la veta y cómo varía la ley en zonas más profundas o laterales.",
+     "cifras": "Ley promedio de oro cerca de 8.72 g/t.",
+     "cronologia": "Reportado en el comunicado del 6-jul-2026."
+    },
+    {
+     "titulo": "Retrasos en la nueva planta de procesamiento",
+     "tipo": "Construcción · permisos · comunidades",
+     "impacto": "negativo",
+     "que": "La construcción de la planta propia de procesamiento tiene retrasos.",
+     "positivo": "La empresa dice estar trabajando «constructivamente» con autoridades y comunidades locales.",
+     "negativo": "El retraso impide subir producción, ganar flexibilidad y dejar de depender de plantas de terceros.",
+     "incertidumbre": "Fecha de finalización y cómo se resuelven los temas con comunidades y autoridades.",
+     "cifras": "El comunicado no da monto ni fecha estimada de la planta.",
+     "cronologia": "Situación reportada al 6-jul-2026."
+    },
+    {
+     "titulo": "Reinicio de la perforación diamantina",
+     "tipo": "Exploración",
+     "impacto": "positivo",
+     "que": "PPX reinició el programa de perforación diamantina en Callanquitas para probar extensiones de las estructuras mineralizadas conocidas.",
+     "positivo": "Puede ampliar los recursos minerales y afinar el modelo geológico para el plan de mina a largo plazo.",
+     "negativo": null,
+     "incertidumbre": "Los resultados de laboratorio de los testigos y si confirman que las leyes altas se extienden.",
+     "cifras": "4,860 m iniciales, con opción a 9,810 m si suman una 2ª máquina; ~265 días calendario.",
+     "cronologia": "Anunciado el 30-jun-2026; la movilización arranca tras el pago anticipado y la preparación del sitio."
+    },
+    {
+     "titulo": "Contrato de perforación con RAMPERU (vía el socio peruano PLP)",
+     "tipo": "Administración · operaciones",
+     "impacto": "neutro",
+     "que": "El socio peruano Proyectos La Patagonia S.A.C. (PLP) firmó el contrato de servicios de perforación con RAMPERU S.A.C.",
+     "positivo": "Asegura un equipo moderno (perforadora Tecdrill H400E, diámetro HQ3) y personal técnico; PLP ya provee acceso, agua, energía, combustible y alojamiento.",
+     "negativo": "El inicio de los trabajos está condicionado a un pago anticipado contractual.",
+     "incertidumbre": "Si el contratista externo cumple los plazos.",
+     "cifras": "Perforadora Tecdrill H400E; testigos de diámetro HQ3.",
+     "cronologia": "Contrato anunciado el 30-jun-2026."
+    },
+    {
+     "titulo": "El balance de la matriz sigue frágil (going concern)",
+     "tipo": "Estructura financiera · riesgos",
+     "impacto": "negativo",
+     "que": "Aunque la mina genera caja récord en 2026, la matriz PPX Mining Corp. cerró 2025 con patrimonio negativo y una nota de «negocio en marcha» (going concern).",
+     "positivo": "La caja récord del NPI en 2026 ayuda a aliviar esa presión.",
+     "negativo": "Un patrimonio en déficit y la nota de going concern señalan fragilidad estructural de la corporación.",
+     "incertidumbre": "Si la generación de caja de 2026 se traduce en un balance sano y sostenible.",
+     "cifras": "Al 31-dic-2025 (SEDAR+): patrimonio ≈ CAD -9.5 M (déficit acumulado ≈ CAD -114 M); pasivos CAD 48.0 M; caja CAD 25.7 M.",
+     "cronologia": "EE.FF. interinos al 31-dic-2025 (contexto que complementa los 2 comunicados de jul-2026)."
+    }
+   ],
+   "preguntas": [
+    "¿Es buena o mala noticia lo de PPX?",
+    "Desglosa PPX hecho por hecho",
+    "¿Qué riesgos tiene PPX?",
+    "¿Qué es un Net Profit Interest?",
+    "¿Qué es la perforación diamantina?",
+    "¿PPX paga dividendos?"
+   ]
+  },
+  "PML": {
+   "fuente": "Fundamentos SEDAR+/BVL al 31-mar-2026 + Hechos de Importancia a la BVL (jun-jul 2026)",
+   "datos": [
+    "Panoro es una minera JUNIOR canadiense (cotiza en TSX-V, y también en la BVL y Frankfurt) que EXPLORA cobre en Apurímac (proyecto Cotabambas, con cobre/oro/plata). No produce nada todavía: vive de levantar capital para seguir perforando.",
+    "Su balance (al 31-mar-2026) es de explorador puro: activos de exploración US$52.4M (casi todo Cotabambas), caja de apenas US$1.3M, sin deuda bancaria, y pérdida trimestral de US$3.5M. Patrimonio US$34.0M con un déficit acumulado de US$47.9M.",
+    "Se financia a goteo: colocó C$21M en may-2026 y vendió un activo no-core por US$5.2M. El 7-jul-2026 otorgó opciones sobre acciones a CAD$1.70 por 5 años (plan de incentivos al equipo — trámite societario, aunque el lector automático lo marcó 🔴 por la palabra «opciones»).",
+    "En Cotabambas avanza en dos frentes: resultados de perforación (10-jun-2026) y un acuerdo con la comunidad de Guaclle (16-jun-2026) — la licencia social es clave para un proyecto minero en Apurímac.",
+    "⚠ Junior sin producción = MUY ALTA VOLATILIDAD: su precio se mueve con los resultados de perforación y el apetito por el cobre. Puede multiplicarse o desinflarse. Apuesta pura, solo dinero que puedas permitirte perder."
+   ],
+   "crudo": {
+    "veredicto": "mixtas",
+    "texto": "A lo crudo, Panoro es una APUESTA de exploración, no un negocio que ya gane plata. Las noticias recientes son las típicas de un junior: avanza en la perforación de Cotabambas, cerró un acuerdo con la comunidad (bien, es licencia social) y sigue levantando capital a goteo (colocaciones, venta de un activo, opciones sobre acciones). Ni récords ni desastres: progreso lento con caja chica. Traducción: potencial grande PERO riesgo grande — su valor depende de que el cobre y las perforaciones acompañen. Esto NO es «compra»: es una apuesta especulativa."
+   },
+   "analisis": [
+    {
+     "titulo": "Opciones sobre acciones a CAD$1.70",
+     "tipo": "Administración · societario",
+     "impacto": "neutro",
+     "que": "El 7-jul-2026 otorgó opciones sobre acciones ejercibles a CAD$1.70 por acción durante 5 años (plan de incentivos).",
+     "positivo": "Alinea a su equipo con el precio de la acción; es práctica normal en una junior.",
+     "negativo": "Si se ejercen, diluyen algo a los accionistas actuales.",
+     "incertidumbre": "Si la acción llega a superar CAD$1.70 para que esas opciones valgan algo.",
+     "cifras": "Precio de ejercicio CAD$1.70; plazo 5 años.",
+     "cronologia": "7-jul-2026 (el lector automático lo marcó 🔴, pero es trámite societario, no un problema legal)."
+    },
+    {
+     "titulo": "Avance en Cotabambas + licencia social",
+     "tipo": "Exploración",
+     "impacto": "positivo",
+     "que": "Reportó resultados de perforación en Cotabambas (10-jun) y firmó un acuerdo con la comunidad de Guaclle (16-jun-2026).",
+     "positivo": "Perforar amplía el conocimiento del yacimiento, y el acuerdo comunitario reduce el riesgo social.",
+     "negativo": "Son avances de exploración, no un yacimiento probado ni permisos para construir una mina.",
+     "incertidumbre": "Si las leyes y el tamaño justifican una mina, y si la paz social se mantiene.",
+     "cifras": "Proyecto Cotabambas (cobre/oro/plata, Apurímac).",
+     "cronologia": "10-jun y 16-jun-2026."
+    },
+    {
+     "titulo": "Se financia a goteo (caja chica)",
+     "tipo": "Financiamiento · estructura",
+     "impacto": "negativo",
+     "que": "Con una caja de solo US$1.3M, se financió con una colocación de C$21M (may-2026) y la venta de un activo no-core por US$5.2M.",
+     "positivo": "No tiene deuda bancaria y va consiguiendo fondos para seguir explorando.",
+     "negativo": "Depende de emitir acciones o vender activos para vivir; eso diluye y presiona el precio.",
+     "incertidumbre": "Cuánta pista de caja le queda antes de la próxima ronda de financiamiento.",
+     "cifras": "Caja US$1.3M; colocación C$21M; venta de activo US$5.2M; pérdida trimestral US$3.5M.",
+     "cronologia": "Al 31-mar-2026 + movimientos de may-2026."
+    }
+   ],
+   "preguntas": [
+    "¿Es buena o mala noticia lo de Panoro?",
+    "Desglosa Panoro hecho por hecho",
+    "¿Qué es una minera junior?",
+    "¿Qué riesgos tiene Panoro?"
    ]
   }
  }

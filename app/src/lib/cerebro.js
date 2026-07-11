@@ -14,8 +14,9 @@ import { leerContexto, marcarContextoVisto, hechosAprendidos, partirOraciones } 
 import {
   losDocumentos, bibliotecaEsNueva, marcarBibliotecaVista, respuestaBusqueda,
   respuestaMetrica, compararDocumentos, cronologiaDocumentos, riesgosDocumentos,
-  resumenInversionistas, explicarRazonamiento, fijarFormato,
+  resumenInversionistas, explicarRazonamiento, fijarFormato, recuperarEvidencia,
 } from './biblioteca'
+import { analizarEvidencia, esPreguntaAnalitica } from './inferencia'
 
 // 🧠 memoria conversacional: la última empresa de la que hablamos, para
 // entender "esa empresa", "¿y paga dividendos?" sin pedir aclaraciones
@@ -156,6 +157,11 @@ const SECTOR_LEGIBLE = {
 }
 
 const conocimientoDe = (t) => conocimientoData.conocimiento?.[t] || null
+// campos EXTRA del conocimiento curado (empresas con lectura de comunicados,
+// p.ej. extranjeras que no reportan a la SMV) — estilo NotebookLM:
+const crudoDe = (t) => conocimientoDe(t)?.crudo || null       // veredicto a lo crudo (buena/mala noticia)
+const analisisDe = (t) => conocimientoDe(t)?.analisis || null // desglose hecho por hecho (analista)
+const preguntasDe = (t) => conocimientoDe(t)?.preguntas || null
 
 function chipsEmpresa(e) {
   const chips = [
@@ -164,6 +170,7 @@ function chipsEmpresa(e) {
     `Últimas noticias de ${e.nombreCorto}`,
   ]
   if (conocimientoDe(e.ticker)) chips.unshift(`Cuéntame más de ${e.nombreCorto}`)
+  if (crudoDe(e.ticker)) chips.unshift(`¿Es buena o mala noticia lo de ${e.nombreCorto}?`)
   if (gerenciaData.gerencia?.[e.ticker]?.frases?.length) chips.push(`¿Qué dice la gerencia de ${e.nombreCorto}?`)
   if (notasData.notas?.[e.ticker]?.actual?.frases?.length) chips.push(`¿Qué dicen las notas de ${e.nombreCorto}?`)
   if (notasData.notas?.[e.ticker]?.['2025-T4'] || notasData.notas?.[e.ticker]?.['2025-T1']) chips.push(`¿Cómo le fue a ${e.nombreCorto} en 2025?`)
@@ -217,10 +224,64 @@ function respuestaInforme(e) {
   if (!saber) return respuestaResumen(e)
   const lineas = [`Lo que ALTO investigó a fondo sobre **${e.nombreCorto}** (${saber.fuente}):`]
   saber.datos.forEach((d) => lineas.push(`📚 ${d}`))
+  const chips = []
+  if (saber.crudo) chips.push(`¿Es buena o mala noticia lo de ${e.nombreCorto}?`)
+  if (saber.analisis) chips.push(`Desglosa ${e.nombreCorto} hecho por hecho`)
+  chips.push(`¿Qué riesgos tiene ${e.nombreCorto}?`, `¿${e.nombreCorto} paga dividendos?`)
+  return { texto: lineas.join('\n'), ticker: e.ticker, chips: chips.slice(0, 4) }
+}
+
+// ── estilo NotebookLM: el veredicto "a lo crudo" y el desglose de analista ──
+// Ambos leen SOLO campos verificados del conocimiento curado (conocimiento.json).
+// El veredicto es sobre las NOTICIAS (como el 🟢/🔴 de Sentinel), nunca un
+// "compra/vende" (Regla #9), y el desglose separa lo positivo de lo negativo
+// sin decidir cuál pesa más — el usuario decide.
+
+const CRUDO_EMOJI = { buenas: '🟢', malas: '🔴', mixtas: '🟡' }
+const IMPACTO_EMOJI = { positivo: '🟢', negativo: '🔴', neutro: '🟡' }
+
+// "¿es buena o mala noticia lo de X?" / "a lo crudo"
+function respuestaCrudo(e) {
+  const c = crudoDe(e.ticker)
+  if (!c) return respuestaResumen(e)
+  const an = analisisDe(e.ticker) || []
+  const aFavor = an.filter((h) => h.impacto === 'positivo').length
+  const enContra = an.filter((h) => h.impacto === 'negativo').length
+  const lineas = [
+    `${CRUDO_EMOJI[c.veredicto] || '🟡'} **A lo crudo — ${e.nombreCorto}:** ${c.texto}`,
+  ]
+  if (an.length) {
+    lineas.push(`En números: de lo que revisé, ${aFavor} punto${aFavor === 1 ? '' : 's'} juega${aFavor === 1 ? '' : 'n'} a favor y ${enContra} en contra. Pídeme «desglosa ${e.nombreCorto} hecho por hecho» para verlos uno por uno.`)
+  }
   return {
     texto: lineas.join('\n'),
     ticker: e.ticker,
-    chips: [`¿Qué riesgos tiene ${e.nombreCorto}?`, `¿${e.nombreCorto} paga dividendos?`, `Últimas noticias de ${e.nombreCorto}`],
+    chips: [`Desglosa ${e.nombreCorto} hecho por hecho`, `¿Qué riesgos tiene ${e.nombreCorto}?`, `Cuéntame más de ${e.nombreCorto}`],
+  }
+}
+
+// "desglosa X hecho por hecho" / "análisis a fondo" — el formato del analista
+function respuestaAnalisis(e) {
+  const an = analisisDe(e.ticker)
+  if (!an?.length) return conocimientoDe(e.ticker) ? respuestaInforme(e) : respuestaResumen(e)
+  const fuente = conocimientoDe(e.ticker)?.fuente
+  const lineas = [`🔍 **${e.nombreCorto}, hecho por hecho.** Separo lo positivo de lo negativo, sin decidir cuál pesa más${fuente ? ` (${fuente})` : ''}:`]
+  an.forEach((h, i) => {
+    lineas.push('')
+    lineas.push(`**${i + 1}. ${h.titulo}** ${IMPACTO_EMOJI[h.impacto] || '🟡'} · _${h.tipo}_`)
+    if (h.que) lineas.push(`Qué pasó: ${h.que}`)
+    if (h.positivo) lineas.push(`✅ A favor: ${h.positivo}`)
+    if (h.negativo) lineas.push(`⚠️ En contra: ${h.negativo}`)
+    if (h.incertidumbre) lineas.push(`❓ Incógnita: ${h.incertidumbre}`)
+    if (h.cifras) lineas.push(`🔢 Cifras: ${h.cifras}`)
+    if (h.cronologia) lineas.push(`📅 Cuándo: ${h.cronologia}`)
+  })
+  lineas.push('')
+  lineas.push('Todo sale de los comunicados oficiales — no inventé nada, y no te digo si comprar: eso lo decides tú con estos datos.')
+  return {
+    texto: lineas.join('\n'),
+    ticker: e.ticker,
+    chips: preguntasDe(e.ticker)?.slice(0, 4) || [`¿Es buena o mala noticia lo de ${e.nombreCorto}?`, `¿Qué riesgos tiene ${e.nombreCorto}?`, `Cuéntame más de ${e.nombreCorto}`],
   }
 }
 
@@ -604,7 +665,7 @@ export function responder(pregunta) {
   }
 
   // 🧾 "¿cómo lo supiste?" — la explicación del razonamiento (trazabilidad)
-  if (/(como (lo )?(supiste|sabes|hiciste|obtuviste)|explica (tu|el) razonamiento|de donde (lo )?(sacaste|salio)|por que respondiste)/.test(q)) {
+  if (/(como (lo )?(supiste|sabes|hiciste|obtuviste|razonaste)|explica (tu|el) razonamiento|de donde (lo )?(sacaste|salio)|por que respondiste)/.test(q)) {
     const r = explicarRazonamiento()
     if (r) return conChipsBib(r)
     return {
@@ -712,6 +773,9 @@ export function responder(pregunta) {
   }
 
   if (e) {
+    // estilo NotebookLM (solo si la empresa tiene ese conocimiento curado)
+    if (analisisDe(e.ticker) && /(desglos|hecho por hecho|punto por punto|analisis a fondo|analiza a fondo|como analista|analista objetivo|extrae|extraccion|estructurad|analisis (tecnico|detallado)|analizalo)/.test(q)) return respuestaAnalisis(e)
+    if (crudoDe(e.ticker) && /(a lo crudo|en crudo|\bcrudo\b|buena[s]? o mala[s]?|mala[s]? o buena[s]?|como pinta|es (buena|mala|positiv|negativ))/.test(q)) return respuestaCrudo(e)
     if (/(2025|ano pasado)/.test(q) && /(como le fue|que paso|historia|resumen|hechos|notas)/.test(q)) return respuestaMinera2025(e)
     if (/(notas? (a|de) los estados|que dicen las notas|las notas de)/.test(q)) return respuestaNotas(e)
     if (/(gerencia|charla|analisis y discusion|como le fue|que dice la (empresa|gerencia))/.test(q)) return respuestaGerencia(e)
@@ -758,6 +822,82 @@ export function responder(pregunta) {
   }
 
   return respuestaFallback(q, pregunta)
+}
+
+// ── 🧠 EL RAZONADOR (paso 2 del RAG): responde RAZONANDO sobre la evidencia ─
+// Async porque puede usar embeddings (modelo semántico) sobre la biblioteca.
+// Fuentes de evidencia: (a) el análisis curado de ALTO de una empresa nombrada
+// y (b) los fragmentos de los documentos del usuario (recuperación híbrida).
+
+// ¿el nombre de un archivo delata a una empresa de la app? (para agrupar)
+function empresaDeDoc(nombre) {
+  const n = norm(nombre || '')
+  for (const e of EMPRESAS) {
+    if (n.includes(norm(e.ticker)) || (e.alias.length >= 4 && n.includes(e.alias))) return e.nombreCorto
+    if (e.palabras.some((w) => w.length >= 5 && n.includes(w))) return e.nombreCorto
+  }
+  return null
+}
+
+// construye evidencia a partir del análisis curado (conocimiento.json)
+function evidenciaCurada(e) {
+  const an = analisisDe(e.ticker)
+  if (!an?.length) return []
+  return an.map((h) => {
+    const razon = h.impacto === 'positivo' ? h.positivo : h.impacto === 'negativo' ? h.negativo : ''
+    const cifras = h.cifras && !/^n\/?d|no (da|cuantifica)/i.test(h.cifras) ? ` (${h.cifras})` : ''
+    return {
+      texto: `${h.que}${razon ? ' ' + razon : ''}${cifras}`,
+      cita: `Informe ALTO · «${h.titulo}»`,
+      empresa: e.nombreCorto,
+      polaridad: h.impacto === 'positivo' ? 'positivo' : h.impacto === 'negativo' ? 'negativo' : 'neutro',
+      fuenteId: `alto-${e.ticker}`,
+    }
+  })
+}
+
+// ¿esta pregunta necesita el razonador? (analítica Y hay evidencia que razonar)
+export function necesitaAnalisis(pregunta) {
+  const q = norm(pregunta)
+  // "¿cómo lo razonaste/supiste?" NO es análisis nuevo: es explicar el anterior
+  if (/(como (lo )?(supiste|sabes|razonaste|hiciste|obtuviste)|explica (tu|el) razonamiento)/.test(q)) return false
+  if (!esPreguntaAnalitica(q)) return false
+  if (losDocumentos().length > 0) return true
+  const e = buscarEmpresas(q)[0]
+  return !!(e && analisisDe(e.ticker))
+}
+
+export async function responderAnalitico(pregunta, onProgreso) {
+  const q = norm(pregunta)
+  const evid = []
+  let ticker, sujeto
+
+  const e = buscarEmpresas(q)[0]
+  if (e && analisisDe(e.ticker)) {
+    ticker = e.ticker; sujeto = e.nombreCorto
+    ultimaEmpresa = e.ticker
+    evid.push(...evidenciaCurada(e))
+  }
+
+  const bib = losDocumentos()
+  if (bib.length > 0) {
+    try {
+      const frag = await recuperarEvidencia(pregunta, 15, onProgreso)
+      for (const f of frag) evid.push({ ...f, empresa: f.empresa || empresaDeDoc(f.docNombre) })
+    } catch { /* sin modelo/red: si además no hay evidencia curada, caemos abajo */ }
+  }
+
+  if (!evid.length) return responder(pregunta) // nada que razonar → respuesta normal
+
+  const chips = []
+  if (bib.length > 0) {
+    // la traza "¿cómo lo razonaste?" solo es rica cuando hubo recuperación
+    chips.push('¿Cómo lo razonaste?', '¿Qué riesgos mencionan los documentos?', 'Compara mis documentos')
+  } else if (ticker) {
+    chips.push(`Desglosa ${sujeto} hecho por hecho`, `¿Qué riesgos tiene ${sujeto}?`, `Cuéntame más de ${sujeto}`)
+  }
+
+  return analizarEvidencia(pregunta, evid, { sujeto, ticker, chips: chips.slice(0, 3) })
 }
 
 export const PREGUNTAS_INICIALES = [

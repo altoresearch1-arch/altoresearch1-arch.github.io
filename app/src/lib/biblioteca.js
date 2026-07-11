@@ -1,5 +1,6 @@
 import { analizar, partirOraciones } from './sentinel'
 import { leerArchivo } from './lectores'
+import { vectorizarPasajes, vectorizarPregunta, coseno } from './embeddings'
 
 // ─────────────────────────────────────────────────────────────────────────
 // 📚 LA BIBLIOTECA DE SENTINEL — varios documentos a la vez, estilo NotebookLM.
@@ -253,6 +254,121 @@ export function buscarEnBiblioteca(pregunta, k = 3) {
   return top
 }
 
+// ── 🔢 RECUPERACIÓN HÍBRIDA (semántica + BM25) para el motor de inferencias ─
+// Los embeddings viven SOLO en memoria (un vector por chunk es grande para el
+// storage); si el usuario recarga, se re-calculan perezosamente. Sin modelo
+// (sin red), la recuperación cae elegante a BM25 puro.
+
+const vectores = new Map() // docId -> [vector por chunk, alineado con doc.chunks]
+
+// embedea los chunks que aún no tienen vector (por lotes, con progreso)
+export async function asegurarVectores(onProgreso) {
+  for (const d of docs) {
+    if (vectores.has(d.id)) continue
+    const textos = d.chunks.slice(0, 200).map((c) => c.texto) // tope sano por doc
+    const vecs = []
+    for (let i = 0; i < textos.length; i += 32) {
+      onProgreso?.(`entendiendo el significado de «${d.nombre}»…`)
+      const lote = await vectorizarPasajes(textos.slice(i, i + 32), onProgreso)
+      vecs.push(...lote)
+    }
+    vectores.set(d.id, vecs)
+  }
+}
+
+// BM25 "de recall" (sin el filtro duro de buscarEnBiblioteca): puntúa TODOS
+// los chunks para poder mezclarlos con el coseno.
+function bm25Puntos(pregunta) {
+  const grupos = gruposDe(pregunta)
+  const todos = docs.flatMap((d) => d.chunks.map((c) => ({ d, c })))
+  const N = todos.length || 1
+  const largoProm = todos.reduce((s, x) => s + x.c.texto.length, 0) / N
+  const dfs = grupos.map((g) => {
+    let df = 0
+    for (const x of todos) { const tN = norm(x.c.texto); if (g.some((w) => tN.includes(w))) df++ }
+    return df
+  })
+  return todos.map((x) => {
+    const tN = norm(x.c.texto)
+    let puntos = 0
+    grupos.forEach((g, i) => {
+      const df = dfs[i]; if (!df) return
+      let tf = 0; for (const w of g) tf += tN.split(w).length - 1
+      if (!tf) return
+      const idf = Math.log(1 + (N - df + 0.5) / (df + 0.5))
+      const k1 = 1.4, b = 0.6
+      puntos += idf * (tf * (k1 + 1)) / (tf + k1 * (1 - b + b * x.c.texto.length / largoProm))
+    })
+    return { d: x.d, c: x.c, bm25: puntos }
+  })
+}
+
+const normaliza = (arr, sel) => {
+  const max = Math.max(1e-9, ...arr.map(sel))
+  return (x) => sel(x) / max
+}
+
+// devuelve los k fragmentos más relevantes como EVIDENCIA para inferencia.js.
+// Mezcla coseno semántico (si hay modelo) con BM25; sin modelo, solo BM25.
+export async function recuperarEvidencia(pregunta, k = 15, onProgreso) {
+  if (!docs.length) return []
+  const base = bm25Puntos(pregunta)
+
+  // intento semántico (best-effort: si el modelo no carga, seguimos con BM25)
+  let cosByChunk = null
+  try {
+    await asegurarVectores(onProgreso)
+    const vq = await vectorizarPregunta(pregunta, onProgreso)
+    cosByChunk = new Map()
+    for (const d of docs) {
+      const vecs = vectores.get(d.id) || []
+      d.chunks.forEach((c, i) => { if (vecs[i]) cosByChunk.set(c, Math.max(0, coseno(vq, vecs[i]))) })
+    }
+  } catch { cosByChunk = null } // sin red / navegador viejo → BM25 puro
+
+  const nb = normaliza(base, (x) => x.bm25)
+  const cosVals = cosByChunk ? [...cosByChunk.values()] : [0]
+  const maxCos = Math.max(1e-9, ...cosVals)
+  const mezcla = base.map((x) => {
+    const sem = cosByChunk ? (cosByChunk.get(x.c) || 0) / maxCos : 0
+    const lex = nb(x)
+    // con modelo: 65% significado + 35% palabras; sin modelo: 100% palabras
+    const score = cosByChunk ? 0.65 * sem + 0.35 * lex : lex
+    return { ...x, score, sem, lex }
+  }).filter((x) => x.score > 0.02)
+  mezcla.sort((a, b) => b.score - a.score)
+
+  // diversidad: máx 3 chunks por documento
+  const top = []; const porDoc = {}
+  for (const x of mezcla) {
+    porDoc[x.d.id] = (porDoc[x.d.id] || 0) + 1
+    if (porDoc[x.d.id] <= 3) top.push(x)
+    if (top.length >= k) break
+  }
+
+  anotarRazonamiento({
+    tipo: 'inferencia', pregunta,
+    docsRevisados: docs.length, chunksEvaluados: base.length,
+    buscado: gruposDe(pregunta).map((g) => g[0]),
+    semantico: !!cosByChunk,
+    usados: top.map((t) => ({ cita: cita(t.d, t.c), puntos: t.score.toFixed(2) })),
+  })
+
+  // mapea a la métrica del doc (para contradicciones "cifra distinta")
+  return top.map((x) => {
+    const met = (x.d.metricas || []).find((m) => x.c.texto.includes(m.valorTexto))
+    return {
+      texto: x.c.texto,
+      cita: cita(x.d, x.c),
+      fuenteId: x.d.id,
+      docNombre: x.d.nombre,
+      periodo: x.d.periodo || null,
+      metrica: met?.nombre || null,
+      valorNum: met?.valorNum ?? null,
+    }
+  })
+}
+
 export const SIN_RESPUESTA = 'No encontré esa información en los documentos.'
 
 // ── el ANALISTA: métricas financieras con cita ────────────────────────────
@@ -421,6 +537,11 @@ export function explicarRazonamiento() {
     for (const u of r.usados) {
       lineas.push(`4. Usé 📎 ${u.cita} — relevancia ${u.puntos}, acertó ${u.aciertos} de ${u.gruposTotal} término${u.gruposTotal === 1 ? '' : 's'} buscados.`)
     }
+  } else if (r.tipo === 'inferencia') {
+    lineas.push(`2. Recuperé los fragmentos más relevantes con búsqueda ${r.semantico ? '**semántica** (por significado, con el modelo de embeddings) combinada con palabras clave' : 'por palabras clave (el modelo semántico no estaba disponible, usé BM25)'}.`)
+    lineas.push(`3. Clasifiqué cada fragmento (a favor / en contra / neutro), los agrupé por tema y busqué acuerdos y contradicciones entre fuentes.`)
+    for (const u of r.usados) lineas.push(`4. Usé 📎 ${u.cita} — relevancia ${u.puntos}.`)
+    lineas.push('5. Compuse la conclusión SOLO con esos fragmentos citados — si algo no estaba, no lo concluí.')
   } else {
     lineas.push(`2. Busqué los indicadores: ${r.buscado.join(', ')} — con patrones de analista (la cifra tiene que estar PEGADA al nombre del indicador, con su moneda o unidad).`)
     lineas.push(`3. Los encontré en: ${r.usados.join(' · ')}.`)
