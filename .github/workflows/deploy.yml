@@ -25,8 +25,16 @@ on:
     # El cron de Actions es "mejor esfuerzo": puede correrse unos minutos, no es un reloj suizo.
     # 1) CIERRE: 03:23 UTC mar-sáb == 22:23 Lun-Vie en Perú (tras el cierre BVL).
     - cron: '23 3 * * 2-6'
-    # 2) HECHOS+BEM: :07 y :37 de cada hora, 13:00-21:59 UTC == 8:07 a 16:37 Perú, Lun-Vie.
-    - cron: '7,37 13-21 * * 1-5'
+    # 2) HECHOS+BEM: :07 y :37 de cada hora. Los Hechos de Importancia (y el BEM del
+    #    MINEM) salen a CUALQUIER hora — también de tarde/noche: Los Portales 17:47,
+    #    Credicorp 20:08 (vistos 10-jul). Antes la ventana moría 16:37 y esos hechos
+    #    recién los agarraba el cierre de las 22:23 (horas tarde). Ahora se cubre todo
+    #    el día laboral hasta la noche, en cadencia continua de 30 min:
+    #    a) 13-23 UTC == 8:07 a 18:37 Perú (Lun-Vie).
+    - cron: '7,37 13-23 * * 1-5'
+    #    b) 0-2 UTC == 19:07 a 21:37 Perú. OJO: en UTC eso ya es el día SIGUIENTE,
+    #       por eso el rango de días es 2-6 (mar-sáb UTC = lun-vie noche en Perú).
+    - cron: '7,37 0-2 * * 2-6'
     # 3) PRECIOS: 17:15 y 20:15 UTC == 12:15 y 15:15 Perú, Lun-Vie (minuto propio,
     #    no choca con el run de hechos).
     - cron: '15 17,20 * * 1-5'
@@ -70,9 +78,9 @@ jobs:
         # A mano (workflow_dispatch) se corre el modo completo del robot (--rapido).
         run: |
           case "${{ github.event.schedule }}" in
-            '7,37 13-21 * * 1-5') echo "flag=--hechos"  >> "$GITHUB_OUTPUT"; echo "etiqueta=hechos/BEM intradía" >> "$GITHUB_OUTPUT" ;;
-            '15 17,20 * * 1-5')   echo "flag=--precios" >> "$GITHUB_OUTPUT"; echo "etiqueta=precios intradía"    >> "$GITHUB_OUTPUT" ;;
-            *)                    echo "flag=--rapido"  >> "$GITHUB_OUTPUT"; echo "etiqueta=cierre del día"      >> "$GITHUB_OUTPUT" ;;
+            '7,37 13-23 * * 1-5'|'7,37 0-2 * * 2-6') echo "flag=--hechos"  >> "$GITHUB_OUTPUT"; echo "etiqueta=hechos/BEM intradía" >> "$GITHUB_OUTPUT" ;;
+            '15 17,20 * * 1-5')                      echo "flag=--precios" >> "$GITHUB_OUTPUT"; echo "etiqueta=precios intradía"    >> "$GITHUB_OUTPUT" ;;
+            *)                                       echo "flag=--rapido"  >> "$GITHUB_OUTPUT"; echo "etiqueta=cierre del día"      >> "$GITHUB_OUTPUT" ;;
           esac
 
       - name: Correr el robot (${{ steps.modo.outputs.etiqueta }})
