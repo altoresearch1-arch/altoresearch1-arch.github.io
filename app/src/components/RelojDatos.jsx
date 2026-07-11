@@ -111,7 +111,7 @@ export default function RelojDatos() {
         </div>
       )}
       <p className="reloj-nota">
-        El robot revisa cada 30 minutos, de 8:00 a 21:30 (Lun–Vie). ⚠ A veces el servidor de la SMV
+        El Gran Hermano revisa cada 30 minutos, de 8:00 a 21:30 (Lun–Vie). ⚠ A veces el servidor de la SMV
         se demora y el dato entra 7–10 minutos más tarde.
       </p>
     </div>

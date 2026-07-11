@@ -68,7 +68,7 @@ function LecturaInline({ lec, ticker }) {
         </button>
       </div>
       <p className="muted" style={{ fontSize: 11, margin: '6px 0 0' }}>
-        Lectura automática del robot (por palabras y patrones, beta). El documento oficial
+        Lectura automática del Gran Hermano (por palabras y patrones, beta). El documento oficial
         completo está en «PDF ↗».
       </p>
     </div>
@@ -129,7 +129,7 @@ export default function HechosImportancia({ ticker }) {
       )}
       <p className="muted" style={{ marginTop: 8, fontSize: 12 }}>
         Estos son los avisos oficiales que la empresa envía al regulador (SMV) —
-        la fuente primaria, sin rumores. 🛰️ = el robot ya lo leyó (toca «Léemelo»).
+        la fuente primaria, sin rumores. 🛰️ = el Gran Hermano ya lo leyó (toca «Léemelo»).
         Fuente: BVL · documents.bvl.com.pe.
       </p>
     </div>

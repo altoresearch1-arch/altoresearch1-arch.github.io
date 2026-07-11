@@ -47,7 +47,7 @@ export default function DocumentosOficiales({ ticker }) {
       ))}
       <p className="muted" style={{ marginTop: 8, fontSize: 12 }}>
         Los originales, tal como la empresa los presentó al regulador (SMV) — la misma
-        fuente que leen el robot y Atlas. El clic abre o descarga el PDF oficial.
+        fuente que leen el Gran Hermano y Atlas. El clic abre o descarga el PDF oficial.
       </p>
     </div>
   )
