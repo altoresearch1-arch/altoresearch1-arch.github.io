@@ -169,11 +169,7 @@ export default function Valoracion({ empresa }) {
       {ev && (
         <div className="val-ev">
           <div className="val-txt">
-            El <Glosado text="EV/EBITDA" /> mira la empresa ENTERA: lo que costaría comprarla toda,
-            con su deuda incluida, frente a su ganancia operativa (antes de intereses, impuestos,
-            depreciación y amortización) — el motor real del negocio, sin maquillaje contable.
-            A diferencia del <Glosado text="P/E" />, sí funciona con pérdida neta y no se deja
-            engañar por empresas muy endeudadas: menos = más barata.
+            <Glosado text="El EV/EBITDA mira la empresa ENTERA: lo que costaría comprarla toda, con su deuda incluida, frente a su ganancia operativa (antes de intereses, impuestos, depreciación y amortización) — el motor real del negocio, sin maquillaje contable. A diferencia del P/E, sí funciona con pérdida neta y no se deja engañar por empresas muy endeudadas: menos = más barata." />
           </div>
           <div className="val-formula">
             EV/EBITDA = (valor de mercado + deuda neta) ÷ ganancia operativa anualizada ={' '}
@@ -194,12 +190,7 @@ export default function Valoracion({ empresa }) {
       {evEbit && (
         <div className="val-ev">
           <div className="val-txt">
-            Aquí no se pudo calcular el <Glosado text="EV/EBITDA" />: esta empresa presentó su flujo de
-            caja en forma resumida y <strong>no publicó su depreciación y amortización</strong>, así que
-            no hay con qué sumarla. En su lugar mostramos el <strong>EV/EBIT</strong>: la empresa entera
-            (valor de mercado + deuda neta) frente a su ganancia <strong>operativa</strong>. Es primo del
-            EV/EBITDA pero un poco más exigente (no le devuelve la depreciación), por eso corre algo más
-            alto — va sin veredicto de "barata/cara" para no marcarla mal por esa diferencia.
+            <Glosado text="Aquí no se pudo calcular el EV/EBITDA: esta empresa presentó su flujo de caja en forma resumida y no publicó su depreciación y amortización, así que no hay con qué sumarla. En su lugar mostramos el EV/EBIT: la empresa entera (valor de mercado + deuda neta) frente a su ganancia operativa. Es primo del EV/EBITDA pero un poco más exigente (no le devuelve la depreciación), por eso corre algo más alto — va sin veredicto de “barata/cara” para no marcarla mal por esa diferencia." />
           </div>
           <div className="val-formula">
             EV/EBIT = (valor de mercado + deuda neta) ÷ ganancia operativa anualizada ={' '}
@@ -209,9 +200,11 @@ export default function Valoracion({ empresa }) {
           {evEbit.rango && (
             <div className="val-barra">
               <span className="val-rango-txt">
-                Referencia (rango de EV/EBITDA del sector, no de EV/EBIT): <strong>{evEbit.rango.bajo}–{evEbit.rango.alto}</strong>{' '}
-                · como este EV/EBIT no lleva la depreciación de vuelta, suele salir por ENCIMA de ese rango
-                aunque la empresa no esté cara — úsalo para comparar entre empresas parecidas, no contra este número.
+                Referencia (rango de <Glosado text="EV/EBITDA" /> del sector, no de <Glosado text="EV/EBIT" />):{' '}
+                <strong>{evEbit.rango.bajo}–{evEbit.rango.alto}</strong>{' '}
+                · como este <Glosado text="EV/EBIT" /> no lleva la <Glosado text="depreciación y amortización" /> de
+                vuelta, suele salir por ENCIMA de ese rango aunque la empresa no esté cara — úsalo para comparar
+                entre empresas parecidas, no contra este número.
               </span>
             </div>
           )}
