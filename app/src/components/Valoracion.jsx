@@ -151,7 +151,7 @@ export default function Valoracion({ empresa }) {
             Menos = más barata; más = más cara — siempre comparado contra su sector.
           </div>
           <div className="val-formula">
-            P/E = precio ÷ ganancia anual por acción ={' '}
+            <Glosado text="P/E" /> = precio ÷ <Glosado text="ganancia anual por acción" /> ={' '}
             {fmt(px.precio, sim)} ÷ {fmt(eps, sim)} = <strong>{pe.toFixed(1)}</strong>
             {nota && <span className="muted"> {nota}</span>}
           </div>
@@ -172,7 +172,8 @@ export default function Valoracion({ empresa }) {
             <Glosado text="El EV/EBITDA mira la empresa ENTERA: lo que costaría comprarla toda, con su deuda incluida, frente a su ganancia operativa (antes de intereses, impuestos, depreciación y amortización) — el motor real del negocio, sin maquillaje contable. A diferencia del P/E, sí funciona con pérdida neta y no se deja engañar por empresas muy endeudadas: menos = más barata." />
           </div>
           <div className="val-formula">
-            EV/EBITDA = (valor de mercado + deuda neta) ÷ ganancia operativa anualizada ={' '}
+            <Glosado text="EV/EBITDA" /> = (<Glosado text="valor de mercado" /> + <Glosado text="deuda neta" />) ÷{' '}
+            <Glosado text="ganancia operativa anualizada" /> ={' '}
             ({fmtGrande(ev.capitalizacion, simEstados)} + {fmtGrande(ev.deudaNeta, simEstados)}) ÷{' '}
             {fmtGrande(ev.ganancia, simEstados)} = <strong>{ev.ratio.toFixed(1)}</strong>
           </div>
@@ -193,7 +194,8 @@ export default function Valoracion({ empresa }) {
             <Glosado text="Aquí no se pudo calcular el EV/EBITDA: esta empresa presentó su flujo de caja en forma resumida y no publicó su depreciación y amortización, así que no hay con qué sumarla. En su lugar mostramos el EV/EBIT: la empresa entera (valor de mercado + deuda neta) frente a su ganancia operativa. Es primo del EV/EBITDA pero un poco más exigente (no le devuelve la depreciación), por eso corre algo más alto — va sin veredicto de “barata/cara” para no marcarla mal por esa diferencia." />
           </div>
           <div className="val-formula">
-            EV/EBIT = (valor de mercado + deuda neta) ÷ ganancia operativa anualizada ={' '}
+            <Glosado text="EV/EBIT" /> = (<Glosado text="valor de mercado" /> + <Glosado text="deuda neta" />) ÷{' '}
+            <Glosado text="ganancia operativa anualizada" /> ={' '}
             ({fmtGrande(evEbit.capitalizacion, simEstados)} + {fmtGrande(evEbit.deudaNeta, simEstados)}) ÷{' '}
             {fmtGrande(evEbit.ganancia, simEstados)} = <strong>{evEbit.ratio.toFixed(1)}</strong>
           </div>
