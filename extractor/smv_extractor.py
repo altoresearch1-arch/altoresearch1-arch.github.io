@@ -57,6 +57,12 @@ CONCEPTOS_DURACION = {
     "epsDiluido": ["DilutedEarningsLossPerShare"],
     "flujoOperativo": ["CashFlowsFromUsedInOperatingActivities"],
     "capex": ["PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities"],
+    # OJO (verificado 11-jul-2026): ~70 de 94 empresas NO taguean la depreciación en el
+    # XBRL estructurado de la SMV — ni con estos nombres ni con ningún otro. No es un bug
+    # de nombre de campo: presentan el flujo de caja en forma ABREVIADA (reportan
+    # CashFlowsFromUsedInOperations en una sola línea) y no desglosan la D&A, ni en el
+    # trimestral ni en el anual (comprobado con BVN, Volcan, Minsur, El Brocal, Alicorp).
+    # Cuando queda en None, la app cae a EV/EBIT en vez de EV/EBITDA (ver Valoracion.jsx).
     "dya": ["AdjustmentsForDepreciationAndAmortisationExpense",
             "DepreciationAndAmortisationExpense"],
 }

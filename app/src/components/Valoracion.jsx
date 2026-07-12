@@ -49,13 +49,43 @@ export default function Valoracion({ empresa }) {
   // P/E, SÍ funciona aunque la empresa tenga pérdida NETA (usa ganancia OPERATIVA) —
   // por eso se calcula aparte y se muestra para todas, incluso cuando arriba dice
   // "no se puede valorar por P/E".
+  // La depreciación y amortización (D&A) sale del flujo de caja del XBRL de la SMV.
+  // PERO ~70 de 94 empresas (todas las mineras grandes, Alicorp, Gloria, Unacem…)
+  // presentan su flujo de caja en forma ABREVIADA: reportan el efectivo de operación
+  // en una sola línea y NUNCA taguean la depreciación por separado. No es que la
+  // pongan bajo otro nombre — sencillamente no está en el archivo estructurado (ni en
+  // el trimestral ni en el anual; verificado con BVN/Volcan/Minsur/Brocal/Alicorp).
+  // Por eso, cuando falta la D&A caemos al EV/EBIT (ganancia OPERATIVA sin sumarle la
+  // depreciación): usa solo datos que sí están en la fuente y así la valoración por
+  // "empresa entera" aparece para TODAS, sin inventar el número que la SMV no publicó.
   const r = empresa.evEbitdaRaw
   const rangoEV = escenariosData.rangoEVEBITDA?.[empresa.sector]
-  let ev = null
-  if (
-    r && rangoEV && r.eps && r.utilidadOperativa != null &&
-    r.dya != null && r.utilidadNeta != null
-  ) {
+  let ev = null       // EV/EBITDA con veredicto barata/cara vs el rango del sector
+  let evEbit = null   // EV/EBIT informativo (cuando la empresa no publicó la D&A)
+
+  // ¿Es de fiar el nº de acciones? Se deriva de evEbitdaRaw.eps (EPS trimestral del
+  // XBRL individual), que en algunas empresas viene DISTORSIONADO por clase de acción
+  // o por ser holding (Minsur, Backus, Volcan…): eso desinfla la capitalización y
+  // falsea el EV. Lo validamos contra el EPS anual confiable (ea.epsAnual, de
+  // stockanalysis / EE.FF. corregidos): si, anualizado y en la misma moneda, difieren
+  // por más de ~4x, es señal de distorsión y preferimos NO mostrar un EV inventado.
+  let capConfiable = false
+  if (r && r.eps && ea.epsAnual) {
+    const fx = epsAnualData.tipoCambioUSDPEN
+    const mEst = empresa.monedaEstados
+    let epsRawAnual = r.eps * 4
+    let convOk = true
+    if (mEst === ea.moneda) { /* misma moneda, sin conversión */ }
+    else if (mEst === 'USD' && ea.moneda === 'PEN') epsRawAnual *= fx
+    else if (mEst === 'PEN' && ea.moneda === 'USD') epsRawAnual /= fx
+    else convOk = false  // CAD / desconocida: no verificable → mejor no arriesgar
+    if (convOk) {
+      const ratio = Math.abs(epsRawAnual) / Math.abs(ea.epsAnual)
+      capConfiable = ratio >= 0.25 && ratio <= 4
+    }
+  }
+
+  if (capConfiable && r && r.utilidadOperativa != null && r.utilidadNeta != null) {
     const fx = epsAnualData.tipoCambioUSDPEN
     const acciones = r.utilidadNeta / r.eps
     // precio llevado a la moneda de los estados
@@ -65,13 +95,25 @@ export default function Valoracion({ empresa }) {
     const capitalizacion = acciones * precioEst
     const deudaNeta = (r.deudaFinanciera || 0) - (r.efectivo || 0)
     const valorEmpresa = capitalizacion + deudaNeta
-    const ebitdaAnual = (r.utilidadOperativa + r.dya) * 4
-    if (ebitdaAnual > 0 && valorEmpresa > 0) {
-      const ratio = valorEmpresa / ebitdaAnual
-      let evEstado = 'en rango'
-      if (ratio < rangoEV.bajo) evEstado = 'barata'
-      else if (ratio > rangoEV.alto) evEstado = 'cara'
-      ev = { ratio, estado: evEstado, rango: rangoEV }
+    if (r.dya != null && rangoEV) {
+      // Camino ideal: sí tenemos la depreciación → EV/EBITDA de verdad, con veredicto.
+      const ebitdaAnual = (r.utilidadOperativa + r.dya) * 4
+      if (ebitdaAnual > 0 && valorEmpresa > 0) {
+        const ratio = valorEmpresa / ebitdaAnual
+        let evEstado = 'en rango'
+        if (ratio < rangoEV.bajo) evEstado = 'barata'
+        else if (ratio > rangoEV.alto) evEstado = 'cara'
+        ev = { ratio, estado: evEstado, rango: rangoEV }
+      }
+    } else {
+      // Fallback honesto: sin D&A no se puede armar el EBITDA. Mostramos EV/EBIT.
+      // Corre un poco MÁS ALTO que el EV/EBITDA (no se le suma la depreciación), así
+      // que NO lo comparamos contra los rangos del sector (que son de EV/EBITDA) para
+      // no marcar "cara" a todo el mundo por error: va sin veredicto, solo el número.
+      const ebitAnual = r.utilidadOperativa * 4
+      if (ebitAnual > 0 && valorEmpresa > 0) {
+        evEbit = { ratio: valorEmpresa / ebitAnual }
+      }
     }
   }
 
@@ -84,7 +126,8 @@ export default function Valoracion({ empresa }) {
       {tienePerdida ? (
         <div className="val-txt">
           No se puede valorar por <Glosado text="P/E" />: la empresa tuvo <strong>pérdida</strong> en 2025
-          (no hay ganancia con qué dividir el precio). Mira el <Glosado text="EV/EBITDA" /> de abajo — ese sí funciona con pérdidas.
+          (no hay ganancia con qué dividir el precio).
+          {(ev || evEbit) && <> Mira el múltiplo de empresa entera de abajo — ese usa la ganancia <strong>operativa</strong>, así que sí funciona con pérdida neta.</>}
         </div>
       ) : (
         <>
@@ -129,6 +172,24 @@ export default function Valoracion({ empresa }) {
               {ev.estado === 'cara' && `${ev.ratio.toFixed(1)} está por ENCIMA → más cara de lo normal`}
               {ev.estado === 'en rango' && `${ev.ratio.toFixed(1)} cae DENTRO → precio normal para el sector`}
             </span>
+          </div>
+        </div>
+      )}
+
+      {evEbit && (
+        <div className="val-ev">
+          <div className="val-txt">
+            Aquí no se pudo calcular el <Glosado text="EV/EBITDA" />: esta empresa presentó su flujo de
+            caja en forma resumida y <strong>no publicó su depreciación y amortización</strong>, así que
+            no hay con qué sumarla. En su lugar mostramos el <strong>EV/EBIT</strong>: la empresa entera
+            (valor de mercado + deuda neta) frente a su ganancia <strong>operativa</strong>. Es primo del
+            EV/EBITDA pero un poco más exigente (no le devuelve la depreciación), por eso corre algo más
+            alto y no se compara contra el rango del sector — tómalo como referencia y compáralo entre
+            empresas parecidas.
+          </div>
+          <div className="val-formula">
+            EV/EBIT = (valor de mercado + deuda neta) ÷ ganancia operativa anualizada ={' '}
+            <strong>{evEbit.ratio.toFixed(1)}</strong>
           </div>
         </div>
       )}
