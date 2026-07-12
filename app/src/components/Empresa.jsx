@@ -23,6 +23,7 @@ import ProduccionMinera from './ProduccionMinera'
 import { CountUp, Reveal } from '../lib/anim'
 import { useFavoritos, alternarFavorito } from '../lib/favoritos'
 import { peInfo } from '../lib/finanzas'
+import { useNivel, verSeccion, NIVELES } from '../lib/nivel'
 import { useState } from 'react'
 
 // P/E = precio ÷ BPA anual (SMV), vía peInfo de lib/finanzas. Si el precio es
@@ -119,6 +120,8 @@ const NOMBRE_ESCENARIO = {
 }
 
 export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a resultados' }) {
+  const [nivel, setNivel] = useNivel()
+  const ver = (clave) => verSeccion(nivel ?? 4, clave)
   const e = empresasData.empresas.find((x) => x.ticker === ticker)
   if (!e) {
     return (
@@ -215,7 +218,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
         </Reveal>
 
         {/* Tips para estudiarla */}
-        {tipsData.tips?.[e.ticker]?.length > 0 && (
+        {ver('tips') && tipsData.tips?.[e.ticker]?.length > 0 && (
           <Reveal>
             <div className="seccion-titulo">💡 Tips para estudiarla</div>
             <ul className="lista-limpia">
@@ -231,9 +234,10 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
 
         {/* ⛏️ Producción mensual del MINEM + minas y participaciones. Aparece si el
             ticker tiene familia minera (cubre a Shougang, que es sector acereras). */}
-        <Reveal><ProduccionMinera ticker={e.ticker} /></Reveal>
+        {ver('produccionMinera') && <Reveal><ProduccionMinera ticker={e.ticker} /></Reveal>}
 
         {/* Fundamentos */}
+        {ver('fundamentos') && (
         <Reveal>
           <div className="seccion-titulo">Fundamentos · {e.fundamentosFuente
             ? <Glosado text={e.fundamentosFuente} />
@@ -249,9 +253,10 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
             <p className="muted">Pendiente de cargar desde la SMV.</p>
           )}
         </Reveal>
+        )}
 
         {/* Cómo leer estos números, según el sector (siempre abierto) */}
-        {guiasData.guias?.[e.sector] && (
+        {ver('guiaSector') && guiasData.guias?.[e.sector] && (
           <Reveal>
           <div className="guia-sector">
             <div className="guia-cabecera">
@@ -292,7 +297,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
         )}
 
         {/* Balance destacado (si existe) */}
-        {e.balanceDestacado?.length > 0 && (
+        {ver('balanceDestacado') && e.balanceDestacado?.length > 0 && (
           <>
             <div className="seccion-titulo">Del estado de situación financiera</div>
             <ul className="lista-limpia">
@@ -312,7 +317,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
         )}
 
         {/* Catalizadores: eventos que podrían mover el precio (documentado/rumor) */}
-        {(catalizadoresData.catalizadores?.[e.ticker]?.length > 0 || e.catalizadores?.length > 0) && (
+        {ver('catalizadores') && (catalizadoresData.catalizadores?.[e.ticker]?.length > 0 || e.catalizadores?.length > 0) && (
           <Reveal>
             <div className="seccion-titulo">⚡ Catalizadores (eventos que vienen)</div>
             {catalizadoresData.catalizadores?.[e.ticker]?.length > 0 ? (
@@ -337,22 +342,22 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
         )}
 
         {/* 🕐 Reloj: cuándo vuelve a revisar el robot (hechos + BEM) + última actualización */}
-        <Reveal><RelojDatos /></Reveal>
+        {ver('relojDatos') && <Reveal><RelojDatos /></Reveal>}
 
         {/* Hechos de Importancia: comunicados oficiales SMV/BVL (hechos.json) */}
-        <Reveal><HechosImportancia ticker={e.ticker} /></Reveal>
+        {ver('hechos') && <Reveal><HechosImportancia ticker={e.ticker} /></Reveal>}
 
         {/* 📰 Noticias de la web oficial (extranjeras: Rio2 no tiene Hechos BVL) */}
-        <Reveal><NoticiasExtranjero ticker={e.ticker} /></Reveal>
+        {ver('noticiasExtranjero') && <Reveal><NoticiasExtranjero ticker={e.ticker} /></Reveal>}
 
         {/* 🛰️ Sentinel: suelta el PDF de un hecho y te dice si pinta buena o mala */}
-        <Reveal><Sentinel ticker={e.ticker} /></Reveal>
+        {ver('sentinel') && <Reveal><Sentinel ticker={e.ticker} /></Reveal>}
 
         {/* 📚 Los documentos ORIGINALES de la SMV (gerencia, EEFF, notas; minas +2025) */}
-        <Reveal><DocumentosOficiales ticker={e.ticker} /></Reveal>
+        {ver('documentosOficiales') && <Reveal><DocumentosOficiales ticker={e.ticker} /></Reveal>}
 
         {/* Escenarios (solo si Jair los llenó; si no, ya está el Simulador arriba) */}
-        {e.escenarios &&
+        {ver('escenarios') && e.escenarios &&
           ['favorable', 'neutral', 'presion', 'riesgo'].some(
             (k) => e.escenarios[k] && e.escenarios[k] !== 'Pendiente'
           ) && (
@@ -370,7 +375,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
         )}
 
         {/* Riesgos — documentado vs rumor */}
-        {e.riesgos?.length > 0 && (
+        {ver('riesgos') && e.riesgos?.length > 0 && (
           <>
             <div className="seccion-titulo">Riesgos</div>
             {e.riesgos.map((r, i) => (
@@ -385,7 +390,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
         )}
 
         {/* Fuentes */}
-        {e.fuentes?.length > 0 && (
+        {ver('fuentes') && e.fuentes?.length > 0 && (
           <>
             <div className="seccion-titulo">Fuentes</div>
             <ul className="lista-limpia">
@@ -399,6 +404,22 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
             </p>
           </>
         )}
+
+        {/* ¿Subimos el nivel? — CTA para desbloquear más secciones (nivel guardado en localStorage) */}
+        {nivel != null && nivel < 4 && (() => {
+          const siguiente = NIVELES.find((n) => n.id === nivel + 1)
+          return (
+            <div className="nivel-cta">
+              <div className="nivel-cta-texto">
+                <strong>{siguiente.icono} ¿Subimos el nivel?</strong>
+                <div className="muted">{siguiente.detalle}</div>
+              </div>
+              <button className="btn btn-oro" onClick={() => setNivel(nivel + 1)}>
+                Subir a "{siguiente.nombre}" →
+              </button>
+            </div>
+          )
+        })()}
       </div>
 
       <Disclaimer />

@@ -58,6 +58,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  row-gap: 6px;
   gap: 12px;
   padding: 14px 0 18px;
   border-bottom: 1px solid transparent;
@@ -97,6 +99,8 @@ body {
 
 .nav {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 6px;
 }
 
@@ -766,14 +770,9 @@ a.link {
   .apoyo-opciones {
     grid-template-columns: 1fr;
   }
-  /* la barra superior envuelve (con "Explorar" ya no entra en una línea) */
-  .topbar {
-    flex-wrap: wrap;
-    row-gap: 6px;
-  }
+  /* la barra superior ya envuelve por defecto (ver .topbar/.nav arriba); en
+     celular además achicamos el espacio entre botones y su texto. */
   .nav {
-    flex-wrap: wrap;
-    justify-content: flex-end;
     gap: 4px;
   }
   .nav button,
@@ -949,25 +948,8 @@ a.link {
 }
 .val-ev {
   margin-top: 8px;
-  font-size: 13px;
   border-top: 1px dashed var(--gris);
   padding-top: 8px;
-}
-.val-ev-k strong {
-  color: var(--oro);
-  font-size: 15px;
-}
-.val-ev-estado {
-  font-weight: 700;
-}
-.val-ev-estado.evb {
-  color: var(--verde);
-}
-.val-ev-estado.evr {
-  color: var(--ambar);
-}
-.val-ev-estado.evc {
-  color: var(--rojo);
 }
 
 /* ---------- Resumen de dividendos (arriba) ---------- */
@@ -1676,28 +1658,11 @@ a.link {
 .termo-cab {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 10px;
-  flex-wrap: wrap;
 }
 .termo-tit {
   font-weight: 700;
   font-size: 14px;
-}
-.termo-etiqueta {
-  font-weight: 700;
-  font-size: 13px;
-  border: 1px solid;
-  border-radius: 999px;
-  padding: 2px 11px;
-}
-.termo-etiqueta.termo-ilq {
-  color: var(--texto-tenue);
-  border-color: var(--texto-tenue);
-}
-.termo-pct {
-  font-weight: 400;
-  font-size: 12px;
 }
 .termo-barra {
   position: relative;
@@ -3500,3 +3465,169 @@ a.link {
   color: var(--texto-tenue);
 }
 .muro.es-ejemplo { opacity: 0.85; }
+
+/* ---------- Puerta de entrada: elegir nivel ---------- */
+.nivel-gate {
+  position: relative;
+  z-index: 5;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 18px;
+}
+.nivel-gate-inner {
+  width: 100%;
+  max-width: 620px;
+  text-align: center;
+}
+.nivel-gate-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--oro);
+  margin-bottom: 10px;
+}
+.nivel-gate-inner h1 {
+  font-size: 26px;
+  margin-bottom: 8px;
+}
+.nivel-gate-inner .lead {
+  max-width: 460px;
+  margin: 0 auto 26px;
+}
+.nivel-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.nivel-card {
+  appearance: none;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: linear-gradient(180deg, var(--negro-2), var(--negro));
+  border: 1px solid var(--gris);
+  border-radius: var(--radio);
+  padding: 18px 16px;
+  color: var(--texto);
+  transition: border-color 0.15s, transform 0.05s;
+}
+.nivel-card:hover {
+  border-color: var(--oro);
+  transform: translateY(-2px);
+}
+.nivel-card:active {
+  transform: translateY(0);
+}
+.nivel-card-icono {
+  font-size: 26px;
+}
+.nivel-card-nombre {
+  font-weight: 700;
+  font-size: 16px;
+}
+.nivel-card-frase {
+  color: var(--texto-tenue);
+  font-size: 13px;
+  line-height: 1.4;
+}
+@media (max-width: 560px) {
+  .nivel-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Badge de nivel (barra superior) ---------- */
+.nivel-badge-wrap {
+  position: relative;
+}
+/* Especificidad ".nav .nivel-badge" a propósito: le gana a ".nav button"
+   (definido arriba), que si no le pisa el fondo/color y lo deja gris como
+   cualquier otro botón del menú — todo lo contrario de "que resalte". */
+.nav .nivel-badge {
+  appearance: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(180deg, var(--oro-suave), var(--oro));
+  border: none;
+  color: #1a1405;
+  font-weight: 800;
+  font-size: 13px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.4), 0 2px 8px rgba(212, 175, 55, 0.25);
+}
+.nav .nivel-badge:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+.nivel-badge-nombre {
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nivel-badge-flecha {
+  font-size: 9px;
+}
+.nivel-badge-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 30;
+  min-width: 190px;
+  background: linear-gradient(180deg, var(--negro-2), var(--negro));
+  border: 1px solid var(--gris);
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: var(--sombra);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.nivel-badge-opcion {
+  appearance: none;
+  cursor: pointer;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: var(--texto);
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+.nivel-badge-opcion:hover {
+  background: var(--oro-tenue);
+}
+.nivel-badge-opcion.activo {
+  color: var(--oro);
+  font-weight: 700;
+}
+
+/* ---------- CTA "¿Subimos el nivel?" (al fondo de la ficha) ---------- */
+.nivel-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 16px;
+  background: var(--oro-tenue);
+  border: 1px dashed var(--oro);
+  border-radius: var(--radio);
+}
+.nivel-cta-texto {
+  flex: 1 1 220px;
+  font-size: 14px;
+}
+.nivel-cta-texto .muted {
+  font-size: 12.5px;
+  margin-top: 2px;
+}

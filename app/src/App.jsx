@@ -19,6 +19,9 @@ import Atlas from './components/Atlas'
 import Comentarios from './components/Comentarios'
 import Gracias from './components/Gracias'
 import AvisoNovedades from './components/AvisoNovedades'
+import SelectorNivel from './components/SelectorNivel'
+import NivelBadge from './components/NivelBadge'
+import { useNivel } from './lib/nivel'
 
 // "2026-06-24" -> "24 de junio de 2026"
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio',
@@ -40,6 +43,7 @@ const TEXTO_VOLVER = {
 // propio (se puede compartir) y el botón atrás del navegador/celular funciona.
 // El hash es la fuente de verdad de la vista; la UI navega cambiando el hash.
 export default function App() {
+  const [nivel, setNivel] = useNivel()
   const [vista, setVista] = useState('inicio')
   const [respuestas, setRespuestas] = useState(null)
   const [tickerSel, setTickerSel] = useState(null)
@@ -120,6 +124,17 @@ export default function App() {
     { id: 'gracias', label: '💛 Gracias', hash: '#/gracias' },
   ]
 
+  // Puerta de entrada obligatoria: hasta que elija un nivel, no ve nada más.
+  if (nivel == null) {
+    return (
+      <>
+        <FondoVivo />
+        <div className="aurora" aria-hidden="true" />
+        <SelectorNivel onElegir={setNivel} />
+      </>
+    )
+  }
+
   return (
     <>
       <FondoVivo />
@@ -136,6 +151,7 @@ export default function App() {
             <span className="sub">Research</span>
           </div>
           <nav className="nav">
+            <NivelBadge nivel={nivel} onCambiar={setNivel} />
             {navItems.map((it) => (
               <button
                 key={it.id}

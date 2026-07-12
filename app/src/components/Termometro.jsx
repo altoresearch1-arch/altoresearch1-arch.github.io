@@ -5,12 +5,6 @@ import Glosado from './Glosado'
 // (extractor/fetch_historicos.py). Si la acción casi no negocia, el número de
 // volatilidad sería engañoso, así que se dice "poco negociada" (la verdad).
 
-const ZONAS = [
-  { id: 'tranquila', texto: 'Tranquila', color: 'var(--verde)', desde: 0, hasta: 22 },
-  { id: 'se mueve', texto: 'Se mueve', color: 'var(--ambar)', desde: 22, hasta: 45 },
-  { id: 'montaña rusa', texto: 'Montaña rusa', color: 'var(--rojo)', desde: 45, hasta: 80 },
-]
-
 const EXPLICA = {
   tranquila:
     'Su precio se movió poco día a día en los últimos 12 meses. Menos sustos, pero también suele moverse lento.',
@@ -27,22 +21,14 @@ export default function Termometro({ ticker }) {
   if (!h?.volatilidadEtiqueta) return null
 
   const etiqueta = h.volatilidadEtiqueta
-  const vol = h.volatilidadAnualPct
   const ilquida = etiqueta === 'poco negociada'
+  const vol = h.volatilidadAnualPct
   const pos = ilquida ? null : Math.min(97, Math.max(3, (vol / 80) * 100))
-  const zona = ZONAS.find((z) => z.id === etiqueta)
 
   return (
     <div className="termo">
       <div className="termo-cab">
         <span className="termo-tit">🌡️ ¿Cuánto se mueve?</span>
-        <span
-          className={'termo-etiqueta' + (ilquida ? ' termo-ilq' : '')}
-          style={zona ? { color: zona.color, borderColor: zona.color } : undefined}
-        >
-          {ilquida ? 'Poco negociada' : zona?.texto}
-          {vol != null && <span className="termo-pct"> · {vol}% anual</span>}
-        </span>
       </div>
 
       {!ilquida && (
