@@ -10,6 +10,18 @@ function fmt(n, sim) {
   return `${sim} ${n.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
+// Montos de "empresa entera" (capitalización, deuda, EBITDA) vienen en cientos de
+// millones: mostrarlos con 2 decimales completos es ilegible. Se abrevian en M/MM,
+// igual que ya lo hace enrich_tips.py en las tarjetas de tips ("US$ 66.7 M").
+function fmtGrande(n, sim) {
+  const signo = n < 0 ? '-' : ''
+  const abs = Math.abs(n)
+  if (abs >= 1e9) return `${signo}${sim} ${(abs / 1e9).toFixed(2)} MM`
+  if (abs >= 1e6) return `${signo}${sim} ${(abs / 1e6).toFixed(1)} M`
+  if (abs >= 1e3) return `${signo}${sim} ${(abs / 1e3).toFixed(1)} mil`
+  return fmt(n, sim)
+}
+
 export default function Valoracion({ empresa }) {
   const px = preciosData.precios?.[empresa.ticker]
   const ea = epsAnualData.eps?.[empresa.ticker]
@@ -85,6 +97,8 @@ export default function Valoracion({ empresa }) {
     }
   }
 
+  const simEstados = ea.moneda === 'USD' ? 'US$' : 'S/'
+
   if (capConfiable && r && r.utilidadOperativa != null && r.utilidadNeta != null) {
     const fx = epsAnualData.tipoCambioUSDPEN
     const acciones = r.utilidadNeta / r.eps
@@ -103,7 +117,7 @@ export default function Valoracion({ empresa }) {
         let evEstado = 'en rango'
         if (ratio < rangoEV.bajo) evEstado = 'barata'
         else if (ratio > rangoEV.alto) evEstado = 'cara'
-        ev = { ratio, estado: evEstado, rango: rangoEV }
+        ev = { ratio, estado: evEstado, rango: rangoEV, capitalizacion, deudaNeta, ganancia: ebitdaAnual }
       }
     } else {
       // Fallback honesto: sin D&A no se puede armar el EBITDA. Mostramos EV/EBIT.
@@ -112,7 +126,7 @@ export default function Valoracion({ empresa }) {
       // no marcar "cara" a todo el mundo por error: va sin veredicto, solo el número.
       const ebitAnual = r.utilidadOperativa * 4
       if (ebitAnual > 0 && valorEmpresa > 0) {
-        evEbit = { ratio: valorEmpresa / ebitAnual }
+        evEbit = { ratio: valorEmpresa / ebitAnual, capitalizacion, deudaNeta, ganancia: ebitAnual, rango: rangoEV }
       }
     }
   }
@@ -163,7 +177,8 @@ export default function Valoracion({ empresa }) {
           </div>
           <div className="val-formula">
             EV/EBITDA = (valor de mercado + deuda neta) ÷ ganancia operativa anualizada ={' '}
-            <strong>{ev.ratio.toFixed(1)}</strong>
+            ({fmtGrande(ev.capitalizacion, simEstados)} + {fmtGrande(ev.deudaNeta, simEstados)}) ÷{' '}
+            {fmtGrande(ev.ganancia, simEstados)} = <strong>{ev.ratio.toFixed(1)}</strong>
           </div>
           <div className="val-barra">
             <span className="val-rango-txt">
@@ -184,13 +199,22 @@ export default function Valoracion({ empresa }) {
             no hay con qué sumarla. En su lugar mostramos el <strong>EV/EBIT</strong>: la empresa entera
             (valor de mercado + deuda neta) frente a su ganancia <strong>operativa</strong>. Es primo del
             EV/EBITDA pero un poco más exigente (no le devuelve la depreciación), por eso corre algo más
-            alto y no se compara contra el rango del sector — tómalo como referencia y compáralo entre
-            empresas parecidas.
+            alto — va sin veredicto de "barata/cara" para no marcarla mal por esa diferencia.
           </div>
           <div className="val-formula">
             EV/EBIT = (valor de mercado + deuda neta) ÷ ganancia operativa anualizada ={' '}
-            <strong>{evEbit.ratio.toFixed(1)}</strong>
+            ({fmtGrande(evEbit.capitalizacion, simEstados)} + {fmtGrande(evEbit.deudaNeta, simEstados)}) ÷{' '}
+            {fmtGrande(evEbit.ganancia, simEstados)} = <strong>{evEbit.ratio.toFixed(1)}</strong>
           </div>
+          {evEbit.rango && (
+            <div className="val-barra">
+              <span className="val-rango-txt">
+                Referencia (rango de EV/EBITDA del sector, no de EV/EBIT): <strong>{evEbit.rango.bajo}–{evEbit.rango.alto}</strong>{' '}
+                · como este EV/EBIT no lleva la depreciación de vuelta, suele salir por ENCIMA de ese rango
+                aunque la empresa no esté cara — úsalo para comparar entre empresas parecidas, no contra este número.
+              </span>
+            </div>
+          )}
         </div>
       )}
 
