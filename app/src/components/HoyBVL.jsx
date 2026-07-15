@@ -1,10 +1,11 @@
 import { useMemo } from 'react'
 import empresasData from '../data/empresas.json'
-import preciosData from '../data/precios.json'
+import { variacionesDia } from '../lib/finanzas'
 
 // "Así cerró la BVL": variación del último cierre vs el previo, SOLO con
-// datos reales de precios.json (precio y previo de la BVL). Las que no
-// negociaron ese día quedan fuera del ranking (su variación sería vieja).
+// datos reales de precios.json (el cálculo vive en lib/finanzas.variacionesDia,
+// compartido con la cinta bursátil del inicio). Las que no negociaron ese día
+// quedan fuera del ranking (su variación sería vieja).
 
 function fechaCorta(iso) {
   if (!iso) return ''
@@ -14,25 +15,10 @@ function fechaCorta(iso) {
 
 export default function HoyBVL({ onVerEmpresa }) {
   const { movidas, subieron, bajaron, planas, fecha } = useMemo(() => {
-    const filas = []
-    let subieron = 0, bajaron = 0, planas = 0
-    const fechas = {}
-    for (const e of empresasData.empresas) {
-      const px = preciosData.precios?.[e.ticker]
-      if (!px || px.precio == null || px.previo == null || px.sinNegociacionReciente) continue
-      if (px.previo <= 0) continue
-      const pct = ((px.precio - px.previo) / px.previo) * 100
-      if (pct > 0.001) subieron++
-      else if (pct < -0.001) bajaron++
-      else planas++
-      if (px.fecha) fechas[px.fecha] = (fechas[px.fecha] || 0) + 1
-      filas.push({ ticker: e.ticker, nombre: e.nombre, pct, precio: px.precio, moneda: px.moneda })
-    }
-    filas.sort((a, b) => b.pct - a.pct)
+    const { filas, subieron, bajaron, planas, fecha } = variacionesDia(empresasData.empresas)
     const conCambio = filas.filter((f) => Math.abs(f.pct) > 0.001)
     const top = conCambio.slice(0, 3)
     const bottom = conCambio.slice(-3).reverse().filter((f) => !top.includes(f))
-    const fecha = Object.entries(fechas).sort((a, b) => b[1] - a[1])[0]?.[0]
     return { movidas: { top, bottom }, subieron, bajaron, planas, fecha }
   }, [])
 

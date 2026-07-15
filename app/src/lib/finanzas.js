@@ -73,6 +73,30 @@ export function yieldNumerico(ticker) {
   return isFinite(n) ? n : null
 }
 
+// Variaciones del último cierre vs el previo, para TODAS las empresas que
+// negociaron con precio fresco (misma regla que "Así cerró la BVL"): quedan
+// fuera las sinNegociacionReciente (su variación sería vieja y engañosa).
+// La usan HoyBVL (ranking del día) y CintaBVL (la cinta bursátil del inicio).
+export function variacionesDia(empresas) {
+  const filas = []
+  let subieron = 0, bajaron = 0, planas = 0
+  const fechas = {}
+  for (const e of empresas) {
+    const px = preciosData.precios?.[e.ticker]
+    if (!px || px.precio == null || px.previo == null || px.sinNegociacionReciente) continue
+    if (px.previo <= 0) continue
+    const pct = ((px.precio - px.previo) / px.previo) * 100
+    if (pct > 0.001) subieron++
+    else if (pct < -0.001) bajaron++
+    else planas++
+    if (px.fecha) fechas[px.fecha] = (fechas[px.fecha] || 0) + 1
+    filas.push({ ticker: e.ticker, nombre: e.nombre, pct, precio: px.precio, moneda: px.moneda })
+  }
+  filas.sort((a, b) => b.pct - a.pct)
+  const fecha = Object.entries(fechas).sort((a, b) => b[1] - a[1])[0]?.[0]
+  return { filas, subieron, bajaron, planas, fecha }
+}
+
 // Cambio % de los últimos ~6 meses (cierres reales BVL, mismo cálculo que el
 // Sparkline: primer vs último cierre del rango). null si no hay serie o si la
 // acción es "poco negociada" (el % sería engañoso — la BVL rellena la serie).

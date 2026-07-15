@@ -4372,6 +4372,238 @@ a.link {
   transform: scale(0.96);
 }
 
+/* ============================================================
+   ENGANCHE (15-jul-2026, ronda 4): cinta bursátil, gancho de
+   curiosidad "¿Sabías que…?", y micro-delicias en niveles 1-2.
+   ============================================================ */
+
+/* ---------- 📟 Cinta bursátil (inicio): el mercado desfilando ---------- */
+.cinta {
+  overflow: hidden;
+  margin: 0 0 16px;
+  padding: 4px 0;
+  /* los bordes se desvanecen: la cinta "sale" de la pantalla, no choca */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.cinta-pista {
+  display: flex;
+  width: max-content;
+  animation: cintaDesfila var(--cinta-dur, 80s) linear infinite;
+}
+/* dos copias idénticas del contenido → cuando la primera salió entera,
+   la segunda está exactamente donde arrancó la primera: bucle perfecto */
+@keyframes cintaDesfila {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .cinta:hover .cinta-pista {
+    animation-play-state: paused;
+  }
+}
+.cinta:focus-within .cinta-pista {
+  animation-play-state: paused;
+}
+.cinta-grupo {
+  display: flex;
+  gap: 6px;
+  padding-right: 6px;
+}
+.cinta-chip {
+  appearance: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--texto);
+  white-space: nowrap;
+  transition: border-color 0.15s ease, transform 0.16s var(--ease-salida);
+}
+@media (hover: hover) and (pointer: fine) {
+  .cinta-chip:hover {
+    border-color: var(--gris);
+  }
+}
+.cinta-chip:active {
+  transform: scale(0.95);
+}
+.cinta-ticker {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.cinta-pct {
+  font-variant-numeric: tabular-nums;
+}
+.cinta .sube,
+.gancho .sube {
+  color: var(--verde);
+}
+.cinta .baja,
+.gancho .baja {
+  color: var(--rojo);
+}
+@media (prefers-reduced-motion: reduce) {
+  .cinta-pista {
+    animation: none;
+  }
+  .cinta {
+    overflow-x: auto; /* quieta pero completa: se desliza a mano */
+  }
+}
+
+/* ---------- 🎣 "¿Sabías que…?" (hero, niveles 1-2) ---------- */
+.gancho {
+  margin: 18px auto 6px;
+  max-width: 480px;
+}
+.gancho-etq {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--oro);
+}
+.gancho-dato {
+  appearance: none;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  background: var(--negro-3);
+  border: 1px solid var(--gris);
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: var(--texto);
+  font-size: 14.5px;
+  line-height: 1.45;
+  text-align: center;
+  transition: border-color 0.15s ease, transform 0.16s var(--ease-salida);
+  /* el dato nuevo entra con un pelín de blur: enmascara el cruce (Emil K.) */
+  animation: ganchoEntra 0.45s var(--ease-salida) backwards;
+}
+@keyframes ganchoEntra {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .gancho-dato:hover {
+    border-color: var(--oro);
+  }
+}
+.gancho-dato:active {
+  transform: scale(0.98);
+}
+.gancho-dato.sin-link {
+  cursor: default;
+}
+.gancho-ver {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--oro);
+}
+.gancho-puntos {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 9px;
+}
+.gancho-punto {
+  appearance: none;
+  cursor: pointer;
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--gris);
+  transition: background 0.15s ease, transform 0.16s var(--ease-salida);
+}
+.gancho-punto.activo {
+  background: var(--oro);
+  transform: scale(1.2);
+}
+
+/* ---------- Micro-delicias ---------- */
+/* Los 4 globos de la radiografía entran en cascada (60 ms entre cada uno) */
+.rx-tile {
+  animation: transPaso 0.35s var(--ease-salida) backwards;
+}
+.rx-fila .rx-tile:nth-child(2) {
+  animation-delay: 60ms;
+}
+.rx-fila .rx-tile:nth-child(3) {
+  animation-delay: 120ms;
+}
+.rx-fila .rx-tile:nth-child(4) {
+  animation-delay: 180ms;
+}
+
+/* Brillo que barre el CTA del quiz cada ~6 s (sutil, solo en el hero) */
+.hero .btn-oro {
+  position: relative;
+  overflow: hidden;
+}
+.hero .btn-oro::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 40%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.32), transparent);
+  animation: brilloBarrido 6s linear infinite;
+  pointer-events: none;
+}
+@keyframes brilloBarrido {
+  0%, 74% {
+    left: -60%;
+  }
+  92%, 100% {
+    left: 130%;
+  }
+}
+
+/* Los iconos de la puerta de niveles flotan suavecito (idle, desfasados) */
+.nivel-card-icono {
+  display: inline-block;
+  animation: iconoFlota 4.5s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.7s);
+}
+@keyframes iconoFlota {
+  0%, 100% {
+    transform: none;
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gancho-dato,
+  .rx-tile,
+  .nivel-card-icono,
+  .hero .btn-oro::after {
+    animation: none !important;
+  }
+}
+
 /* Toques por nivel: el nivel 1 lee la radiografía más grande; el 4 entra a
    trabajar (moneda más chica, hero compacto — el mercado va primero). */
 [data-nivel='1'] .rx-v {

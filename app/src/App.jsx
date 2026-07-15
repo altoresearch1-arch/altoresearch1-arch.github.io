@@ -24,6 +24,8 @@ import NivelBadge from './components/NivelBadge'
 import NivelTransicion from './components/NivelTransicion'
 import MenuNav from './components/MenuNav'
 import BuscadorInicio from './components/BuscadorInicio'
+import CintaBVL from './components/CintaBVL'
+import GanchoDatos from './components/GanchoDatos'
 import { useNivel, aplicarTemaNivel } from './lib/nivel'
 
 // "2026-06-24" -> "24 de junio de 2026"
@@ -255,6 +257,9 @@ export default function App() {
                   Valores de Lima que encajan con tu perfil — para que las
                   analices tú mismo. Gratis y educativo.
                 </p>
+                {/* 🎣 Gancho de curiosidad con datos REALES (niveles 1-2): una
+                    prueba viva de lo que hay adentro, antes de pedir el quiz */}
+                {nivel <= 2 && <GanchoDatos onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />}
                 {/* Un solo protagonista (el quiz); el resto son atajos discretos */}
                 <div className="hero-actions">
                   <button className="btn btn-oro" onClick={() => irA('#/quiz')}>
@@ -288,6 +293,8 @@ export default function App() {
             // el hero con su moneda queda abajo).
             return (
               <div>
+                {/* 📟 La cinta bursátil: el mercado late apenas entras (todos los niveles) */}
+                <CintaBVL onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
                 {bloqueActualizaciones}
                 {nivel >= 3 ? (
                   <>
