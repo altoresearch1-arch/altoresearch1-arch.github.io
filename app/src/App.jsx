@@ -21,7 +21,9 @@ import Gracias from './components/Gracias'
 import AvisoNovedades from './components/AvisoNovedades'
 import SelectorNivel from './components/SelectorNivel'
 import NivelBadge from './components/NivelBadge'
-import { useNivel } from './lib/nivel'
+import NivelTransicion from './components/NivelTransicion'
+import MenuNav from './components/MenuNav'
+import { useNivel, aplicarTemaNivel } from './lib/nivel'
 
 // "2026-06-24" -> "24 de junio de 2026"
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio',
@@ -45,6 +47,21 @@ const TEXTO_VOLVER = {
 export default function App() {
   const [nivel, setNivel] = useNivel()
   const [vista, setVista] = useState('inicio')
+  const [menuAbierto, setMenuAbierto] = useState(false)
+
+  // Transición de nivel: pantalla de carga honesta que tapa el re-armado de la
+  // interfaz. Se dispara ante CUALQUIER cambio de nivel (puerta de entrada,
+  // badge de la barra o CTA "¿Subimos el nivel?" de la ficha) porque escucha
+  // el estado, no los botones. En la primera carga no hay transición.
+  const [transicion, setTransicion] = useState(null)
+  const nivelPrevio = useRef(nivel)
+  useEffect(() => {
+    if (nivelPrevio.current !== nivel && nivel != null) setTransicion(nivel)
+    nivelPrevio.current = nivel
+  }, [nivel])
+
+  // Tema visual del nivel (densidad, radio, velocidad): vive en <html data-nivel>
+  useEffect(() => { aplicarTemaNivel(nivel) }, [nivel])
   const [respuestas, setRespuestas] = useState(null)
   const [tickerSel, setTickerSel] = useState(null)
   const [origenEmpresa, setOrigenEmpresa] = useState('inicio')
@@ -115,13 +132,14 @@ export default function App() {
     abrirEmpresa(elegida.ticker, 'inicio')
   }
 
-  const navItems = [
+  // Topbar descongestionada (antes: 8 elementos en un renglón): en escritorio
+  // van solo los 4 destinos de uso diario; Comentarios/Gracias/Apóyanos viven
+  // en el menú ☰ (MenuNav). En celular, TODO va al menú: queda marca + nivel + ☰.
+  const navPrimario = [
     { id: 'inicio', label: 'Inicio', hash: '#/' },
     { id: 'explorar', label: 'Explorar', hash: '#/explorar' },
     { id: 'glosario', label: 'Glosario', hash: '#/glosario' },
     { id: 'ia', label: '🧠 Atlas', hash: '#/ia', beta: true },
-    { id: 'comentarios', label: '💬 Comentarios', hash: '#/comentarios' },
-    { id: 'gracias', label: '💛 Gracias', hash: '#/gracias' },
   ]
 
   // Puerta de entrada obligatoria: hasta que elija un nivel, no ve nada más.
@@ -131,6 +149,9 @@ export default function App() {
         <FondoVivo />
         <div className="aurora" aria-hidden="true" />
         <SelectorNivel onElegir={setNivel} />
+        {transicion != null && (
+          <NivelTransicion nivelId={transicion} onFin={() => setTransicion(null)} />
+        )}
       </>
     )
   }
@@ -151,22 +172,38 @@ export default function App() {
             <span className="sub">Research</span>
           </div>
           <nav className="nav">
+            <div className="nav-links">
+              {navPrimario.map((it) => (
+                <button
+                  key={it.id}
+                  className={vista === it.id ? 'activo' : ''}
+                  onClick={() => irA(it.hash)}
+                >
+                  {it.label}
+                  {it.beta && <span className="nav-beta">beta</span>}
+                </button>
+              ))}
+            </div>
             <NivelBadge nivel={nivel} onCambiar={setNivel} />
-            {navItems.map((it) => (
-              <button
-                key={it.id}
-                className={vista === it.id ? 'activo' : ''}
-                onClick={() => irA(it.hash)}
-              >
-                {it.label}
-                {it.beta && <span className="nav-beta">beta</span>}
-              </button>
-            ))}
-            <button className="nav-apoyo" onClick={() => setApoyoAbierto(true)}>
-              💛 Apóyanos
+            <button
+              className="nav-menu"
+              onClick={() => setMenuAbierto(true)}
+              aria-label="Abrir menú"
+              aria-expanded={menuAbierto}
+            >
+              ☰
             </button>
           </nav>
         </div>
+
+        {menuAbierto && (
+          <MenuNav
+            vista={vista}
+            onIr={irA}
+            onApoyar={() => setApoyoAbierto(true)}
+            onCerrar={() => setMenuAbierto(false)}
+          />
+        )}
 
         {/* key={vista}: remonta el contenido al cambiar de vista -> transición suave */}
         <div key={vista + (tickerSel || '')} className="vista-anim">
@@ -303,6 +340,11 @@ export default function App() {
           )}
         </div>
       </div>
+
+      {/* Pantalla de transición al cambiar de nivel (tapa el re-armado de la UI) */}
+      {transicion != null && (
+        <NivelTransicion nivelId={transicion} onFin={() => setTransicion(null)} />
+      )}
 
       {/* 🔔 Avisos en vivo: hechos nuevos de las empresas guardadas con ★ */}
       <AvisoNovedades />

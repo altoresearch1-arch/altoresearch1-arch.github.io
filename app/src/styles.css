@@ -16,6 +16,14 @@
   --radio: 14px;
   --sombra: 0 10px 30px rgba(0, 0, 0, 0.45);
   --maxw: 760px;
+
+  /* Movimiento: curvas con carácter (las de fábrica son débiles) y duraciones
+     que cada NIVEL puede acelerar/relajar (ver "EXPERIENCIAS POR NIVEL"). */
+  --ease-salida: cubic-bezier(0.23, 1, 0.32, 1); /* ease-out fuerte: responde YA */
+  --ease-cajon: cubic-bezier(0.32, 0.72, 0, 1); /* cajón/hoja estilo iOS */
+  --anim-reveal: 0.5s; /* reveal al hacer scroll */
+  --anim-vista: 0.35s; /* cambio de vista */
+  --nivel-color: var(--oro); /* acento del nivel activo (lo pisa aplicarTemaNivel) */
 }
 
 * {
@@ -99,8 +107,14 @@ body {
 
 .nav {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Destinos de uso diario (Inicio/Explorar/Glosario/Atlas): solo en escritorio.
+   En celular viven en el menú ☰ y la barra queda: marca + nivel + ☰. */
+.nav-links {
+  display: flex;
   gap: 6px;
 }
 
@@ -112,15 +126,35 @@ body {
   padding: 6px 10px;
   border-radius: 999px;
   cursor: pointer;
+  transition: color 0.15s ease, transform 0.16s var(--ease-salida);
 }
 
 .nav button:hover {
   color: var(--texto);
 }
 
+.nav button:active {
+  transform: scale(0.96);
+}
+
 .nav button.activo {
   color: var(--oro);
   border-color: var(--oro);
+}
+
+/* Botón ☰ que abre MenuNav (Comentarios/Gracias/Apóyanos; en celular, todo) */
+.nav .nav-menu {
+  border: 1px solid var(--gris);
+  color: var(--texto);
+  font-size: 15px;
+  line-height: 1;
+  padding: 7px 11px;
+}
+
+@media (max-width: 720px) {
+  .nav-links {
+    display: none;
+  }
 }
 
 /* ---------- Tipografía ---------- */
@@ -770,15 +804,17 @@ a.link {
   .apoyo-opciones {
     grid-template-columns: 1fr;
   }
-  /* la barra superior ya envuelve por defecto (ver .topbar/.nav arriba); en
-     celular además achicamos el espacio entre botones y su texto. */
+  /* en celular la barra queda liviana (marca + nivel + ☰); solo compactamos */
   .nav {
     gap: 4px;
   }
-  .nav button,
-  .nav-apoyo {
+  .nav button {
     font-size: 12px;
     padding: 5px 9px;
+  }
+  /* sin el "RESEARCH" la barra entra en UN renglón en 375px */
+  .brand .sub {
+    display: none;
   }
 }
 
@@ -1258,20 +1294,7 @@ a.link {
   font-style: italic;
 }
 
-/* ---------- Apoyo: nav, pill flotante y modal ---------- */
-.nav-apoyo {
-  background: var(--oro-tenue);
-  border: 1px solid var(--oro);
-  color: var(--oro);
-  font-size: 13px;
-  padding: 6px 12px;
-  border-radius: 999px;
-  cursor: pointer;
-}
-.nav-apoyo:hover {
-  background: rgba(212, 175, 55, 0.2);
-}
-
+/* ---------- Apoyo: pill flotante y modal (el botón del nav se mudó a MenuNav) ---------- */
 .apoyo-pill {
   position: fixed;
   right: 18px;
@@ -1512,15 +1535,15 @@ a.link {
 }
 
 .vista-anim {
-  animation: subeFade 0.35s cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+  animation: subeFade var(--anim-vista) cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
 }
 
 /* Reveal al hacer scroll (lib/anim.js le pone .reveal-visto al entrar) */
 .reveal {
   opacity: 0;
   transform: translateY(14px);
-  transition: opacity 0.5s cubic-bezier(0.2, 0.7, 0.3, 1),
-    transform 0.5s cubic-bezier(0.2, 0.7, 0.3, 1);
+  transition: opacity var(--anim-reveal) cubic-bezier(0.2, 0.7, 0.3, 1),
+    transform var(--anim-reveal) cubic-bezier(0.2, 0.7, 0.3, 1);
 }
 .reveal.reveal-visto {
   opacity: 1;
@@ -3466,11 +3489,19 @@ a.link {
 }
 .muro.es-ejemplo { opacity: 0.85; }
 
+/* ============================================================
+   NIVELES v2 (15-jul-2026): cada nivel es una experiencia.
+   Puerta de entrada con identidad por tarjeta, transición al
+   cambiar, y tokens por nivel (densidad/radio/velocidad) abajo
+   en "EXPERIENCIAS POR NIVEL".
+   ============================================================ */
+
 /* ---------- Puerta de entrada: elegir nivel ---------- */
 .nivel-gate {
   position: relative;
   z-index: 5;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3478,7 +3509,7 @@ a.link {
 }
 .nivel-gate-inner {
   width: 100%;
-  max-width: 620px;
+  max-width: 640px;
   text-align: center;
 }
 .nivel-gate-logo {
@@ -3492,10 +3523,15 @@ a.link {
 .nivel-gate-inner h1 {
   font-size: 26px;
   margin-bottom: 8px;
+  text-wrap: balance;
 }
 .nivel-gate-inner .lead {
   max-width: 460px;
-  margin: 0 auto 26px;
+  margin: 0 auto 24px;
+}
+.nivel-gate-pie {
+  margin: 18px 0 0;
+  font-size: 12.5px;
 }
 .nivel-cards {
   display: grid;
@@ -3508,23 +3544,51 @@ a.link {
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   background: linear-gradient(180deg, var(--negro-2), var(--negro));
   border: 1px solid var(--gris);
   border-radius: var(--radio);
-  padding: 18px 16px;
+  padding: 16px;
   color: var(--texto);
-  transition: border-color 0.15s, transform 0.05s;
+  transition: border-color 0.15s ease, transform 0.18s var(--ease-salida),
+    box-shadow 0.18s var(--ease-salida);
+  /* entrada escalonada: cada tarjeta llega 70 ms después de la anterior */
+  animation: nivelCardEntra 0.45s var(--ease-salida) backwards;
+  animation-delay: calc(100ms + 70ms * var(--i));
 }
-.nivel-card:hover {
-  border-color: var(--oro);
-  transform: translateY(-2px);
+@keyframes nivelCardEntra {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .nivel-card:hover {
+    border-color: var(--nivel-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+  }
 }
 .nivel-card:active {
-  transform: translateY(0);
+  transform: scale(0.98);
+}
+.nivel-card-cab {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 .nivel-card-icono {
   font-size: 26px;
+  line-height: 1;
+}
+.nivel-card-num {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--nivel-color);
+  opacity: 0.9;
 }
 .nivel-card-nombre {
   font-weight: 700;
@@ -3535,10 +3599,151 @@ a.link {
   font-size: 13px;
   line-height: 1.4;
 }
+.nivel-card-incluye {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+.nivel-chip {
+  font-size: 10.5px;
+  color: var(--texto-tenue);
+  border: 1px solid var(--gris);
+  border-radius: 999px;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+.nivel-chip.suma {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--nivel-color) 55%, transparent);
+  color: var(--nivel-color);
+}
 @media (max-width: 560px) {
   .nivel-cards {
     grid-template-columns: 1fr;
   }
+  .nivel-gate {
+    align-items: flex-start;
+    padding-top: 42px;
+  }
+}
+
+/* ---------- Transición de nivel (pantalla de carga honesta) ---------- */
+.nivel-trans {
+  position: fixed;
+  inset: 0;
+  z-index: 80; /* sobre todo: menú (60), apoyo-pill (40), topbar (30) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  cursor: pointer;
+  background: var(--negro);
+  background:
+    radial-gradient(620px 440px at 50% 32%,
+      color-mix(in srgb, var(--nivel-color) 13%, transparent), transparent 72%),
+    var(--negro);
+  animation: transEntra 0.22s ease-out backwards;
+  transition: opacity 0.3s ease-out; /* espejo de MS_SALIDA en NivelTransicion.jsx */
+}
+@keyframes transEntra {
+  from {
+    opacity: 0;
+  }
+}
+.nivel-trans.saliendo {
+  opacity: 0;
+  pointer-events: none;
+}
+.nivel-trans-inner {
+  text-align: center;
+  max-width: 340px;
+}
+.nivel-trans-icono {
+  display: inline-block;
+  font-size: 52px;
+  line-height: 1;
+  animation: transIcono 0.5s var(--ease-salida) backwards;
+}
+@keyframes transIcono {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(6px);
+  }
+}
+.nivel-trans-eyebrow {
+  margin-top: 12px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nivel-color);
+}
+.nivel-trans-nombre {
+  font-size: 22px;
+  font-weight: 800;
+  margin-top: 2px;
+  text-wrap: balance;
+}
+.nivel-trans-pasos {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 13.5px;
+  color: var(--texto-tenue);
+  text-align: left;
+}
+.nivel-trans-pasos li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  opacity: 0;
+  animation: transPaso 0.3s var(--ease-salida) forwards; /* delay inline por paso */
+}
+@keyframes transPaso {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.nivel-trans-check {
+  color: var(--nivel-color);
+  font-weight: 700;
+}
+.nivel-trans-barra {
+  margin: 20px auto 0;
+  width: 190px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--gris);
+  overflow: hidden;
+}
+.nivel-trans-barra span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--nivel-color);
+  /* progreso lineal y honesto: dura lo que dura la pantalla */
+  animation: transBarra var(--trans-total, 1.7s) linear forwards;
+}
+@keyframes transBarra {
+  to {
+    width: 100%;
+  }
+}
+.nivel-trans-saltar {
+  margin-top: 16px;
+  font-size: 11px;
+  color: var(--texto-tenue);
+  opacity: 0;
+  animation: transPaso 0.4s ease-out 0.7s forwards;
 }
 
 /* ---------- Badge de nivel (barra superior) ---------- */
@@ -3559,13 +3764,19 @@ a.link {
   color: #1a1405;
   font-weight: 800;
   font-size: 13px;
-  padding: 6px 13px;
+  padding: 6px 12px;
   border-radius: 999px;
   box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.4), 0 2px 8px rgba(212, 175, 55, 0.25);
+  transition: filter 0.15s ease, transform 0.16s var(--ease-salida);
 }
-.nav .nivel-badge:hover {
-  filter: brightness(1.06);
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .nav .nivel-badge:hover {
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+  }
+}
+.nav .nivel-badge:active {
+  transform: scale(0.96);
 }
 .nivel-badge-nombre {
   max-width: 110px;
@@ -3580,8 +3791,8 @@ a.link {
   position: absolute;
   top: calc(100% + 6px);
   right: 0;
-  z-index: 30;
-  min-width: 190px;
+  z-index: 35;
+  width: min(290px, calc(100vw - 28px));
   background: linear-gradient(180deg, var(--negro-2), var(--negro));
   border: 1px solid var(--gris);
   border-radius: 12px;
@@ -3590,23 +3801,67 @@ a.link {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  transform-origin: top right; /* brota desde su botón, no desde el centro */
+  animation: menuBrota 0.16s var(--ease-salida) backwards;
+}
+.nivel-badge-menu-tit {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--texto-tenue);
+  padding: 6px 10px 2px;
 }
 .nivel-badge-opcion {
   appearance: none;
   cursor: pointer;
   text-align: left;
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
   background: transparent;
   border: none;
   color: var(--texto);
   font-size: 13px;
   padding: 8px 10px;
   border-radius: 8px;
+  transition: background 0.15s ease, transform 0.16s var(--ease-salida);
 }
-.nivel-badge-opcion:hover {
-  background: var(--oro-tenue);
+@media (hover: hover) and (pointer: fine) {
+  .nivel-badge-opcion:hover {
+    background: var(--oro-tenue);
+  }
+}
+.nivel-badge-opcion:active {
+  transform: scale(0.98);
 }
 .nivel-badge-opcion.activo {
-  color: var(--oro);
+  background: color-mix(in srgb, var(--nivel-color) 10%, transparent);
+}
+.nivel-badge-opcion-icono {
+  font-size: 16px;
+  line-height: 1.3;
+}
+.nivel-badge-opcion-textos {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.nivel-badge-opcion-nombre {
+  font-weight: 700;
+}
+.nivel-badge-opcion.activo .nivel-badge-opcion-nombre {
+  color: var(--nivel-color);
+}
+.nivel-badge-opcion-detalle {
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--texto-tenue);
+}
+.nivel-badge-opcion-check {
+  margin-left: auto;
+  color: var(--nivel-color);
   font-weight: 700;
 }
 
@@ -3619,8 +3874,8 @@ a.link {
   gap: 12px;
   margin-top: 18px;
   padding: 16px;
-  background: var(--oro-tenue);
-  border: 1px dashed var(--oro);
+  background: color-mix(in srgb, var(--nivel-color) 9%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--nivel-color) 70%, transparent);
   border-radius: var(--radio);
 }
 .nivel-cta-texto {
@@ -3630,4 +3885,238 @@ a.link {
 .nivel-cta-texto .muted {
   font-size: 12.5px;
   margin-top: 2px;
+}
+
+/* ---------- Pista del nivel 2 (las palabras punteadas se tocan) ---------- */
+.nivel-pista {
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--texto-tenue);
+  background: var(--oro-tenue);
+  border-radius: 10px;
+  padding: 9px 12px;
+}
+.nivel-pista-demo {
+  color: var(--texto);
+  border-bottom: 1px dotted var(--oro);
+}
+
+/* ---------- Menú ☰ (MenuNav): hoja inferior en celular, panel en escritorio ---------- */
+.menu-nav-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 60; /* sobre la apoyo-pill (40) y la topbar (30) */
+  background: rgba(0, 0, 0, 0.55);
+  animation: transEntra 0.2s ease-out backwards;
+  transition: opacity 0.18s ease-out; /* espejo de MS_CIERRE en MenuNav.jsx */
+}
+.menu-nav-fondo.cerrando {
+  opacity: 0;
+  pointer-events: none;
+}
+.menu-nav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: linear-gradient(180deg, var(--negro-2), var(--negro));
+  border: 1px solid var(--gris);
+  border-bottom: none;
+  border-radius: 20px 20px 0 0;
+  padding: 8px 12px calc(14px + env(safe-area-inset-bottom, 0px));
+  animation: menuSube 0.34s var(--ease-cajon) backwards;
+  transition: transform 0.18s ease-out;
+}
+@keyframes menuSube {
+  from {
+    transform: translateY(100%);
+  }
+}
+.menu-nav-fondo.cerrando .menu-nav {
+  transform: translateY(14%);
+}
+.menu-nav-asa {
+  width: 40px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--gris);
+  margin: 2px auto 8px;
+}
+.menu-nav-item {
+  appearance: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  border: none;
+  color: var(--texto);
+  font-size: 15.5px;
+  text-align: left;
+  padding: 12px 10px;
+  border-radius: 12px;
+  transition: background 0.15s ease, transform 0.16s var(--ease-salida);
+  animation: transPaso 0.3s var(--ease-salida) backwards;
+  animation-delay: calc(40ms * var(--i)); /* cascada corta, no bloquea nada */
+}
+@media (hover: hover) and (pointer: fine) {
+  .menu-nav-item:hover {
+    background: var(--oro-tenue);
+  }
+}
+.menu-nav-item:active {
+  transform: scale(0.97);
+}
+.menu-nav-item.activo {
+  color: var(--oro);
+}
+.menu-nav-icono {
+  width: 24px;
+  text-align: center;
+  flex: 0 0 auto;
+}
+.menu-nav-check {
+  margin-left: auto;
+  color: var(--oro);
+}
+.menu-nav-sep {
+  height: 1px;
+  background: var(--gris);
+  margin: 6px 6px;
+}
+.menu-nav-apoyo {
+  color: var(--oro);
+}
+@media (min-width: 721px) {
+  /* En escritorio no hace falta velo: es un panel que brota del botón ☰ */
+  .menu-nav-fondo {
+    background: transparent;
+  }
+  .menu-nav {
+    left: auto;
+    bottom: auto;
+    top: 62px;
+    right: max(18px, calc((100vw - var(--maxw)) / 2 + 18px));
+    width: 248px;
+    border-bottom: 1px solid var(--gris);
+    border-radius: 14px;
+    padding: 8px;
+    box-shadow: var(--sombra);
+    transform-origin: top right;
+    animation: menuBrota 0.18s var(--ease-salida) backwards;
+  }
+  .menu-nav-fondo.cerrando .menu-nav {
+    transform: scale(0.98);
+  }
+  .menu-nav-asa {
+    display: none;
+  }
+  .menu-nav-item {
+    font-size: 14px;
+    padding: 9px 10px;
+    animation: none; /* el panel ya brota entero; la cascada es del celular */
+  }
+}
+@keyframes menuBrota {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-4px);
+  }
+}
+
+/* ============================================================
+   EXPERIENCIAS POR NIVEL — aplicarTemaNivel() marca
+   <html data-nivel="N"> y cada nivel ajusta densidad, radio,
+   velocidad y énfasis. Mismo contenido verificado, otra piel.
+   ============================================================ */
+
+/* 💸 Nivel 1 "Simple": aire, letras grandes, movimiento relajado.
+   El precio y el simulador son LOS protagonistas. */
+:root[data-nivel='1'] {
+  --radio: 18px;
+  --anim-reveal: 0.6s;
+  --anim-vista: 0.42s;
+}
+[data-nivel='1'] .app-shell {
+  line-height: 1.6;
+}
+[data-nivel='1'] .card {
+  padding: 24px 20px;
+}
+[data-nivel='1'] .precio .valor {
+  font-size: 30px;
+}
+[data-nivel='1'] .tesis {
+  font-size: 19px;
+}
+[data-nivel='1'] .seccion-titulo {
+  margin: 30px 0 12px;
+}
+
+/* 🟡 Nivel 2 "Aprender": el look clásico de ALTO, con las ayudas encendidas. */
+
+/* 📊 Nivel 3 "Análisis": más datos por pantalla — compacto, números
+   tabulares (las columnas cuadran) y animaciones más cortas. */
+:root[data-nivel='3'] {
+  --radio: 12px;
+  --anim-reveal: 0.32s;
+  --anim-vista: 0.26s;
+  font-variant-numeric: tabular-nums;
+}
+[data-nivel='3'] .app-shell {
+  line-height: 1.48;
+}
+[data-nivel='3'] .card {
+  padding: 18px 16px;
+}
+[data-nivel='3'] .seccion-titulo {
+  margin: 22px 0 8px;
+}
+
+/* 🧠 Nivel 4 "Lobo": terminal de pro — lo más denso y lo más rápido.
+   Quien entra aquí ve la ficha decenas de veces al día: casi sin espera. */
+:root[data-nivel='4'] {
+  --radio: 9px;
+  --anim-reveal: 0.18s;
+  --anim-vista: 0.18s;
+  font-variant-numeric: tabular-nums;
+}
+[data-nivel='4'] .app-shell {
+  line-height: 1.42;
+}
+[data-nivel='4'] .card {
+  padding: 16px 14px;
+}
+[data-nivel='4'] .seccion-titulo {
+  margin: 18px 0 7px;
+  letter-spacing: 1.4px;
+}
+[data-nivel='4'] .lead,
+[data-nivel='4'] .tesis {
+  font-size: 15.5px;
+}
+
+/* Accesibilidad: con "menos movimiento" TODO lo nuevo se calma —
+   sin cascadas ni barras; el contenido aparece de una. */
+@media (prefers-reduced-motion: reduce) {
+  .nivel-card,
+  .nivel-trans,
+  .nivel-trans-icono,
+  .nivel-trans-saltar,
+  .menu-nav,
+  .menu-nav-item,
+  .nivel-badge-menu {
+    animation: none !important;
+  }
+  .nivel-trans-pasos li {
+    animation: none !important;
+    opacity: 1;
+  }
+  .nivel-trans-barra span {
+    animation: none !important;
+    width: 100%;
+  }
 }

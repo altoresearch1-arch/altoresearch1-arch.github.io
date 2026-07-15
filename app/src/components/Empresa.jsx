@@ -188,6 +188,15 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
           </div>
         </div>
 
+        {/* Nivel 2 "Explícamela fácil": pista de que las palabras punteadas
+            se tocan (es SU modo aprender; en los demás niveles no hace falta) */}
+        {nivel === 2 && (
+          <div className="nivel-pista">
+            💡 Las palabras <span className="nivel-pista-demo">con puntitos</span> se
+            tocan: te explican el término al instante.
+          </div>
+        )}
+
         {/* Tesis: honesta, de una línea (tesis.json reemplaza el 'pendiente') */}
         {(tesisData.tesis?.[e.ticker] || e.tesis) && (
           <div className="tesis">
@@ -409,7 +418,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
         {nivel != null && nivel < 4 && (() => {
           const siguiente = NIVELES.find((n) => n.id === nivel + 1)
           return (
-            <div className="nivel-cta">
+            <div className="nivel-cta" style={{ '--nivel-color': siguiente.color }}>
               <div className="nivel-cta-texto">
                 <strong>{siguiente.icono} ¿Subimos el nivel?</strong>
                 <div className="muted">{siguiente.detalle}</div>

@@ -8,34 +8,57 @@ import { useEffect, useState } from 'react'
 const CLAVE = 'alto-nivel'
 const EVENTO = 'alto-nivel-cambio'
 
+// Cada nivel es una EXPERIENCIA, no solo un filtro de secciones:
+// - corto/color: identidad visible (badge de la barra, tarjetas del selector).
+// - incluye: qué desbloquea (chips del selector; niveles 2-4 SUMAN a lo anterior).
+// - cargando: pasos honestos de la pantalla de transición (describen lo que
+//   de verdad se muestra u oculta al cambiar — nada de teatro vacío).
+// El color NO reemplaza al dorado de la marca: es un acento secundario que
+// solo aparece en badge, selector, transición y CTA de subir nivel.
 export const NIVELES = [
   {
     id: 1,
     icono: '💸',
     nombre: '¿Cuánto podría ganar?',
+    corto: 'Simple',
+    color: '#5fc98e',
     frase: 'Quiero ver cómo se movería mi dinero',
     detalle: 'Precio, cuánto ganarías o perderías, y si reparte dividendos — sin tecnicismos.',
+    incluye: ['Precio y su gráfico', 'Simulador de ganancia', 'Dividendos', '¿Barata o cara?'],
+    cargando: ['Trayendo el precio y los dividendos…', 'Armando tu simulador…', 'Escondiendo los tecnicismos'],
   },
   {
     id: 2,
     icono: '🟡',
     nombre: 'Explícamela fácil',
+    corto: 'Aprender',
+    color: '#d4af37',
     frase: 'Nunca he invertido, quiero entender primero',
     detalle: 'Tips para estudiar la empresa, sus fundamentos y cómo leer sus números.',
+    incluye: ['Tips para estudiarla', 'Fundamentos (SMV)', 'Cómo leer sus números'],
+    cargando: ['Sumando tips y fundamentos…', 'Activando las explicaciones al toque…', 'Preparando el modo aprender'],
   },
   {
     id: 3,
     icono: '📊',
     nombre: 'Quiero analizarla',
+    corto: 'Análisis',
+    color: '#8fb8d8',
     frase: 'Ya sé lo básico, quiero explorar y comparar',
     detalle: 'Catalizadores, escenarios, riesgos y producción minera (si aplica).',
+    incluye: ['Catalizadores', 'Escenarios y riesgos', 'Producción minera'],
+    cargando: ['Cargando catalizadores y escenarios…', 'Midiendo los riesgos…', 'Subiendo la densidad de datos'],
   },
   {
     id: 4,
     icono: '🧠',
     nombre: 'Lobo de wall street',
+    corto: 'Lobo',
+    color: '#c9d6e8',
     frase: 'Dame acceso completo, con IA y documentos oficiales',
     detalle: 'Sentinel, hechos de importancia, documentos SMV, noticias y todo lo demás.',
+    incluye: ['Sentinel 🛰️', 'Hechos de importancia', 'Documentos SMV', 'Fuentes y reloj de datos'],
+    cargando: ['Desplegando Sentinel y los hechos…', 'Abriendo los documentos SMV…', 'Acceso completo concedido'],
   },
 ]
 
@@ -60,6 +83,22 @@ export const NIVEL_SECCION = {
 
 export function verSeccion(nivel, clave) {
   return nivel >= (NIVEL_SECCION[clave] || 1)
+}
+
+// Tema visual del nivel: marca <html data-nivel="N"> y expone su color de
+// acento como --nivel-color. Con eso el CSS ajusta densidad, radio de bordes
+// y velocidad de animaciones por nivel (ver "EXPERIENCIAS POR NIVEL" en
+// styles.css). Sin nivel elegido (puerta de entrada) no hay atributo.
+export function aplicarTemaNivel(nivel) {
+  const raiz = document.documentElement
+  const n = NIVELES.find((x) => x.id === nivel)
+  if (!n) {
+    delete raiz.dataset.nivel
+    raiz.style.removeProperty('--nivel-color')
+    return
+  }
+  raiz.dataset.nivel = String(n.id)
+  raiz.style.setProperty('--nivel-color', n.color)
 }
 
 export function leerNivel() {
