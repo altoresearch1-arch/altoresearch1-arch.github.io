@@ -4604,6 +4604,184 @@ a.link {
   }
 }
 
+/* ============================================================
+   🚶 TOUR GUIADO (estilo driver.js, hecho en casa): velo + foco
+   dorado que se DESLIZA entre pasos + tarjeta que explica todo.
+   La burbuja ❓ (abajo-izquierda) siempre está para abrirlo.
+   ============================================================ */
+.tour-atrapa {
+  position: fixed;
+  inset: 0;
+  z-index: 90; /* sobre TODO (menú 60, transición 80): el tour manda */
+}
+.tour-foco {
+  position: fixed;
+  z-index: 91;
+  pointer-events: none;
+  border-radius: 14px;
+  /* el velo ES la sombra del foco: todo oscuro menos este recuadro */
+  box-shadow: 0 0 0 200vmax rgba(5, 5, 5, 0.8);
+  outline: 2px solid var(--oro);
+  outline-offset: 0;
+  /* el recuadro VIAJA de un paso al siguiente (la gracia del patrón driver.js) */
+  transition: top 0.35s var(--ease-salida), left 0.35s var(--ease-salida),
+    width 0.35s var(--ease-salida), height 0.35s var(--ease-salida);
+  animation: transEntra 0.25s ease-out backwards;
+}
+.tour-tarjeta {
+  position: fixed;
+  z-index: 92;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(380px, calc(100vw - 28px));
+  background: linear-gradient(180deg, var(--negro-2), var(--negro));
+  border: 1px solid var(--oro);
+  border-radius: 14px;
+  padding: 14px 15px 12px;
+  box-shadow: var(--sombra);
+  animation: tourTarjetaEntra 0.3s var(--ease-salida) backwards;
+  transition: top 0.35s var(--ease-salida);
+}
+@keyframes tourTarjetaEntra {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+.tour-cab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tour-icono {
+  font-size: 20px;
+  line-height: 1;
+}
+.tour-titulo {
+  font-size: 15.5px;
+}
+.tour-x {
+  appearance: none;
+  cursor: pointer;
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: var(--texto-tenue);
+  font-size: 14px;
+  padding: 4px 6px;
+  border-radius: 8px;
+  transition: color 0.15s ease;
+}
+.tour-x:hover {
+  color: var(--texto);
+}
+.tour-texto {
+  margin: 8px 0 10px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--texto-tenue);
+}
+.tour-pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.tour-cuenta {
+  font-size: 12px;
+  color: var(--texto-tenue);
+  font-variant-numeric: tabular-nums;
+}
+.tour-botones {
+  display: flex;
+  gap: 8px;
+}
+.tour-botones .btn {
+  font-size: 13px;
+  padding: 7px 14px;
+}
+
+/* ---------- Burbuja ❓ (siempre a la mano, abajo a la izquierda) ---------- */
+.burbuja-tour-wrap {
+  position: fixed;
+  left: 16px;
+  bottom: 18px;
+  z-index: 40; /* misma capa que la pill de apoyo (derecha) */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+.burbuja-tour {
+  appearance: none;
+  cursor: pointer;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--oro);
+  background: linear-gradient(180deg, var(--negro-3), var(--negro-2));
+  color: var(--oro);
+  font-size: 18px;
+  box-shadow: var(--sombra);
+  transition: transform 0.16s var(--ease-salida), background 0.15s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .burbuja-tour:hover {
+    background: var(--oro-tenue);
+    transform: translateY(-1px);
+  }
+}
+.burbuja-tour:active {
+  transform: scale(0.94);
+}
+.burbuja-tour-saludo {
+  position: relative;
+  width: min(250px, calc(100vw - 90px));
+  background: linear-gradient(180deg, var(--negro-2), var(--negro));
+  border: 1px solid var(--oro);
+  border-radius: 14px;
+  padding: 12px 13px;
+  box-shadow: var(--sombra);
+  font-size: 13px;
+  animation: tourTarjetaEntra 0.35s var(--ease-salida) 0.6s backwards;
+  transform-origin: bottom left;
+}
+.burbuja-tour-saludo p {
+  margin: 4px 0 10px;
+  color: var(--texto-tenue);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+.burbuja-tour-saludo .burbuja-tour-si {
+  font-size: 13px;
+  padding: 7px 13px;
+}
+.burbuja-tour-x {
+  appearance: none;
+  cursor: pointer;
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  color: var(--texto-tenue);
+  font-size: 12px;
+  padding: 3px 5px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tour-foco,
+  .tour-tarjeta,
+  .burbuja-tour-saludo {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 /* Toques por nivel: el nivel 1 lee la radiografía más grande; el 4 entra a
    trabajar (moneda más chica, hero compacto — el mercado va primero). */
 [data-nivel='1'] .rx-v {

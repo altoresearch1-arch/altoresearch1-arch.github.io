@@ -26,6 +26,8 @@ import MenuNav from './components/MenuNav'
 import BuscadorInicio from './components/BuscadorInicio'
 import CintaBVL from './components/CintaBVL'
 import GanchoDatos from './components/GanchoDatos'
+import TourGuia, { PASOS_INICIO, PASOS_FICHA } from './components/TourGuia'
+import BurbujaTour from './components/BurbujaTour'
 import { useNivel, aplicarTemaNivel } from './lib/nivel'
 
 // "2026-06-24" -> "24 de junio de 2026"
@@ -65,6 +67,22 @@ export default function App() {
 
   // Tema visual del nivel (densidad, radio, velocidad): vive en <html data-nivel>
   useEffect(() => { aplicarTemaNivel(nivel) }, [nivel])
+
+  // 🚶 Tour guiado: 'inicio' | 'ficha' | null. Se abre desde la burbuja ❓
+  // (abajo-izquierda, siempre presente en inicio y ficha) o desde el menú ☰.
+  const [tour, setTour] = useState(null)
+  // si cambias de pantalla a mitad del tour, se cierra: sus pasos apuntaban
+  // a la pantalla anterior (el setTimeout de abrirTour llega DESPUÉS de esto)
+  useEffect(() => { setTour(null) }, [vista])
+  const abrirTour = () => {
+    if (vista === 'empresa') setTour('ficha')
+    else if (vista === 'inicio') setTour('inicio')
+    else {
+      // desde otra pantalla: primero al inicio, luego arranca (deja montar el DOM)
+      irA('#/')
+      setTimeout(() => setTour('inicio'), 400)
+    }
+  }
   const [respuestas, setRespuestas] = useState(null)
   const [tickerSel, setTickerSel] = useState(null)
   const [origenEmpresa, setOrigenEmpresa] = useState('inicio')
@@ -204,6 +222,7 @@ export default function App() {
             vista={vista}
             onIr={irA}
             onApoyar={() => setApoyoAbierto(true)}
+            onTour={abrirTour}
             onCerrar={() => setMenuAbierto(false)}
           />
         )}
@@ -376,6 +395,19 @@ export default function App() {
       {/* Pantalla de transición al cambiar de nivel (tapa el re-armado de la UI) */}
       {transicion != null && (
         <NivelTransicion nivelId={transicion} onFin={() => setTransicion(null)} />
+      )}
+
+      {/* 🚶 Tour guiado: burbuja ❓ siempre a la mano (inicio y ficha) + el tour */}
+      {/* key={vista}: al cambiar de pantalla se remonta y re-lee su saludo
+          (si no, el estado inicial del saludo se queda pegado al del inicio) */}
+      {tour == null && transicion == null && (vista === 'inicio' || vista === 'empresa') && (
+        <BurbujaTour key={vista} vista={vista} onAbrir={abrirTour} />
+      )}
+      {tour != null && (
+        <TourGuia
+          pasos={tour === 'ficha' ? PASOS_FICHA : PASOS_INICIO}
+          onCerrar={() => setTour(null)}
+        />
       )}
 
       {/* 🔔 Avisos en vivo: hechos nuevos de las empresas guardadas con ★ */}

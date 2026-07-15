@@ -16,7 +16,7 @@ const ITEMS = [
 
 const MS_CIERRE = 180 // espejo de .menu-nav-fondo.cerrando en styles.css
 
-export default function MenuNav({ vista, onIr, onApoyar, onCerrar }) {
+export default function MenuNav({ vista, onIr, onApoyar, onTour, onCerrar }) {
   const [cerrando, setCerrando] = useState(false)
 
   // Cierre con animación de salida (más corta que la entrada, como debe ser)
@@ -64,8 +64,19 @@ export default function MenuNav({ vista, onIr, onApoyar, onCerrar }) {
         ))}
         <div className="menu-nav-sep" aria-hidden="true" />
         <button
-          className="menu-nav-item menu-nav-apoyo"
+          className="menu-nav-item"
           style={{ '--i': ITEMS.length }}
+          onClick={() => {
+            onTour()
+            cerrar()
+          }}
+        >
+          <span className="menu-nav-icono" aria-hidden="true">❓</span>
+          Tour guiado
+        </button>
+        <button
+          className="menu-nav-item menu-nav-apoyo"
+          style={{ '--i': ITEMS.length + 1 }}
           onClick={() => {
             onApoyar()
             cerrar()
