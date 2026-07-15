@@ -14,6 +14,7 @@ import DividendoSimulador from './DividendoSimulador'
 import Disclaimer from './Disclaimer'
 import Sparkline from './Sparkline'
 import Termometro from './Termometro'
+import RadiografiaExpres from './RadiografiaExpres'
 import HechosImportancia from './HechosImportancia'
 import RelojDatos from './RelojDatos'
 import Sentinel from './Sentinel'
@@ -197,6 +198,10 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
           </div>
         )}
 
+        {/* 🩻 La empresa en 10 segundos — 4 datos en simple; cada uno baja a su
+            sección de detalle (para todos los públicos, pedido de Jair 15-jul) */}
+        <RadiografiaExpres empresa={e} />
+
         {/* Tesis: honesta, de una línea (tesis.json reemplaza el 'pendiente') */}
         {(tesisData.tesis?.[e.ticker] || e.tesis) && (
           <div className="tesis">
@@ -208,13 +213,14 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
           </div>
         )}
 
-        {/* Gráfico de precio (cierres reales BVL) + termómetro de volatilidad */}
-        <Sparkline ticker={e.ticker} />
-        <Termometro ticker={e.ticker} />
+        {/* Gráfico de precio (cierres reales BVL) + termómetro de volatilidad
+            (los id sec-* son las anclas de la radiografía de arriba) */}
+        <div id="sec-precio" className="sec-ancla"><Sparkline ticker={e.ticker} /></div>
+        <div id="sec-movimiento" className="sec-ancla"><Termometro ticker={e.ticker} /></div>
 
         {/* Dividendos (resumen) + ¿Barata o cara? + simuladores — lo más importante, arriba */}
-        <Reveal><DividendoResumen empresa={e} /></Reveal>
-        <Reveal><Valoracion empresa={e} /></Reveal>
+        <div id="sec-dividendos" className="sec-ancla"><Reveal><DividendoResumen empresa={e} /></Reveal></div>
+        <div id="sec-valoracion" className="sec-ancla"><Reveal><Valoracion empresa={e} /></Reveal></div>
         <Reveal>
           {pagaDividendos ? (
             <div className="sim-par">

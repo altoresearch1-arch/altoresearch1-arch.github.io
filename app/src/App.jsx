@@ -23,6 +23,7 @@ import SelectorNivel from './components/SelectorNivel'
 import NivelBadge from './components/NivelBadge'
 import NivelTransicion from './components/NivelTransicion'
 import MenuNav from './components/MenuNav'
+import BuscadorInicio from './components/BuscadorInicio'
 import { useNivel, aplicarTemaNivel } from './lib/nivel'
 
 // "2026-06-24" -> "24 de junio de 2026"
@@ -207,39 +208,40 @@ export default function App() {
 
         {/* key={vista}: remonta el contenido al cambiar de vista -> transición suave */}
         <div key={vista + (tickerSel || '')} className="vista-anim">
-          {vista === 'inicio' && (
-            <div>
-              {/* 🆕 Actualizaciones (reemplaza al "mensaje del día", pedido de Jair 09-jul):
-                  las mejoras REALES de la app, editables en config.json */}
-              {config.actualizaciones?.items?.length > 0 && (
-                <div className="mensaje-dia">
-                  <button
-                    className="mensaje-dia-cab actualizaciones-toggle"
-                    onClick={toggleActualiz}
-                    aria-expanded={actualizAbiertas}
-                  >
-                    <span>
-                      🆕 Actualizaciones
-                      {!actualizAbiertas && (
-                        <span className="actualizaciones-cuenta">
-                          {' '}({config.actualizaciones.items.length})
-                        </span>
-                      )}
-                    </span>
-                    <span className="mensaje-dia-fecha">
-                      {fechaLegible(config.actualizaciones.items[0].fecha)}
-                      <span className="actualizaciones-flecha">{actualizAbiertas ? '▲' : '▼'}</span>
-                    </span>
-                  </button>
-                  {actualizAbiertas && (
-                    <ul className="actualizaciones-lista">
-                      {config.actualizaciones.items.slice(0, 6).map((it, i) => (
-                        <li key={i}>{it.texto}</li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              )}
+          {vista === 'inicio' && (() => {
+            // 🆕 Actualizaciones (reemplaza al "mensaje del día", pedido de Jair 09-jul):
+            // las mejoras REALES de la app, editables en config.json
+            const bloqueActualizaciones = config.actualizaciones?.items?.length > 0 && (
+              <div className="mensaje-dia">
+                <button
+                  className="mensaje-dia-cab actualizaciones-toggle"
+                  onClick={toggleActualiz}
+                  aria-expanded={actualizAbiertas}
+                >
+                  <span>
+                    🆕 Actualizaciones
+                    {!actualizAbiertas && (
+                      <span className="actualizaciones-cuenta">
+                        {' '}({config.actualizaciones.items.length})
+                      </span>
+                    )}
+                  </span>
+                  <span className="mensaje-dia-fecha">
+                    {fechaLegible(config.actualizaciones.items[0].fecha)}
+                    <span className="actualizaciones-flecha">{actualizAbiertas ? '▲' : '▼'}</span>
+                  </span>
+                </button>
+                {actualizAbiertas && (
+                  <ul className="actualizaciones-lista">
+                    {config.actualizaciones.items.slice(0, 6).map((it, i) => (
+                      <li key={i}>{it.texto}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )
+
+            const bloqueHero = (
               <div className="hero">
                 {/* El logo gigante ES la moneda anti-estrés: clícalo y salta/gira/suena */}
                 <MonedaFidget />
@@ -253,34 +255,57 @@ export default function App() {
                   Valores de Lima que encajan con tu perfil — para que las
                   analices tú mismo. Gratis y educativo.
                 </p>
+                {/* Un solo protagonista (el quiz); el resto son atajos discretos */}
                 <div className="hero-actions">
                   <button className="btn btn-oro" onClick={() => irA('#/quiz')}>
-                    Empezar el quiz
-                  </button>
-                  <button className="btn" onClick={() => irA('#/explorar')}>
-                    🔎 Explorar las {empresasData.empresas.length}
-                  </button>
-                  <button className="btn" onClick={() => irA('#/glosario')}>
-                    Ver el glosario
-                  </button>
-                  <button className="btn btn-ia" onClick={() => irA('#/ia')}>
-                    🧠 Aprende con Atlas <span className="nav-beta">beta</span>
+                    🎯 Empezar el quiz
                   </button>
                 </div>
-                <button className="btn-aleatoria" onClick={empresaAleatoria}>
-                  🎲 Conoce una empresa al azar
-                </button>
+                <div className="hero-atajos">
+                  <button onClick={() => irA('#/explorar')}>
+                    🔎 Explorar las {empresasData.empresas.length}
+                  </button>
+                  <button onClick={() => irA('#/glosario')}>📖 Glosario</button>
+                  <button onClick={() => irA('#/ia')}>
+                    🧠 Atlas <span className="nav-beta">beta</span>
+                  </button>
+                  <button onClick={empresaAleatoria}>🎲 Una al azar</button>
+                </div>
               </div>
+            )
 
-              <MiLista onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
-              <HoyBVL onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
-              <EmpresaDelDia onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
+            const bloqueMercado = (
+              <>
+                <BuscadorInicio onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
+                <MiLista onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
+                <HoyBVL onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
+                <EmpresaDelDia onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
+              </>
+            )
 
-              <Pildora />
-              <div className="space" />
-              <Disclaimer />
-            </div>
-          )}
+            // Orden según el público: niveles 1-2 entran a APRENDER (hero al
+            // frente); niveles 3-4 entran a TRABAJAR (buscador y mercado primero,
+            // el hero con su moneda queda abajo).
+            return (
+              <div>
+                {bloqueActualizaciones}
+                {nivel >= 3 ? (
+                  <>
+                    {bloqueMercado}
+                    {bloqueHero}
+                  </>
+                ) : (
+                  <>
+                    {bloqueHero}
+                    {bloqueMercado}
+                  </>
+                )}
+                <Pildora />
+                <div className="space" />
+                <Disclaimer />
+              </div>
+            )
+          })()}
 
           {vista === 'quiz' && (
             <Quiz

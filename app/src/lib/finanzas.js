@@ -2,6 +2,7 @@ import preciosData from '../data/precios.json'
 import epsAnualData from '../data/eps_anual.json'
 import dividendosData from '../data/dividendos.json'
 import historicosData from '../data/historicos.json'
+import escenariosData from '../data/escenarios.json'
 
 // P/E CON CONTEXTO (pedido de Jair 08-jul): P/E = precio ÷ BPA anual (SMV).
 // Antes, si el precio era viejo (acción ilíquida) el P/E se OCULTABA — pero el
@@ -70,4 +71,40 @@ export function yieldNumerico(ticker) {
   if (!dv?.yield) return null
   const n = parseFloat(String(dv.yield).replace('%', '').replace(',', '.'))
   return isFinite(n) ? n : null
+}
+
+// Cambio % de los últimos ~6 meses (cierres reales BVL, mismo cálculo que el
+// Sparkline: primer vs último cierre del rango). null si no hay serie o si la
+// acción es "poco negociada" (el % sería engañoso — la BVL rellena la serie).
+export function cambio6M(ticker) {
+  const h = historicoDe(ticker)
+  if (!h?.valores?.length) return null
+  if (h.volatilidadEtiqueta === 'poco negociada') return null
+  const corte = new Date()
+  corte.setMonth(corte.getMonth() - 6)
+  const iso = corte.toISOString().slice(0, 10)
+  const rango = h.valores.filter(([f, v]) => f >= iso && v > 0)
+  if (rango.length < 2) return null
+  const primero = rango[0][1]
+  const ultimo = rango[rango.length - 1][1]
+  if (!primero) return null
+  return ((ultimo - primero) / primero) * 100
+}
+
+// Veredicto de valoración por P/E vs el rango justo del sector — el MISMO
+// método de Valoracion.jsx (allá está explicado con la fórmula); aquí solo la
+// conclusión para la radiografía exprés. Devuelve:
+//   { estado: 'BARATA'|'EN RANGO'|'CARA', pe, referencial }
+//   { perdida: true }  · tuvo pérdida anual (no hay P/E)
+//   null               · sin precio/BPA/rango del sector
+export function veredictoPE(ticker, sector) {
+  const rango = escenariosData.rangoPE?.[sector]
+  if (!rango) return null
+  const info = peInfo(ticker)
+  if (!info) return null
+  if (info.perdida) return { perdida: true }
+  let estado = 'EN RANGO'
+  if (info.pe < rango.bajo) estado = 'BARATA'
+  else if (info.pe > rango.alto) estado = 'CARA'
+  return { estado, pe: info.pe, referencial: info.referencial }
 }
