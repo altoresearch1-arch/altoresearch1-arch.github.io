@@ -63,11 +63,17 @@ export const NIVELES = [
 ]
 
 // Qué secciones de la ficha requieren qué nivel mínimo. Lo que no aparece
-// aquí es nivel 1 (base: siempre visible — precio, tesis, valoración, simulador).
+// aquí es nivel 1 (base: siempre visible — precio, tesis, simulador).
+// valoracion/termometro (el "porqué" con fórmula y medidor) son nivel 3:
+// en los niveles 1-2 la radiografía muestra SOLO el veredicto y eso pica la
+// curiosidad para subir de nivel (pedido de Jair 15-jul: que atrape, no que
+// dé toda la comodidad de entrada).
 export const NIVEL_SECCION = {
   tips: 2,
   guiaSector: 2,
   fundamentos: 2,
+  valoracion: 3,
+  termometro: 3,
   produccionMinera: 3,
   balanceDestacado: 3,
   catalizadores: 3,

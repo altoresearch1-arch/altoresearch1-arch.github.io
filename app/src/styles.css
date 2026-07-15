@@ -4205,6 +4205,49 @@ a.link {
   scroll-margin-top: 76px;
 }
 
+/* ---------- Anzuelo (niveles 1-2): los 4 globos se quedan, pero el porqué
+   (medidor + fórmula) vive en el nivel 3. Los tiles con gancho lo dicen en
+   dorado y al tocarlos aparece la invitación — la curiosidad hace el resto. */
+.rx-nota-gancho {
+  color: var(--oro);
+}
+.rx-invita {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin-top: 8px;
+  padding: 13px 14px;
+  background: color-mix(in srgb, var(--nivel-color) 9%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--nivel-color) 70%, transparent);
+  border-radius: var(--radio);
+  animation: transPaso 0.25s var(--ease-salida) backwards;
+}
+.rx-invita-texto {
+  flex: 1 1 230px;
+  font-size: 14px;
+}
+.rx-invita-texto .muted {
+  font-size: 12.5px;
+  margin-top: 2px;
+}
+.rx-invita-botones {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.rx-invita-luego {
+  appearance: none;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  color: var(--texto-tenue);
+  font-size: 12.5px;
+  text-decoration: underline dotted;
+  padding: 6px 2px;
+}
+
 /* ---------- 🔎 Buscador exprés del inicio ---------- */
 .buscar-inicio {
   position: relative;

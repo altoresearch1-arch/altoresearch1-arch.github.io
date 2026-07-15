@@ -198,9 +198,11 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
           </div>
         )}
 
-        {/* 🩻 La empresa en 10 segundos — 4 datos en simple; cada uno baja a su
-            sección de detalle (para todos los públicos, pedido de Jair 15-jul) */}
-        <RadiografiaExpres empresa={e} />
+        {/* 🩻 La empresa en 10 segundos. Niveles 1-2: SOLO los dos veredictos
+            que pican curiosidad (¿barata o cara? / ¿cuánto se mueve?) y el tile
+            invita a subir de nivel para ver el porqué. Niveles 3-4: los 4 datos
+            con ancla a su detalle. (Pedido de Jair 15-jul: que atrape al nuevo.) */}
+        <RadiografiaExpres empresa={e} nivel={nivel ?? 4} onSubirNivel={setNivel} />
 
         {/* Tesis: honesta, de una línea (tesis.json reemplaza el 'pendiente') */}
         {(tesisData.tesis?.[e.ticker] || e.tesis) && (
@@ -214,13 +216,19 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
         )}
 
         {/* Gráfico de precio (cierres reales BVL) + termómetro de volatilidad
-            (los id sec-* son las anclas de la radiografía de arriba) */}
+            (los id sec-* son las anclas de la radiografía de arriba).
+            El medidor y la valoración con fórmula son nivel 3+: en 1-2 solo se
+            ve el veredicto arriba — el detalle es el premio por subir. */}
         <div id="sec-precio" className="sec-ancla"><Sparkline ticker={e.ticker} /></div>
-        <div id="sec-movimiento" className="sec-ancla"><Termometro ticker={e.ticker} /></div>
+        {ver('termometro') && (
+          <div id="sec-movimiento" className="sec-ancla"><Termometro ticker={e.ticker} /></div>
+        )}
 
         {/* Dividendos (resumen) + ¿Barata o cara? + simuladores — lo más importante, arriba */}
         <div id="sec-dividendos" className="sec-ancla"><Reveal><DividendoResumen empresa={e} /></Reveal></div>
-        <div id="sec-valoracion" className="sec-ancla"><Reveal><Valoracion empresa={e} /></Reveal></div>
+        {ver('valoracion') && (
+          <div id="sec-valoracion" className="sec-ancla"><Reveal><Valoracion empresa={e} /></Reveal></div>
+        )}
         <Reveal>
           {pagaDividendos ? (
             <div className="sim-par">
