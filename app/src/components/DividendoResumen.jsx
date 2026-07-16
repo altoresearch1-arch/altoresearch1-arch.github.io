@@ -90,15 +90,15 @@ export default function DividendoResumen({ empresa }) {
                   key={i}
                   className="divres-pago"
                   style={{
-                    padding: '4px 0', borderBottom: '1px solid rgba(212,175,55,0.12)',
+                    padding: '4px 0', borderBottom: '1px solid color-mix(in srgb, var(--oro) 12%, transparent)',
                     opacity: p.anio === String(ANIO_ACTUAL) ? 1 : 0.7,
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                     <span>
-                      {p.anio === String(ANIO_ACTUAL) && <span style={{ color: '#D4AF37', marginRight: 6 }} title="pago de este año">●</span>}
+                      {p.anio === String(ANIO_ACTUAL) && <span style={{ color: 'var(--oro)', marginRight: 6 }} title="pago de este año">●</span>}
                       <span className="divres-a">{p.texto}</span>
-                      {p.anio === String(ANIO_ACTUAL) && <span style={{ color: '#D4AF37', fontSize: 11, marginLeft: 6 }}>este año</span>}
+                      {p.anio === String(ANIO_ACTUAL) && <span style={{ color: 'var(--oro)', fontSize: 11, marginLeft: 6 }}>este año</span>}
                     </span>
                     <strong>{fmtMonto(p.monto, p.moneda)}</strong>
                   </div>

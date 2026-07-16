@@ -29,13 +29,13 @@ export default function DividendoGrafico({ dv, ticker }) {
     const h = Math.max(10, (valor / max) * 56)
     return (
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end' }}>
-        <div style={{ fontSize: 15, fontWeight: 600, color: '#D4AF37', marginBottom: 4 }}>
+        <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--oro)', marginBottom: 4 }}>
           {sim} {valor.toFixed(2)}
         </div>
         <div style={{
           width: '70%', height: h, borderRadius: '5px 5px 0 0',
-          background: enCurso ? 'transparent' : '#D4AF37',
-          border: enCurso ? '1.5px dashed #D4AF37' : 'none',
+          background: enCurso ? 'transparent' : 'var(--oro)',
+          border: enCurso ? '1.5px dashed var(--oro)' : 'none',
         }} />
         <div style={{ fontSize: 12, color: '#EDE7D2', marginTop: 5 }}>{anio}</div>
         <div className="muted" style={{ fontSize: 11 }}>

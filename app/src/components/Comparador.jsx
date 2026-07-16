@@ -223,7 +223,7 @@ function Carrera({ tA, tB }) {
           return (
             <g key={f}>
               <line x1={PADL} x2={W - PADR} y1={py(v)} y2={py(v)}
-                stroke="rgba(212,175,55,0.12)" strokeWidth="1" strokeDasharray="2 4" />
+                style={{ stroke: 'color-mix(in srgb, var(--oro) 12%, transparent)' }} strokeWidth="1" strokeDasharray="2 4" />
               <text x={PADL - 6} y={py(v) + 3.5} textAnchor="end" className="prodmin-ytick">{Math.round(v)}</text>
             </g>
           )
@@ -444,11 +444,11 @@ function ChartDueloMetal({ metal, nombre, tA, tB, sA, sB }) {
         {[0.5, 1].map((f) => (
           <g key={f}>
             <line x1={PADL} x2={W - PADR} y1={py(max * f)} y2={py(max * f)}
-              stroke="rgba(212,175,55,0.14)" strokeWidth="1" strokeDasharray="2 4" />
+              style={{ stroke: 'color-mix(in srgb, var(--oro) 14%, transparent)' }} strokeWidth="1" strokeDasharray="2 4" />
             <text x={PADL - 6} y={py(max * f) + 3.5} textAnchor="end" className="prodmin-ytick">{compacto(max * f)}</text>
           </g>
         ))}
-        <line x1={PADL} x2={W - PADR} y1={py(0)} y2={py(0)} stroke="rgba(212,175,55,0.3)" strokeWidth="1" />
+        <line x1={PADL} x2={W - PADR} y1={py(0)} y2={py(0)} style={{ stroke: 'color-mix(in srgb, var(--oro) 30%, transparent)' }} strokeWidth="1" />
         {ticks.map(({ m, i }) => (
           <text key={m} x={px(i)} y={H - 6}
             textAnchor={i === 0 ? 'start' : i === meses.length - 1 ? 'end' : 'middle'}

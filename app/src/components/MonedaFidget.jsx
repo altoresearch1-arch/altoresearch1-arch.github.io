@@ -66,7 +66,7 @@ function sonarIntento(intento) {
 // 🎉 Partículas doradas al lograr el giro: chispas que salen disparadas del
 // centro y caen con "gravedad" (todo con spans + WAAPI; se autodestruyen).
 function soltarParticulas(wrap, reduce) {
-  const cuantas = reduce ? 6 : 16
+  const cuantas = reduce ? 10 : 34
   const rect = wrap.getBoundingClientRect()
   const cx = rect.width / 2
   const cy = rect.height / 2
@@ -85,19 +85,25 @@ function soltarParticulas(wrap, reduce) {
     wrap.appendChild(p)
     // ángulo con sesgo hacia arriba (fuente de chispas) + gravedad de vuelta
     const ang = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.4
-    const dist = 60 + Math.random() * 90
+    const dist = 55 + Math.random() * 115
     const dx = Math.cos(ang) * dist
     const dy = Math.sin(ang) * dist
     const caida = 40 + Math.random() * 60
     const dur = 650 + Math.random() * 450
     const giro = (Math.random() - 0.5) * 540
+    // salida escalonada (stagger): las chispas no explotan como un anillo
+    // perfecto sino como una FUENTE — unas salen al toque y otras un pelín
+    // después. Nace invisible (estilo natural) para que la espera no la
+    // muestre plantada en el centro; los keyframes la encienden al arrancar.
+    const espera = Math.random() * 110
+    p.style.opacity = '0'
     p.animate(
       [
         { transform: 'translate(-50%, -50%) scale(1) rotate(0deg)', opacity: 1 },
         { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(1.1) rotate(${giro * 0.6}deg)`, opacity: 1, offset: 0.55 },
         { transform: `translate(calc(-50% + ${dx * 1.15}px), calc(-50% + ${dy + caida}px)) scale(0.4) rotate(${giro}deg)`, opacity: 0 },
       ],
-      { duration: dur, easing: 'cubic-bezier(0.16, 0.8, 0.4, 1)' }
+      { duration: dur, delay: espera, easing: 'cubic-bezier(0.16, 0.8, 0.4, 1)' }
     ).onfinish = () => p.remove()
   }
 }

@@ -69,17 +69,25 @@ export default function FondoVivo() {
     }
 
     const crearParticulas = () => {
-      const n = esMovil ? 150 : 360
-      particulas = Array.from({ length: n }, () => ({
-        x: Math.random() * ancho,
-        y: Math.random() * alto,
-        vx: (Math.random() - 0.5) * 12,
-        vy: -3 - Math.random() * 9, // deriva lenta hacia arriba (como brasas)
-        r: 0.7 + Math.random() * 1.7,
-        base: 0.08 + Math.random() * 0.22, // opacidad base (tenue)
-        fase: Math.random() * Math.PI * 2,
-        parpadeo: 0.4 + Math.random() * 0.9,
-      }))
+      // Más polvo (pedido 16-jul) y con PROFUNDIDAD: tamaño, velocidad y brillo
+      // van juntos — las motas "cercanas" son grandes, rápidas y brillantes;
+      // las "lejanas", chicas y lentas. El ojo lee capas (parallax barato)
+      // en vez de una cortina plana. El sesgo (**1.6) manda a la mayoría al
+      // fondo para que la densidad extra no ensucie la lectura del texto.
+      const n = esMovil ? 240 : 620
+      particulas = Array.from({ length: n }, () => {
+        const prof = Math.pow(Math.random(), 1.6) // 0 = lejos, 1 = pegada al vidrio
+        return {
+          x: Math.random() * ancho,
+          y: Math.random() * alto,
+          vx: (Math.random() - 0.5) * (6 + prof * 14),
+          vy: -(2 + prof * 13), // deriva hacia arriba (como brasas); cerca = más rápido
+          r: 0.5 + prof * 2.6,
+          base: 0.05 + prof * 0.28, // opacidad base (tenue; crece con la cercanía)
+          fase: Math.random() * Math.PI * 2,
+          parpadeo: 0.4 + Math.random() * 0.9,
+        }
+      })
     }
 
     // ---- FLECHAS DE ÍNDICE BURSÁTIL (como la del logo de ALTO): zigzag con

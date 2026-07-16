@@ -103,9 +103,11 @@ export default function Sparkline({ ticker, compacto = false }) {
           onTouchMove={compacto ? undefined : moverHover}
           onTouchEnd={compacto ? undefined : () => setHover(null)}>
           <defs>
+            {/* var(--oro) va en style (los ATRIBUTOS svg no aceptan var()):
+                el gráfico se tiñe del elemento del nivel */}
             <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#d4af37" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="#d4af37" stopOpacity="0" />
+              <stop offset="0%" style={{ stopColor: 'var(--oro)' }} stopOpacity="0.35" />
+              <stop offset="100%" style={{ stopColor: 'var(--oro)' }} stopOpacity="0" />
             </linearGradient>
           </defs>
           {/* grilla punteada con el PRECIO en el eje (estilo BEM) */}
@@ -114,7 +116,8 @@ export default function Sparkline({ ticker, compacto = false }) {
             return (
               <g key={f}>
                 <line x1={PADL} x2={W - PADR} y1={py(v)} y2={py(v)}
-                  stroke="rgba(212,175,55,0.16)" strokeWidth="1" strokeDasharray="2 4" />
+                  style={{ stroke: 'color-mix(in srgb, var(--oro) 16%, transparent)' }}
+                  strokeWidth="1" strokeDasharray="2 4" />
                 <text x={PADL - 7} y={py(v) + 3.5} textAnchor="end" className="prodmin-ytick">
                   {fmtPrecio(v)}
                 </text>
@@ -135,12 +138,12 @@ export default function Sparkline({ ticker, compacto = false }) {
               stroke="rgba(244,241,233,0.35)" strokeWidth="1" strokeDasharray="3 3" />
           )}
           <polygon points={area} fill={`url(#${gid})`} />
-          <polyline points={linea} fill="none" stroke="#d4af37" strokeWidth="2"
+          <polyline points={linea} fill="none" style={{ stroke: 'var(--oro)' }} strokeWidth="2"
             strokeLinejoin="round" strokeLinecap="round" className="spark-linea" />
-          {hv && <circle cx={px(hover)} cy={py(hv[1])} r="4" fill="#e6c965" />}
-          <circle cx={px(serie.length - 1)} cy={py(ultimo)} r="3.5" fill="#e6c965" className="spark-punto" />
+          {hv && <circle cx={px(hover)} cy={py(hv[1])} r="4" style={{ fill: 'var(--oro-suave)' }} />}
+          <circle cx={px(serie.length - 1)} cy={py(ultimo)} r="3.5" style={{ fill: 'var(--oro-suave)' }} className="spark-punto" />
           <circle cx={px(serie.length - 1)} cy={py(ultimo)} r="6" fill="none"
-            stroke="#e6c965" strokeWidth="1.3" opacity="0.7" />
+            style={{ stroke: 'var(--oro-suave)' }} strokeWidth="1.3" opacity="0.7" />
         </svg>
         {compacto && (
           <div className="spark-minmax">
@@ -154,7 +157,7 @@ export default function Sparkline({ ticker, compacto = false }) {
         <div className="prodmin-lectura">
           <strong>{fechaCorta(hv[0])}</strong>
           <span className="prodmin-lectura-item">
-            <span className="prodmin-dot" style={{ background: '#d4af37' }} />
+            <span className="prodmin-dot" style={{ background: 'var(--oro)' }} />
             {moneda} {hv[1]}
           </span>
           <span className={'prodmin-lectura-item ' + (hv[1] >= primero ? 'sube' : 'baja')}>

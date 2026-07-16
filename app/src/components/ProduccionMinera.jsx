@@ -245,13 +245,13 @@ function GraficoMetal({ metal, lineas, meses, conLeyenda }) {
           {[0.25, 0.5, 0.75, 1].map((f) => (
             <g key={f}>
               <line x1={PADL} x2={W - PADR} y1={py(max * f)} y2={py(max * f)}
-                stroke="rgba(212,175,55,0.16)" strokeWidth="1" strokeDasharray="2 4" />
+                style={{ stroke: 'color-mix(in srgb, var(--oro) 16%, transparent)' }} strokeWidth="1" strokeDasharray="2 4" />
               <text x={PADL - 7} y={py(max * f) + 3.5} textAnchor="end" className="prodmin-ytick">
                 {compacto(max * f)}
               </text>
             </g>
           ))}
-          <line x1={PADL} x2={W - PADR} y1={py(0)} y2={py(0)} stroke="rgba(212,175,55,0.35)" strokeWidth="1" />
+          <line x1={PADL} x2={W - PADR} y1={py(0)} y2={py(0)} style={{ stroke: 'color-mix(in srgb, var(--oro) 35%, transparent)' }} strokeWidth="1" />
           <text x={PADL - 7} y={py(0) + 3.5} textAnchor="end" className="prodmin-ytick">0</text>
           {/* frontera 2025 | 2026 */}
           {(() => {

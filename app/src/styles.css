@@ -1864,8 +1864,8 @@ a.link {
 }
 .comparar-lista {
   border-color: var(--oro);
-  background: linear-gradient(180deg, rgba(212, 175, 55, 0.16), var(--negro-2));
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 22px rgba(212, 175, 55, 0.22);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--oro) 16%, transparent), var(--negro-2));
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 22px color-mix(in srgb, var(--oro) 22%, transparent);
   animation: popListo 0.35s cubic-bezier(0.2, 0.7, 0.3, 1) both;
 }
 .comparar-check {
@@ -2240,7 +2240,7 @@ a.link {
 .rango52-relleno {
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(212, 175, 55, 0.25), var(--oro));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--oro) 25%, transparent), var(--oro));
   transition: width 0.8s cubic-bezier(0.2, 0.7, 0.3, 1);
 }
 .rango52-marca {
@@ -2298,8 +2298,8 @@ a.link {
   left: -18vmax;
   top: -30vmax;
   background: radial-gradient(circle,
-    rgba(212, 175, 55, 0.075) 0%,
-    rgba(212, 175, 55, 0.03) 38%,
+    color-mix(in srgb, var(--oro) 7.5%, transparent) 0%,
+    color-mix(in srgb, var(--oro) 3%, transparent) 38%,
     transparent 68%);
   animation: auroraA 26s ease-in-out infinite alternate;
 }
@@ -2340,10 +2340,11 @@ a.link {
    topbar con blur premium, botones con brillo sutil.
    ============================================================ */
 
-/* ---------- Topbar flotante TRANSPARENTE (sin banda ni línea que desentone) ---------- */
+/* ---------- Topbar TRANSPARENTE que se queda ARRIBA (pedido de Jair 16-jul:
+   que no te siga al hacer scroll — flotando encima incomoda la lectura).
+   z-index se conserva para que el menú del badge se dibuje sobre el contenido. */
 .topbar {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 30;
   background: transparent;
 }
@@ -2370,36 +2371,44 @@ a.link {
   pointer-events: none;
   z-index: 5;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #ffe9a8, var(--oro) 60%, rgba(212, 175, 55, 0) 100%);
-  color: var(--oro-suave);
+  /* del color del ELEMENTO del nivel (--nivel-color = oro si no hay nivel):
+     la celebración de la moneda combina con el logo ya teñido */
+  background: radial-gradient(
+    circle at 35% 35%,
+    color-mix(in srgb, var(--nivel-color) 45%, #fff),
+    var(--nivel-color) 60%,
+    transparent 100%
+  );
+  color: color-mix(in srgb, var(--nivel-color) 62%, #fff);
   line-height: 1;
-  text-shadow: 0 0 8px rgba(212, 175, 55, 0.8);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--nivel-color) 80%, transparent);
   will-change: transform, opacity;
 }
 
-/* ---------- Logo del hero: aura dorada que respira ---------- */
+/* ---------- Logo del hero: aura que respira DEL COLOR DEL NIVEL ----------
+   (var(--oro) ya es el color del elemento en los niveles 1-3) */
 .hero-logo {
   width: 185px;
   height: 185px;
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid rgba(212, 175, 55, 0.35);
+  border: 1px solid color-mix(in srgb, var(--oro) 35%, transparent);
   box-shadow:
-    0 0 42px rgba(212, 175, 55, 0.26),
-    0 0 130px rgba(212, 175, 55, 0.10);
+    0 0 42px color-mix(in srgb, var(--oro) 26%, transparent),
+    0 0 130px color-mix(in srgb, var(--oro) 10%, transparent);
   animation: auraLogo 5.5s ease-in-out infinite;
 }
 @keyframes auraLogo {
   0%, 100% {
     box-shadow:
-      0 0 42px rgba(212, 175, 55, 0.26),
-      0 0 130px rgba(212, 175, 55, 0.10);
+      0 0 42px color-mix(in srgb, var(--oro) 26%, transparent),
+      0 0 130px color-mix(in srgb, var(--oro) 10%, transparent);
     transform: scale(1);
   }
   50% {
     box-shadow:
-      0 0 60px rgba(212, 175, 55, 0.38),
-      0 0 170px rgba(212, 175, 55, 0.16);
+      0 0 60px color-mix(in srgb, var(--oro) 38%, transparent),
+      0 0 170px color-mix(in srgb, var(--oro) 16%, transparent);
     transform: scale(1.015);
   }
 }
@@ -2410,7 +2419,13 @@ a.link {
   letter-spacing: 0.3px;
 }
 .hero h1 .oro {
-  background: linear-gradient(100deg, #f2dc92 0%, #d4af37 45%, #b08d2b 100%);
+  /* degradado desde var(--oro): en los niveles 1-3 el título es del elemento */
+  background: linear-gradient(
+    100deg,
+    color-mix(in srgb, var(--oro) 60%, #fff) 0%,
+    var(--oro) 45%,
+    color-mix(in srgb, var(--oro) 76%, #000) 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -2420,13 +2435,14 @@ a.link {
   opacity: 0.95;
 }
 
-/* ---------- Botón dorado con brillo (llamada a la acción) ---------- */
+/* ---------- Botón dorado con brillo (llamada a la acción) ----------
+   (el brillo sale de var(--oro): del color del elemento en niveles 1-3) */
 .btn-oro {
-  box-shadow: 0 3px 14px rgba(212, 175, 55, 0.22);
+  box-shadow: 0 3px 14px color-mix(in srgb, var(--oro) 22%, transparent);
 }
 .btn-oro:hover {
   filter: brightness(1.07);
-  box-shadow: 0 5px 22px rgba(212, 175, 55, 0.38);
+  box-shadow: 0 5px 22px color-mix(in srgb, var(--oro) 38%, transparent);
 }
 
 /* ---------- Tarjetas con vida al pasar el cursor ---------- */
@@ -2540,7 +2556,7 @@ a.link {
 .prodmin-link {
   color: var(--oro);
   text-decoration: none;
-  border-bottom: 1px dotted rgba(212, 175, 55, 0.5);
+  border-bottom: 1px dotted color-mix(in srgb, var(--oro) 50%, transparent);
 }
 .prodmin-link:hover { border-bottom-style: solid; }
 .prodmin-nota {
@@ -2555,7 +2571,7 @@ a.link {
 
 /* ⛏️ prodmin v2: números que enganchan */
 .prodmin-trofeo {
-  border: 1px solid rgba(212, 175, 55, 0.45);
+  border: 1px solid color-mix(in srgb, var(--oro) 45%, transparent);
   background: var(--oro-tenue);
   border-radius: 10px;
   padding: 9px 12px;
@@ -2822,10 +2838,10 @@ a.link {
 /* Todas las gráficas estilo BEM (pedido de Jair): pista con grilla punteada
    también en las barras de dividendos, y lecturas de hover con color. */
 .divgraf-pista {
-  border-bottom: 1px solid rgba(212, 175, 55, 0.35);
+  border-bottom: 1px solid color-mix(in srgb, var(--oro) 35%, transparent);
   background-image:
-    repeating-linear-gradient(to right, rgba(212, 175, 55, 0.14) 0 2px, transparent 2px 6px),
-    repeating-linear-gradient(to right, rgba(212, 175, 55, 0.14) 0 2px, transparent 2px 6px);
+    repeating-linear-gradient(to right, color-mix(in srgb, var(--oro) 14%, transparent) 0 2px, transparent 2px 6px),
+    repeating-linear-gradient(to right, color-mix(in srgb, var(--oro) 14%, transparent) 0 2px, transparent 2px 6px);
   background-size: 100% 1px, 100% 1px;
   background-position: 0 33%, 0 66%;
   background-repeat: no-repeat;
@@ -2903,7 +2919,7 @@ a.link {
 .ya-yachay .ya-burbuja {
   align-self: flex-start;
   background: var(--oro-tenue);
-  border: 1px solid rgba(212, 175, 55, 0.28);
+  border: 1px solid color-mix(in srgb, var(--oro) 28%, transparent);
   border-top-left-radius: 4px;
 }
 .ya-usuario { align-items: flex-end; }
@@ -2936,7 +2952,7 @@ a.link {
 .ya-chip {
   padding: 7px 12px;
   background: transparent;
-  border: 1px dashed rgba(212, 175, 55, 0.5);
+  border: 1px dashed color-mix(in srgb, var(--oro) 50%, transparent);
   border-radius: 999px;
   color: var(--texto);
   font-size: 13px;
@@ -2972,7 +2988,7 @@ a.link {
   flex: 1;
   padding: 12px 14px;
   background: var(--gris);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  border: 1px solid color-mix(in srgb, var(--oro) 30%, transparent);
   border-radius: var(--radio);
   color: var(--texto);
   font-size: 15px;
@@ -3045,7 +3061,7 @@ a.link {
 .coment-tipo {
   padding: 8px 12px;
   background: transparent;
-  border: 1px solid rgba(212, 175, 55, 0.35);
+  border: 1px solid color-mix(in srgb, var(--oro) 35%, transparent);
   border-radius: 999px;
   color: var(--texto);
   font-size: 13px;
@@ -3062,7 +3078,7 @@ a.link {
   box-sizing: border-box;
   padding: 12px 14px;
   background: var(--gris);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  border: 1px solid color-mix(in srgb, var(--oro) 30%, transparent);
   border-radius: var(--radio);
   color: var(--texto);
   font-size: 15px;
@@ -3098,7 +3114,7 @@ a.link {
 .hi-leer {
   padding: 3px 10px;
   background: transparent;
-  border: 1px solid rgba(212, 175, 55, 0.45);
+  border: 1px solid color-mix(in srgb, var(--oro) 45%, transparent);
   border-radius: 999px;
   color: var(--oro-suave);
   font-size: 11.5px;
@@ -3113,9 +3129,9 @@ a.link {
 .hi-lectura-panel {
   margin-top: 10px;
   padding: 12px 14px;
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  border: 1px solid color-mix(in srgb, var(--oro) 30%, transparent);
   border-radius: 12px;
-  background: rgba(212, 175, 55, 0.05);
+  background: color-mix(in srgb, var(--oro) 5%, transparent);
   display: flex;
   flex-direction: column;
   gap: 9px;
@@ -3145,7 +3161,7 @@ a.link {
   align-items: flex-start;
   gap: 10px;
   padding: 8px 0;
-  border-bottom: 1px dashed rgba(212, 175, 55, 0.18);
+  border-bottom: 1px dashed color-mix(in srgb, var(--oro) 18%, transparent);
 }
 .docs-periodo:last-of-type { border-bottom: none; }
 .docs-periodo-tag {
@@ -3156,7 +3172,7 @@ a.link {
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--oro-suave);
-  border: 1px solid rgba(212, 175, 55, 0.4);
+  border: 1px solid color-mix(in srgb, var(--oro) 40%, transparent);
   border-radius: 999px;
 }
 .docs-botones {
@@ -3169,7 +3185,7 @@ a.link {
   font-size: 12.5px;
   color: var(--texto);
   text-decoration: none;
-  border: 1px solid rgba(212, 175, 55, 0.35);
+  border: 1px solid color-mix(in srgb, var(--oro) 35%, transparent);
   border-radius: 10px;
   transition: background 0.15s, border-color 0.15s;
   -webkit-tap-highlight-color: transparent;
@@ -3207,7 +3223,7 @@ a.link {
   align-items: center;
   gap: 4px;
   padding: 26px 14px;
-  border: 2px dashed rgba(212, 175, 55, 0.45);
+  border: 2px dashed color-mix(in srgb, var(--oro) 45%, transparent);
   border-radius: var(--radio);
   cursor: pointer;
   text-align: center;
@@ -3289,7 +3305,7 @@ a.link {
   margin: 12px 0 0;
   padding: 9px 11px;
   border-left: 2px solid var(--oro);
-  background: rgba(212, 175, 55, 0.06);
+  background: color-mix(in srgb, var(--oro) 6%, transparent);
   border-radius: 4px;
 }
 .actualizaciones-lista {
@@ -3319,7 +3335,7 @@ a.link {
   margin: 18px 0 6px;
   padding: 12px 14px;
   border: 1px solid var(--oro-tenue);
-  background: linear-gradient(180deg, rgba(212, 175, 55, 0.06), rgba(212, 175, 55, 0.02));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--oro) 6%, transparent), color-mix(in srgb, var(--oro) 2%, transparent));
   border-radius: 12px;
 }
 .reloj-cab {
@@ -3350,7 +3366,7 @@ a.link {
   margin: 12px 0 6px;
   padding: 11px 14px;
   border: 1px solid var(--oro-tenue);
-  background: linear-gradient(180deg, rgba(212, 175, 55, 0.06), rgba(212, 175, 55, 0.02));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--oro) 6%, transparent), color-mix(in srgb, var(--oro) 2%, transparent));
   border-radius: 12px;
 }
 .reloj-precios-cab {
@@ -3656,8 +3672,98 @@ a.link {
   pointer-events: none;
 }
 .nivel-trans-inner {
+  position: relative; /* por delante de las motas (van en absolute detrás) */
   text-align: center;
   max-width: 340px;
+}
+/* 🎇 Transición ELEMENTAL estilo Destiny (pedido de Jair 16-jul): cada
+   nivel invoca SU elemento detrás de la tarjeta — hebras 🧵, brasas 🔥 y
+   cristales ❄️; el 👑 va limpio (Jair pidió quitar los destellos de oro).
+   Solo transform+opacity (GPU); no existen con prefers-reduced-motion
+   (el componente ni las renderiza). */
+.nivel-trans-motas {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.nivel-trans-motas span {
+  position: absolute;
+  bottom: -70px;
+  opacity: 0;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform, opacity;
+}
+/* 🧵 CUERDA: hebras verdes que ondulan al subir (hilos que tejen) */
+.nivel-trans-motas.elemento-1 span {
+  border-radius: 2px;
+  background: linear-gradient(180deg, transparent, var(--nivel-color), transparent);
+  animation-name: transHebra;
+}
+@keyframes transHebra {
+  0% {
+    transform: translateY(0) rotate(var(--mota-rot, 10deg));
+    opacity: 0;
+  }
+  15% {
+    opacity: var(--mota-alfa, 0.45);
+  }
+  50% {
+    transform: translateY(-55vh) rotate(calc(-1 * var(--mota-rot, 10deg)));
+  }
+  100% {
+    transform: translateY(-112vh) rotate(var(--mota-rot, 10deg));
+    opacity: 0;
+  }
+}
+/* 🔥 SOLAR: brasas rápidas que titilan mientras suben (fogata) */
+.nivel-trans-motas.elemento-2 span {
+  border-radius: 50%;
+  background: var(--nivel-color);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--nivel-color) 75%, transparent);
+  animation-name: transBrasa;
+}
+@keyframes transBrasa {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: var(--mota-alfa, 0.5);
+  }
+  38% {
+    opacity: calc(var(--mota-alfa, 0.5) * 0.45); /* titileo de fuego */
+  }
+  55% {
+    opacity: var(--mota-alfa, 0.5);
+  }
+  100% {
+    transform: translateY(-112vh) translateX(16px) scale(0.35);
+    opacity: 0;
+  }
+}
+/* ❄️ STASIS: cristales (rombos) que CAEN girando, como nieve lenta */
+.nivel-trans-motas.elemento-3 span {
+  top: -70px;
+  bottom: auto;
+  border-radius: 2px;
+  background: var(--nivel-color);
+  box-shadow: 0 0 7px color-mix(in srgb, var(--nivel-color) 60%, transparent);
+  animation-name: transCristal;
+}
+@keyframes transCristal {
+  0% {
+    transform: translateY(0) rotate(45deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--mota-alfa, 0.45);
+  }
+  100% {
+    transform: translateY(112vh) translateX(-12px) rotate(225deg);
+    opacity: 0;
+  }
 }
 .nivel-trans-icono {
   display: inline-block;
@@ -3766,7 +3872,7 @@ a.link {
   font-size: 13px;
   padding: 6px 12px;
   border-radius: 999px;
-  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.4), 0 2px 8px rgba(212, 175, 55, 0.25);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--oro) 40%, transparent), 0 2px 8px color-mix(in srgb, var(--oro) 25%, transparent);
   transition: filter 0.15s ease, transform 0.16s var(--ease-salida);
 }
 @media (hover: hover) and (pointer: fine) {
@@ -3877,6 +3983,39 @@ a.link {
   background: color-mix(in srgb, var(--nivel-color) 9%, transparent);
   border: 1px dashed color-mix(in srgb, var(--nivel-color) 70%, transparent);
   border-radius: var(--radio);
+}
+/* el botón viste el color del nivel DESTINO (tanto .nivel-cta como
+   .rx-invita traen --nivel-color del nivel al que invitan, puesto inline) —
+   pedido de Jair 16-jul: "que sea al color al nivel que se debe cambiar".
+   Y su AURA RESALTA: respira con el color del destino, invitando a subir. */
+.rx-invita .btn-oro,
+.nivel-cta .btn-oro {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--nivel-color) 62%, #fff),
+    var(--nivel-color)
+  );
+  animation: auraSubir 2.8s ease-in-out infinite;
+}
+@keyframes auraSubir {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--nivel-color) 55%, transparent),
+      0 0 14px color-mix(in srgb, var(--nivel-color) 30%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 0 2px color-mix(in srgb, var(--nivel-color) 75%, transparent),
+      0 0 30px color-mix(in srgb, var(--nivel-color) 55%, transparent),
+      0 0 60px color-mix(in srgb, var(--nivel-color) 22%, transparent);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rx-invita .btn-oro,
+  .nivel-cta .btn-oro {
+    animation: none;
+    box-shadow: 0 0 18px color-mix(in srgb, var(--nivel-color) 45%, transparent);
+  }
 }
 .nivel-cta-texto {
   flex: 1 1 220px;
@@ -4249,6 +4388,185 @@ a.link {
     opacity: 1;
   }
 }
+
+/* ---------- 👑 EL ELEMENTO REINA (pedido de Jair 16-jul) ----------
+   "Que predomine el color del nivel, no solo amarillo": el DORADO de la
+   interfaz SE VUELVE el color del elemento. Redefinir --oro/--oro-suave/
+   --oro-tenue por nivel tiñe DE UN GOLPE todo acento que ya era oro
+   (tips, precio, bordes de simuladores, botones, kicker, menú, tooltips,
+   estrella de favoritos…). El nivel 4 no necesita regla: SU elemento ES
+   el oro. Lo que NO se toca: --verde/--rojo/--ambar (sube/baja/alerta
+   significan dinero y eso no se negocia). */
+[data-nivel='1'] {
+  --oro: #35da85;
+  --oro-suave: #82edb6;
+  --oro-tenue: rgba(53, 218, 133, 0.12);
+}
+[data-nivel='2'] {
+  --oro: #f2721b;
+  --oro-suave: #ffa563;
+  --oro-tenue: rgba(242, 114, 27, 0.12);
+}
+[data-nivel='3'] {
+  --oro: #6fb7f0;
+  --oro-suave: #abd5f9;
+  --oro-tenue: rgba(111, 183, 240, 0.13);
+}
+
+/* ---------- ✨ MICRO-EFECTOS ELEMENTALES en los botones (pedido de Jair
+   16-jul): a pequeña escala, para que quien se quede mirando los descubra.
+   Una sola capa ::after por botón; cada nivel le da SU vida:
+   🧵 un hilo fino que teje el botón · 🔥 brasas que suben ·
+   ❄️ escarcha que destella · 👑 (y sin nivel) pulido de oro que barre.
+   Luz blanca a baja opacidad: no ensucia el texto ni el contraste. */
+.btn-oro {
+  position: relative;
+  overflow: hidden;
+}
+.btn-oro::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* 👑 pulido: un brillo diagonal barre el oro y descansa (como metal recién lustrado) */
+  background: linear-gradient(
+      115deg,
+      transparent 36%,
+      rgba(255, 255, 255, 0.35) 50%,
+      transparent 64%
+    )
+    no-repeat;
+  background-size: 240% 100%;
+  animation: pulidoBtn 5.4s ease-in-out infinite;
+}
+@keyframes pulidoBtn {
+  0%, 58% {
+    background-position: 115% 0;
+  }
+  100% {
+    background-position: -55% 0;
+  }
+}
+/* 🧵 Cuerda: un HILO de luz fino cruza tejiendo, sin descanso pero discreto */
+[data-nivel='1'] .btn-oro::after {
+  background: linear-gradient(
+      100deg,
+      transparent 48.5%,
+      rgba(255, 255, 255, 0.55) 50%,
+      transparent 51.5%
+    )
+    no-repeat;
+  background-size: 240% 100%;
+  animation: pulidoBtn 3.6s linear infinite;
+}
+/* 🔥 Solar: brasas chiquitas suben dentro del botón (patrón que se desplaza
+   en Y exactamente un mosaico por vuelta = bucle sin salto) */
+[data-nivel='2'] .btn-oro::after {
+  background-image:
+    radial-gradient(1.8px 1.8px at 16% 24%, rgba(255, 236, 200, 0.95), transparent 100%),
+    radial-gradient(1.3px 1.3px at 38% 70%, rgba(255, 214, 150, 0.85), transparent 100%),
+    radial-gradient(2px 2px at 60% 40%, rgba(255, 240, 210, 0.95), transparent 100%),
+    radial-gradient(1.2px 1.2px at 78% 82%, rgba(255, 210, 140, 0.85), transparent 100%),
+    radial-gradient(1.6px 1.6px at 90% 18%, rgba(255, 230, 190, 0.9), transparent 100%);
+  background-size: 100% 50%;
+  background-repeat: repeat;
+  animation: brasasBtn 3s linear infinite;
+  opacity: 0.6;
+}
+@keyframes brasasBtn {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 -100%;
+  }
+}
+/* ❄️ Stasis: motitas de escarcha que destellan juntas, como hielo al sol */
+[data-nivel='3'] .btn-oro::after {
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 28%, rgba(255, 255, 255, 0.95), transparent 100%),
+    radial-gradient(1px 1px at 34% 72%, rgba(255, 255, 255, 0.85), transparent 100%),
+    radial-gradient(1.8px 1.8px at 56% 22%, rgba(255, 255, 255, 0.95), transparent 100%),
+    radial-gradient(1.2px 1.2px at 76% 64%, rgba(255, 255, 255, 0.9), transparent 100%),
+    radial-gradient(1.5px 1.5px at 92% 36%, rgba(255, 255, 255, 0.95), transparent 100%);
+  animation: escarchaBtn 4.2s ease-in-out infinite;
+}
+@keyframes escarchaBtn {
+  0%, 100% {
+    opacity: 0.18;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-oro::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* ---------- El INFORME entero toma el tono del elemento ----------
+   Nota: en el nivel 4 var(--nivel-color) ES el oro de la marca, así que
+   estas reglas valen para los 4 niveles sin excepción ni caso especial. */
+[data-nivel] .seccion-titulo {
+  color: var(--nivel-color);
+}
+[data-nivel] .tesis {
+  border-left-color: var(--nivel-color);
+}
+[data-nivel] .card {
+  border-color: color-mix(in srgb, var(--nivel-color) 16%, var(--gris));
+}
+[data-nivel] .rx-tit {
+  color: var(--nivel-color);
+}
+[data-nivel] .rx-nota-gancho {
+  color: var(--nivel-color);
+}
+/* las palabras punteadas del glosario también son del elemento */
+[data-nivel] .termino {
+  border-bottom-color: color-mix(in srgb, var(--nivel-color) 78%, transparent);
+}
+@media (hover: hover) and (pointer: fine) {
+  [data-nivel] .rx-tile:hover {
+    border-color: var(--nivel-color);
+  }
+}
+
+/* ---------- El badge de la topbar VISTE el elemento ---------- */
+.nav .nivel-badge {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--nivel-color) 78%, #fff),
+    var(--nivel-color)
+  );
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--nivel-color) 45%, transparent),
+    0 2px 8px color-mix(in srgb, var(--nivel-color) 28%, transparent);
+}
+
+/* ---------- El LOGO también cambia de elemento (moneda, barra y puerta) ----------
+   Receta grayscale→sepia→hue-rotate→saturate: recolorea CUALQUIER imagen
+   sin importar sus colores originales (hue-rotate a secas apenas movía el
+   dorado saturado y el logo "seguía amarillo" — reclamo de Jair 16-jul).
+   Como filter afecta todo el render del elemento, el borde y el aura que
+   respira alrededor de la moneda cambian gratis. */
+[data-nivel='1'] .brand-logo,
+[data-nivel='1'] .hero-logo,
+[data-nivel='1'] .nivel-gate-logo {
+  filter: grayscale(1) sepia(1) saturate(2.6) hue-rotate(100deg) brightness(1.04); /* 🧵 Cuerda */
+}
+[data-nivel='2'] .brand-logo,
+[data-nivel='2'] .hero-logo,
+[data-nivel='2'] .nivel-gate-logo {
+  filter: grayscale(1) sepia(1) saturate(3.1) hue-rotate(-16deg) brightness(1.03); /* 🔥 Solar */
+}
+[data-nivel='3'] .brand-logo,
+[data-nivel='3'] .hero-logo,
+[data-nivel='3'] .nivel-gate-logo {
+  filter: grayscale(1) sepia(1) saturate(1.9) hue-rotate(168deg) brightness(1.12); /* ❄️ Stasis */
+}
+/* nivel 4: el logo es oro de nacimiento — la corona no se toca */
 
 /* ---------- Toques finales por nivel ---------- */
 /* 💸 el precio respira un halo verde Cuerda: ES la pantalla del dinero */
