@@ -29,7 +29,7 @@ export default function SelectorNivel({ onElegir }) {
             >
               <span className="nivel-card-cab">
                 <span className="nivel-card-icono" aria-hidden="true">{n.icono}</span>
-                <span className="nivel-card-num">Nivel {n.id} de 4</span>
+                <span className="nivel-card-num">{n.elemento} Nivel {n.id} de 4</span>
               </span>
               <span className="nivel-card-nombre">{n.nombre}</span>
               <span className="nivel-card-frase">{n.frase}</span>

@@ -9,19 +9,23 @@ const CLAVE = 'alto-nivel'
 const EVENTO = 'alto-nivel-cambio'
 
 // Cada nivel es una EXPERIENCIA, no solo un filtro de secciones:
-// - corto/color: identidad visible (badge de la barra, tarjetas del selector).
+// - corto/color/elemento: identidad visible (badge, selector, transición,
+//   y el POLVO del fondo — FondoVivo se tiñe con este color).
 // - incluye: qué desbloquea (chips del selector; niveles 2-4 SUMAN a lo anterior).
 // - cargando: pasos honestos de la pantalla de transición (describen lo que
 //   de verdad se muestra u oculta al cambiar — nada de teatro vacío).
-// El color NO reemplaza al dorado de la marca: es un acento secundario que
-// solo aparece en badge, selector, transición y CTA de subir nivel.
+// 🎮 Paleta ELEMENTAL (pedido de Jair 15-jul, guiño a Destiny 2):
+//   1 🧵 Cuerda (Strand) verde esmeralda · 2 🔥 Solar fuego ·
+//   3 ❄️ Stasis azul celeste · 4 👑 el ORO de ALTO corona el nivel máximo.
+// El dorado de la marca no se negocia: botones/títulos siguen siendo oro.
 export const NIVELES = [
   {
     id: 1,
     icono: '💸',
     nombre: '¿Cuánto podría ganar?',
     corto: 'Simple',
-    color: '#5fc98e',
+    color: '#35da85',
+    elemento: '🧵',
     frase: 'Quiero ver cómo se movería mi dinero',
     detalle: 'Precio, cuánto ganarías o perderías, y si reparte dividendos — sin tecnicismos.',
     incluye: ['Precio y su gráfico', 'Simulador de ganancia', 'Dividendos', '¿Barata o cara?'],
@@ -32,7 +36,8 @@ export const NIVELES = [
     icono: '🟡',
     nombre: 'Explícamela fácil',
     corto: 'Aprender',
-    color: '#d4af37',
+    color: '#f2721b',
+    elemento: '🔥',
     frase: 'Nunca he invertido, quiero entender primero',
     detalle: 'Tips para estudiar la empresa, sus fundamentos y cómo leer sus números.',
     incluye: ['Tips para estudiarla', 'Fundamentos (SMV)', 'Cómo leer sus números'],
@@ -43,7 +48,8 @@ export const NIVELES = [
     icono: '📊',
     nombre: 'Quiero analizarla',
     corto: 'Análisis',
-    color: '#8fb8d8',
+    color: '#6fb7f0',
+    elemento: '❄️',
     frase: 'Ya sé lo básico, quiero explorar y comparar',
     detalle: 'Catalizadores, escenarios, riesgos y producción minera (si aplica).',
     incluye: ['Catalizadores', 'Escenarios y riesgos', 'Producción minera'],
@@ -54,7 +60,8 @@ export const NIVELES = [
     icono: '🧠',
     nombre: 'Lobo de wall street',
     corto: 'Lobo',
-    color: '#c9d6e8',
+    color: '#d4af37',
+    elemento: '👑',
     frase: 'Dame acceso completo, con IA y documentos oficiales',
     detalle: 'Sentinel, hechos de importancia, documentos SMV, noticias y todo lo demás.',
     incluye: ['Sentinel 🛰️', 'Hechos de importancia', 'Documentos SMV', 'Fuentes y reloj de datos'],

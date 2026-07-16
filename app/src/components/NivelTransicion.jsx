@@ -46,7 +46,7 @@ export default function NivelTransicion({ nivelId, onFin }) {
     >
       <div className="nivel-trans-inner">
         <span className="nivel-trans-icono" aria-hidden="true">{n.icono}</span>
-        <div className="nivel-trans-eyebrow">Nivel {n.id} de 4</div>
+        <div className="nivel-trans-eyebrow">{n.elemento} Nivel {n.id} de 4</div>
         <div className="nivel-trans-nombre">{n.nombre}</div>
         <ul className="nivel-trans-pasos">
           {n.cargando.map((paso, i) => (

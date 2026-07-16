@@ -4107,17 +4107,19 @@ a.link {
    pantalla de transición. Todo transform/opacity/filter = GPU puro.
    ============================================================ */
 
-/* ---------- Atmósfera: la aurora respira del color del nivel ----------
-   (la base es oro ~45° de tono; se rota el matiz hacia el color del nivel) */
+/* ---------- Atmósfera elemental: la aurora respira del elemento del nivel
+   (guiño Destiny 2; base oro ~45° de tono, se rota el matiz al elemento) ----------
+   🧵 Cuerda verde · 🔥 Solar fuego · ❄️ Stasis celeste · 👑 oro (la base misma) */
 :root[data-nivel='1'] .aurora {
-  filter: hue-rotate(95deg); /* oro → verde dinero */
+  filter: hue-rotate(105deg) saturate(1.15); /* oro → verde Cuerda */
+}
+:root[data-nivel='2'] .aurora {
+  filter: hue-rotate(-18deg) saturate(1.4); /* oro → naranja Solar (brasas) */
 }
 :root[data-nivel='3'] .aurora {
-  filter: hue-rotate(165deg) saturate(0.9); /* oro → azul acero */
+  filter: hue-rotate(162deg) saturate(1.05) brightness(1.05); /* oro → celeste Stasis */
 }
-:root[data-nivel='4'] .aurora {
-  filter: hue-rotate(175deg) saturate(0.55) brightness(0.9); /* platino frío */
-}
+/* nivel 4: la aurora ES oro de fábrica — la corona no necesita filtro */
 
 /* ---------- Firma de movimiento: cómo entra el contenido ----------
    💸 flota y crece (suave) · 🟡 llega desde la izquierda (como se lee) ·
@@ -4136,7 +4138,8 @@ a.link {
 }
 
 /* ---------- Sello tipográfico de los títulos de sección ---------- */
-/* 🟡 Nivel 2: el subrayado del profe — se DIBUJA solito al llegar la sección */
+/* 🔥 Nivel 2: el subrayado del profe — se DIBUJA solito al llegar la sección
+   (en naranja Solar: la tiza de fuego) */
 [data-nivel='2'] .seccion-titulo::after {
   content: '';
   display: block;
@@ -4144,7 +4147,7 @@ a.link {
   height: 2px;
   margin-top: 4px;
   border-radius: 2px;
-  background: var(--oro);
+  background: var(--nivel-color);
   transform-origin: left center;
   transition: transform 0.55s var(--ease-salida) 0.2s;
 }
@@ -4248,9 +4251,9 @@ a.link {
 }
 
 /* ---------- Toques finales por nivel ---------- */
-/* 💸 el precio respira un halo verde: ES la pantalla del dinero */
+/* 💸 el precio respira un halo verde Cuerda: ES la pantalla del dinero */
 [data-nivel='1'] .precio .valor {
-  text-shadow: 0 0 20px rgba(95, 201, 142, 0.28);
+  text-shadow: 0 0 20px rgba(53, 218, 133, 0.3);
 }
 /* 🧠 terminal plano: sin sombras blandas, bordes que cortan */
 [data-nivel='4'] .card {
