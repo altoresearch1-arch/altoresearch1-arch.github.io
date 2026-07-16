@@ -4099,6 +4099,191 @@ a.link {
   font-size: 15.5px;
 }
 
+/* ============================================================
+   NIVELES v3 — LA FIRMA DE CADA NIVEL (15-jul, ronda 6).
+   Cada nivel tiene: atmósfera (aurora teñida; el polvo del canvas
+   se tiñe en FondoVivo.jsx), firma de movimiento (cómo entran las
+   secciones), sello tipográfico (los títulos) y SU animación en la
+   pantalla de transición. Todo transform/opacity/filter = GPU puro.
+   ============================================================ */
+
+/* ---------- Atmósfera: la aurora respira del color del nivel ----------
+   (la base es oro ~45° de tono; se rota el matiz hacia el color del nivel) */
+:root[data-nivel='1'] .aurora {
+  filter: hue-rotate(95deg); /* oro → verde dinero */
+}
+:root[data-nivel='3'] .aurora {
+  filter: hue-rotate(165deg) saturate(0.9); /* oro → azul acero */
+}
+:root[data-nivel='4'] .aurora {
+  filter: hue-rotate(175deg) saturate(0.55) brightness(0.9); /* platino frío */
+}
+
+/* ---------- Firma de movimiento: cómo entra el contenido ----------
+   💸 flota y crece (suave) · 🟡 llega desde la izquierda (como se lee) ·
+   📊 sube seco y preciso · 🧠 sin teatro: aparece (el pro no espera) */
+:root[data-nivel='1'] .reveal {
+  transform: translateY(18px) scale(0.985);
+}
+:root[data-nivel='2'] .reveal {
+  transform: translateX(-16px);
+}
+:root[data-nivel='3'] .reveal {
+  transform: translateY(10px);
+}
+:root[data-nivel='4'] .reveal {
+  transform: none; /* solo fundido, casi instantáneo */
+}
+
+/* ---------- Sello tipográfico de los títulos de sección ---------- */
+/* 🟡 Nivel 2: el subrayado del profe — se DIBUJA solito al llegar la sección */
+[data-nivel='2'] .seccion-titulo::after {
+  content: '';
+  display: block;
+  width: 46px;
+  height: 2px;
+  margin-top: 4px;
+  border-radius: 2px;
+  background: var(--oro);
+  transform-origin: left center;
+  transition: transform 0.55s var(--ease-salida) 0.2s;
+}
+[data-nivel='2'] .reveal:not(.reveal-visto) .seccion-titulo::after {
+  transform: scaleX(0);
+}
+/* 📊 Nivel 3: marcador de regla en azul acero, como panel de instrumentos */
+[data-nivel='3'] .seccion-titulo::before {
+  content: '▍';
+  margin-right: 6px;
+  color: var(--nivel-color);
+}
+/* 🧠 Nivel 4: cursor de terminal parpadeando al final del título */
+[data-nivel='4'] .seccion-titulo::after {
+  content: '▎';
+  margin-left: 5px;
+  color: var(--nivel-color);
+  animation: parpadeoTerminal 1.15s steps(2, start) infinite;
+}
+@keyframes parpadeoTerminal {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ---------- La pantalla de transición: cada nivel entra a SU manera ---------- */
+/* 💸 la moneda: el icono gira sobre sí mismo como moneda lanzada */
+[data-nivel='1'] .nivel-trans-icono {
+  animation: transMoneda 0.9s var(--ease-salida) backwards;
+}
+@keyframes transMoneda {
+  from {
+    opacity: 0;
+    transform: rotateY(0deg) scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: rotateY(720deg) scale(1);
+  }
+}
+/* 🟡 el aprendiz: rebote amable, como pelota que se asienta */
+[data-nivel='2'] .nivel-trans-icono {
+  animation: transRebote 0.75s var(--ease-salida) backwards;
+}
+@keyframes transRebote {
+  0% {
+    opacity: 0;
+    transform: translateY(-26px);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(4px);
+  }
+  75% {
+    transform: translateY(-3px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+/* 📊 el analista: barrido lateral con freno, como aguja de instrumento */
+[data-nivel='3'] .nivel-trans-icono {
+  animation: transBarrido 0.55s var(--ease-salida) backwards;
+}
+@keyframes transBarrido {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  70% {
+    transform: translateX(3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* 🧠 el lobo: parpadeo de terminal encendiéndose (flicker seco) */
+[data-nivel='4'] .nivel-trans-icono {
+  animation: transFlicker 0.5s steps(1) backwards;
+}
+@keyframes transFlicker {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  35% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+  62% {
+    opacity: 0.4;
+  }
+  75%, 100% {
+    opacity: 1;
+  }
+}
+
+/* ---------- Toques finales por nivel ---------- */
+/* 💸 el precio respira un halo verde: ES la pantalla del dinero */
+[data-nivel='1'] .precio .valor {
+  text-shadow: 0 0 20px rgba(95, 201, 142, 0.28);
+}
+/* 🧠 terminal plano: sin sombras blandas, bordes que cortan */
+[data-nivel='4'] .card {
+  box-shadow: none;
+}
+
+/* La puerta de niveles: al pasar el dedo/cursor, cada icono hace SU gesto */
+@media (hover: hover) and (pointer: fine) {
+  .nivel-card:nth-child(1):hover .nivel-card-icono {
+    animation: transMoneda 0.9s var(--ease-salida);
+  }
+  .nivel-card:nth-child(2):hover .nivel-card-icono {
+    animation: transRebote 0.75s var(--ease-salida);
+  }
+  .nivel-card:nth-child(3):hover .nivel-card-icono {
+    animation: transBarrido 0.55s var(--ease-salida);
+  }
+  .nivel-card:nth-child(4):hover .nivel-card-icono {
+    animation: transFlicker 0.5s steps(1);
+  }
+}
+
+/* Los globos de la radiografía se levantan un pelín al pasar por encima
+   (y el apretón le sigue ganando al hover: va declarado después) */
+@media (hover: hover) and (pointer: fine) {
+  .rx-tile:hover {
+    transform: translateY(-2px);
+  }
+}
+.rx-tile:active {
+  transform: scale(0.98);
+}
+
 /* Accesibilidad: con "menos movimiento" TODO lo nuevo se calma —
    sin cascadas ni barras; el contenido aparece de una. */
 @media (prefers-reduced-motion: reduce) {
@@ -4108,7 +4293,9 @@ a.link {
   .nivel-trans-saltar,
   .menu-nav,
   .menu-nav-item,
-  .nivel-badge-menu {
+  .nivel-badge-menu,
+  .nivel-card-icono,
+  [data-nivel='4'] .seccion-titulo::after {
     animation: none !important;
   }
   .nivel-trans-pasos li {
@@ -4118,6 +4305,9 @@ a.link {
   .nivel-trans-barra span {
     animation: none !important;
     width: 100%;
+  }
+  [data-nivel='2'] .seccion-titulo::after {
+    transition: none;
   }
 }
 

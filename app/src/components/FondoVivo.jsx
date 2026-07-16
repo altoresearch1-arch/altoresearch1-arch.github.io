@@ -1,11 +1,35 @@
 import { useEffect, useRef } from 'react'
 import { prefiereQuieto } from '../lib/anim'
+import { NIVELES, leerNivel } from '../lib/nivel'
 
 // Fondo vivo: "polvo dorado" flotando en canvas + luz que sigue el cursor.
 // Sobrio (partículas tenues, deriva lenta) e interactivo: se apartan suave
 // del mouse. Barato en batería: pausa cuando la pestaña no se ve, tope de
 // devicePixelRatio, pocas partículas en celular, y se APAGA por completo si
 // el usuario pide menos movimiento (prefers-reduced-motion).
+// 🎨 NIVELES v3: el polvo y la luz del cursor toman el COLOR DEL NIVEL
+// (verde dinero / oro / azul acero / platino) — la atmósfera entera es tuya.
+// El cambio ocurre tapado por la pantalla de transición, así que al volver
+// "el mundo ya es de otro color". Las flechas de índice NO se tocan: su
+// verde/rojo significa sube/baja y eso no se negocia.
+
+const ORO = { r: 212, g: 175, b: 55 }
+
+function hexARgb(hex) {
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex || '')
+  if (!m) return ORO
+  const n = parseInt(m[1], 16)
+  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 }
+}
+
+// versión "encendida" del color: mezclado 35% hacia blanco
+function aclarar(c) {
+  return {
+    r: Math.round(c.r + (255 - c.r) * 0.35),
+    g: Math.round(c.g + (255 - c.g) * 0.35),
+    b: Math.round(c.b + (255 - c.b) * 0.35),
+  }
+}
 
 export default function FondoVivo() {
   const ref = useRef(null)
@@ -15,6 +39,16 @@ export default function FondoVivo() {
     const canvas = ref.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
+
+    // color del polvo según el nivel elegido (oro si aún no hay nivel)
+    let polvo = ORO
+    let polvoClaro = aclarar(ORO)
+    const aplicarColorNivel = () => {
+      const n = NIVELES.find((x) => x.id === leerNivel())
+      polvo = n ? hexARgb(n.color) : ORO
+      polvoClaro = aclarar(polvo)
+    }
+    aplicarColorNivel()
 
     let ancho = 0, alto = 0
     let particulas = []
@@ -139,12 +173,14 @@ export default function FondoVivo() {
       pasoLineas(dt)
       dibujarLineas()
 
-      // luz que sigue el cursor (solo escritorio) — visible pero elegante
+      // luz que sigue el cursor (solo escritorio) — visible pero elegante,
+      // y del color del nivel
       if (raton.activo && !esMovil) {
+        const c = `${polvo.r}, ${polvo.g}, ${polvo.b}`
         const g = ctx.createRadialGradient(raton.x, raton.y, 0, raton.x, raton.y, 300)
-        g.addColorStop(0, 'rgba(212, 175, 55, 0.10)')
-        g.addColorStop(0.45, 'rgba(212, 175, 55, 0.035)')
-        g.addColorStop(1, 'rgba(212, 175, 55, 0)')
+        g.addColorStop(0, `rgba(${c}, 0.10)`)
+        g.addColorStop(0.45, `rgba(${c}, 0.035)`)
+        g.addColorStop(1, `rgba(${c}, 0)`)
         ctx.fillStyle = g
         ctx.fillRect(raton.x - 300, raton.y - 300, 600, 600)
       }
@@ -180,10 +216,10 @@ export default function FondoVivo() {
         }
         ctx.beginPath()
         ctx.arc(p.x, p.y, radio, 0, Math.PI * 2)
-        // el dorado se aclara (oro-suave) cuando están encendidas
+        // el color del nivel se aclara cuando están encendidas junto al cursor
         ctx.fillStyle = cercania > 0.15
-          ? `rgba(230, 201, 101, ${alfa.toFixed(3)})`
-          : `rgba(212, 175, 55, ${alfa.toFixed(3)})`
+          ? `rgba(${polvoClaro.r}, ${polvoClaro.g}, ${polvoClaro.b}, ${alfa.toFixed(3)})`
+          : `rgba(${polvo.r}, ${polvo.g}, ${polvo.b}, ${alfa.toFixed(3)})`
         ctx.fill()
       }
       rafId = requestAnimationFrame(cuadro)
@@ -213,6 +249,9 @@ export default function FondoVivo() {
     window.addEventListener('mouseout', alSalir)
     window.addEventListener('resize', alRedimensionar)
     document.addEventListener('visibilitychange', alVisibilidad)
+    // al cambiar de nivel, el polvo se re-tiñe (mismo evento que usa useNivel)
+    window.addEventListener('alto-nivel-cambio', aplicarColorNivel)
+    window.addEventListener('storage', aplicarColorNivel)
 
     return () => {
       if (rafId) cancelAnimationFrame(rafId)
@@ -220,6 +259,8 @@ export default function FondoVivo() {
       window.removeEventListener('mouseout', alSalir)
       window.removeEventListener('resize', alRedimensionar)
       document.removeEventListener('visibilitychange', alVisibilidad)
+      window.removeEventListener('alto-nivel-cambio', aplicarColorNivel)
+      window.removeEventListener('storage', aplicarColorNivel)
     }
   }, [])
 
