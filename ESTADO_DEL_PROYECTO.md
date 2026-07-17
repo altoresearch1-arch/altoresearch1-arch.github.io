@@ -2,7 +2,34 @@
 
 > **Documento maestro vivo.** Captura TODO lo construido para que nada se pierda, sin
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
-> herramienta), lee esto primero. Última actualización: **11 jul 2026**. Estado: **EN VIVO (beta pública)**.
+> herramienta), lee esto primero. Última actualización: **17 jul 2026**. Estado: **EN VIVO (beta pública)**.
+
+## 🕵️ 17-jul: VIGILANCIA DEL BEM (regla de Jair) — arranque del Q2
+Caso real que trajo Jair: el HI de BVN del 16-jul reporta producción de oro del 2T26
+(37,266 oz incl. asociadas), pero el BEM de mayo muestra a BVN "vacío" en oro.
+**Diagnóstico verificado con el Excel crudo**: NO es una celda vacía — el cuadro por
+empresa del BEM es un TOP-10 por metal + "OTROS", y el oro de la entidad legal
+"Compañía de Minas Buenaventura S.A.A." (~234k g/mes: Orcopampa+Tambomayo+Julcani+
+San Gabriel) queda justo BAJO el corte del top → invisible en TODA la serie (0/17
+meses). Coimolache entra y sale (4/17). No es bug nuestro ni anomalía de mayo: es
+estructural de la fuente (el "Excel de anexos" también es top-10).
+Lo construido (regla de Jair implementada, adaptada a lo que realmente pasa):
+- **`fetch_bem.py` → `vigilar()`** + config `PRODUCTORES_HISTORICOS` (una línea por
+  caso, cero código nuevo): (a) `hueco_reciente` = tenía dato el mes anterior y el
+  último mes del BEM vino vacío → aviso, NUNCA se asume cero; (b) `fuera_del_top` =
+  metal insignia sin ningún dato en toda la serie. **Validación cruzada automática**:
+  busca en hechos.json un HI de producción reciente (≤120 días) de la empresa
+  (entidad→ticker vía mineria_familia.json, única fuente de verdad) y lo cita en el
+  aviso. Salida: sección `vigilancia` en mineria.json + alertas ⚠ en el log del robot.
+- **ProduccionMinera.jsx** renderiza los avisos (estilo nota dorada): si la ficha ya
+  tiene `notaProduccion` manual (BVN), los estructurales no se duplican. Verificado
+  en navegador: Brocal muestra "⚠ El Brocal produce oro, pero no entra al top-10…";
+  BVN mantiene su nota manual; consola limpia.
+- **Robot coordinado**: deploy.yml ahora committea `extractor/cache_bem` (desde el
+  14-jul cada corrida de 30 min re-bajaba del MINEM la edición de mayo porque el
+  xlsx nunca viajaba en el commit). Edición 2026-05 integrada: serie ene25→may26.
+- Detectado al correr: buenaventura/oro y la_zanja/oro con ✓ HI del 16-jul citado;
+  brocal/oro sin HI propio (la producción de Brocal la reporta BVN en su HI).
 
 ## 🌎 RONDA 9 del 11-jul: EMPRESAS DEL EXTRANJERO (AUNA/PPX/PML + Rio2 nueva)
 Pedido de Jair: "a AUNA le falta info; aprende a sacar lo mismo de las webs de PPX, PML y Rio2, y

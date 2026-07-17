@@ -364,6 +364,27 @@ function GraficoMetal({ metal, lineas, meses, conLeyenda }) {
   )
 }
 
+// 🕵️ Vigilancia (regla de Jair, caso BVN-oro): avisos que genera fetch_bem.py
+// cuando un productor conocido desaparece del top-10 del BEM. NUNCA se asume
+// cero — se explica el hueco y, si la empresa reportó producción en sus Hechos
+// de Importancia (validación cruzada del robot), se dice dónde está el dato real.
+function frasesVigilancia(fam) {
+  return (mineriaData.vigilancia || [])
+    .filter((a) => (fam.entidades || []).includes(a.entidad))
+    // con nota manual en la ficha, los avisos estructurales ya están contados
+    .filter((a) => a.tipo === 'hueco_reciente' || !fam.notaProduccion)
+    .map((a) => {
+      const metal = (METAL_INFO[a.metal] || { nombre: a.metal }).nombre.toLowerCase()
+      const base = a.tipo === 'hueco_reciente'
+        ? `⚠ ${a.nombre} venía apareciendo en el top-10 de ${metal} del BEM y en ${mesCorto(a.mes)} ya no está. Eso NO significa que produjo cero — el MINEM solo publica a los mayores productores de cada metal.`
+        : `⚠ ${a.nombre} produce ${metal}, pero no entra al top-10 que publica el BEM (su producción queda sumada en «OTROS») — por eso no hay gráfica de ${metal}.`
+      const cruce = a.hiProduccion
+        ? ` ✓ La empresa SÍ reportó su producción en un Hecho de Importancia del ${a.hiProduccion.fecha} — búscalo abajo en 📰.`
+        : ''
+      return base + cruce
+    })
+}
+
 export default function ProduccionMinera({ ticker }) {
   const fam = familiaData[ticker]
   if (!fam) return null
@@ -421,6 +442,11 @@ export default function ProduccionMinera({ ticker }) {
               <Glosado text={fam.notaProduccion} />
             </div>
           )}
+          {frasesVigilancia(fam).map((frase, i) => (
+            <div key={i} className="prodmin-notaprod">
+              <Glosado text={frase} />
+            </div>
+          ))}
           {puntuales.length > 0 && (
             <div className="prodmin-hueco muted">
               También apareció de forma puntual (muy pocos meses con dato, no da para una gráfica):{' '}

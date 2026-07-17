@@ -113,6 +113,19 @@ ENTIDADES = {
     "PERUBAR S.A.": "perubar",
 }
 
+# ── VIGILANCIA (regla de Jair, 17-jul-2026, caso BVN-oro) ────────────────────
+# El cuadro del BEM es un TOP-10 + "OTROS": si un productor conocido no aparece,
+# NO significa que produjo cero. Esta config dice qué metal es "insignia" de qué
+# entidad: si falta TODA la serie (o el último mes tras haber tenido dato), se
+# genera un aviso de revisión — nunca se publica un cero inventado (Regla #1).
+# Para agregar un caso: una línea aquí, cero código nuevo.
+PRODUCTORES_HISTORICOS = {
+    "buenaventura": ["oro"],
+    "la_zanja": ["oro"],
+    "coimolache": ["oro"],
+    "brocal": ["oro"],
+}
+
 NOMBRES_BONITOS = {
     "nexa_peru": "Nexa Resources Perú (Cerro Lindo)",
     "nexa_porvenir": "Nexa El Porvenir (subsidiaria de Nexa Perú)",
@@ -271,6 +284,91 @@ def descubrir_nuevas():
     return nuevas
 
 
+def entidad_a_ticker():
+    """Mapa entidad -> ticker de la app, leído de mineria_familia.json (una
+    sola fuente de verdad: la misma que usa la ficha)."""
+    ruta = SALIDA.parent / "mineria_familia.json"
+    mapa = {}
+    try:
+        fam = json.loads(ruta.read_text(encoding="utf-8-sig"))
+        for ticker, info in fam.items():
+            if isinstance(info, dict):
+                for ent in info.get("entidades", []):
+                    mapa.setdefault(ent, ticker)
+    except Exception as e:
+        print(f"  (aviso: no pude leer mineria_familia.json para la vigilancia: {e})")
+    return mapa
+
+
+def hi_produccion_reciente(ticker):
+    """Validación cruzada: ¿la empresa reportó producción en sus Hechos de
+    Importancia hace poco (≤120 días)? Devuelve {fecha, titulo} o None."""
+    ruta = SALIDA.parent / "hechos.json"
+    try:
+        hechos = json.loads(ruta.read_text(encoding="utf-8-sig"))["hechos"]
+        lista = hechos.get(ticker, {}).get("hechos", [])
+    except Exception:
+        return None
+    from datetime import datetime, timedelta
+    limite = (datetime.now() - timedelta(days=120)).date().isoformat()
+    for h in lista:
+        titulo = normalizar(h.get("titulo") or "")
+        if h.get("fecha", "") >= limite and ("PRODUCCION" in titulo or "PRODUCTION" in titulo):
+            return {"fecha": h["fecha"], "titulo": h.get("titulo")}
+    return None
+
+
+def vigilar(entidades, totales_pais, meses):
+    """Regla de Jair: productor conocido + dato antes + vacío ahora → NO asumir
+    cero; generar aviso de revisión con validación cruzada (Hechos de Imp.).
+
+    Dos tipos de aviso:
+      - hueco_reciente: la entidad tenía dato el mes anterior y el último mes
+        (donde el país SÍ tiene total) quedó vacío → salió del top-10 o la
+        fuente vino incompleta. Revisión manual.
+      - fuera_del_top: metal insignia (PRODUCTORES_HISTORICOS) sin NINGÚN dato
+        en toda la serie → invisible estructural en el top-10 del BEM.
+    """
+    tickers = entidad_a_ticker()
+    avisos = []
+
+    def base(ent, metal, tipo, mes=None):
+        ticker = tickers.get(ent)
+        return {
+            "entidad": ent, "nombre": NOMBRES_BONITOS.get(ent, ent),
+            "metal": metal, "tipo": tipo, "mes": mes, "ticker": ticker,
+            "hiProduccion": hi_produccion_reciente(ticker) if ticker else None,
+        }
+
+    for ent, datos in entidades.items():
+        for metal, serie in datos["produccion"].items():
+            pais = totales_pais.get(metal)
+            if not pais:
+                continue
+            # último mes con total nacional (= el BEM sí publicó ese mes)
+            i_ult = max((i for i, v in enumerate(pais) if v is not None), default=-1)
+            if i_ult >= 1 and serie[i_ult] is None and serie[i_ult - 1] is not None:
+                avisos.append(base(ent, metal, "hueco_reciente", meses[i_ult]))
+
+    for ent, metales in PRODUCTORES_HISTORICOS.items():
+        produccion = entidades.get(ent, {}).get("produccion", {})
+        for metal in metales:
+            serie = produccion.get(metal)
+            if serie is None or all(v is None for v in serie):
+                avisos.append(base(ent, metal, "fuera_del_top"))
+
+    for a in avisos:
+        cruz = (f" · ✓ HI de producción del {a['hiProduccion']['fecha']}"
+                if a.get("hiProduccion") else "")
+        if a["tipo"] == "hueco_reciente":
+            print(f"  ⚠ VIGILANCIA {a['entidad']}/{a['metal']}: tenía dato y {a['mes']} "
+                  f"vino vacío — NO se asume cero; revisión manual{cruz}")
+        else:
+            print(f"  ⚠ VIGILANCIA {a['entidad']}/{a['metal']}: productor histórico "
+                  f"invisible en el top-10 del BEM (toda la serie){cruz}")
+    return avisos
+
+
 def main():
     print("BEM MINEM — producción minera mensual por empresa")
     ediciones = dict(EDICIONES)
@@ -321,6 +419,7 @@ def main():
         "unidades": {v[0]: v[1] for v in METALES.values()},
         "totalesPais": totales_pais,
         "entidades": entidades,
+        "vigilancia": vigilar(entidades, totales_pais, meses),
     }
     # El BEM cambia UNA vez al mes: si los datos no cambiaron, no se reescribe
     # (evita que el robot nocturno commitee un archivo idéntico cada día).
