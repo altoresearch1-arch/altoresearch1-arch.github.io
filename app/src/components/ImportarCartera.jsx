@@ -278,7 +278,7 @@ function PasoRevision({ filas, setFilas, broker, onAtras, onSeguir, onRecordator
                   onChange={(ev) => cambia(i, { cant: Math.max(1, Math.floor(Number(ev.target.value) || 1)) })} />
                 <input type="number" value={f.costo ?? ''} min="0" step="0.0001" placeholder="PPC" disabled={omitida}
                   className={(f.faltaCosto && !f.costo) || f.ppcSospechoso ? 'ambar-borde' : ''}
-                  onChange={(ev) => cambia(i, { costo: Number(ev.target.value) || 0, ppcSospechoso: false })} />
+                  onChange={(ev) => cambia(i, { costo: Number(ev.target.value) || 0, ppcSospechoso: false, ppcCorregido: false })} />
                 <span className="cd-rev-derecha">
                   <span className="cd-rev-estado">{icono}</span>
                   {omitida ? (
@@ -314,7 +314,10 @@ function PasoRevision({ filas, setFilas, broker, onAtras, onSeguir, onRecordator
                 {f.faltaCosto && !omitida && !(f.costo > 0) && (
                   <span className="ambar"> ⚠ No encontramos el costo promedio — escríbelo.</span>
                 )}
-                {f.ppcSospechoso && !omitida && (
+                {f.ppcCorregido && !omitida && (
+                  <span className="ambar"> 🔧 El costo leído parecía un total (o traía la coma corrida); lo ajustamos al precio por acción — verifícalo.</span>
+                )}
+                {f.ppcSospechoso && !f.ppcCorregido && !omitida && (
                   <span className="ambar"> ⚠ ¿El costo estará bien leído? Está muy lejos del precio actual — revísalo.</span>
                 )}
               </div>

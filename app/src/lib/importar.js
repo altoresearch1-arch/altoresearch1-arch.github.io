@@ -121,12 +121,39 @@ export function procesarFilas(crudas) {
         faltaCosto: f.ppc == null,
         ppcSospechoso: false,
       }
-      // Sanidad del PPC contra el precio real del robot (caza 2.3966 → 23.966)
+      // Sanidad del PPC contra el precio real del robot. Cuando el número leído
+      // como "costo" cae LEJÍSIMOS del precio actual, casi siempre no es el precio
+      // unitario sino un TOTAL (cantidad × precio, la columna "valor de compra")
+      // o trae la coma decimal corrida por el OCR ("2.40" → "240"). En vez de
+      // marcarlo y que el usuario corrija 16 filas a mano, probamos divisores
+      // plausibles y nos quedamos con el que aterriza junto al precio real — pero
+      // dejamos la fila señalada (ppcSospechoso) para que la verifique. Los costos
+      // que ya caen en un rango sano NO se tocan (el caso común queda intacto).
       if (fila.costo != null && fila.accion === 'importar') {
         const e = empresaDe(fila.t)
-        if (e?.precio != null && fila.costo > 0) {
+        if (e?.precio != null && e.precio > 0 && fila.costo > 0) {
           const razon = fila.costo / e.precio
-          if (razon < 0.2 || razon > 5) fila.ppcSospechoso = true
+          const enBanda = (v) => { const r = v / e.precio; return r >= 0.2 && r <= 5 }
+          // EXTREMO (>20× o <1/20 del precio): una acción no se mueve tanto desde
+          // la compra → casi seguro es un TOTAL (cant × precio) o la coma corrida
+          // por el OCR. Solo AHÍ auto-corregimos, para no pisar una baja/subida
+          // real (esas quedan solo señaladas). Probamos divisores plausibles.
+          if (razon > 20 || razon < 0.05) {
+            const cand = [fila.costo / fila.cant, fila.costo / 10, fila.costo / 100, fila.costo / 1000]
+            let mejor = null, dist = Infinity
+            for (const c of cand) {
+              if (!(c > 0) || !enBanda(c)) continue
+              const d = Math.abs(Math.log(c / e.precio))
+              if (d < dist) { dist = d; mejor = c }
+            }
+            if (mejor != null) {
+              fila.costo = Math.round(mejor * 10000) / 10000
+              fila.ppcCorregido = true
+            }
+          }
+          // Señalar para revisión desde 5× (sin tocar el valor): puede ser real,
+          // pero el usuario debe mirarlo.
+          if (razon > 5 || razon < 0.2) fila.ppcSospechoso = true
         }
       }
       return fila
