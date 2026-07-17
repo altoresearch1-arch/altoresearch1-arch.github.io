@@ -2857,6 +2857,116 @@ a.link {
   font-size: 11.5px;
 }
 
+/* 📣 Producción oficial parseada del HI (tabla mina por mina). Pedido de Jair
+   17-jul: el dato COMPLETO que publica la empresa, más allá del top-10 del BEM. */
+.prodof {
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.10), rgba(212, 175, 55, 0.03));
+  border-radius: 14px;
+  padding: 14px 15px;
+  margin-bottom: 14px;
+}
+.prodof-cab {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.prodof-titulo {
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--oro);
+}
+.prodof-pdf {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--oro);
+  color: var(--oro);
+  font-weight: 700;
+  font-size: 12px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.prodof-pdf:hover { background: rgba(212, 175, 55, 0.14); }
+.prodof-intro {
+  font-size: 12.5px;
+  line-height: 1.55;
+  margin: 8px 0 12px;
+}
+.prodof-metal { margin-bottom: 12px; }
+.prodof-metal-cab {
+  font-weight: 700;
+  font-size: 13.5px;
+  margin-bottom: 4px;
+}
+.prodof-tabla-wrap { width: 100%; overflow-x: auto; }
+.prodof-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  min-width: 320px;
+}
+.prodof-tabla th, .prodof-tabla td {
+  padding: 5px 8px;
+  text-align: left;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+}
+.prodof-tabla th {
+  color: var(--texto-tenue);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.prodof-tabla .num { text-align: right; font-variant-numeric: tabular-nums; }
+.prodof-tabla .prodof-total {
+  font-weight: 700;
+  background: rgba(212, 175, 55, 0.07);
+}
+.prodof-pct {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 10.5px;
+  color: var(--texto-tenue);
+}
+.prodof-guia { color: var(--texto-tenue); font-size: 11.5px; }
+.prodof-vermas {
+  background: none;
+  border: 1px dashed rgba(212, 175, 55, 0.5);
+  color: var(--oro);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 4px;
+}
+.prodof-vermas:hover { background: rgba(212, 175, 55, 0.08); }
+.prodof-extra { margin-top: 12px; }
+.prodof-sub {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--oro);
+  margin: 14px 0 6px;
+}
+.prodof-coment {
+  font-size: 12.5px;
+  line-height: 1.5;
+  padding-left: 18px;
+}
+.prodof-coment > li { margin-bottom: 8px; }
+.prodof-coment ul { padding-left: 16px; margin-top: 2px; }
+.prodof-fuente {
+  font-size: 11px;
+  line-height: 1.5;
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(212, 175, 55, 0.15);
+}
+
 /* Nota de producción (ej. BVN: por qué hay huecos y dónde está el dato completo) */
 .prodmin-notaprod {
   border: 1px solid rgba(199, 154, 58, 0.45);

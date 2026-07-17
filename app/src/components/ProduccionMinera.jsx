@@ -2,6 +2,8 @@ import { useState } from 'react'
 import mineriaData from '../data/mineria.json'
 import familiaData from '../data/mineria_familia.json'
 import hechosData from '../data/hechos.json'
+import produccionData from '../data/produccion.json'
+import ProduccionOficial from './ProduccionOficial'
 import Glosado from './Glosado'
 
 // ⛏️ Producción minera mensual (MINEM — Boletín Estadístico Minero).
@@ -409,7 +411,10 @@ function hiProduccionOficial(ticker) {
 export default function ProduccionMinera({ ticker }) {
   const fam = familiaData[ticker]
   if (!fam) return null
-  const hiProd = hiProduccionOficial(ticker)
+  // Si tenemos la tabla parseada del HI (produccion.json), la mostramos entera;
+  // si solo tenemos el HI sin parsear, cae a la caja de enlace simple.
+  const tieneTablaOficial = !!produccionData.empresas?.[ticker]
+  const hiProd = tieneTablaOficial ? null : hiProduccionOficial(ticker)
 
   const meses = mineriaData.meses
   const entidades = (fam.entidades || [])
@@ -443,6 +448,8 @@ export default function ProduccionMinera({ ticker }) {
   return (
     <div className="prodmin">
       <div className="seccion-titulo">⛏️ Producción de sus minas (MINEM)</div>
+
+      {tieneTablaOficial && <ProduccionOficial ticker={ticker} />}
 
       {hiProd && (
         <div className="prodmin-hiprod">

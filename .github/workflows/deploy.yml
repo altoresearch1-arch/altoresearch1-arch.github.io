@@ -94,9 +94,9 @@ jobs:
         run: |
           git config user.name  "robot-alto"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          # cache_bem viaja en el commit: sin esto, cada corrida re-bajaba
-          # del MINEM las ediciones nuevas del BEM (detectado 17-jul).
-          git add app/src/data app/public/novedades.json extractor/cache_bem
+          # Las cachés de PDF/xlsx viajan en el commit: sin esto, cada corrida
+          # re-bajaba el BEM del MINEM y los PDF de producción (detectado 17-jul).
+          git add app/src/data app/public/novedades.json extractor/cache_bem extractor/cache_produccion
           if git diff --cached --quiet; then
             echo "Sin cambios en los datos: nada que commitear ni desplegar."
             echo "cambios=false" >> "$GITHUB_OUTPUT"
