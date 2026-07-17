@@ -112,6 +112,33 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
     ponCartera(nueva)
   }
 
+  // Alta en BLOQUE (importar del broker): fusiona TODAS las posiciones sobre una
+  // sola copia y guarda una vez. Antes se llamaba agregarPosicion en un forEach,
+  // pero cada llamada partía de la misma `cartera` del closure y se pisaban entre
+  // sí → solo entraba la última (bug: "reconoció 16 y solo quedó una"). 17-jul.
+  const agregarVarias = (posiciones, broker) => {
+    const nueva = [...cartera]
+    let entraron = 0
+    posiciones.forEach(({ t, cant, costo, nombre, manual, sinDatos }) => {
+      if (!t) return
+      const idx = nueva.findIndex((c) => c.t === t)
+      if (idx >= 0) {
+        const c = nueva[idx]
+        const total = c.cant + cant
+        nueva[idx] = { ...c, cant: total, costo: total ? (c.cant * c.costo + cant * costo) / total : c.costo }
+      } else {
+        const pos = { t, cant, costo, sab: broker }
+        if (nombre) pos.nombre = nombre
+        if (manual) pos.manual = true
+        if (sinDatos) pos.sinDatos = true
+        nueva.push(pos)
+      }
+      entraron += 1
+    })
+    ponCartera(nueva)
+    return entraron
+  }
+
   return (
     <div className="cuaderno">
       {/* ── Cabecera: el patrimonio respira ── */}
@@ -237,9 +264,9 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
         <ImportarCartera
           onCerrar={() => setImportando(false)}
           onImportar={(posiciones, broker) => {
-            posiciones.forEach((p) => agregarPosicion({ ...p, sab: broker }))
+            const n = agregarVarias(posiciones, broker)
             setImportando(false)
-            avisar(`🛰 Sentinel importó ${posiciones.length} posiciones a tu cuaderno. Bienvenidas a casa.`)
+            avisar(`🛰 Sentinel importó ${n} ${n === 1 ? 'posición' : 'posiciones'} a tu cuaderno. Bienvenidas a casa.`)
           }}
           onRecordatorio={(txt) => ponRecs([...recs, { txt, ok: false }])}
         />
