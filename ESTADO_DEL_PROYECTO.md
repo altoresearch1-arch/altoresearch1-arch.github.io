@@ -30,6 +30,15 @@ Lo construido (regla de Jair implementada, adaptada a lo que realmente pasa):
   xlsx nunca viajaba en el commit). Edición 2026-05 integrada: serie ene25→may26.
 - Detectado al correr: buenaventura/oro y la_zanja/oro con ✓ HI del 16-jul citado;
   brocal/oro sin HI propio (la producción de Brocal la reporta BVN en su HI).
+- **📣 HI de producción DESTACADO en el apartado de minas** (pedido de Jair, mismo día):
+  si la empresa publicó su "producción y volumen de ventas" del trimestre como HI,
+  la sección ⛏️ lo destaca arriba con caja dorada + botón "Léelo (PDF ↗)" al original
+  BVL. Genérico: busca en hechos.json (título con "producción", ≤120 días) → hoy se
+  enciende para BVN ("Producción oficial del 2T 2026", del 16-jul) y SIMSA (citando
+  su título real — honestidad); cualquier minera que empiece a publicarlo aparecerá
+  SOLA, sin tocar código. Nivel 3 (va dentro de produccionMinera). hechos.json ya
+  estaba en el bundle (chunk datos-hechos) → cero peso agregado. Verificado en
+  navegador (BVN/SIMSA/Poderosa-sin-caja), consola limpia.
 
 ## 🌎 RONDA 9 del 11-jul: EMPRESAS DEL EXTRANJERO (AUNA/PPX/PML + Rio2 nueva)
 Pedido de Jair: "a AUNA le falta info; aprende a sacar lo mismo de las webs de PPX, PML y Rio2, y

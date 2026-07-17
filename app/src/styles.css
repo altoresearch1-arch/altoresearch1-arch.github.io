@@ -2819,6 +2819,44 @@ a.link {
   .comp-duelo, .comp-tesis-par { grid-template-columns: 1fr; }
 }
 
+/* 📣 HI de producción oficial destacado (pedido de Jair 17-jul): la empresa
+   publicó su producción del trimestre — se destaca con link al PDF. */
+.prodmin-hiprod {
+  border: 1px solid rgba(212, 175, 55, 0.65);
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.13), rgba(212, 175, 55, 0.04));
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+}
+.prodmin-hiprod-txt {
+  flex: 1 1 260px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.prodmin-hiprod-btn {
+  display: inline-block;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--oro);
+  color: var(--oro);
+  font-weight: 700;
+  font-size: 12.5px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+}
+.prodmin-hiprod-btn:hover {
+  background: rgba(212, 175, 55, 0.14);
+}
+.prodmin-hiprod-fecha {
+  flex-basis: 100%;
+  font-size: 11.5px;
+}
+
 /* Nota de producción (ej. BVN: por qué hay huecos y dónde está el dato completo) */
 .prodmin-notaprod {
   border: 1px solid rgba(199, 154, 58, 0.45);

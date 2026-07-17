@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import mineriaData from '../data/mineria.json'
 import familiaData from '../data/mineria_familia.json'
+import hechosData from '../data/hechos.json'
 import Glosado from './Glosado'
 
 // ⛏️ Producción minera mensual (MINEM — Boletín Estadístico Minero).
@@ -385,9 +386,30 @@ function frasesVigilancia(fam) {
     })
 }
 
+// 📣 HI de producción oficial (pedido de Jair, 17-jul): si la empresa publicó
+// su "producción y volumen de ventas" del trimestre como Hecho de Importancia,
+// se DESTACA aquí (nivel 3, junto a los gráficos del BEM) con link al PDF.
+// Es la producción COMPLETA que la propia empresa reporta — mina por mina —
+// mientras el BEM solo trae el top-10 por metal. Busca en hechos.json (se
+// actualiza solo cada 30 min): hoy la publican BVN y SIMSA; cualquier minera
+// que empiece a publicarla aparecerá sola, sin tocar código.
+const DIAS_HI_PROD = 120 // un trimestre + margen: solo se destaca el vigente
+
+function hiProduccionOficial(ticker) {
+  const lista = hechosData.hechos?.[ticker]?.hechos || []
+  const limite = new Date(Date.now() - DIAS_HI_PROD * 86400000).toISOString().slice(0, 10)
+  const hi = lista.find((h) =>
+    (h.fecha || '') >= limite && /producci[oó]n|production/i.test(h.titulo || ''))
+  if (!hi) return null
+  // "2do. Trimestre del 2026" → "2T 2026" (si el título no lo trae, va sin etiqueta)
+  const m = (hi.titulo || '').match(/([1-4])(?:er|do|to)?\.?\s*Trimestre\s*(?:del?\s*)?(\d{4})/i)
+  return { ...hi, trimestre: m ? `${m[1]}T ${m[2]}` : null }
+}
+
 export default function ProduccionMinera({ ticker }) {
   const fam = familiaData[ticker]
   if (!fam) return null
+  const hiProd = hiProduccionOficial(ticker)
 
   const meses = mineriaData.meses
   const entidades = (fam.entidades || [])
@@ -421,6 +443,31 @@ export default function ProduccionMinera({ ticker }) {
   return (
     <div className="prodmin">
       <div className="seccion-titulo">⛏️ Producción de sus minas (MINEM)</div>
+
+      {hiProd && (
+        <div className="prodmin-hiprod">
+          <div className="prodmin-hiprod-txt">
+            {hiProd.trimestre ? (
+              <>
+                📣 <strong>Producción oficial del {hiProd.trimestre}:</strong>{' '}
+                la propia empresa ya publicó{' '}
+                <Glosado text="su producción y volumen de ventas, mina por mina — el dato COMPLETO (los gráficos de abajo solo muestran lo que entra al top del BEM)." />
+              </>
+            ) : (
+              <>
+                📣 <strong>Producción oficial:</strong> la propia empresa publicó{' '}
+                «{hiProd.titulo}» — <Glosado text="el dato de la fuente misma, más completo que el top del BEM." />
+              </>
+            )}
+          </div>
+          <a className="prodmin-hiprod-btn" href={hiProd.pdf} target="_blank" rel="noreferrer">
+            📄 Léelo (PDF ↗)
+          </a>
+          <div className="muted prodmin-hiprod-fecha">
+            Hecho de Importancia del {hiProd.fecha}
+          </div>
+        </div>
+      )}
 
       {fam.sinProduccion ? (
         <p className="prodmin-sinprod"><Glosado text={fam.sinProduccion} /></p>
