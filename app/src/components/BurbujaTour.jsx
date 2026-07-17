@@ -4,8 +4,15 @@ import { useState } from 'react'
 // SIEMPRE está ahí por si quieres el tour — y la primera vez se presenta
 // sola con un globito de saludo. Cerrar el saludo no la mata: queda la ❓.
 // Un saludo por pantalla (inicio/ficha), recordado en localStorage.
+const SALUDOS = {
+  empresa: { clave: 'ficha', titulo: '¿Te explico esta ficha?', texto: 'Te llevo de la mano y te explico todo, pasito a pasito.' },
+  cuaderno: { clave: 'cuaderno', titulo: '¿Te muestro tu Cuaderno?', texto: 'Cargo una cartera de ejemplo y te enseño cada parte, de la mano.' },
+  inicio: { clave: 'inicio', titulo: '¿Primera vez por aquí?', texto: 'Te llevo de la mano y te explico todo, pasito a pasito.' },
+}
+
 export default function BurbujaTour({ vista, onAbrir }) {
-  const clave = 'alto-tour-saludo-' + (vista === 'empresa' ? 'ficha' : 'inicio')
+  const info = SALUDOS[vista] || SALUDOS.inicio
+  const clave = 'alto-tour-saludo-' + info.clave
   const [saludo, setSaludo] = useState(() => {
     try { return !localStorage.getItem(clave) } catch { return true }
   })
@@ -25,8 +32,8 @@ export default function BurbujaTour({ vista, onAbrir }) {
       {saludo && (
         <div className="burbuja-tour-saludo">
           <button className="burbuja-tour-x" onClick={cerrarSaludo} aria-label="Cerrar">✕</button>
-          <strong>👋 {vista === 'empresa' ? '¿Te explico esta ficha?' : '¿Primera vez por aquí?'}</strong>
-          <p>Te llevo de la mano y te explico todo, pasito a pasito.</p>
+          <strong>👋 {info.titulo}</strong>
+          <p>{info.texto}</p>
           <button className="btn btn-oro burbuja-tour-si" onClick={abrir}>
             🚶 Sí, dame el tour
           </button>

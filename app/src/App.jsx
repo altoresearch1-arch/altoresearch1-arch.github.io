@@ -77,9 +77,13 @@ export default function App() {
   // si cambias de pantalla a mitad del tour, se cierra: sus pasos apuntaban
   // a la pantalla anterior (el setTimeout de abrirTour llega DESPUÉS de esto)
   useEffect(() => { setTour(null) }, [vista])
+  // El tour de Mi Cuaderno lo maneja el propio Cuaderno (carga una cartera de
+  // ejemplo antes de arrancar); aquí guardamos su disparador.
+  const arrancarTourCuaderno = useRef(null)
   const abrirTour = () => {
     if (vista === 'empresa') setTour('ficha')
     else if (vista === 'inicio') setTour('inicio')
+    else if (vista === 'cuaderno' && arrancarTourCuaderno.current) arrancarTourCuaderno.current()
     else {
       // desde otra pantalla: primero al inicio, luego arranca (deja montar el DOM)
       irA('#/')
@@ -202,6 +206,7 @@ export default function App() {
                 <button
                   key={it.id}
                   className={vista === it.id ? 'activo' : ''}
+                  data-tour={it.id === 'cuaderno' ? 'nav-cuaderno' : undefined}
                   onClick={() => irA(it.hash)}
                 >
                   {it.label}
@@ -374,7 +379,12 @@ export default function App() {
 
           {vista === 'ia' && <Atlas onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />}
 
-          {vista === 'cuaderno' && <Cuaderno onVerEmpresa={(t) => abrirEmpresa(t, 'cuaderno')} />}
+          {vista === 'cuaderno' && (
+            <Cuaderno
+              onVerEmpresa={(t) => abrirEmpresa(t, 'cuaderno')}
+              onRegistrarTour={(fn) => { arrancarTourCuaderno.current = fn }}
+            />
+          )}
 
           {vista === 'comentarios' && <Comentarios />}
 
@@ -408,7 +418,7 @@ export default function App() {
       {/* 🚶 Tour guiado: burbuja ❓ siempre a la mano (inicio y ficha) + el tour */}
       {/* key={vista}: al cambiar de pantalla se remonta y re-lee su saludo
           (si no, el estado inicial del saludo se queda pegado al del inicio) */}
-      {tour == null && transicion == null && (vista === 'inicio' || vista === 'empresa') && (
+      {tour == null && transicion == null && (vista === 'inicio' || vista === 'empresa' || vista === 'cuaderno') && (
         <BurbujaTour key={vista} vista={vista} onAbrir={abrirTour} />
       )}
       {tour != null && (

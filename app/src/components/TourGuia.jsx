@@ -53,9 +53,14 @@ export const PASOS_INICIO = [
     texto: 'Cada día te presentamos una empresa distinta de la bolsa. Visítanos seguido y en unos meses las conoces todas.',
   },
   {
+    sel: '[data-tour="nav-cuaderno"]',
+    icono: '📓', titulo: 'Mi Cuaderno',
+    texto: 'Tu cartera vive aquí: anota (o importa con una foto) las acciones que tienes y el Cuaderno te calcula tu patrimonio, tus próximos dividendos, un calendario y más — todo privado, en tu teléfono. Ábrelo y toca el ❓: tiene su propio tour con una cartera de ejemplo.',
+  },
+  {
     sel: '.nav-menu',
     icono: '☰', titulo: 'Todo lo demás',
-    texto: 'El glosario (diccionario de palabras raras), Atlas — nuestra IA que enseña —, comentarios y más. Todo vive detrás de este botón.',
+    texto: 'El glosario (diccionario de palabras raras), Atlas — nuestra IA que enseña —, 📓 Mi Cuaderno, comentarios y más. Todo vive detrás de este botón.',
   },
   {
     sel: '.apoyo-pill',
@@ -108,11 +113,76 @@ export const PASOS_FICHA = [
   },
 ]
 
+// Pasos de MI CUADERNO (pedido de Jair 17-jul). Al arrancar, el Cuaderno carga
+// una cartera de EJEMPLO (simulación) para que todo esté lleno y se pueda
+// mostrar de la mano; al cerrar el tour la borra sola (si el usuario no metió
+// la suya). Los pasos cuyo elemento no exista se saltan igual.
+export const PASOS_CUADERNO = [
+  {
+    sel: '.cd-patrimonio',
+    icono: '📓', titulo: 'Tu Cuaderno (con ejemplo)',
+    texto: 'Para mostrarte cómo se ve lleno, cargué una cartera de EJEMPLO — no es real, y al cerrar el tour la borro sola. Este número grande es tu patrimonio: todo lo que tienes sumado, latiendo con los precios del día.',
+  },
+  {
+    sel: '.cd-botonera',
+    icono: '🛰', titulo: 'Así armas la tuya',
+    texto: 'Aquí empiezas: «Importar de mi broker» lee una foto o PDF de tu estado de cuenta y reconoce tus acciones solo; «+ Agregar» las pones a mano. Todo se guarda en tu teléfono — sin cuentas ni nube.',
+  },
+  {
+    sel: '[data-tour="cd-acciones"]',
+    icono: '📄', titulo: 'Tu hoja de acciones',
+    texto: 'Cada empresa que tienes, con cuánto va ganando o perdiendo. Tócala para ver el detalle, ponerle una nota o editar cuántas tienes y a qué precio las compraste.',
+  },
+  {
+    sel: '[data-tour="cd-flujo"]',
+    icono: '💰', titulo: 'Tu lluvia de dividendos',
+    texto: 'Los próximos pagos que caerían a tu bolsillo, mes a mes, según lo que cada empresa suele repartir. El mes más gordo lleva su corona 👑. Son estimados con el patrón real — no promesas.',
+  },
+  {
+    sel: '[data-tour="cd-calendario"]',
+    icono: '📅', titulo: 'Calendario inteligente',
+    texto: 'Las fechas que te importan — cortes de dividendo, pagos, juntas — marcadas en el mes. Toca un día con puntito y te dice qué pasa.',
+  },
+  {
+    sel: '[data-tour="cd-pulso"]',
+    icono: '🛰', titulo: 'El pulso de tus empresas',
+    texto: 'Las noticias oficiales (Hechos de Importancia) de TUS empresas, con el semáforo del lector: 🟢 buena pinta, 🔴 ojo, 🟡 neutra. Llegan solas, sin que las busques.',
+  },
+  {
+    sel: '[data-tour="cd-vigilar"]',
+    icono: '👀', titulo: 'Lo que debes vigilar',
+    texto: 'Avisos armados desde tus propias empresas: demasiado dinero en una sola, un dividendo que se acerca, algo que cambió. Como un amigo que te pica el hombro.',
+  },
+  {
+    sel: '[data-tour="cd-recordatorios"]',
+    icono: '⏰', titulo: 'Tus recordatorios',
+    texto: 'Apúntate lo que no quieras olvidar — «revisar Ferreycorp tras sus resultados» — y queda guardado aquí. Tú mandas.',
+  },
+  {
+    sel: '[data-tour="cd-torta"]',
+    icono: '🥧', titulo: 'Tu torta',
+    texto: 'Cómo está repartido tu dinero entre empresas y sectores. Si una tajada se ve enorme, es señal de que estás muy concentrado en una sola apuesta.',
+  },
+  {
+    sel: '.cd-pie',
+    icono: '🔒', titulo: 'Todo es tuyo y privado',
+    texto: 'Nada de esto sale de tu navegador: sin cuentas, sin nube, sin que nadie lo vea. Y listo — ya conoces tu Cuaderno. Borro la cartera de ejemplo y te dejo empezar la tuya. 🎉',
+  },
+]
+
 const ALTO_TARJETA = 230 // alto estimado de la tarjeta para decidir arriba/abajo
 
 export default function TourGuia({ pasos, onCerrar }) {
-  // solo los pasos cuyo elemento SÍ está en pantalla ahora mismo
-  const lista = useMemo(() => pasos.filter((p) => document.querySelector(p.sel)), [pasos])
+  // solo los pasos cuyo elemento SÍ está en pantalla ahora mismo — y VISIBLE
+  // (getClientRects() queda vacío si está display:none, ej. los nav-links en
+  // móvil): así el paso de un elemento oculto se salta en vez de enfocar la nada
+  const lista = useMemo(
+    () => pasos.filter((p) => {
+      const el = document.querySelector(p.sel)
+      return el && el.getClientRects().length > 0
+    }),
+    [pasos],
+  )
   const [i, setI] = useState(0)
   const [caja, setCaja] = useState(null)
   const quieto = prefiereQuieto()

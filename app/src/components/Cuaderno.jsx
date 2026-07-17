@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import empresasData from '../data/empresas.json'
 import Sparkline from './Sparkline'
 import ImportarCartera from './ImportarCartera'
+import TourGuia, { PASOS_CUADERNO } from './TourGuia'
 import {
   leerCartera, guardarCartera, leerNotas, guardarNotas,
   leerRecordatorios, guardarRecordatorios, leerVisitaAnterior, marcarVisita,
@@ -21,7 +22,7 @@ import {
 const COLORES = ['#d4af37', '#4f9d6b', '#6b8fc9', '#c0563f', '#9a7bb8',
   '#c79a3a', '#5aa3a3', '#b56a8a', '#7a9e5f', '#8a8a80']
 
-export default function Cuaderno({ onVerEmpresa }) {
+export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
   const [cartera, setCartera] = useState(leerCartera)
   const [notas, setNotas] = useState(leerNotas)
   const [recs, setRecs] = useState(() => leerRecordatorios())
@@ -47,6 +48,39 @@ export default function Cuaderno({ onVerEmpresa }) {
   const ponCartera = (c) => { setCartera(c); guardarCartera(c) }
   const ponNotas = (n) => { setNotas(n); guardarNotas(n) }
   const ponRecs = (r) => { setRecs(r); guardarRecordatorios(r) }
+
+  // 🚶 Tour de Mi Cuaderno (pedido de Jair 17-jul). Para poder mostrar TODO de
+  // la mano, si el cuaderno está vacío carga una cartera de EJEMPLO (simulación)
+  // antes de arrancar; al cerrar la borra sola. Si el usuario ya tenía la suya,
+  // NO la toca. El velo del tour bloquea la interacción, así que mientras corre
+  // la cartera no cambia — al cerrar basta con saber si fue ejemplo temporal.
+  const [tourAbierto, setTourAbierto] = useState(false)
+  const demoTemporal = useRef(false)
+  const arrancarTour = useRef(null)
+  arrancarTour.current = () => {
+    let espera = 0
+    if (cartera.length === 0) {
+      ponCartera(CARTERA_DEMO.map((c) => ({ ...c })))
+      demoTemporal.current = true
+      espera = 430 // deja montar y pintar las secciones antes de medir el 1er paso
+    }
+    setTimeout(() => setTourAbierto(true), espera)
+  }
+  useEffect(() => {
+    onRegistrarTour?.(() => arrancarTour.current())
+  }, [onRegistrarTour])
+  const cerrarTour = () => {
+    setTourAbierto(false)
+    if (demoTemporal.current) {
+      demoTemporal.current = false
+      ponCartera([])
+      avisar('🧹 Borré la cartera de ejemplo del tour. Ahora arma la tuya: 🛰 Importar de mi broker o + Agregar.')
+    }
+  }
+  // Si te vas del cuaderno con el ejemplo puesto (ej. botón atrás), no lo dejes pegado.
+  useEffect(() => () => {
+    if (demoTemporal.current) guardarCartera([])
+  }, [])
 
   const { filas, totalValor, totalCosto, ganTotal, cambioDia, suben, bajan } =
     useMemo(() => filasDe(cartera), [cartera])
@@ -107,7 +141,7 @@ export default function Cuaderno({ onVerEmpresa }) {
 
       {/* ── Mis acciones ── */}
       <div className="cd-seccion-cab">
-        <h2>Mis acciones</h2>
+        <h2 data-tour="cd-acciones">Mis acciones</h2>
         <div className="cd-botonera">
           <button className="btn cd-btn-mini cd-btn-oro" onClick={() => setImportando(true)}>🛰 Importar de mi broker</button>
           <button className="btn cd-btn-mini" onClick={() => setFormAbierto((v) => !v)}>+ Agregar</button>
@@ -159,23 +193,23 @@ export default function Cuaderno({ onVerEmpresa }) {
           <h2>Comprar más</h2>
           <Calculadora cartera={cartera} />
 
-          <h2>Próximo flujo de efectivo ⭐</h2>
+          <h2 data-tour="cd-flujo">Próximo flujo de efectivo ⭐</h2>
           <Flujo filas={filas} proys={proys} hoy={hoy} />
 
-          <h2>Calendario inteligente</h2>
+          <h2 data-tour="cd-calendario">Calendario inteligente</h2>
           <Calendario filas={filas} proys={proys} hoy={hoy}
             calMes={calMes} setCalMes={setCalMes} calSel={calSel} setCalSel={setCalSel} />
 
-          <h2>El pulso de tus empresas 🛰</h2>
+          <h2 data-tour="cd-pulso">El pulso de tus empresas 🛰</h2>
           <p className="muted cd-sub">Hechos de importancia reales de la BVL, con el semáforo del lector.</p>
           <Pulso filas={filas} onVerEmpresa={onVerEmpresa} />
 
-          <h2>Lo que debes vigilar</h2>
+          <h2 data-tour="cd-vigilar">Lo que debes vigilar</h2>
           <Vigilar filas={filas} proys={proys} hoy={hoy} />
         </>
       )}
 
-      <h2>Recordatorios</h2>
+      <h2 data-tour="cd-recordatorios">Recordatorios</h2>
       <Recordatorios recs={recs} ponRecs={ponRecs} />
 
       {cartera.length > 0 && (
@@ -189,7 +223,7 @@ export default function Cuaderno({ onVerEmpresa }) {
           <h2>Salud de la cartera</h2>
           <Salud filas={filas} cartera={cartera} totalValor={totalValor} />
 
-          <h2>Mi torta</h2>
+          <h2 data-tour="cd-torta">Mi torta</h2>
           <Torta filas={filas} totalValor={totalValor} />
         </>
       )}
@@ -212,6 +246,8 @@ export default function Cuaderno({ onVerEmpresa }) {
       )}
 
       {toast && <div className="cd-toast visible">{toast}</div>}
+
+      {tourAbierto && <TourGuia pasos={PASOS_CUADERNO} onCerrar={cerrarTour} />}
     </div>
   )
 }
