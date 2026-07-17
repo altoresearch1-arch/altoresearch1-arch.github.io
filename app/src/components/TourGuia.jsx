@@ -113,6 +113,41 @@ export const PASOS_FICHA = [
   },
 ]
 
+// Pasos de EXPLORAR — las empresas + el «modo enfrentamiento» (pedido de Jair
+// 17-jul). Lenguaje de bebé, cero jerga; el paso estrella es el duelo ⚖.
+export const PASOS_EXPLORAR = [
+  {
+    sel: '.explorar-busqueda',
+    icono: '🔎', titulo: 'Busca entre todas',
+    texto: 'Aquí están TODAS las empresas de la Bolsa de Lima que seguimos. Escribe un ticker o un nombre — «BVN», «Gloria», hasta «cemento» — y la lista se filtra al toque.',
+  },
+  {
+    sel: '.explorar-chips',
+    icono: '🏷️', titulo: 'Filtra por sector',
+    texto: 'Toca un sector (minas, bancos, alimentos…) y verás solo esas. «Todos» te las devuelve completas.',
+  },
+  {
+    sel: '.explorar-filtros',
+    icono: '🎛️', titulo: 'Afina la búsqueda',
+    texto: 'Deja solo las que pagan dividendos o las que se negocian seguido, y ordénalas por nombre o por cuánto rinden. Se combinan como quieras.',
+  },
+  {
+    sel: '.empresa-item',
+    icono: '🃏', titulo: 'Cada tarjeta',
+    texto: 'Un vistazo de cada empresa: su sector, si paga dividendos y a cuánto cerró. Tócala y entras a su ficha completa.',
+  },
+  {
+    sel: '.empresa-item .btn-estrella',
+    icono: '⭐', titulo: 'Guárdala',
+    texto: 'La estrellita la manda a tu lista del inicio, vigilada: si publica una noticia importante, te suena un aviso.',
+  },
+  {
+    sel: '.empresa-item .btn-comparar',
+    icono: '⚖️', titulo: 'Modo enfrentamiento',
+    texto: 'Lo mejor de aquí: toca el ⚖ en DOS empresas y se baten en duelo — precio, dividendos, tamaño, producción minera… lado a lado, para decidir cuál estudiar primero. ¡Y listo, ese es Explorar! 🎉',
+  },
+]
+
 // Pasos de MI CUADERNO (pedido de Jair 17-jul). Al arrancar, el Cuaderno carga
 // una cartera de EJEMPLO (simulación) para que todo esté lleno y se pueda
 // mostrar de la mano; al cerrar el tour la borra sola (si el usuario no metió

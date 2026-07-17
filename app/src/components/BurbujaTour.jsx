@@ -6,6 +6,7 @@ import { useState } from 'react'
 // Un saludo por pantalla (inicio/ficha), recordado en localStorage.
 const SALUDOS = {
   empresa: { clave: 'ficha', titulo: '¿Te explico esta ficha?', texto: 'Te llevo de la mano y te explico todo, pasito a pasito.' },
+  explorar: { clave: 'explorar', titulo: '¿Te explico cómo explorar?', texto: 'Cómo buscar, filtrar y batir 2 empresas en duelo — pasito a pasito.' },
   cuaderno: { clave: 'cuaderno', titulo: '¿Te muestro tu Cuaderno?', texto: 'Cargo una cartera de ejemplo y te enseño cada parte, de la mano.' },
   inicio: { clave: 'inicio', titulo: '¿Primera vez por aquí?', texto: 'Te llevo de la mano y te explico todo, pasito a pasito.' },
 }

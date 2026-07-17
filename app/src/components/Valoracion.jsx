@@ -132,98 +132,114 @@ export default function Valoracion({ empresa }) {
   }
 
   return (
-    <div className={'val ' + clase}>
-      <div className="val-tit">
-        💎 ¿Barata o cara? {estado && <span className="val-estado">{estado}</span>}
-      </div>
-
-      {tienePerdida ? (
-        <div className="val-txt">
-          No se puede valorar por <Glosado text="P/E" />: la empresa tuvo <strong>pérdida</strong> en 2025
-          (no hay ganancia con qué dividir el precio).
-          {(ev || evEbit) && <> Mira el múltiplo de empresa entera de abajo — ese usa la ganancia <strong>operativa</strong>, así que sí funciona con pérdida neta.</>}
+    <>
+      {/* ¿Barata o cara? = SOLO el P/E (pedido de Jair 17-jul): es el dato que
+          tenemos para todas; el múltiplo de empresa entera baja a su propio
+          bloque, como complemento, porque le faltan datos a muchas empresas. */}
+      <div className={'val ' + clase}>
+        <div className="val-tit">
+          💎 ¿Barata o cara? {estado && <span className="val-estado">{estado}</span>}
         </div>
-      ) : (
-        <>
-          <div className="val-txt">
-            El <Glosado text="P/E" /> es el más usado para saber si el precio de hoy es razonable: te dice
-            cuántos años de la ganancia actual de la empresa estarías pagando por tener una acción.
-            Menos = más barata; más = más cara — siempre comparado contra su sector.
-          </div>
-          <div className="val-formula">
-            <Glosado text="P/E" /> = precio ÷ <Glosado text="ganancia anual por acción" /> ={' '}
-            {fmt(px.precio, sim)} ÷ {fmt(eps, sim)} = <strong>{pe.toFixed(1)}</strong>
-            {nota && <span className="muted"> {nota}</span>}
-          </div>
-          <div className="val-barra">
-            <span className="val-rango-txt">
-              Rango justo del sector: <strong>{rango.bajo}–{rango.alto}</strong> ·{' '}
-              {estado === 'BARATA' && `${pe.toFixed(1)} está por DEBAJO → más barata de lo normal`}
-              {estado === 'CARA' && `${pe.toFixed(1)} está por ENCIMA → más cara de lo normal`}
-              {estado === 'EN RANGO' && `${pe.toFixed(1)} cae DENTRO → precio normal para el sector`}
-            </span>
-          </div>
-        </>
-      )}
 
-      {ev && (
-        <div className="val-ev">
+        {tienePerdida ? (
           <div className="val-txt">
-            <Glosado text="El EV/EBITDA mira la empresa ENTERA: lo que costaría comprarla toda, con su deuda incluida, frente a su ganancia operativa (antes de intereses, impuestos, depreciación y amortización) — el motor real del negocio, sin maquillaje contable. A diferencia del P/E, sí funciona con pérdida neta y no se deja engañar por empresas muy endeudadas: menos = más barata." />
+            No se puede valorar por <Glosado text="P/E" />: la empresa tuvo <strong>pérdida</strong> en 2025
+            (no hay ganancia con qué dividir el precio).
+            {(ev || evEbit) && <> Más abajo hay otro ángulo (la empresa entera) que sí funciona con pérdida neta.</>}
           </div>
-          <div className="val-formula">
-            <Glosado text="EV/EBITDA" /> = (<Glosado text="valor de mercado" /> + <Glosado text="deuda neta" />) ÷{' '}
-            <Glosado text="ganancia operativa anualizada" /> ={' '}
-            ({fmtGrande(ev.capitalizacion, simEstados)} + {fmtGrande(ev.deudaNeta, simEstados)}) ÷{' '}
-            {fmtGrande(ev.ganancia, simEstados)} = <strong>{ev.ratio.toFixed(1)}</strong>
-          </div>
-          <div className="val-barra">
-            <span className="val-rango-txt">
-              Rango justo del sector: <strong>{ev.rango.bajo}–{ev.rango.alto}</strong> ·{' '}
-              {ev.estado === 'barata' && `${ev.ratio.toFixed(1)} está por DEBAJO → más barata de lo normal`}
-              {ev.estado === 'cara' && `${ev.ratio.toFixed(1)} está por ENCIMA → más cara de lo normal`}
-              {ev.estado === 'en rango' && `${ev.ratio.toFixed(1)} cae DENTRO → precio normal para el sector`}
-            </span>
-          </div>
-        </div>
-      )}
-
-      {evEbit && (
-        <div className="val-ev">
-          <div className="val-txt">
-            <Glosado text="Aquí no se pudo calcular el EV/EBITDA: esta empresa presentó su flujo de caja en forma resumida y no publicó su depreciación y amortización, así que no hay con qué sumarla. En su lugar mostramos el EV/EBIT: la empresa entera (valor de mercado + deuda neta) frente a su ganancia operativa. Es primo del EV/EBITDA pero un poco más exigente (no le devuelve la depreciación), por eso corre algo más alto — va sin veredicto de “barata/cara” para no marcarla mal por esa diferencia." />
-          </div>
-          <div className="val-formula">
-            <Glosado text="EV/EBIT" /> = (<Glosado text="valor de mercado" /> + <Glosado text="deuda neta" />) ÷{' '}
-            <Glosado text="ganancia operativa anualizada" /> ={' '}
-            ({fmtGrande(evEbit.capitalizacion, simEstados)} + {fmtGrande(evEbit.deudaNeta, simEstados)}) ÷{' '}
-            {fmtGrande(evEbit.ganancia, simEstados)} = <strong>{evEbit.ratio.toFixed(1)}</strong>
-          </div>
-          {evEbit.rango && (
+        ) : (
+          <>
+            <div className="val-txt">
+              El <Glosado text="P/E" /> es el más usado para saber si el precio de hoy es razonable: te dice
+              cuántos años de la ganancia actual de la empresa estarías pagando por tener una acción.
+              Menos = más barata; más = más cara — siempre comparado contra su sector.
+            </div>
+            <div className="val-formula">
+              <Glosado text="P/E" /> = precio ÷ <Glosado text="ganancia anual por acción" /> ={' '}
+              {fmt(px.precio, sim)} ÷ {fmt(eps, sim)} = <strong>{pe.toFixed(1)}</strong>
+              {nota && <span className="muted"> {nota}</span>}
+            </div>
             <div className="val-barra">
               <span className="val-rango-txt">
-                Referencia (rango de <Glosado text="EV/EBITDA" /> del sector, no de <Glosado text="EV/EBIT" />):{' '}
-                <strong>{evEbit.rango.bajo}–{evEbit.rango.alto}</strong>{' '}
-                · como este <Glosado text="EV/EBIT" /> no lleva la <Glosado text="depreciación y amortización" /> de
-                vuelta, suele salir por ENCIMA de ese rango aunque la empresa no esté cara — úsalo para comparar
-                entre empresas parecidas, no contra este número.
+                Rango justo del sector: <strong>{rango.bajo}–{rango.alto}</strong> ·{' '}
+                {estado === 'BARATA' && `${pe.toFixed(1)} está por DEBAJO → más barata de lo normal`}
+                {estado === 'CARA' && `${pe.toFixed(1)} está por ENCIMA → más cara de lo normal`}
+                {estado === 'EN RANGO' && `${pe.toFixed(1)} cae DENTRO → precio normal para el sector`}
               </span>
+            </div>
+          </>
+        )}
+
+        {!tienePerdida && px.sinNegociacionReciente && (
+          <div className="val-aviso">
+            ⚠️ Ojo: el precio es de un cierre antiguo (la acción casi no se negocia), así que este P/E puede no ser fiable.
+          </div>
+        )}
+        {!tienePerdida && rango.ciclico && (
+          <div className="val-aviso">
+            ⚠️ Cuidado: en este sector el P/E ENGAÑA. Con el ciclo alto (metal/acero/pesca caros)
+            la ganancia se infla y la acción parece barata justo cuando podría estar cara.
+          </div>
+        )}
+      </div>
+
+      {(ev || evEbit) && (
+        <div className="val val-otro">
+          <div className="val-tit val-otro-tit">🔎 Otro ángulo (opcional): la empresa entera</div>
+          <p className="val-otro-nota muted">
+            Un segundo múltiplo que mira el negocio completo, con su deuda incluida. Necesita datos
+            que no todas las empresas publican en la SMV, así que no aparece para todas — tómalo como
+            complemento del P/E de arriba, no como el veredicto.
+          </p>
+
+          {ev && (
+            <div className="val-ev">
+              <div className="val-txt">
+                <Glosado text="El EV/EBITDA mira la empresa ENTERA: lo que costaría comprarla toda, con su deuda incluida, frente a su ganancia operativa (antes de intereses, impuestos, depreciación y amortización) — el motor real del negocio, sin maquillaje contable. A diferencia del P/E, sí funciona con pérdida neta y no se deja engañar por empresas muy endeudadas: menos = más barata." />
+              </div>
+              <div className="val-formula">
+                <Glosado text="EV/EBITDA" /> = (<Glosado text="valor de mercado" /> + <Glosado text="deuda neta" />) ÷{' '}
+                <Glosado text="ganancia operativa anualizada" /> ={' '}
+                ({fmtGrande(ev.capitalizacion, simEstados)} + {fmtGrande(ev.deudaNeta, simEstados)}) ÷{' '}
+                {fmtGrande(ev.ganancia, simEstados)} = <strong>{ev.ratio.toFixed(1)}</strong>
+              </div>
+              <div className="val-barra">
+                <span className="val-rango-txt">
+                  Rango justo del sector: <strong>{ev.rango.bajo}–{ev.rango.alto}</strong> ·{' '}
+                  {ev.estado === 'barata' && `${ev.ratio.toFixed(1)} está por DEBAJO → más barata de lo normal`}
+                  {ev.estado === 'cara' && `${ev.ratio.toFixed(1)} está por ENCIMA → más cara de lo normal`}
+                  {ev.estado === 'en rango' && `${ev.ratio.toFixed(1)} cae DENTRO → precio normal para el sector`}
+                </span>
+              </div>
+            </div>
+          )}
+
+          {evEbit && (
+            <div className="val-ev">
+              <div className="val-txt">
+                <Glosado text="Aquí no se pudo calcular el EV/EBITDA: esta empresa presentó su flujo de caja en forma resumida y no publicó su depreciación y amortización, así que no hay con qué sumarla. En su lugar mostramos el EV/EBIT: la empresa entera (valor de mercado + deuda neta) frente a su ganancia operativa. Es primo del EV/EBITDA pero un poco más exigente (no le devuelve la depreciación), por eso corre algo más alto — va sin veredicto de “barata/cara” para no marcarla mal por esa diferencia." />
+              </div>
+              <div className="val-formula">
+                <Glosado text="EV/EBIT" /> = (<Glosado text="valor de mercado" /> + <Glosado text="deuda neta" />) ÷{' '}
+                <Glosado text="ganancia operativa anualizada" /> ={' '}
+                ({fmtGrande(evEbit.capitalizacion, simEstados)} + {fmtGrande(evEbit.deudaNeta, simEstados)}) ÷{' '}
+                {fmtGrande(evEbit.ganancia, simEstados)} = <strong>{evEbit.ratio.toFixed(1)}</strong>
+              </div>
+              {evEbit.rango && (
+                <div className="val-barra">
+                  <span className="val-rango-txt">
+                    Referencia (rango de <Glosado text="EV/EBITDA" /> del sector, no de <Glosado text="EV/EBIT" />):{' '}
+                    <strong>{evEbit.rango.bajo}–{evEbit.rango.alto}</strong>{' '}
+                    · como este <Glosado text="EV/EBIT" /> no lleva la <Glosado text="depreciación y amortización" /> de
+                    vuelta, suele salir por ENCIMA de ese rango aunque la empresa no esté cara — úsalo para comparar
+                    entre empresas parecidas, no contra este número.
+                  </span>
+                </div>
+              )}
             </div>
           )}
         </div>
       )}
-
-      {!tienePerdida && px.sinNegociacionReciente && (
-        <div className="val-aviso">
-          ⚠️ Ojo: el precio es de un cierre antiguo (la acción casi no se negocia), así que este P/E puede no ser fiable.
-        </div>
-      )}
-      {!tienePerdida && rango.ciclico && (
-        <div className="val-aviso">
-          ⚠️ Cuidado: en este sector el P/E ENGAÑA. Con el ciclo alto (metal/acero/pesca caros)
-          la ganancia se infla y la acción parece barata justo cuando podría estar cara.
-        </div>
-      )}
-    </div>
+    </>
   )
 }

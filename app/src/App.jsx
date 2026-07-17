@@ -28,7 +28,7 @@ import MenuNav from './components/MenuNav'
 import BuscadorInicio from './components/BuscadorInicio'
 import CintaBVL from './components/CintaBVL'
 import GanchoDatos from './components/GanchoDatos'
-import TourGuia, { PASOS_INICIO, PASOS_FICHA } from './components/TourGuia'
+import TourGuia, { PASOS_INICIO, PASOS_FICHA, PASOS_EXPLORAR } from './components/TourGuia'
 import BurbujaTour from './components/BurbujaTour'
 import { useNivel, aplicarTemaNivel } from './lib/nivel'
 
@@ -83,6 +83,7 @@ export default function App() {
   const abrirTour = () => {
     if (vista === 'empresa') setTour('ficha')
     else if (vista === 'inicio') setTour('inicio')
+    else if (vista === 'explorar') setTour('explorar')
     else if (vista === 'cuaderno' && arrancarTourCuaderno.current) arrancarTourCuaderno.current()
     else {
       // desde otra pantalla: primero al inicio, luego arranca (deja montar el DOM)
@@ -418,12 +419,12 @@ export default function App() {
       {/* 🚶 Tour guiado: burbuja ❓ siempre a la mano (inicio y ficha) + el tour */}
       {/* key={vista}: al cambiar de pantalla se remonta y re-lee su saludo
           (si no, el estado inicial del saludo se queda pegado al del inicio) */}
-      {tour == null && transicion == null && (vista === 'inicio' || vista === 'empresa' || vista === 'cuaderno') && (
+      {tour == null && transicion == null && (vista === 'inicio' || vista === 'empresa' || vista === 'cuaderno' || vista === 'explorar') && (
         <BurbujaTour key={vista} vista={vista} onAbrir={abrirTour} />
       )}
       {tour != null && (
         <TourGuia
-          pasos={tour === 'ficha' ? PASOS_FICHA : PASOS_INICIO}
+          pasos={tour === 'ficha' ? PASOS_FICHA : tour === 'explorar' ? PASOS_EXPLORAR : PASOS_INICIO}
           onCerrar={() => setTour(null)}
         />
       )}

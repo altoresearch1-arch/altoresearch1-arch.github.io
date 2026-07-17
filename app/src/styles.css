@@ -923,6 +923,21 @@ a.link {
 .val-perdida {
   border-left-color: var(--texto-tenue);
 }
+/* "Otro ángulo" (EV/EBITDA): complemento secundario, tono neutro y apagado
+   para que NO compita con el veredicto de P/E de arriba (pedido de Jair 17-jul). */
+.val-otro {
+  border-left-color: var(--gris);
+  background: color-mix(in srgb, var(--negro-3) 60%, transparent);
+}
+.val-otro-tit {
+  font-size: 14px;
+  color: var(--texto-tenue);
+}
+.val-otro-nota {
+  font-size: 12.5px;
+  line-height: 1.5;
+  margin: 6px 0 4px;
+}
 .val-tit {
   font-weight: 700;
   font-size: 15px;
