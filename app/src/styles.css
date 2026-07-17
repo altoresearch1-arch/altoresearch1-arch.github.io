@@ -5574,6 +5574,24 @@ a.link {
   display: flex; justify-content: space-between; padding: 11px 16px;
   font-weight: 700; border-top: 1px solid var(--gris); font-size: 14px;
 }
+/* Leyenda de columnas (pedido de Jair 17-jul: que estén bien explicadas) */
+.cd-hoja-leyenda {
+  border-top: 1px solid var(--gris);
+  padding: 10px 16px;
+  font-size: 12.5px;
+}
+.cd-hoja-leyenda summary {
+  cursor: pointer;
+  color: var(--oro);
+  font-weight: 600;
+  list-style: none;
+}
+.cd-hoja-leyenda summary::before { content: '▸ '; }
+.cd-hoja-leyenda[open] summary::before { content: '▾ '; }
+.cd-hoja-leyenda ul { margin: 8px 0 2px; padding-left: 18px; line-height: 1.55; }
+.cd-hoja-leyenda li { margin-bottom: 5px; }
+.cd-hoja-leyenda b { color: var(--texto); }
+
 .cd-vacio { padding: 26px 18px; text-align: center; display: grid; gap: 10px; justify-items: center; }
 .cd-vacio-voz { font-size: 16px; font-style: italic; }
 

@@ -354,8 +354,8 @@ function Hoja({ filas, filtro, setFiltro, expandido, setExpandido, notas, ponNot
       <div className="card cd-tarjeta cd-hoja-wrap">
         <div className="cd-hoja">
           <div className="cd-hoja-cab">
-            <span>Empresa</span><span className="num">Acciones</span><span className="num">Costo prom.</span>
-            <span className="num">Precio</span><span className="num">Ganancia</span><span className="num">Div. 12 m</span>
+            <span>Empresa</span><span className="num">Acciones</span><span className="num">Tu costo</span>
+            <span className="num">Precio</span><span className="num">Gan./pérd.</span><span className="num">Div. 12m</span>
           </div>
           {visibles.map((f) => (
             <FilaHoja key={f.t} f={f} abierta={expandido === f.t} notas={notas} ponNotas={ponNotas}
@@ -383,6 +383,17 @@ function Hoja({ filas, filtro, setFiltro, expandido, setExpandido, notas, ponNot
                 ` · ${ganTotal >= 0 ? '+' : ''}${ganTotal.toFixed(1)}%`}
             </span>
           </div>
+        )}
+        {filas.length > 0 && (
+          <details className="cd-hoja-leyenda">
+            <summary>¿Qué significa cada columna?</summary>
+            <ul>
+              <li><b>Tu costo</b>: a cuánto compraste (o adquiriste) cada acción, en promedio.</li>
+              <li><b>Precio</b>: cuánto vale una acción hoy en la Bolsa (último cierre del robot).</li>
+              <li><b>Gan./pérd.</b>: cuánto ganas o pierdes <b>por ahora</b>, comparado con lo que pagaste. Sube y baja cada día — no es definitivo hasta que vendes.</li>
+              <li><b>Div. 12m</b>: el dividendo que <b>recibirías en un año</b> si la empresa repite lo que pagó el año pasado. Es un estimado, no una promesa.</li>
+            </ul>
+          </details>
         )}
       </div>
     </>
