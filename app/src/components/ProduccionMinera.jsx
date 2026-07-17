@@ -401,7 +401,8 @@ function hiProduccionOficial(ticker) {
   const lista = hechosData.hechos?.[ticker]?.hechos || []
   const limite = new Date(Date.now() - DIAS_HI_PROD * 86400000).toISOString().slice(0, 10)
   const hi = lista.find((h) =>
-    (h.fecha || '') >= limite && /producci[oó]n|production/i.test(h.titulo || ''))
+    (h.fecha || '') >= limite &&
+    /producci[oó]n|production|resultados? operativ|operational/i.test(h.titulo || ''))
   if (!hi) return null
   // "2do. Trimestre del 2026" → "2T 2026" (si el título no lo trae, va sin etiqueta)
   const m = (hi.titulo || '').match(/([1-4])(?:er|do|to)?\.?\s*Trimestre\s*(?:del?\s*)?(\d{4})/i)
@@ -454,18 +455,9 @@ export default function ProduccionMinera({ ticker }) {
       {hiProd && (
         <div className="prodmin-hiprod">
           <div className="prodmin-hiprod-txt">
-            {hiProd.trimestre ? (
-              <>
-                📣 <strong>Producción oficial del {hiProd.trimestre}:</strong>{' '}
-                la propia empresa ya publicó{' '}
-                <Glosado text="su producción y volumen de ventas, mina por mina — el dato COMPLETO (los gráficos de abajo solo muestran lo que entra al top del BEM)." />
-              </>
-            ) : (
-              <>
-                📣 <strong>Producción oficial:</strong> la propia empresa publicó{' '}
-                «{hiProd.titulo}» — <Glosado text="el dato de la fuente misma, más completo que el top del BEM." />
-              </>
-            )}
+            📣 <strong>Comunicado de la empresa{hiProd.trimestre ? ` del ${hiProd.trimestre}` : ''}:</strong>{' '}
+            presentó «{hiProd.titulo}» a la BVL.{' '}
+            <Glosado text="Es información de la fuente misma; ábrela para leer el detalle." />
           </div>
           <a className="prodmin-hiprod-btn" href={hiProd.pdf} target="_blank" rel="noreferrer">
             📄 Léelo (PDF ↗)
