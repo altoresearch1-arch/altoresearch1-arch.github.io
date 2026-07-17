@@ -13,6 +13,8 @@ import Disclaimer from './components/Disclaimer'
 import HoyBVL from './components/HoyBVL'
 import EmpresaDelDia from './components/EmpresaDelDia'
 import MiLista from './components/MiLista'
+import Cuaderno from './components/Cuaderno'
+import CuadernoPortada from './components/CuadernoPortada'
 import MonedaFidget from './components/MonedaFidget'
 import FondoVivo from './components/FondoVivo'
 import Atlas from './components/Atlas'
@@ -44,6 +46,7 @@ const TEXTO_VOLVER = {
   resultados: '← Volver a resultados',
   explorar: '← Volver al explorador',
   comparar: '← Volver a la comparación',
+  cuaderno: '← Volver a mi cuaderno',
 }
 
 // Rutas por hash (#/empresa/BVN, #/explorar, …): cada ficha tiene su LINK
@@ -113,6 +116,7 @@ export default function App() {
       else if (ruta === 'glosario') setVista('glosario')
       else if (ruta === 'explorar') setVista('explorar')
       else if (ruta === 'ia') setVista('ia')
+      else if (ruta === 'cuaderno') setVista('cuaderno')
       else if (ruta === 'comentarios') setVista('comentarios')
       else if (ruta === 'gracias') setVista('gracias')
       else if (ruta === 'empresa' && a && existe(a)) {
@@ -159,7 +163,7 @@ export default function App() {
   const navPrimario = [
     { id: 'inicio', label: 'Inicio', hash: '#/' },
     { id: 'explorar', label: 'Explorar', hash: '#/explorar' },
-    { id: 'glosario', label: 'Glosario', hash: '#/glosario' },
+    { id: 'cuaderno', label: '📓 Cuaderno', hash: '#/cuaderno', beta: true },
     { id: 'ia', label: '🧠 Atlas', hash: '#/ia', beta: true },
   ]
 
@@ -301,6 +305,8 @@ export default function App() {
             const bloqueMercado = (
               <>
                 <BuscadorInicio onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
+                {/* 📓 La puerta del Cuaderno: el inicio saluda con TUS números */}
+                <CuadernoPortada onAbrir={() => irA('#/cuaderno')} />
                 <MiLista onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
                 <HoyBVL onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
                 <EmpresaDelDia onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
@@ -367,6 +373,8 @@ export default function App() {
           {vista === 'glosario' && <Glosario />}
 
           {vista === 'ia' && <Atlas onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />}
+
+          {vista === 'cuaderno' && <Cuaderno onVerEmpresa={(t) => abrirEmpresa(t, 'cuaderno')} />}
 
           {vista === 'comentarios' && <Comentarios />}
 

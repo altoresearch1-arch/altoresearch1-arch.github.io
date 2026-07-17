@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 const ITEMS = [
   { id: 'inicio', icono: '🏠', label: 'Inicio', hash: '#/' },
   { id: 'explorar', icono: '🔎', label: 'Explorar empresas', hash: '#/explorar' },
+  { id: 'cuaderno', icono: '📓', label: 'Mi Cuaderno', hash: '#/cuaderno', beta: true },
   { id: 'glosario', icono: '📖', label: 'Glosario', hash: '#/glosario' },
   { id: 'ia', icono: '🧠', label: 'Atlas', hash: '#/ia', beta: true },
   { id: 'comentarios', icono: '💬', label: 'Comentarios', hash: '#/comentarios' },
