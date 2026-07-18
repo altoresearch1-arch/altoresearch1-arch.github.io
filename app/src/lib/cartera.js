@@ -69,6 +69,10 @@ export const TC = epsAnualData.tipoCambioUSDPEN || 3.75
 export const esUSD = (m) => String(m || '').indexOf('US') === 0
 export const enSoles = (monto, moneda) => (esUSD(moneda) ? monto * TC : monto)
 export const fmtS = (n) => 'S/ ' + Math.round(n).toLocaleString('es-PE')
+export const fmtUSD = (n) => 'US$ ' + Math.round(n).toLocaleString('es-PE')
+export const aUSD = (soles) => soles / TC
+// Monto en soles mostrado en AMBAS monedas (pedido de Jair: soles y dólares)
+export const fmtSyD = (soles) => `${fmtS(soles)} · ${fmtUSD(soles / TC)}`
 export const fmtP = (n, mon) => (esUSD(mon) ? 'US$ ' : 'S/ ') + Number(n).toFixed(2)
 export const nombreCorto = (n) => String(n || '')
   .replace(/\s?S\.A\.A\.|\s?S\.A\.|Compañía de Minas\s|Compañía Minera\s|\s?\(Grupo Coril Sociedad Titulizadora\)/g, '')
@@ -152,7 +156,9 @@ export function filasDe(cartera) {
     return {
       ...c, e, precioSoles, valor, costoT,
       gan: c.costo > 0 ? ((e.precio - c.costo) / c.costo) * 100 : 0,
-      div12: divUlt12PorAccion(e) * c.cant,
+      div12: divUlt12PorAccion(e) * c.cant,          // en soles (para totales/flujo)
+      div12nat: divUlt12NativoPorAccion(e) * c.cant, // en la moneda que paga la empresa
+      divMoneda: e.divMoneda || e.moneda || 'S/',
       dia,
     }
   })
@@ -173,6 +179,21 @@ export function divUlt12PorAccion(e) {
   return s
 }
 export const divUlt12 = (t) => divUlt12PorAccion(empresaDe(t))
+
+// Igual que divUlt12PorAccion pero en la MONEDA que paga la empresa (sin pasar a
+// soles) — para mostrar el dividendo tal como lo reparte (US$ o S/). Recuerda:
+// varias empresas pagan en dólares (pedido de Jair de mostrarlo así).
+export function divUlt12NativoPorAccion(e) {
+  if (!e?.historial?.length) return 0
+  const hoy = new Date()
+  const hace12 = new Date(hoy); hace12.setFullYear(hace12.getFullYear() - 1)
+  let s = 0
+  for (const h of e.historial) {
+    const f = new Date(h.fecha)
+    if (f > hace12 && f <= hoy) s += h.monto // en su moneda original (e.divMoneda)
+  }
+  return s
+}
 
 // ── Proyección del flujo: "si repite lo del año pasado" ──────────────────
 // Semestrales/anuales: cada pago de los últimos 12 m se proyecta +1 año.
@@ -259,7 +280,9 @@ export function acuerdoDividendo(t) {
 // distancia de edición ≤ 2. (ARQUITECTURA_IMPORTACION_CARTERA.md: "OCR
 // primero, diccionario después; nunca se le cree el ticker a nadie".)
 // ─────────────────────────────────────────────────────────────────────────
-export const SABS = ['Kallpa SAB', 'BBVA SAB', 'Credicorp Capital', 'Renta4', 'Magot SAB', 'Trii', 'Otra']
+// 'Otra' al final = deja escribir tu SAB a mano (SelectorSAB en Cuaderno.jsx).
+export const SABS = ['Kallpa SAB', 'BBVA SAB', 'Credicorp Capital', 'Inteligo SAB',
+  'Renta4', 'Magot SAB', 'Trii', 'Otra']
 
 export const ALIAS = {
   FERREYCORP: 'FERREYC1', FERREY: 'FERREYC1',

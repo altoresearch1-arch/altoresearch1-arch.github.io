@@ -6,7 +6,7 @@ import TourGuia, { PASOS_CUADERNO } from './TourGuia'
 import {
   leerCartera, guardarCartera, leerNotas, guardarNotas,
   leerRecordatorios, guardarRecordatorios, leerVisitaAnterior, marcarVisita,
-  TC, esUSD, enSoles, fmtS, fmtP, nombreCorto, MESES, MESES_C, fechaCorta, haceDias,
+  TC, esUSD, enSoles, fmtS, fmtP, fmtSyD, fmtUSD, nombreCorto, MESES, MESES_C, fechaCorta, haceDias,
   empresaDe, filasDe, divUlt12PorAccion, proyecciones, recibidosRecientes,
   catBonita, tipoPunto, acuerdoDividendo, normTicker, SABS, CARTERA_DEMO,
 } from '../lib/cartera'
@@ -146,7 +146,9 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
       <div className="cd-color-nota muted">
         Guardado en tu navegador — sin cuentas, sin nube. TC S/ {TC} y precios del robot.
       </div>
+      {cartera.length > 0 && <p className="cd-portafolio-lbl">Esto vale tu portafolio</p>}
       <p className="cd-patrimonio">{fmtS(totalValor)}</p>
+      {totalValor > 0 && <p className="cd-patrimonio-usd muted">≈ {fmtUSD(totalValor / TC)}</p>}
       {totalCosto > 0 && (
         <p className={'cd-variacion ' + (ganTotal >= 0 ? 'pos' : 'neg')}>
           {ganTotal >= 0 ? '▲ +' : '▼ '}{ganTotal.toFixed(1)}%
@@ -166,9 +168,9 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
         <DesdeUltimaVisita filas={filas} hechosNuevos={hechosNuevos} visitaAnterior={visitaAnterior} />
       )}
 
-      {/* ── Mis acciones ── */}
+      {/* ── Este es tu portafolio (tus acciones) ── */}
       <div className="cd-seccion-cab">
-        <h2 data-tour="cd-acciones">Mis acciones</h2>
+        <h2 data-tour="cd-acciones">📊 Este es tu portafolio</h2>
         <div className="cd-botonera">
           <button className="btn cd-btn-mini cd-btn-oro" onClick={() => setImportando(true)}>🛰 Importar de mi broker</button>
           <button className="btn cd-btn-mini" onClick={() => setFormAbierto((v) => !v)}>+ Agregar</button>
@@ -317,6 +319,30 @@ function DesdeUltimaVisita({ filas, hechosNuevos, visitaAnterior }) {
   )
 }
 
+// Selector de SAB con opción de ESCRIBIR el tuyo (pedido de Jair): al elegir
+// «Otra» aparece un campito para teclear el nombre. Se usa igual en Agregar y
+// en Modificar (antes la lista no calzaba: Inteligo salía en una y en otra no).
+const SABS_FIJOS = SABS.filter((s) => s !== 'Otra')
+function SelectorSAB({ value, onChange }) {
+  const enLista = SABS_FIJOS.includes(value)
+  const esOtra = !enLista // valor libre (o vacío) → modo "Otra"
+  return (
+    <>
+      <select value={enLista ? value : 'Otra'} onChange={(ev) => {
+        onChange(ev.target.value === 'Otra' ? '' : ev.target.value)
+      }}>
+        {SABS_FIJOS.map((s) => <option key={s}>{s}</option>)}
+        <option value="Otra">Otra (escribir)…</option>
+      </select>
+      {esOtra && (
+        <input type="text" className="cd-sab-otra" placeholder="Escribe tu SAB / broker"
+          value={value === 'Otra' ? '' : value} maxLength={40}
+          onChange={(ev) => onChange(ev.target.value)} />
+      )}
+    </>
+  )
+}
+
 // ── La hoja de acciones ───────────────────────────────────────────────────
 function pasaFiltro(f, filtro) {
   if (filtro.tipo === 'ganando' && f.gan < 0) return false
@@ -354,7 +380,7 @@ function Hoja({ filas, filtro, setFiltro, expandido, setExpandido, notas, ponNot
       <div className="card cd-tarjeta cd-hoja-wrap">
         <div className="cd-hoja">
           <div className="cd-hoja-cab">
-            <span>Empresa</span><span className="num">Acciones</span><span className="num">Tu costo</span>
+            <span>Empresa</span><span className="num">Acciones</span><span className="num">Precio compra</span>
             <span className="num">Precio</span><span className="num">Gan./pérd.</span><span className="num">Div. 12m</span>
           </div>
           {visibles.map((f) => (
@@ -388,10 +414,10 @@ function Hoja({ filas, filtro, setFiltro, expandido, setExpandido, notas, ponNot
           <details className="cd-hoja-leyenda">
             <summary>¿Qué significa cada columna?</summary>
             <ul>
-              <li><b>Tu costo</b>: a cuánto compraste (o adquiriste) cada acción, en promedio.</li>
+              <li><b>Precio compra</b>: a qué precio compraste (o adquiriste) cada acción, en promedio.</li>
               <li><b>Precio</b>: cuánto vale una acción hoy en la Bolsa (último cierre del robot).</li>
               <li><b>Gan./pérd.</b>: cuánto ganas o pierdes <b>por ahora</b>, comparado con lo que pagaste. Sube y baja cada día — no es definitivo hasta que vendes.</li>
-              <li><b>Div. 12m</b>: el dividendo que <b>recibirías en un año</b> si la empresa repite lo que pagó el año pasado. Es un estimado, no una promesa.</li>
+              <li><b>Div. 12m</b>: el dividendo que <b>recibirías en un año</b> si la empresa repite lo que pagó el año pasado, <b>en la moneda que ella paga</b> (varias reparten en US$). Es un estimado, no una promesa.</li>
             </ul>
           </details>
         )}
@@ -417,7 +443,10 @@ function FilaHoja({ f, abierta, notas, ponNotas, onToggle, onGuardar, onQuitar, 
           {sinPx ? '≈ ' : ''}{fmtP(e.precio, e.moneda)}
         </span>
         <span className={'num ' + (f.gan >= 0 ? 'pos' : 'neg')}>{f.gan >= 0 ? '+' : ''}{f.gan.toFixed(1)}%</span>
-        <span className={'num' + (f.div12 > 0 ? ' pos' : '')}>{f.div12 > 0 ? fmtS(f.div12) : '—'}</span>
+        <span className={'num' + (f.div12nat > 0 ? ' pos' : '')}
+          title={f.div12nat > 0 && esUSD(f.divMoneda) ? `≈ ${fmtS(f.div12)}` : ''}>
+          {f.div12nat > 0 ? fmtP(f.div12nat, f.divMoneda) : '—'}
+        </span>
       </button>
       {abierta && <DetalleFila f={f} notas={notas} ponNotas={ponNotas}
         onGuardar={onGuardar} onQuitar={onQuitar} onVerEmpresa={onVerEmpresa} />}
@@ -448,7 +477,6 @@ function DetalleFila({ f, notas, ponNotas, onGuardar, onQuitar, onVerEmpresa }) 
   if (!e.sinDatos && f.div12 === 0 && !ultimoPago)
     chips.push({ c: 'rojo', txt: 'nunca ha pagado dividendos' })
   if (e.sinDatos) chips.push({ c: 'ambar', txt: '🌎 sin métricas ALTO — solo lo guardamos por ti' })
-  const opcionesSab = SABS.includes(f.sab) ? SABS : [f.sab, ...SABS]
 
   const cambiarNota = (v) => {
     setNota(v)
@@ -474,7 +502,8 @@ function DetalleFila({ f, notas, ponNotas, onGuardar, onQuitar, onVerEmpresa }) 
           </div>
         </div>
         <div className="cd-dato"><div className="k">Div. si repite 12 m</div>
-          <div className={'v' + (f.div12 > 0 ? ' pos' : '')}>{f.div12 > 0 ? fmtS(f.div12) : '—'}</div>
+          <div className={'v' + (f.div12nat > 0 ? ' pos' : '')}>{f.div12nat > 0 ? fmtP(f.div12nat, f.divMoneda) : '—'}</div>
+          {f.div12nat > 0 && esUSD(f.divMoneda) && <div className="muted" style={{ fontSize: 11 }}>≈ {fmtS(f.div12)}</div>}
         </div>
       </div>
       {anios.length > 0 && (
@@ -503,13 +532,11 @@ function DetalleFila({ f, notas, ponNotas, onGuardar, onQuitar, onVerEmpresa }) 
         <label className="cd-campo"><span>Acciones</span>
           <input type="number" value={cant} min="1" step="1" onChange={(ev) => setCant(ev.target.value)} />
         </label>
-        <label className="cd-campo"><span>Costo prom. ({esUSD(e.moneda) ? 'US$' : 'S/'})</span>
+        <label className="cd-campo"><span>¿A qué precio compraste? ({esUSD(e.moneda) ? 'US$' : 'S/'})</span>
           <input type="number" value={costo} min="0" step="0.01" onChange={(ev) => setCosto(ev.target.value)} />
         </label>
-        <label className="cd-campo"><span>SAB</span>
-          <select value={sab} onChange={(ev) => setSab(ev.target.value)}>
-            {opcionesSab.map((s) => <option key={s}>{s}</option>)}
-          </select>
+        <label className="cd-campo"><span>SAB / broker</span>
+          <SelectorSAB value={sab} onChange={setSab} />
         </label>
         <div className="cd-acciones-editar">
           {!e.sinDatos && (
@@ -628,9 +655,7 @@ function FormAgregar({ cartera, onCancelar, onAgregar }) {
           <input type="number" value={costo} min="0" step="0.01" onChange={(ev) => setCosto(ev.target.value)} />
         </label>
         <label className="cd-campo"><span>¿En qué SAB / broker?</span>
-          <select value={sab} onChange={(ev) => setSab(ev.target.value)}>
-            {SABS.map((s) => <option key={s}>{s}</option>)}
-          </select>
+          <SelectorSAB value={sab} onChange={setSab} />
         </label>
       </div>
       <div className="cd-precio-info muted">
@@ -722,8 +747,8 @@ function Flujo({ filas, proys, hoy }) {
       <p className="cd-flujo-frase">
         {total6 > 0 ? (
           <>
-            Si nada cambia, recibirás aproximadamente <b>{fmtS(en45)}</b> durante los próximos
-            45 días — y <b>{fmtS(total6)}</b> de aquí a {MESES[meses[5].m]}.
+            Si nada cambia, recibirás aproximadamente <b>{fmtSyD(en45)}</b> durante los próximos
+            45 días — y <b>{fmtSyD(total6)}</b> de aquí a {MESES[meses[5].m]}.
             <small> {MESES[gordo.m].charAt(0).toUpperCase() + MESES[gordo.m].slice(1)} es tu mes
               gordo: {fmtS(gordo.total)} de {Object.keys(gordo.de).length} empresa{Object.keys(gordo.de).length === 1 ? '' : 's'}.</small>
           </>
@@ -744,6 +769,7 @@ function Flujo({ filas, proys, hoy }) {
               <div className="cd-barrita"><i style={{ height: Math.max(2, (mm.total / maxMes) * 100).toFixed(0) + '%' }} /></div>
               <div className="n">{MESES[mm.m]}{i === 0 ? ' · hoy' : ''}</div>
               <div className={'m' + (mm.total ? '' : ' cero')}>{fmtS(mm.total)}</div>
+              {mm.total > 0 && <div className="cd-mes-usd muted">≈ {fmtUSD(mm.total / TC)}</div>}
               <div className="de">{Object.keys(mm.de).join(' · ')}</div>
               <div className="humor">{humor}</div>
             </div>
