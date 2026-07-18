@@ -65,6 +65,7 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
   const [configAbierta, setConfigAbierta] = useState(false)
   const cuadernoActual = cuadernos.find((c) => c.id === activo) || cuadernos[0]
   const acento = cuadernoActual?.color || COLOR_DEFECTO
+  const filtroMarca = (COLORES_CUADERNO.find((c) => c.hex === acento) || {}).filtro || 'none'
 
   const [cartera, setCartera] = useState(() => leerCartera(activo))
   const [notas, setNotas] = useState(() => leerNotas(activo))
@@ -77,6 +78,23 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
     setCartera(leerCartera(activo)); setNotas(leerNotas(activo)); setRecs(leerRecordatorios(activo))
     setExpandido(null); setFormAbierto(false); setImportando(false)
   }, [activo])
+
+  // 🎨 El logo de ALTO vive en la barra superior, FUERA del subárbol del
+  // cuaderno, así que no heredaba el color del cuaderno (se quedaba con el del
+  // nivel). Mientras estás en el Cuaderno lo teñimos con el color del cuaderno
+  // activo (texto + imagen recoloreada por filtro); al salir se restaura el
+  // tema del nivel (pedido de Jair).
+  useEffect(() => {
+    const raiz = document.documentElement
+    raiz.style.setProperty('--cd-marca', acento)
+    raiz.style.setProperty('--cd-marca-filtro', filtroMarca)
+    document.body.classList.add('cuaderno-marca')
+    return () => {
+      document.body.classList.remove('cuaderno-marca')
+      raiz.style.removeProperty('--cd-marca')
+      raiz.style.removeProperty('--cd-marca-filtro')
+    }
+  }, [acento, filtroMarca])
 
   const guardarCuadernosState = (list) => { setCuadernos(list); guardarCuadernos(list) }
   const crearCuaderno = () => {

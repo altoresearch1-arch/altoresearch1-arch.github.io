@@ -4731,6 +4731,20 @@ a.link {
 }
 /* nivel 4: el logo es oro de nacimiento — la corona no se toca */
 
+/* ---------- 📓 El logo sigue el color del CUADERNO activo ----------
+   Mientras estás en el Cuaderno, Cuaderno.jsx pone body.cuaderno-marca y
+   expone --cd-marca (color) y --cd-marca-filtro (receta de recoloreo de la
+   imagen). Así el logo toma el color del cuaderno en vez del nivel; al salir
+   se quitan la clase y las variables y vuelve el tema del nivel (pedido de
+   Jair). Mayor especificidad que las reglas por nivel de arriba, así que gana. */
+body.cuaderno-marca .brand .mark {
+  color: var(--cd-marca);
+}
+body.cuaderno-marca .brand-logo {
+  filter: var(--cd-marca-filtro);
+  border-color: var(--cd-marca);
+}
+
 /* ---------- Toques finales por nivel ---------- */
 /* 💸 el precio respira un halo verde Cuerda: ES la pantalla del dinero */
 [data-nivel='1'] .precio .valor {

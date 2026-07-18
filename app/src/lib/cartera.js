@@ -41,14 +41,18 @@ function pon(k, v) {
 // bajo claves con su id.
 export const MAX_CUADERNOS = 3
 export const COLOR_DEFECTO = '#d4af37'
+// `filtro`: receta para recolorear el LOGO (imagen JPG) al color del cuaderno,
+// misma técnica que el tema por nivel (grayscale→sepia→hue-rotate→saturate):
+// así el logo de ALTO sigue el color del cuaderno activo, no el del nivel
+// (pedido de Jair). Dorado = color nativo del logo → sin filtro.
 export const COLORES_CUADERNO = [
-  { nombre: 'Dorado', hex: '#d4af37' },
-  { nombre: 'Esmeralda', hex: '#4f9d6b' },
-  { nombre: 'Turquesa', hex: '#46b3a3' },
-  { nombre: 'Zafiro', hex: '#6b8fc9' },
-  { nombre: 'Amatista', hex: '#9a7bb8' },
-  { nombre: 'Coral', hex: '#d9836f' },
-  { nombre: 'Rubí', hex: '#c0563f' },
+  { nombre: 'Dorado', hex: '#d4af37', filtro: 'none' },
+  { nombre: 'Esmeralda', hex: '#4f9d6b', filtro: 'grayscale(1) sepia(1) saturate(2.4) hue-rotate(96deg) brightness(1.02)' },
+  { nombre: 'Turquesa', hex: '#46b3a3', filtro: 'grayscale(1) sepia(1) saturate(2.2) hue-rotate(128deg) brightness(1.06)' },
+  { nombre: 'Zafiro', hex: '#6b8fc9', filtro: 'grayscale(1) sepia(1) saturate(2) hue-rotate(178deg) brightness(1.1)' },
+  { nombre: 'Amatista', hex: '#9a7bb8', filtro: 'grayscale(1) sepia(1) saturate(1.9) hue-rotate(228deg) brightness(1.08)' },
+  { nombre: 'Coral', hex: '#d9836f', filtro: 'grayscale(1) sepia(1) saturate(2.6) hue-rotate(-38deg) brightness(1.06)' },
+  { nombre: 'Rubí', hex: '#c0563f', filtro: 'grayscale(1) sepia(1) saturate(3.8) hue-rotate(-44deg) brightness(0.94)' },
 ]
 
 function claves(id) {
