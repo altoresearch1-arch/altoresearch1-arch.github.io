@@ -137,12 +137,22 @@ export default function ImportarCartera({ onCerrar, onImportar, onRecordatorio }
               style={{ display: 'none' }}
               onChange={(e) => { const f = e.target.files?.[0]; if (f) leerArchivo(f) }} />
             <div className="cd-tipos-doc">
-              <div className="cd-tipo-doc"><span className="em">📷</span><b>Captura</b>estado de cuenta en pantalla</div>
-              <div className="cd-tipo-doc"><span className="em">📄</span><b>PDF</b>reporte mensual del broker</div>
-              <div className="cd-tipo-doc"><span className="em">📊</span><b>CSV</b>tu hoja de siempre (Excel → CSV)</div>
+              <div className="cd-tipo-doc"><span className="em">📊</span><b>CSV / Excel</b><span className="cd-fiab buena">lo más confiable ✓</span></div>
+              <div className="cd-tipo-doc"><span className="em">📄</span><b>PDF</b><span className="cd-fiab ok">se lee bien</span></div>
+              <div className="cd-tipo-doc"><span className="em">📷</span><b>Foto / captura</b><span className="cd-fiab floja">puede fallar</span></div>
+            </div>
+            <div className="cd-wiz-honesto">
+              🫡 <b>Con la mano en el corazón:</b> un <b>CSV o Excel</b> (o un PDF) se lee casi perfecto porque
+              son texto. Una <b>foto</b> se descifra con OCR y ahí <b>siempre se cuela algún error</b> —
+              tickers mal leídos, comas corridas, costos que no cuadran. Si solo tienes foto, úsala,
+              pero <b>revisa cada fila</b> antes de confirmar… o, para pocas acciones, muchas veces es
+              más rápido y seguro <b>anotarlas a mano</b>.
+              <div style={{ marginTop: 8 }}>
+                <button className="btn cd-btn-mini" onClick={onCerrar}>✍️ Mejor lo agrego a mano</button>
+              </div>
             </div>
             <div className="cd-wiz-ejemplo">
-              <button className="btn cd-btn-mini" onClick={usarDemo}>No tengo uno a la mano — usa un documento de ejemplo</button>
+              <button className="btn cd-btn-mini cd-btn-fantasma" onClick={usarDemo}>No tengo uno a la mano — usa un documento de ejemplo</button>
             </div>
             <div className="cd-wiz-pie">
               <button className="btn cd-btn-mini cd-btn-fantasma" onClick={() => setPaso(1)}>‹ Atrás</button>
