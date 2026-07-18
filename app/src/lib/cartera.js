@@ -21,10 +21,9 @@ import epsAnualData from '../data/eps_anual.json'
 // ─────────────────────────────────────────────────────────────────────────
 
 const LS = {
-  cartera: 'alto-cuaderno-cartera',
-  notas: 'alto-cuaderno-notas',
-  recs: 'alto-cuaderno-recordatorios',
   visita: 'alto-cuaderno-ultima-visita',
+  cuadernos: 'alto-cuadernos',        // índice: [{id, nombre, color}] (máx 3)
+  activo: 'alto-cuaderno-activo',      // id del cuaderno abierto
 }
 const EVENTO = 'alto-cuaderno-cambio'
 
@@ -36,24 +35,71 @@ function pon(k, v) {
   window.dispatchEvent(new CustomEvent(EVENTO))
 }
 
-export function leerCartera() {
-  const c = lee(LS.cartera, [])
+// ── Varios cuadernos (pedido de Jair: hasta 3, con nombre y color) ─────────
+// El cuaderno 'principal' usa las claves de SIEMPRE (sin sufijo) → los datos
+// actuales del usuario NO se migran ni se pierden. Los cuadernos extra guardan
+// bajo claves con su id.
+export const MAX_CUADERNOS = 3
+export const COLOR_DEFECTO = '#d4af37'
+export const COLORES_CUADERNO = [
+  { nombre: 'Dorado', hex: '#d4af37' },
+  { nombre: 'Esmeralda', hex: '#4f9d6b' },
+  { nombre: 'Turquesa', hex: '#46b3a3' },
+  { nombre: 'Zafiro', hex: '#6b8fc9' },
+  { nombre: 'Amatista', hex: '#9a7bb8' },
+  { nombre: 'Coral', hex: '#d9836f' },
+  { nombre: 'Rubí', hex: '#c0563f' },
+]
+
+function claves(id) {
+  const suf = (!id || id === 'principal') ? '' : '-' + id
+  return {
+    cartera: 'alto-cuaderno-cartera' + suf,
+    notas: 'alto-cuaderno-notas' + suf,
+    recs: 'alto-cuaderno-recordatorios' + suf,
+  }
+}
+
+export function leerCuadernos() {
+  const list = lee(LS.cuadernos, null)
+  if (Array.isArray(list) && list.length) return list.slice(0, MAX_CUADERNOS)
+  return [{ id: 'principal', nombre: 'Mi Cuaderno', color: COLOR_DEFECTO }]
+}
+export function guardarCuadernos(list) { pon(LS.cuadernos, list.slice(0, MAX_CUADERNOS)) }
+export function leerActivo() {
+  const id = lee(LS.activo, null)
+  const cuadernos = leerCuadernos()
+  return cuadernos.some((c) => c.id === id) ? id : cuadernos[0].id
+}
+export function guardarActivo(id) { pon(LS.activo, id) }
+export function borrarDatosCuaderno(id) {
+  const k = claves(id)
+  try {
+    localStorage.removeItem(k.cartera)
+    localStorage.removeItem(k.notas)
+    localStorage.removeItem(k.recs)
+  } catch { /* incógnito */ }
+  window.dispatchEvent(new CustomEvent(EVENTO))
+}
+
+export function leerCartera(id) {
+  const c = lee(claves(id).cartera, [])
   return Array.isArray(c) ? c : []
 }
-export function guardarCartera(c) { pon(LS.cartera, c) }
-export function leerNotas() { return lee(LS.notas, {}) || {} }
-export function guardarNotas(n) { pon(LS.notas, n) }
-export function leerRecordatorios() {
-  const r = lee(LS.recs, [])
+export function guardarCartera(c, id) { pon(claves(id).cartera, c) }
+export function leerNotas(id) { return lee(claves(id).notas, {}) || {} }
+export function guardarNotas(n, id) { pon(claves(id).notas, n) }
+export function leerRecordatorios(id) {
+  const r = lee(claves(id).recs, [])
   return Array.isArray(r) ? r : []
 }
-export function guardarRecordatorios(r) { pon(LS.recs, r) }
+export function guardarRecordatorios(r, id) { pon(claves(id).recs, r) }
 
 // Hook: cualquier vista (la página, la portada del inicio) se entera al toque.
 export function useCartera() {
-  const [cartera, setCartera] = useState(leerCartera)
+  const [cartera, setCartera] = useState(() => leerCartera(leerActivo()))
   useEffect(() => {
-    const al = () => setCartera(leerCartera())
+    const al = () => setCartera(leerCartera(leerActivo()))
     window.addEventListener(EVENTO, al)
     window.addEventListener('storage', al)
     return () => {

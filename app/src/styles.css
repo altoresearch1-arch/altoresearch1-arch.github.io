@@ -5486,6 +5486,48 @@ a.link {
 .cuaderno h2 { margin: 34px 0 10px; font-size: 20px; }
 .cd-sub { margin: 4px 0 10px; line-height: 1.5; }
 
+/* 📚 Barra de cuadernos (varios, con nombre y color) — pedido de Jair */
+.cd-cuadernos {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 4px; flex-wrap: wrap;
+}
+.cd-cua-pills { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; }
+.cd-cua-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid var(--gris); background: transparent;
+  color: var(--texto-tenue); border-radius: 999px;
+  padding: 5px 12px; font-size: 12.5px; font-weight: 600; cursor: pointer;
+}
+.cd-cua-pill.on { border-color: var(--oro); color: var(--oro); background: color-mix(in srgb, var(--oro) 12%, transparent); }
+.cd-cua-pill .punto { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.cd-cua-nuevo {
+  border: 1px dashed var(--gris); background: transparent; color: var(--texto-tenue);
+  border-radius: 999px; width: 30px; height: 30px; font-size: 16px; cursor: pointer; line-height: 1;
+}
+.cd-cua-nuevo:hover { border-color: var(--oro); color: var(--oro); }
+.cd-cua-config-btn {
+  border: 1px solid var(--gris); background: transparent; border-radius: 8px;
+  padding: 4px 8px; font-size: 14px; cursor: pointer;
+}
+.cd-cua-config-btn.on { border-color: var(--oro); }
+.cd-cua-panel {
+  border: 1px solid var(--gris); border-radius: 10px; padding: 12px 14px;
+  margin-bottom: 6px; display: grid; gap: 10px; background: var(--negro-3);
+}
+.cd-cua-nombre { display: grid; gap: 4px; font-size: 12px; color: var(--texto-tenue); }
+.cd-cua-nombre input {
+  padding: 8px 10px; border-radius: 8px; border: 1px solid var(--gris);
+  background: var(--negro-2); color: var(--texto); font-size: 14px;
+}
+.cd-cua-colores-lbl { font-size: 12px; color: var(--texto-tenue); }
+.cd-cua-colores { display: flex; gap: 8px; flex-wrap: wrap; }
+.cd-cua-color {
+  width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+  border: 2px solid transparent; box-shadow: 0 0 0 1px var(--gris);
+}
+.cd-cua-color.on { border-color: var(--texto); box-shadow: 0 0 0 2px var(--texto); }
+.cd-cua-borrar { justify-self: start; }
+
 .cd-saludo { margin: 8px 0 0; font-style: italic; color: var(--texto-tenue); }
 .cd-color-nota { margin: 2px 0 0; }
 .cd-portafolio-lbl {

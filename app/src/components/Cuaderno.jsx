@@ -6,6 +6,8 @@ import TourGuia, { PASOS_CUADERNO } from './TourGuia'
 import {
   leerCartera, guardarCartera, leerNotas, guardarNotas,
   leerRecordatorios, guardarRecordatorios, leerVisitaAnterior, marcarVisita,
+  leerCuadernos, guardarCuadernos, leerActivo, guardarActivo, borrarDatosCuaderno,
+  COLORES_CUADERNO, COLOR_DEFECTO, MAX_CUADERNOS,
   TC, esUSD, enSoles, fmtS, fmtP, fmtSyD, fmtUSD, nombreCorto, MESES, MESES_C, fechaCorta, haceDias,
   empresaDe, filasDe, divUlt12PorAccion, proyecciones, recibidosRecientes,
   catBonita, tipoPunto, acuerdoDividendo, normTicker, SABS, CARTERA_DEMO,
@@ -23,9 +25,48 @@ const COLORES = ['#d4af37', '#4f9d6b', '#6b8fc9', '#c0563f', '#9a7bb8',
   '#c79a3a', '#5aa3a3', '#b56a8a', '#7a9e5f', '#8a8a80']
 
 export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
-  const [cartera, setCartera] = useState(leerCartera)
-  const [notas, setNotas] = useState(leerNotas)
-  const [recs, setRecs] = useState(() => leerRecordatorios())
+  // 📚 Varios cuadernos (máx 3, con nombre y color) — pedido de Jair.
+  const [cuadernos, setCuadernos] = useState(leerCuadernos)
+  const [activo, setActivo] = useState(leerActivo)
+  const [configAbierta, setConfigAbierta] = useState(false)
+  const cuadernoActual = cuadernos.find((c) => c.id === activo) || cuadernos[0]
+  const acento = cuadernoActual?.color || COLOR_DEFECTO
+
+  const [cartera, setCartera] = useState(() => leerCartera(activo))
+  const [notas, setNotas] = useState(() => leerNotas(activo))
+  const [recs, setRecs] = useState(() => leerRecordatorios(activo))
+  // Al cambiar de cuaderno: recargar sus datos y recordar cuál quedó abierto.
+  const montado = useRef(false)
+  useEffect(() => {
+    guardarActivo(activo)
+    if (!montado.current) { montado.current = true; return }
+    setCartera(leerCartera(activo)); setNotas(leerNotas(activo)); setRecs(leerRecordatorios(activo))
+    setExpandido(null); setFormAbierto(false); setImportando(false)
+  }, [activo])
+
+  const guardarCuadernosState = (list) => { setCuadernos(list); guardarCuadernos(list) }
+  const crearCuaderno = () => {
+    if (cuadernos.length >= MAX_CUADERNOS) return
+    const id = 'c' + Date.now().toString(36)
+    const usados = cuadernos.map((c) => c.color)
+    const color = (COLORES_CUADERNO.find((c) => !usados.includes(c.hex)) || COLORES_CUADERNO[0]).hex
+    guardarCuadernosState([...cuadernos, { id, nombre: `Cuaderno ${cuadernos.length + 1}`, color }])
+    setActivo(id)
+    setConfigAbierta(true)
+  }
+  const renombrarCuaderno = (nombre) =>
+    guardarCuadernosState(cuadernos.map((c) => (c.id === activo ? { ...c, nombre } : c)))
+  const colorCuaderno = (hex) =>
+    guardarCuadernosState(cuadernos.map((c) => (c.id === activo ? { ...c, color: hex } : c)))
+  const borrarCuaderno = () => {
+    if (cuadernos.length <= 1) return
+    if (!confirm(`¿Borrar el cuaderno «${cuadernoActual.nombre}» y TODO lo que tiene dentro? No se puede deshacer.`)) return
+    borrarDatosCuaderno(activo)
+    const resto = cuadernos.filter((c) => c.id !== activo)
+    guardarCuadernosState(resto)
+    setActivo(resto[0].id)
+    setConfigAbierta(false)
+  }
   const [filtro, setFiltro] = useState({ tipo: 'todas', sab: null })
   const [expandido, setExpandido] = useState(null)
   const [formAbierto, setFormAbierto] = useState(false)
@@ -45,9 +86,9 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
   }
   useEffect(() => () => clearTimeout(toastTimer.current), [])
 
-  const ponCartera = (c) => { setCartera(c); guardarCartera(c) }
-  const ponNotas = (n) => { setNotas(n); guardarNotas(n) }
-  const ponRecs = (r) => { setRecs(r); guardarRecordatorios(r) }
+  const ponCartera = (c) => { setCartera(c); guardarCartera(c, activo) }
+  const ponNotas = (n) => { setNotas(n); guardarNotas(n, activo) }
+  const ponRecs = (r) => { setRecs(r); guardarRecordatorios(r, activo) }
 
   // 🚶 Tour de Mi Cuaderno (pedido de Jair 17-jul). Para poder mostrar TODO de
   // la mano, si el cuaderno está vacío carga una cartera de EJEMPLO (simulación)
@@ -79,7 +120,7 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
   }
   // Si te vas del cuaderno con el ejemplo puesto (ej. botón atrás), no lo dejes pegado.
   useEffect(() => () => {
-    if (demoTemporal.current) guardarCartera([])
+    if (demoTemporal.current) guardarCartera([], activo)
   }, [])
 
   const { filas, totalValor, totalCosto, ganTotal, cambioDia, suben, bajan } =
@@ -140,7 +181,49 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
   }
 
   return (
-    <div className="cuaderno">
+    <div className="cuaderno" style={{ '--oro': acento }}>
+      {/* 📚 Tus cuadernos (máx 3, con nombre y color) */}
+      <div className="cd-cuadernos">
+        <div className="cd-cua-pills">
+          {cuadernos.map((c) => (
+            <button key={c.id}
+              className={'cd-cua-pill' + (c.id === activo ? ' on' : '')}
+              onClick={() => setActivo(c.id)}>
+              <span className="punto" style={{ background: c.color }} />
+              {c.nombre}
+            </button>
+          ))}
+          {cuadernos.length < MAX_CUADERNOS && (
+            <button className="cd-cua-nuevo" onClick={crearCuaderno} title="Nuevo cuaderno">＋</button>
+          )}
+        </div>
+        <button className={'cd-cua-config-btn' + (configAbierta ? ' on' : '')}
+          onClick={() => setConfigAbierta((v) => !v)} title="Nombre y color de este cuaderno">⚙️</button>
+      </div>
+      {configAbierta && (
+        <div className="cd-cua-panel">
+          <label className="cd-cua-nombre">
+            <span>Nombre</span>
+            <input type="text" value={cuadernoActual.nombre} maxLength={24}
+              onChange={(ev) => renombrarCuaderno(ev.target.value)} placeholder="Mi Cuaderno" />
+          </label>
+          <div className="cd-cua-colores-lbl">🎨 Color de este cuaderno</div>
+          <div className="cd-cua-colores">
+            {COLORES_CUADERNO.map((col) => (
+              <button key={col.hex} title={col.nombre}
+                className={'cd-cua-color' + (cuadernoActual.color === col.hex ? ' on' : '')}
+                style={{ background: col.hex }}
+                onClick={() => colorCuaderno(col.hex)} />
+            ))}
+          </div>
+          {cuadernos.length > 1 && (
+            <button className="btn cd-btn-mini cd-btn-rojo cd-cua-borrar" onClick={borrarCuaderno}>
+              🗑 Borrar este cuaderno
+            </button>
+          )}
+        </div>
+      )}
+
       {/* ── Cabecera: el patrimonio respira ── */}
       <p className="cd-saludo">{saludo}</p>
       <div className="cd-color-nota muted">
