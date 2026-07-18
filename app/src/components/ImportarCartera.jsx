@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import empresasData from '../data/empresas.json'
-import { empresaDe, esUSD, fmtP, fmtS, divUlt12, enSoles } from '../lib/cartera'
+import { empresaDe, esUSD, fmtP, fmtPrecioExacto, fmtS, divUlt12, enSoles } from '../lib/cartera'
 import { BROKERS, DEMO_OCR, extraerFilas, procesarFilas, leerDocumentoCartera } from '../lib/importar'
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -365,7 +365,7 @@ function RevExtra({ e, f }) {
   const d12 = divUlt12(f.t)
   return (
     <span className="cd-rev-extra">
-      {' '}· hoy {fmtP(e.precio, e.moneda)} ·{' '}
+      {' '}· hoy {fmtPrecioExacto(e.precio, e.moneda)} ·{' '}
       <span className={gan >= 0 ? 'pos' : 'neg'}>{gan >= 0 ? '+' : ''}{gan.toFixed(1)}%</span>
       {d12 > 0 && <> · div. 12 m {fmtS(d12 * f.cant)}</>}
     </span>

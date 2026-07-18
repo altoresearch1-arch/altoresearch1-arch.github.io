@@ -407,7 +407,7 @@ function DesdeUltimaVisita({ filas, hechosNuevos, visitaAnterior }) {
             <span>
               <b>{f.t}</b>{' '}
               <span className={f.dia > 0 ? 'pos' : 'neg'}>{f.dia > 0 ? '+' : ''}{f.dia.toFixed(1)}%</span>{' '}
-              <small className="muted">({fmtP(f.e.previo, f.e.moneda)} → {fmtP(f.e.precio, f.e.moneda)})</small>
+              <small className="muted">({fmtPrecioExacto(f.e.previo, f.e.moneda)} → {fmtPrecioExacto(f.e.precio, f.e.moneda)})</small>
             </span>
           </div>
         ))}
@@ -791,7 +791,7 @@ function FormAgregar({ cartera, onCancelar, onAgregar }) {
         {emp && (
           <>
             {emp.precio != null
-              ? <>Último cierre del robot: <b>{fmtP(emp.precio, emp.moneda)}</b> ({emp.fechaPrecio})</>
+              ? <>Último cierre del robot: <b>{fmtPrecioExacto(emp.precio, emp.moneda)}</b> ({emp.fechaPrecio})</>
               : <><b>{sel.t}</b> casi no negocia en la BVL — se usará tu precio de compra.</>}
             {emp.yield && <> · yield {emp.yield}</>}
             {yaTiene && <><br />⚠ Ya tienes {yaTiene.cant.toLocaleString('es-PE')} — se sumarán y tu costo promedio se recalculará.</>}
@@ -837,7 +837,7 @@ function Calculadora({ cartera }) {
         </label>
         <div className="cd-campo"><span>Precio hoy</span>
           <div className="cd-campo-falso">
-            {fmtP(precio, e.moneda)}{esUSD(e.moneda) ? ` (≈ S/ ${precioSoles.toFixed(2)})` : ''}
+            {fmtPrecioExacto(precio, e.moneda)}{esUSD(e.moneda) ? ` (≈ ${fmtP(precioSoles, 'S/')})` : ''}
           </div>
         </div>
       </div>

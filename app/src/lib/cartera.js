@@ -119,7 +119,18 @@ export const fmtUSD = (n) => 'US$ ' + Math.round(n).toLocaleString('es-PE')
 export const aUSD = (soles) => soles / TC
 // Monto en soles mostrado en AMBAS monedas (pedido de Jair: soles y dólares)
 export const fmtSyD = (soles) => `${fmtS(soles)} · ${fmtUSD(soles / TC)}`
-export const fmtP = (n, mon) => (esUSD(mon) ? 'US$ ' : 'S/ ') + Number(n).toFixed(2)
+export const fmtP = (n, mon) => {
+  const v = Number(n)
+  const pref = esUSD(mon) ? 'US$ ' : 'S/ '
+  // Acciones normales: 2 decimales de siempre.
+  if (!(Math.abs(v) < 1)) return pref + v.toFixed(2)
+  // Acciones/dividendos de centavos (PPX ~0.16): con 2 decimales el precio
+  // «no concuerda» con el % del día ni con las acciones que comprarías (ambos
+  // se calculan con el precio EXACTO, no con el redondeado). Damos hasta 4
+  // decimales recortando ceros sobrantes: 0.1580→0.158, 0.1600→0.16, 0.05→0.05.
+  const [ent, frac = ''] = v.toFixed(4).replace(/0+$/, '').split('.')
+  return pref + ent + '.' + frac.padEnd(2, '0')
+}
 // Precio de bolsa EXACTO como lo muestra la ficha de ALTO (valor crudo de
 // precios.json, sin redondear): así el Cuaderno y la ficha NUNCA discrepan
 // (pedido de Jair: mismo robot, mismo precio en los dos lados).
