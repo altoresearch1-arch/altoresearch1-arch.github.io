@@ -24,6 +24,40 @@ import {
 const COLORES = ['#d4af37', '#4f9d6b', '#6b8fc9', '#c0563f', '#9a7bb8',
   '#c79a3a', '#5aa3a3', '#b56a8a', '#7a9e5f', '#8a8a80']
 
+// Fusiona una compra en la cartera. Si el MISMO ticker ya está en OTRA SAB, se
+// guarda un desglose por SAB en `lotes` y la posición pasa a "repartida en varias
+// SAB" (pedido de Jair). Si es la misma SAB, solo promedia el costo. Mutará `nueva`.
+function fusionarPosicion(nueva, { t, cant, costo, sab, nombre, manual, sinDatos }) {
+  if (!t) return
+  const idx = nueva.findIndex((c) => c.t === t)
+  if (idx < 0) {
+    const pos = { t, cant, costo, sab }
+    if (nombre) pos.nombre = nombre
+    if (manual) pos.manual = true
+    if (sinDatos) pos.sinDatos = true
+    nueva.push(pos)
+    return
+  }
+  const c = nueva[idx]
+  const lotes = c.lotes ? c.lotes.map((l) => ({ ...l })) : [{ sab: c.sab, cant: c.cant, costo: c.costo }]
+  const li = lotes.findIndex((l) => (l.sab || '') === (sab || ''))
+  if (li >= 0) {
+    const tot = lotes[li].cant + cant
+    lotes[li].costo = tot ? (lotes[li].cant * lotes[li].costo + cant * costo) / tot : lotes[li].costo
+    lotes[li].cant = tot
+  } else {
+    lotes.push({ sab, cant, costo })
+  }
+  const totalCant = lotes.reduce((a, l) => a + l.cant, 0)
+  const totalCosto = totalCant ? lotes.reduce((a, l) => a + l.cant * l.costo, 0) / totalCant : 0
+  const sabsUnicas = [...new Set(lotes.map((l) => l.sab))]
+  nueva[idx] = {
+    ...c, cant: totalCant, costo: totalCosto,
+    sab: sabsUnicas.length === 1 ? sabsUnicas[0] : null,
+    lotes: sabsUnicas.length > 1 ? lotes : undefined,
+  }
+}
+
 export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
   // 📚 Varios cuadernos (máx 3, con nombre y color) — pedido de Jair.
   const [cuadernos, setCuadernos] = useState(leerCuadernos)
@@ -136,20 +170,10 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
     a + f.e.hechos.filter((h) => new Date(h.fecha + 'T12:00:00') >= desde7).length, 0)
   const prox = proys[0]
 
-  // agregar / fusionar una posición (promedia el costo si ya la tiene)
-  const agregarPosicion = ({ t, cant, costo, sab, nombre, manual, sinDatos }) => {
+  // agregar / fusionar una posición (promedia el costo; desglosa por SAB si aplica)
+  const agregarPosicion = (pos) => {
     const nueva = [...cartera]
-    const ya = nueva.find((c) => c.t === t)
-    if (ya) {
-      ya.costo = (ya.cant * ya.costo + cant * costo) / (ya.cant + cant)
-      ya.cant += cant
-    } else {
-      const pos = { t, cant, costo, sab }
-      if (nombre) pos.nombre = nombre
-      if (manual) pos.manual = true
-      if (sinDatos) pos.sinDatos = true
-      nueva.push(pos)
-    }
+    fusionarPosicion(nueva, pos)
     ponCartera(nueva)
   }
 
@@ -160,20 +184,9 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
   const agregarVarias = (posiciones, broker) => {
     const nueva = [...cartera]
     let entraron = 0
-    posiciones.forEach(({ t, cant, costo, nombre, manual, sinDatos }) => {
-      if (!t) return
-      const idx = nueva.findIndex((c) => c.t === t)
-      if (idx >= 0) {
-        const c = nueva[idx]
-        const total = c.cant + cant
-        nueva[idx] = { ...c, cant: total, costo: total ? (c.cant * c.costo + cant * costo) / total : c.costo }
-      } else {
-        const pos = { t, cant, costo, sab: broker }
-        if (nombre) pos.nombre = nombre
-        if (manual) pos.manual = true
-        if (sinDatos) pos.sinDatos = true
-        nueva.push(pos)
-      }
+    posiciones.forEach((p) => {
+      if (!p.t) return
+      fusionarPosicion(nueva, { ...p, sab: p.sab ?? broker })
       entraron += 1
     })
     ponCartera(nueva)
@@ -443,7 +456,7 @@ function pasaFiltro(f, filtro) {
   if (filtro.tipo === 'perdiendo' && f.gan >= 0) return false
   if (filtro.tipo === 'condiv' && f.div12 <= 0) return false
   if (filtro.tipo === 'sindiv' && f.div12 > 0) return false
-  if (filtro.sab && f.sab !== filtro.sab) return false
+  if (filtro.sab && f.sab !== filtro.sab && !(f.lotes || []).some((l) => l.sab === filtro.sab)) return false
   return true
 }
 
@@ -451,7 +464,7 @@ function Hoja({ filas, filtro, setFiltro, expandido, setExpandido, notas, ponNot
   onGuardarFila, onQuitar, onEjemplo, onVerEmpresa, totalValor, ganTotal }) {
   const tipos = [['todas', 'Todas'], ['ganando', '📈 Ganando'], ['perdiendo', '📉 Perdiendo'],
     ['condiv', '💰 Pagan dividendos'], ['sindiv', 'Sin dividendos']]
-  const sabs = [...new Set(filas.map((f) => f.sab))]
+  const sabs = [...new Set(filas.flatMap((f) => (f.lotes ? f.lotes.map((l) => l.sab) : [f.sab])))].filter(Boolean)
   const visibles = filas.filter((f) => pasaFiltro(f, filtro))
   return (
     <>
@@ -528,7 +541,7 @@ function FilaHoja({ f, abierta, notas, ponNotas, onToggle, onGuardar, onQuitar, 
       <button className={'cd-hoja-fila' + (abierta ? ' abierta' : '')} onClick={onToggle}>
         <span className="emp">
           <span className="tk">{f.t}{notas[f.t] ? ' 📝' : ''}</span>
-          <span className="nm">{nombreCorto(e.nombre)} · {f.sab}</span>
+          <span className="nm">{nombreCorto(e.nombre)} · {f.lotes ? `repartida en ${f.lotes.length} SAB` : f.sab}</span>
         </span>
         <span className="num">{f.cant.toLocaleString('es-PE')}</span>
         <span className="num">{fmtP(f.costo, e.moneda)}</span>
@@ -600,6 +613,20 @@ function DetalleFila({ f, notas, ponNotas, onGuardar, onQuitar, onVerEmpresa }) 
           {f.div12nat > 0 && esUSD(f.divMoneda) && <div className="muted" style={{ fontSize: 11 }}>≈ {fmtS(f.div12)}</div>}
         </div>
       </div>
+      {f.lotes && (
+        <div className="cd-lotes">
+          <div className="cd-lotes-tit">🏦 Repartida en varias SAB — dónde están tus {f.cant.toLocaleString('es-PE')} acciones:</div>
+          <ul>
+            {f.lotes.map((l, i) => (
+              <li key={i}>
+                <b>{l.sab || 'sin SAB'}</b>: {l.cant.toLocaleString('es-PE')} acciones
+                <span className="muted"> · compradas a {fmtP(l.costo, e.moneda)}</span>
+              </li>
+            ))}
+          </ul>
+          <div className="muted cd-lotes-nota">Para editarlas por separado, reimpórtalas o quítala y vuélvela a anotar por cada SAB.</div>
+        </div>
+      )}
       {anios.length > 0 && (
         <div className="cd-mini-divs">
           {anios.map((a, i) => (
@@ -623,25 +650,31 @@ function DetalleFila({ f, notas, ponNotas, onGuardar, onQuitar, onVerEmpresa }) 
         <div className="cd-nota-guardada">{guardada ? '✓ nota guardada' : ''}</div>
       </div>
       <div className="cd-editar">
-        <label className="cd-campo"><span>Acciones</span>
-          <input type="number" value={cant} min="1" step="1" onChange={(ev) => setCant(ev.target.value)} />
-        </label>
-        <label className="cd-campo"><span>¿A qué precio compraste? ({esUSD(e.moneda) ? 'US$' : 'S/'})</span>
-          <input type="number" value={costo} min="0" step="0.01" onChange={(ev) => setCosto(ev.target.value)} />
-        </label>
-        <label className="cd-campo"><span>SAB / broker</span>
-          <SelectorSAB value={sab} onChange={setSab} />
-        </label>
+        {!f.lotes && (
+          <>
+            <label className="cd-campo"><span>Acciones</span>
+              <input type="number" value={cant} min="1" step="1" onChange={(ev) => setCant(ev.target.value)} />
+            </label>
+            <label className="cd-campo"><span>¿A qué precio compraste? ({esUSD(e.moneda) ? 'US$' : 'S/'})</span>
+              <input type="number" value={costo} min="0" step="0.01" onChange={(ev) => setCosto(ev.target.value)} />
+            </label>
+            <label className="cd-campo"><span>SAB / broker</span>
+              <SelectorSAB value={sab} onChange={setSab} />
+            </label>
+          </>
+        )}
         <div className="cd-acciones-editar">
           {!e.sinDatos && (
             <button className="btn cd-btn-mini" onClick={() => onVerEmpresa?.(f.t)}>Ver su ficha →</button>
           )}
-          <button className="btn cd-btn-mini" onClick={() => {
-            const c2 = Math.floor(Number(cant) || 0)
-            const co2 = Number(costo) || 0
-            if (c2 < 1 || co2 <= 0) { alert('Revisa la cantidad y el costo.'); return }
-            onGuardar(f.t, { cant: c2, costo: co2, sab })
-          }}>Guardar cambios</button>
+          {!f.lotes && (
+            <button className="btn cd-btn-mini" onClick={() => {
+              const c2 = Math.floor(Number(cant) || 0)
+              const co2 = Number(costo) || 0
+              if (c2 < 1 || co2 <= 0) { alert('Revisa la cantidad y el costo.'); return }
+              onGuardar(f.t, { cant: c2, costo: co2, sab })
+            }}>Guardar cambios</button>
+          )}
           <button className="btn cd-btn-mini cd-btn-rojo" onClick={() => {
             if (confirm(`¿Quitar ${f.t} (${f.cant.toLocaleString('es-PE')} acciones) de tu cuaderno?`)) onQuitar(f.t)
           }}>Quitar</button>
