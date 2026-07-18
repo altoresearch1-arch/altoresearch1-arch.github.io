@@ -8,7 +8,7 @@ import {
   leerRecordatorios, guardarRecordatorios, leerVisitaAnterior, marcarVisita,
   leerCuadernos, guardarCuadernos, leerActivo, guardarActivo, borrarDatosCuaderno,
   COLORES_CUADERNO, COLOR_DEFECTO, MAX_CUADERNOS,
-  TC, esUSD, enSoles, fmtS, fmtP, fmtSyD, fmtUSD, nombreCorto, MESES, MESES_C, fechaCorta, haceDias,
+  TC, esUSD, enSoles, fmtS, fmtP, fmtPrecioExacto, fmtSyD, fmtUSD, nombreCorto, MESES, MESES_C, fechaCorta, haceDias,
   empresaDe, filasDe, divUlt12PorAccion, proyecciones, recibidosRecientes,
   catBonita, tipoPunto, acuerdoDividendo, normTicker, SABS, CARTERA_DEMO,
 } from '../lib/cartera'
@@ -268,6 +268,17 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
           )}
         </div>
       </div>
+      {cartera.length > 0 && (
+        <div className="cd-portafolio-valor">
+          <span className="cd-pv-num">{fmtS(totalValor)}</span>
+          <span className="cd-pv-usd">≈ {fmtUSD(totalValor / TC)}</span>
+          {totalCosto > 0 && (
+            <span className={'cd-pv-gan ' + (ganTotal >= 0 ? 'pos' : 'neg')}>
+              {ganTotal >= 0 ? '▲ +' : '▼ '}{ganTotal.toFixed(1)}%
+            </span>
+          )}
+        </div>
+      )}
 
       {formAbierto && (
         <FormAgregar
@@ -522,8 +533,8 @@ function FilaHoja({ f, abierta, notas, ponNotas, onToggle, onGuardar, onQuitar, 
         <span className="num">{f.cant.toLocaleString('es-PE')}</span>
         <span className="num">{fmtP(f.costo, e.moneda)}</span>
         <span className={'num' + (sinPx ? ' muted' : ' oro')}
-          title={sinPx ? 'Sin precio reciente — se usa tu costo' : ''}>
-          {sinPx ? '≈ ' : ''}{fmtP(e.precio, e.moneda)}
+          title={sinPx ? 'Sin precio reciente — se usa tu costo' : 'Último cierre del robot (igual que en la ficha de ALTO)'}>
+          {sinPx ? '≈ ' : ''}{fmtPrecioExacto(e.precio, e.moneda)}
         </span>
         <span className={'num ' + (f.gan >= 0 ? 'pos' : 'neg')}>{f.gan >= 0 ? '+' : ''}{f.gan.toFixed(1)}%</span>
         <span className={'num' + (f.div12nat > 0 ? ' pos' : '')}
@@ -817,7 +828,11 @@ function Flujo({ filas, proys, hoy }) {
   }
   for (const p of proys) {
     for (const mm of meses) {
-      if (p.fecha.getFullYear() === mm.y && p.fecha.getMonth() === mm.m) { mm.total += p.soles; mm.de[p.t] = 1 }
+      if (p.fecha.getFullYear() === mm.y && p.fecha.getMonth() === mm.m) {
+        mm.total += p.soles
+        const prev = mm.de[p.t] || { nativo: 0, moneda: p.moneda }
+        mm.de[p.t] = { nativo: prev.nativo + (p.nativo || 0), moneda: p.moneda }
+      }
     }
   }
   const maxMes = Math.max(...meses.map((m) => m.total), 1)
@@ -853,7 +868,11 @@ function Flujo({ filas, proys, hoy }) {
               <div className="n">{MESES[mm.m]}{i === 0 ? ' · hoy' : ''}</div>
               <div className={'m' + (mm.total ? '' : ' cero')}>{fmtS(mm.total)}</div>
               {mm.total > 0 && <div className="cd-mes-usd muted">≈ {fmtUSD(mm.total / TC)}</div>}
-              <div className="de">{Object.keys(mm.de).join(' · ')}</div>
+              <div className="de">
+                {Object.entries(mm.de).map(([tk, info]) => (
+                  <span key={tk} className="cd-mes-emp">{tk} <b>{fmtP(info.nativo, info.moneda)}</b></span>
+                ))}
+              </div>
               <div className="humor">{humor}</div>
             </div>
           )

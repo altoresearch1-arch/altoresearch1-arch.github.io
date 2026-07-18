@@ -120,6 +120,10 @@ export const aUSD = (soles) => soles / TC
 // Monto en soles mostrado en AMBAS monedas (pedido de Jair: soles y dólares)
 export const fmtSyD = (soles) => `${fmtS(soles)} · ${fmtUSD(soles / TC)}`
 export const fmtP = (n, mon) => (esUSD(mon) ? 'US$ ' : 'S/ ') + Number(n).toFixed(2)
+// Precio de bolsa EXACTO como lo muestra la ficha de ALTO (valor crudo de
+// precios.json, sin redondear): así el Cuaderno y la ficha NUNCA discrepan
+// (pedido de Jair: mismo robot, mismo precio en los dos lados).
+export const fmtPrecioExacto = (n, mon) => (esUSD(mon) ? 'US$ ' : 'S/ ') + n
 export const nombreCorto = (n) => String(n || '')
   .replace(/\s?S\.A\.A\.|\s?S\.A\.|Compañía de Minas\s|Compañía Minera\s|\s?\(Grupo Coril Sociedad Titulizadora\)/g, '')
   .trim()
@@ -252,20 +256,23 @@ export function proyecciones(filas) {
   for (const c of filas) {
     const e = c.e
     if (!e || e.sinDatos || !e.historial.length) continue
+    const monedaEmp = e.divMoneda || 'S/'
     if (e.frecuencia === 'Mensual') {
-      const porMes = {}
+      const porMes = {}; const porMesNat = {}
       for (const h of e.historial) {
         const f = new Date(h.fecha)
         const k = f.getFullYear() + '-' + f.getMonth()
         porMes[k] = (porMes[k] || 0) + enSoles(h.monto, h.moneda)
+        porMesNat[k] = (porMesNat[k] || 0) + h.monto
       }
       const vals = Object.values(porMes)
       if (!vals.length) continue
       const prom = vals.reduce((a, b) => a + b, 0) / vals.length
+      const promNat = Object.values(porMesNat).reduce((a, b) => a + b, 0) / vals.length
       const dia = Math.round(e.historial.reduce((a, h) => a + new Date(h.fecha).getDate(), 0) / e.historial.length)
       for (let i = 0; i < 7; i++) {
         const f = new Date(hoy.getFullYear(), hoy.getMonth() + i, dia)
-        if (f >= hoy) porClave[c.t + '|' + i] = { t: c.t, fecha: f, soles: prom * c.cant, mensual: true }
+        if (f >= hoy) porClave[c.t + '|' + i] = { t: c.t, fecha: f, soles: prom * c.cant, nativo: promNat * c.cant, moneda: monedaEmp, mensual: true }
       }
       continue
     }
@@ -274,8 +281,9 @@ export function proyecciones(filas) {
       if (f <= hace12 || f > hoy) continue
       const fut = new Date(f); fut.setFullYear(fut.getFullYear() + 1)
       const clave = c.t + '|' + fut.toISOString().slice(0, 10)
-      if (!porClave[clave]) porClave[clave] = { t: c.t, fecha: fut, soles: 0 }
+      if (!porClave[clave]) porClave[clave] = { t: c.t, fecha: fut, soles: 0, nativo: 0, moneda: monedaEmp }
       porClave[clave].soles += enSoles(h.monto, h.moneda) * c.cant
+      porClave[clave].nativo += h.monto * c.cant
     }
   }
   return Object.values(porClave).filter((p) => p.fecha >= hoy).sort((a, b) => a.fecha - b.fecha)

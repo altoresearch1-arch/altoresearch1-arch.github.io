@@ -5531,14 +5531,29 @@ a.link {
 .cd-saludo { margin: 8px 0 0; font-style: italic; color: var(--texto-tenue); }
 .cd-color-nota { margin: 2px 0 0; }
 .cd-portafolio-lbl {
-  margin: 12px 0 -2px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  margin: 14px 0 -4px;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--texto-tenue);
+  color: color-mix(in srgb, var(--oro) 80%, var(--texto-tenue));
 }
-.cd-patrimonio-usd { margin: 2px 0 0; font-size: 14px; font-weight: 600; }
+.cd-patrimonio-usd { margin: 2px 0 0; font-size: 15px; font-weight: 700; color: var(--texto); }
+
+/* Valor ÉPICO también en "Este es tu portafolio" (pedido de Jair) */
+.cd-portafolio-valor {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  margin: 4px 0 12px;
+}
+.cd-pv-num {
+  font-size: clamp(30px, 7vw, 44px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--oro);
+  text-shadow: 0 0 26px color-mix(in srgb, var(--oro) 28%, transparent);
+}
+.cd-pv-usd { font-size: 16px; font-weight: 700; color: var(--texto); }
+.cd-pv-gan { font-size: 15px; font-weight: 700; }
 .cd-patrimonio {
   margin: 10px 0 0;
   font-size: clamp(38px, 9vw, 56px);
@@ -5746,7 +5761,9 @@ a.link {
 .cd-mes .m.cero { color: var(--texto-tenue); font-weight: 400; }
 .cd-mes-usd { font-size: 9.5px; margin-top: 1px; }
 .cd-sab-otra { margin-top: 6px; }
-.cd-mes .de { min-height: 14px; font-size: 9.5px; overflow: hidden; }
+.cd-mes .de { min-height: 14px; font-size: 9.5px; line-height: 1.5; }
+.cd-mes-emp { display: block; white-space: nowrap; }
+.cd-mes-emp b { color: var(--texto); font-weight: 700; }
 .cd-mes .humor { font-style: italic; margin-top: 2px; }
 .cd-barrita { height: 90px; display: flex; align-items: end; justify-content: center; }
 .cd-barrita i {
