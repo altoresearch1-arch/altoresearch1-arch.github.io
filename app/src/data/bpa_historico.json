@@ -2637,18 +2637,54 @@
    },
    "trimestres": {},
    "fuente": "SMV — EE.FF. individuales anuales, utilidad básica por acción (detalle HTML de bancos; sin desglose trimestral)"
+  },
+  "VOLCABC1": {
+   "moneda": "USD",
+   "serie": {
+    "2020": -0.01,
+    "2021": 0.01,
+    "2022": 0.019,
+    "2023": 0.019,
+    "2024": 0.031,
+    "2025": 0.03
+   },
+   "trimestres": {
+    "2020-Q1": -0.005,
+    "2020-Q2": 0.0,
+    "2020-Q3": 0.004,
+    "2020-Q4": 0.002,
+    "2021-Q1": -0.001,
+    "2021-Q2": 0.004,
+    "2021-Q3": 0.0,
+    "2021-Q4": 0.003,
+    "2023-Q1": 0.002,
+    "2023-Q2": -0.001,
+    "2023-Q3": 0.001,
+    "2023-Q4": 0.0,
+    "2024-Q1": -0.001,
+    "2024-Q2": 0.004,
+    "2024-Q3": 0.006,
+    "2024-Q4": 0.01,
+    "2025-Q1": 0.007,
+    "2025-Q2": 0.0,
+    "2025-Q3": -0.004,
+    "2025-Q4": 0.01,
+    "2026-Q1": 0.005
+   },
+   "fuente": "SMV — EE.FF. individuales, utilidad básica por acción: anual auditado + trimestrales intermedios (XBRL)",
+   "notaBpa": "Este BPA es el que la empresa reporta en sus estados INDIVIDUALES (solo la matriz), en su moneda original. Como es un holding, el P/E de «¿Barata o cara?» usa el resultado CONSOLIDADO (todo el grupo), que suele ser mayor: por eso estas barras y ese P/E no calzan número con número.",
+   "notaTrimestres": "Trimestres de 2022 omitidos: no cuadran con el anual auditado (re-expresión por acciones liberadas o tagueo XBRL inconsistente). Mejor hueco que dato engañoso."
   }
  },
  "excluidas": {
-  "VOLCABC1": "El BPA del XBRL individual no representa a la acción que cotiza (clase de acción/holding/moneda — mismo motivo que fix_eps.py); graficarlo engañaría.",
-  "MINSURI1": "El BPA del XBRL individual no representa a la acción que cotiza (clase de acción/holding/moneda — mismo motivo que fix_eps.py); graficarlo engañaría.",
-  "BACKUSI1": "El BPA del XBRL individual no representa a la acción que cotiza (clase de acción/holding/moneda — mismo motivo que fix_eps.py); graficarlo engañaría.",
   "INRETC1": "El BPA del XBRL individual no representa a la acción que cotiza (clase de acción/holding/moneda — mismo motivo que fix_eps.py); graficarlo engañaría.",
   "IFS": "El BPA del XBRL individual no representa a la acción que cotiza (clase de acción/holding/moneda — mismo motivo que fix_eps.py); graficarlo engañaría.",
   "PODERC1": "El BPA del XBRL individual no representa a la acción que cotiza (clase de acción/holding/moneda — mismo motivo que fix_eps.py); graficarlo engañaría.",
   "MINCORI1": "El BPA del XBRL individual no representa a la acción que cotiza (clase de acción/holding/moneda — mismo motivo que fix_eps.py); graficarlo engañaría.",
   "BAP": "El BPA del XBRL individual no representa a la acción que cotiza (clase de acción/holding/moneda — mismo motivo que fix_eps.py); graficarlo engañaría.",
   "SCCO": "El BPA del XBRL individual no representa a la acción que cotiza (clase de acción/holding/moneda — mismo motivo que fix_eps.py); graficarlo engañaría.",
-  "COCESUI1": "El BPA del XBRL individual no representa a la acción que cotiza (clase de acción/holding/moneda — mismo motivo que fix_eps.py); graficarlo engañaría."
+  "COCESUI1": "El BPA del XBRL individual no representa a la acción que cotiza (clase de acción/holding/moneda — mismo motivo que fix_eps.py); graficarlo engañaría.",
+  "MINSURI1": "El BPA del XBRL individual no representa a la acción que cotiza (clase de acción/holding/moneda — mismo motivo que fix_eps.py); graficarlo engañaría.",
+  "BACKUSI1": "El BPA del XBRL individual no representa a la acción que cotiza (clase de acción/holding/moneda — mismo motivo que fix_eps.py); graficarlo engañaría."
  }
 }

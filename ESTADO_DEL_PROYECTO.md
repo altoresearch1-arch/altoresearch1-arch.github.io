@@ -67,6 +67,25 @@ punteado (Regla #1), moneda original (Regla #3), pastillas `.spark-rango` reusad
   sin pago; el periodo en curso se marca con nota. Correr este script junto a
   fetch_bpa_historico.py tras cada trimestre (no está en el robot de 30 min).
 
+## ⚖ 22-jul: VOLCAN SÍ TIENE BPA — mostrado con nota (pregunta de Jair)
+Jair insistió «¿Volcan no tiene BPA?». **Verificado en la SMV con su Chrome**: Volcan
+SÍ reporta utilidad básica por acción, serie limpia (individual, US$, acciones comunes):
+2020 −0.01 · 2021 0.01 · 2022 0.019 · 2023 0.019 · 2024 0.031 · 2025 0.03. Estaba fuera
+solo porque `fix_eps` lo agrupaba con los 10 «distorsionados». Decisión de Jair: mostrarla
+con nota clara. Lo hecho:
+- **`fetch_bpa_historico.py`**: lista blanca `MOSTRAR_INDIVIDUAL = {"VOLCABC1"}` — esos
+  se bajan (antes se saltaban) y se marcan con `notaBpa`; el resto de fix_eps sigue
+  excluido. **Por qué SOLO Volcan**: al bajar los 10 para revisarlos, Minsur reporta
+  S/21/acción (acción a ~S/4 → P/E 0.2) y Backus S/23 vs corregido S/2.6 → su individual
+  va en OTRA base de acciones, la nota diría lo contrario → siguen fuera. Volcan es el
+  único donde el individual (US$0.03) vs consolidado (~US$0.057, lo que usa su P/E) es un
+  efecto holding honesto y la nota calza. Los otros 7 no tienen serie individual en la SMV.
+- **App**: `GraficaBPA` muestra `emp.notaBpa` como caja ámbar bajo el título (`.bpa-nota-
+  individual`) cuando existe. Volcan ahora tiene sus 4 modos + gráfica + Resumen; Minsur/
+  Backus siguen en modo solo-🧠 Resumen (con la nota de «no se grafica»).
+- Verificado en navegador (Volcan: gráfica+nota+tarjetas 2020🔻→2024⭐; Minsur: solo
+  resumen), build PWA OK. Caché nuevo: solo VOLCABC1_*.json (los 9 no-mostrados, borrados).
+
 ## 🧠 21-jul (3): GRÁFICA BPA V2 + RESUMEN INTELIGENTE (pedidos de Jair, nombre elegido por él)
 La sección BPA de la ficha (nivel 3) se volvió un centro de análisis:
 - **Modos como botones de análisis** (📈 Año vs año · 🏆 Mismo trimestre · 📅 Un solo año ·

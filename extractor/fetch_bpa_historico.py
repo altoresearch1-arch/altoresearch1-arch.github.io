@@ -49,6 +49,21 @@ MOTIVO_EXCLUSION = ("El BPA del XBRL individual no representa a la acción que c
                     "(clase de acción/holding/moneda — mismo motivo que fix_eps.py); "
                     "graficarlo engañaría.")
 
+# 22-jul (pedido de Jair): algunos de fix_eps SÍ reportan una utilidad por acción
+# COHERENTE en la SMV y se pueden mostrar CON nota. Pero SOLO los verificados:
+# - Volcan ✅: individual US$0.03 (2025), consolidado ~US$0.057 → la nota calza
+#   (el consolidado es mayor, efecto holding; la serie 2020−0.01→2025 0.03 es limpia).
+# - Minsur/Backus ❌: su individual va en OTRA base de acciones (Minsur S/21 con
+#   acción a ~S/4 → P/E 0.2; Backus S/23 vs corregido S/2.6) → distorsionado de
+#   verdad, la nota diría lo contrario. Siguen excluidos.
+# Ampliar SOLO tras verificar que el individual es coherente con la acción que cotiza.
+MOSTRAR_INDIVIDUAL = {"VOLCABC1"}
+NOTA_INDIVIDUAL = ("Este BPA es el que la empresa reporta en sus estados INDIVIDUALES "
+                   "(solo la matriz), en su moneda original. Como es un holding, el P/E "
+                   "de «¿Barata o cara?» usa el resultado CONSOLIDADO (todo el grupo), "
+                   "que suele ser mayor: por eso estas barras y ese P/E no calzan número "
+                   "con número.")
+
 with open(os.path.join(AQUI, "empresas_config.json"), encoding="utf-8") as f:
     CFG = json.load(f)
 
@@ -269,10 +284,14 @@ def main():
     s = nueva_sesion()
     for i, c in enumerate(CFG["empresas"]):
         tk = c["ticker"]
-        if tk in DISTORSIONADOS:
+        # fix_eps: se excluye SALVO los verificados en MOSTRAR_INDIVIDUAL (Volcan),
+        # que se bajan y se marcan con NOTA_INDIVIDUAL (pedido de Jair 22-jul).
+        if tk in DISTORSIONADOS and tk not in MOSTRAR_INDIVIDUAL:
             salida["excluidas"][tk] = MOTIVO_EXCLUSION
             salida["empresas"].pop(tk, None)
             continue
+        mostrar_nota = tk in MOSTRAR_INDIVIDUAL
+        salida.get("excluidas", {}).pop(tk, None)
 
         serie, trimestres, moneda, tipo_visto, fallo = {}, {}, None, None, False
 
@@ -349,6 +368,8 @@ def main():
             "trimestres": {q: trimestres[q] for q in sorted(trimestres)},
             "fuente": fuente,
         }
+        if mostrar_nota:
+            salida["empresas"][tk]["notaBpa"] = NOTA_INDIVIDUAL
         if nota_q:
             salida["empresas"][tk]["notaTrimestres"] = nota_q
             print(f"    {tk}: {nota_q}")

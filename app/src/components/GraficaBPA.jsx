@@ -278,6 +278,14 @@ export default function GraficaBPA({ ticker, empresa }) {
           : <>📈 <Glosado text="BPA" /> — ¿gana más por acción que antes?</>}
       </div>
 
+      {/* Nota del BPA individual (holdings/clases de acción — antes se excluían;
+          22-jul pedido de Jair: se muestran CON esta aclaración) */}
+      {hayBpa && emp?.notaBpa && (
+        <p className="bpa-nota-individual">
+          ⚖ <Glosado text={emp.notaBpa} />
+        </p>
+      )}
+
       {/* Sin serie de BPA histórico: nota honesta (los 10 de fix_eps) + solo el resumen */}
       {soloResumen && (
         <p className="muted" style={{ fontSize: 12, marginBottom: 10, lineHeight: 1.5 }}>
