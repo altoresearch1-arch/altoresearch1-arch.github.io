@@ -18,6 +18,11 @@ Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTAD
 > cuadre. 93 empresas anual / 73 con trimestres / 0 descuadres. Bancos solo anual. Los 10
 > de fix_eps excluidos. Al correr el Q2 (--trimestral): re-correr fetch_bpa_historico.py y
 > el trimestre nuevo entra solo (lee epsTrimestreRaw de empresas.json).
+> **+ CONTEXTO «Ver también» (misma noche)**: filas alineadas bajo las barras — 💵 precio
+> de la acción (BVL, último cierre del periodo), 💰 dividendo del periodo (dividendos.json),
+> ⛏ metal para mineras (promedio LME del **BCRP**, no investing: oficial y sin scraping).
+> `bpa_contexto.json` ← `fetch_bpa_contexto.py` (correrlo junto al de arriba tras cada Q).
+> Gráfica más grande (158px). «—» = sin dato o sin pago, nada de ceros inventados.
 
 ## ⚡ NUEVO 21-jul (Fable): EL PLAN EDUCATIVO MAESTRO — leer ANTES de la próxima sesión
 > Sesión de PURO ANÁLISIS (cero código, pedido de Jair antes de renovar Fable con sus US$100).

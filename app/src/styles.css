@@ -3013,12 +3013,14 @@ a.link {
 .prodmin-lectura-item.baja, .prodmin-lectura .baja { color: var(--rojo); }
 .spark-fecha-eje { font-size: 9.5px; }
 
-/* 📈 BPA año por año (GraficaBPA, nivel 3) — misma pista estilo BEM */
+/* 📈 BPA año por año (GraficaBPA, nivel 3) — misma pista estilo BEM.
+   Más grande que las otras mini-gráficas (pedido de Jair 21-jul) pero sin
+   volverse mural: barras de hasta 96px + filas de contexto alineadas. */
 .bpagraf {
   display: flex;
   align-items: flex-end;
   gap: 10px;
-  height: 118px;
+  height: 158px;
   padding: 0 6px;
   border-bottom: 1px solid color-mix(in srgb, var(--oro) 35%, transparent);
   background-image:
@@ -3037,7 +3039,7 @@ a.link {
   min-width: 0;
 }
 .bpagraf-valor {
-  font-size: 12.5px;
+  font-size: 13.5px;
   font-weight: 600;
   color: var(--oro);
   margin-bottom: 4px;
@@ -3045,7 +3047,7 @@ a.link {
 }
 .bpagraf-valor.perdida { color: var(--rojo); }
 .bpagraf-barra {
-  width: 62%;
+  width: 66%;
   border-radius: 4px 4px 0 0;
   background: var(--oro);
 }
@@ -3055,13 +3057,53 @@ a.link {
   border: 1.5px dashed color-mix(in srgb, var(--oro) 40%, transparent);
 }
 .bpagraf-anio {
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: #ede7d2;
-  margin-top: 5px;
+  margin-top: 6px;
+}
+
+/* "Ver también": chips que encienden las filas de contexto */
+.bpagraf-extras {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 12px;
+}
+.bpagraf-extras-tit {
+  font-size: 11.5px;
+  color: var(--texto-tenue);
+  margin-right: 3px;
+}
+.spark-rango.chico { padding: 1px 7px; font-size: 10.5px; }
+
+/* Filas de contexto (precio / dividendo / metal) alineadas con las columnas:
+   mismo flex y gap que .bpagraf para que cada celda caiga bajo su barra */
+.bpagraf-ctx { margin-top: 8px; }
+.bpagraf-ctx-titulo {
+  font-size: 11.5px;
+  color: var(--texto-tenue);
+  margin-bottom: 3px;
+}
+.bpagraf-ctx-fila {
+  display: flex;
+  gap: 10px;
+  padding: 3px 6px;
+  border-top: 1px dashed color-mix(in srgb, var(--oro) 22%, transparent);
+}
+.bpagraf-ctx-cel {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: #ede7d2;
+  white-space: nowrap;
 }
 @media (max-width: 480px) {
-  .bpagraf { gap: 6px; }
-  .bpagraf-valor { font-size: 10.5px; }
+  .bpagraf, .bpagraf-ctx-fila { gap: 6px; }
+  .bpagraf-valor { font-size: 11px; }
+  .bpagraf-ctx-cel { font-size: 10.5px; }
 }
 
 /* ══════════ 🧠 YACHAY — la IA de ALTO (beta) ══════════ */

@@ -54,6 +54,18 @@ punteado (Regla #1), moneda original (Regla #3), pastillas `.spark-rango` reusad
   con años omitidos, nota visible en la UI). Resultado: 93 empresas con serie anual, 73 con
   trimestres, **304 años testeables con CERO descuadres** y 2025 cuadra exacto con
   eps_anual.json en todas.
+- **FILAS DE CONTEXTO «Ver también» (2ª tanda de pedidos, misma noche)**: chips que
+  encienden filas alineadas columna a columna bajo las barras — 💵 precio de la acción
+  (último cierre del periodo), 💰 dividendo pagado en el periodo (de dividendos.json:
+  porAnioNum anual / historial con fecha para trimestres), ⛏ metal para mineras (promedio
+  del periodo, metal elegible; orden por su % del Perú vía mineria_familia + BEM).
+  Datos nuevos: **`bpa_contexto.json` (77 KB)** ← `extractor/fetch_bpa_contexto.py`:
+  precios BVL dataondemand 2020→hoy (96 tickers, ceros de relleno filtrados) + **metales
+  del BCRP** (API pública, promedio mensual LME: cobre/oro/plata/zinc/plomo/estaño/níquel
+  — se eligió BCRP en vez de investing.com: oficial, JSON estable, sin scraping; plata
+  Q1-26 verificada contra la serie cruda). Gráfica más grande (158px). «—» = sin dato o
+  sin pago; el periodo en curso se marca con nota. Correr este script junto a
+  fetch_bpa_historico.py tras cada trimestre (no está en el robot de 30 min).
 
 ## 🕵️ 17-jul: VIGILANCIA DEL BEM (regla de Jair) — arranque del Q2
 Caso real que trajo Jair: el HI de BVN del 16-jul reporta producción de oro del 2T26
