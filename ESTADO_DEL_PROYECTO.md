@@ -4,6 +4,34 @@
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
 > herramienta), lee esto primero. Última actualización: **17 jul 2026**. Estado: **EN VIVO (beta pública)**.
 
+## 🧭 21-jul: EL PLAN EDUCATIVO MAESTRO (sesión de ANÁLISIS, sin código — pedido de Jair)
+Sesión completa de análisis antes de la renovación de Fable (Jair tiene US$100 de la oferta).
+**TODO vive en `ANALISIS_EDUCATIVO_Y_TOUR_POR_NIVELES.md` (leerlo ANTES de tocar tour/guías/
+valoración/quiz) + maqueta navegable `MAQUETA_MENTOR_ALTO.html`.** 5 partes, 151 mejoras
+priorizadas [P0-P3]:
+- **I.** Lentes por sector (deuda de AUNA ≠ minera ≠ banco; "diversas" es cajón ciego), tour por
+  niveles en 3 capas (hoy el tour no cubre nada de N3-4 y explica interfaz, no números),
+  playbook de 16 lentes con casos peruanos, 10 "combos de analista" (nunca un indicador solo).
+- **II.** La escalera de aprendizaje (¿qué hace? → ¿cómo gana? → ¿por qué este año? → riesgos →
+  ¿barata? → ¿listo para decidir?) — hallazgo: la ficha responde la 5 antes que la 1; regla de
+  los 5 segundos auditada número por número. gerencia.json ya responde "¿por qué este año?" y
+  está enterrada en N4 (mejor valor/esfuerzo del plan).
+- **III.** 20 errores educativos ACTIVOS verificados en código (top: el anzuelo de niveles OCULTA
+  el aviso "P/E referencial"; damp 0.4 del simulador enseña ilíquida=segura; tips con cifras
+  congeladas que envejecen; tip de deuda de BCP contradice su guía; "cero sustos→dividendos" en
+  el quiz). Matriz vs 10 plataformas mundiales; 12 sesgos con vacuna; carga cognitiva (la subida
+  2→3 mete ~14 conceptos de golpe); comité Buffett/Damodaran/Marks/Lynch/profesor peruano.
+- **IV.** Laboratorio UX del usuario cero: 9 personas, 30 segundos en 11 empresas, ~500 preguntas
+  en ~60 familias, 14 preguntas invisibles, 10 momentos de abandono (top: la puerta de niveles
+  al usuario cero; el plazo-fijista que lee el yield como TEA), los primeros 5 minutos
+  rediseñados (botón 🐣 "nunca he invertido" + Lección Exprés).
+- **V. EL MENTOR ALTO (idea de JAIR, #151, P0):** botón flotante contextual único que unifica
+  todo — modo "toca cualquier cosa", tarjetas con analogía por nivel/lente (mentor.json),
+  "🤔 No entendí" contextual, progreso honesto ✔/✔✔, absorbe la ❓ del tour. Maqueta aprobada.
+**Orden de implementación acordado:** S1 lentes+deuda ("¿puede pagarla?" en años)+fixes de
+honestidad → S2 tour por niveles + cáscara del Mentor → S3 combos/lectura de analista →
+S4 guiones y tarjetas del Mentor → S5 feed de hechos del día + precio de los metales.
+
 ## 🕵️ 17-jul: VIGILANCIA DEL BEM (regla de Jair) — arranque del Q2
 Caso real que trajo Jair: el HI de BVN del 16-jul reporta producción de oro del 2T26
 (37,266 oz incl. asociadas), pero el BEM de mayo muestra a BVN "vacío" en oro.

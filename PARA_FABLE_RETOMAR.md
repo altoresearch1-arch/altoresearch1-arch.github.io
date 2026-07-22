@@ -7,6 +7,24 @@ Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTAD
 
 ---
 
+## ⚡ NUEVO 21-jul (Fable): EL PLAN EDUCATIVO MAESTRO — leer ANTES de la próxima sesión
+> Sesión de PURO ANÁLISIS (cero código, pedido de Jair antes de renovar Fable con sus US$100).
+> **Leer `ANALISIS_EDUCATIVO_Y_TOUR_POR_NIVELES.md` COMPLETO antes de tocar tour/guías/
+> valoración/quiz/simulador** — 5 partes, 151 mejoras priorizadas, con evidencia de código.
+> Lo no negociable para la próxima sesión (S1): (a) lentes por sector (campo `lente`; guías de
+> seguros y salud/AUNA; "diversas" deja de ser cajón ciego), (b) indicador "¿puede pagar su
+> deuda?" en AÑOS con umbral por lente + globo en la radiografía, (c) FIXES de honestidad que
+> son errores ACTIVOS: el anzuelo de niveles oculta el aviso "P/E referencial" (E1 — las
+> advertencias JAMÁS se filtran por nivel), el damp 0.4 del simulador (E2), cifras congeladas
+> en tips (E5), "cero sustos→dividendos" del quiz (E4), tip de deuda de BCP estilo minera (E6).
+> Después: S2 = tour por niveles (3 capas: pasos por nivel / tour de DESBLOQUEO al subir /
+> micro-tours) + cáscara del **MENTOR ALTO** (idea de Jair, mejora #151: botón flotante
+> contextual único — maqueta navegable en `MAQUETA_MENTOR_ALTO.html`, absorbe la BurbujaTour ❓).
+> La escalera de aprendizaje (Parte II) re-secuencia el tour: tesis → "vive de" → "¿por qué le
+> fue así este trimestre?" (¡gerencia.json YA lo tiene digerido y está enterrado en N4!) →
+> riesgos → veredicto → checklist "¿listo para decidir?". Memoria de Claude actualizada
+> (analisis-educativo-y-tour.md).
+
 ## ⚡ NUEVO 10-jul ronda 9 (Fable): 3 PULIDOS DE UI (pedido de Jair)
 > (1) **Advertencia de límites en Sentinel**: componente `AvisoLimitaciones` (Sentinel.jsx,
 > en los 3 estados: espera/biblioteca/informe) + intent en Atlas — dice claro que NO lee

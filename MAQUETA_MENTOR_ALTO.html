@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maqueta — Mentor ALTO (21-jul-2026)</title>
+<!-- Maqueta NAVEGABLE de la idea de Jair (21-jul): el botón flotante contextual "Mentor ALTO".
+     Diseño y ajustes documentados en ANALISIS_EDUCATIVO_Y_TOUR_POR_NIVELES.md §31 (mejora #151).
+     Abrir este archivo en el navegador para jugarla. NO es código de la app: es el plano visual. -->
+<style>
+  body{margin:0;background:#1a1a17;font-family:system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;gap:12px;padding:24px 12px;color:#e8e2cf}
+  .ctx{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;font-size:13px;color:#8a8a85}
+  .ctx button{background:none;border:1px solid #3a3a33;color:#e8e2cf;border-radius:8px;padding:5px 10px;font-size:13px;cursor:pointer}
+  .ctx button:hover{border-color:#d4af37}
+  #frame{position:relative;width:340px;background:#0e0e0e;border:1px solid #3a3a33;border-radius:20px;padding:16px 14px 74px;overflow:hidden}
+  .mk{background:#161613;border:1px solid #2a2a24;border-radius:10px;padding:8px}
+  .k{color:#8a8a85;font-size:11px}
+  .v{font-size:13px;color:#f0e6c8}
+  .verde{color:#67d18b}
+  #pill{position:absolute;right:12px;bottom:12px;background:#d4af37;color:#1a1503;border:none;border-radius:999px;padding:9px 14px;font-size:13px;font-weight:600;max-width:220px;text-align:left;cursor:pointer}
+  .panelbox{display:none;position:absolute;background:#14140f;border:1px solid #d4af37;border-radius:14px;padding:12px}
+  #panel{right:12px;bottom:12px;width:230px}
+  #card,#noent{left:12px;right:12px;bottom:12px;padding:14px}
+  #hint{display:none;position:absolute;left:12px;right:12px;top:8px;background:#14140f;border:1px solid #d4af37;border-radius:10px;padding:6px 10px;font-size:12px;text-align:center}
+  .op,.nav{background:none;border:1px solid #3a3a33;color:#e8e2cf;border-radius:8px;padding:6px 10px;font-size:13px;cursor:pointer}
+  .op{display:block;width:100%;text-align:left;margin-bottom:6px}
+  .op:hover,.nav:hover{border-color:#d4af37}
+  .oro{color:#d4af37}
+  .nota{font-size:12px;color:#8a8a85;text-align:center;max-width:420px}
+</style>
+</head>
+<body>
+<h1 style="font-size:16px;margin:0" class="oro">🎓 Mentor ALTO — maqueta navegable (idea de Jair, 21-jul-2026)</h1>
+<div class="ctx">
+  <span>Simula que el usuario está mirando:</span>
+  <button id="ctx-val">💎 Valoración</button>
+  <button id="ctx-div">💰 Dividendos</button>
+  <button id="ctx-prod">⛏️ Producción</button>
+</div>
+<div id="frame">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+    <div><div class="oro" style="font-weight:600;font-size:17px">BVN</div><div class="k">Buenaventura · Minas</div></div>
+    <div style="text-align:right"><div class="v" style="font-size:15px">US$ 30.31</div><div class="k">cierre 18/07 · BVL</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+    <div class="mk" data-k="precio"><div class="k">📈 Últimos 6 meses</div><div class="v verde">▲ subió 15.9%</div></div>
+    <div class="mk" data-k="pe"><div class="k">💎 ¿Barata o cara?</div><div class="v verde">Barata · P/E 9.6</div></div>
+    <div class="mk" data-k="div"><div class="k">💰 Dividendos</div><div class="v">Sí paga · 3.82%</div></div>
+    <div class="mk" data-k="vol"><div class="k">🌡️ ¿Cuánto se mueve?</div><div class="v">Se mueve</div></div>
+  </div>
+  <div class="mk" data-k="spark" style="margin-bottom:10px">
+    <div class="k" style="margin-bottom:4px">Su recorrido · 1A</div>
+    <svg viewBox="0 0 300 54" style="width:100%;display:block"><polyline points="0,44 30,40 60,42 90,34 120,36 150,28 180,30 210,22 240,26 270,16 300,12" fill="none" stroke="#d4af37" stroke-width="2"/><circle cx="300" cy="12" r="3" fill="#d4af37"/></svg>
+  </div>
+  <div class="mk" data-k="deuda">
+    <div class="k">Fundamentos (SMV)</div>
+    <div class="v" style="font-size:12px;margin-top:2px">Deuda: US$ 685 M · FCF: US$ 312 M · Margen 84%</div>
+  </div>
+
+  <button id="pill">💡 Explícamelo</button>
+
+  <div id="panel" class="panelbox">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span class="oro" style="font-size:13px;font-weight:600">🎓 Mentor ALTO</span>
+      <button data-go="s0" class="nav" style="font-size:12px;padding:2px 8px">✕</button>
+    </div>
+    <button data-go="tocar" class="nav op">👆 ¿Qué es esto? — toca algo</button>
+    <button data-go="noent" class="nav op">🤔 No entendí</button>
+    <button class="nav op">🚶 Tour de esta pantalla</button>
+    <button class="nav op" style="margin-bottom:8px">🧠 Preguntar a Atlas</button>
+    <div class="k">✔ Aprendidos: <span id="pn">2</span> de 14 · P/E, dividendo</div>
+  </div>
+
+  <div id="hint">👆 Toca cualquier elemento con borde dorado</div>
+
+  <div id="card" class="panelbox">
+    <div id="card-t" class="oro" style="font-size:14px;font-weight:600;margin-bottom:6px">💎 P/E</div>
+    <div id="card-b" style="font-size:13px;line-height:1.55;margin-bottom:10px"></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="nav" data-go="ejemplo" style="font-size:12px">Ver ejemplo con Gloria</button>
+      <button class="nav" style="font-size:12px">🧠 Preguntar más</button>
+      <button class="nav" data-go="ok" style="font-size:12px;border-color:#d4af37;color:#d4af37">✔ Entendido</button>
+    </div>
+  </div>
+
+  <div id="noent" class="panelbox">
+    <div class="oro" style="font-size:14px;font-weight:600;margin-bottom:8px">🤔 Estás en Valoración — ¿qué no entendiste?</div>
+    <button class="nav op" data-go="pe">○ ¿Qué es P/E?</button>
+    <button class="nav op">○ ¿Por qué dice «barata»?</button>
+    <button class="nav op">○ ¿Quién decidió ese rango?</button>
+    <button class="nav op">✏️ Escríbeme tu duda…</button>
+  </div>
+</div>
+<p class="nota">Toca el botón dorado · «¿Qué es esto?» enciende los bordes punteados y cada elemento explica con analogía ·
+«No entendí» cambia sus opciones según la sección (son las familias del Mapa de Dudas, Parte IV del análisis) ·
+El «✔ Entendido» suma al progreso. Ajustes acordados: borde DORADO (no azul), un solo flotante (absorbe la ❓ del tour),
+✔✔ dominado solo con mini-pregunta, profundidad según el nivel del usuario. Ver §31 del análisis.</p>
+<script>
+var $=function(id){return document.getElementById(id)};
+var estado='s0';var aprendidos=2;
+var EXPL={
+ pe:{t:'💎 P/E',b:'Imagina comprar una bodega. Si gana S/10 al año y te la venden a S/100, estás pagando 10 años de sus ganancias. Ese es el P/E. El de BVN es 9.6 — pero ojo: es minera, y con el oro caro este número puede engañar.'},
+ div:{t:'💰 Dividendos',b:'La parte de la ganancia que la empresa te paga por ser socio. BVN reparte ~3.82% al año, en dólares y VARIABLE — no es una tasa fija como el banco.'},
+ precio:{t:'📈 Últimos 6 meses',b:'Cuánto cambió el precio con cierres reales de la BVL. Mira el pasado: no promete nada del futuro.'},
+ vol:{t:'🌡️ ¿Cuánto se mueve?',b:'Cuánto se sacudió el precio en 12 meses. Mide el vaivén del PRECIO — no si el negocio es seguro.'},
+ spark:{t:'📈 Este gráfico',b:'Muestra cómo cambió el precio durante el último año. No predice el futuro: solo muestra el pasado. Los saltos suelen coincidir con noticias oficiales.'},
+ deuda:{t:'🏦 Deuda',b:'Lo que la empresa debe con intereses. En una minera se juzga imaginando el metal BARATO: la deuda cómoda de hoy puede pesar si el oro cae. (En un banco o en AUNA se lee distinto.)'},
+ ejemplo:{t:'💎 P/E con Gloria',b:'Gloria gana estable vendiendo leche todos los meses: su P/E se parece más al de la bodega del ejemplo. En BVN la «ganancia anual» baila con el oro — por eso el MISMO número se lee distinto.'}
+};
+function ver(id,si){$(id).style.display=si?'block':'none'}
+function estadoA(e){estado=e;ver('panel',e==='panel');ver('hint',e==='tocar');ver('card',e==='card');ver('noent',e==='noent');
+ $('pill').style.display=(e==='s0')?'block':'none';
+ var marcar=e==='tocar';
+ document.querySelectorAll('.mk').forEach(function(el){el.style.borderColor=marcar?'#d4af37':'#2a2a24';el.style.borderStyle=marcar?'dashed':'solid';el.style.cursor=marcar?'pointer':'default'});}
+function abrirCard(k){var d=EXPL[k]||EXPL.pe;$('card-t').textContent=d.t;$('card-b').textContent=d.b;estadoA('card')}
+$('pill').onclick=function(){estadoA('panel')};
+document.querySelectorAll('.nav').forEach(function(b){b.onclick=function(ev){ev.stopPropagation();var g=b.getAttribute('data-go');
+ if(g==='s0')estadoA('s0');else if(g==='tocar')estadoA('tocar');else if(g==='noent')estadoA('noent');
+ else if(g==='pe')abrirCard('pe');else if(g==='ejemplo')abrirCard('ejemplo');
+ else if(g==='ok'){aprendidos=Math.min(14,aprendidos+1);$('pn').textContent=aprendidos;estadoA('s0');$('pill').textContent='✔ ¡Aprendido! · 💡 Explícamelo'}
+}});
+document.querySelectorAll('.mk').forEach(function(el){el.onclick=function(){if(estado==='tocar')abrirCard(el.getAttribute('data-k'))}});
+function ctx(txt){$('pill').textContent=txt;estadoA('s0')}
+$('ctx-val').onclick=function(){ctx('💎 ¿Por qué dice «Barata»?')};
+$('ctx-div').onclick=function(){ctx('💰 ¿Cómo funcionan los dividendos?')};
+$('ctx-prod').onclick=function(){ctx('⛏️ ¿Qué significa esto?')};
+</script>
+</body>
+</html>
