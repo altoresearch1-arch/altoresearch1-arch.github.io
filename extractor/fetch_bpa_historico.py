@@ -215,10 +215,30 @@ def curar_trimestres(serie, trimestres):
        (= al Q3 acumulado) y cae aquí; su 2024-25 se desteje y queda.
     Devuelve (trimestres_curados, nota | None)."""
     t = dict(trimestres)
-    acumuladora = any(
-        anual is not None and t.get(f"{a}-Q4") is not None
-        and abs(t[f"{a}-Q4"] - anual) <= max(0.005, abs(anual) * 0.005)
-        for a, anual in serie.items())
+    # ¿ACUMULADORA? Se comparan las DOS hipótesis año por año y gana la que
+    # explica mejor los datos (criterio independiente de la MAGNITUD del EPS):
+    #   sueltos    → Q1+Q2+Q3+Q4 ≈ anual
+    #   acumulados → Q4 (el "oct-dic" etiquetado) ≈ anual
+    # BUG CAZADO 22-jul (pregunta de Jair «¿por qué el Q2 de Volcan está vacío?»):
+    # el umbral viejo era ABSOLUTO (|Q4−anual| ≤ 0.005), y para una empresa de
+    # centavos eso es la MITAD de su BPA anual → a Volcan le bastó UN año de
+    # coincidencia (2021: Q4 0.006 vs anual 0.010) para marcarla acumuladora y
+    # destejer TODOS sus años, inventando un Q3-2025 en pérdida (−0.004) cuando
+    # la SMV reportaba +0.003. Sus trimestres ya venían SUELTOS y cuadraban exacto.
+    votos_sueltos = votos_acum = 0
+    for a, anual in serie.items():
+        qs = [t.get(f"{a}-Q{i}") for i in (1, 2, 3, 4)]
+        if anual is None or any(v is None for v in qs):
+            continue
+        err_sueltos = abs(sum(qs) - anual)
+        err_acum = abs(qs[3] - anual)
+        if err_sueltos < err_acum:
+            votos_sueltos += 1
+        elif err_acum < err_sueltos:
+            votos_acum += 1
+    # empate o sin años completos → NO destejer (preservar la fuente tal cual;
+    # la prueba de fuego de abajo igual bota los años que no cuadren)
+    acumuladora = votos_acum > votos_sueltos
     if acumuladora:
         for a in sorted({k[:4] for k in t}):
             prev = 0.0  # acumulado del eslabón anterior; None = cadena rota
@@ -235,7 +255,11 @@ def curar_trimestres(serie, trimestres):
     descartados = []
     for a, anual in serie.items():
         qs = [t.get(f"{a}-Q{i}") for i in (1, 2, 3, 4)]
-        if all(v is not None for v in qs) and abs(sum(qs) - anual) > max(0.02, abs(anual) * 0.05):
+        # tolerancia: 5% del anual, con piso por REDONDEO del XBRL (3 decimales:
+        # 4 trimestres + el anual ≈ ±0.0025), no el 0.02 fijo de antes — que era
+        # MAYOR que el BPA anual entero de las empresas de centavos y las dejaba
+        # pasar sin control (Volcan 2025: suma 0.013 vs anual 0.03 y no se botaba).
+        if all(v is not None for v in qs) and abs(sum(qs) - anual) > max(0.003, abs(anual) * 0.05):
             for i in (1, 2, 3, 4):
                 t.pop(f"{a}-Q{i}", None)
             descartados.append(a)

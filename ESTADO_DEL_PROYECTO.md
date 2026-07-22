@@ -67,6 +67,33 @@ punteado (Regla #1), moneda original (Regla #3), pastillas `.spark-rango` reusad
   sin pago; el periodo en curso se marca con nota. Correr este script junto a
   fetch_bpa_historico.py tras cada trimestre (no está en el robot de 30 min).
 
+## 🐞 22-jul (2): BUG GRAVE EN `curar_trimestres` — 39 años mal, cazado por Jair
+Jair: «¿por qué el Q2 de Volcan 2025 está vacío si sí tiene BPA?». **Tenía razón y el
+bug era GENERALIZADO** (no solo Volcan): **28 de 94 empresas y 39 de 309 años (12%)
+mostraban trimestres INVENTADOS o borrados**.
+- **Causa raíz: tolerancias ABSOLUTAS pensadas para EPS en soles.** (a) El detector de
+  "empresa acumuladora" era `|Q4 − anual| ≤ max(0.005, …)`: para una empresa de centavos
+  ese 0.005 es la MITAD de su BPA anual → a Volcan le bastó UN año de coincidencia
+  (2021: Q4 0.006 vs anual 0.010) para marcarla acumuladora y **destejer TODOS sus años
+  restando consecutivos**, cuando sus trimestres ya venían SUELTOS y cuadraban EXACTO.
+  Resultado visible: Q2-2025 real 0.007 → mostrado 0.0 («vacío», la queja de Jair) y un
+  **Q3-2025 en pérdida (−0.004) que NUNCA existió** (la SMV reporta +0.003). (b) La
+  prueba de fuego usaba piso `0.02`, **mayor que el BPA anual entero** de esas empresas
+  → no botaba nada (Volcan 2025: suma 0.013 vs anual 0.03 y pasaba).
+- **Fix**: (a) detector por **DOS HIPÓTESIS votadas año a año** — gana la que explica
+  mejor los datos: `sueltos` (Q1+..+Q4 ≈ anual) vs `acumulados` (Q4 ≈ anual); empate o
+  sin años completos → NO destejer (preservar la fuente). Independiente de la magnitud.
+  (b) piso de la prueba de fuego `0.02 → 0.003` (redondeo real del XBRL a 3 decimales:
+  4 trimestres + anual ≈ ±0.0025).
+- **Resultado**: 297 años testeados, **0 descuadres** (antes 39 mal). Volcan 2025 queda
+  Q1 0.007 · **Q2 0.007** · Q3 0.003 · Q4 0.013 = 0.030 = anual exacto. Empresas que
+  RECUPERAN trimestres bien destejidos: CasaGrande +12, Eternit +12, GrañaHolding +12,
+  Perubar +12, Hidra2 +16, BAM +4. Las que PIERDEN años (Etna −12, Crecap/SanGabriel/
+  Concesionaria −8…) es porque de verdad no cuadran: mejor hueco que dato falso (#1).
+- ⚠ **Lección para el futuro**: en este proyecto conviven EPS de S/23 (Backus) y de
+  US$0.005 (Nexa/Volcan) — **nunca usar umbrales absolutos**; siempre relativos o por
+  comparación de hipótesis.
+
 ## ⚖ 22-jul: VOLCAN SÍ TIENE BPA — mostrado con nota (pregunta de Jair)
 Jair insistió «¿Volcan no tiene BPA?». **Verificado en la SMV con su Chrome**: Volcan
 SÍ reporta utilidad básica por acción, serie limpia (individual, US$, acciones comunes):
