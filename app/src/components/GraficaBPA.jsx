@@ -181,10 +181,18 @@ export default function GraficaBPA({ ticker, empresa }) {
   const aniosQ = [...new Set(clavesQ.map((k) => k.slice(0, 4)))].sort()
   const hayTrimestres = clavesQ.length > 0
 
+  // ¿tenemos serie histórica de BPA para graficar? Los 10 tickers de fix_eps
+  // NO están en bpa_historico.json (su EPS del XBRL individual no representa a
+  // la acción que cotiza: clases de acción como Volcan, holding o moneda). Para
+  // ellos igual mostramos el 🧠 Resumen Inteligente (sale del BALANCE, no del
+  // BPA problemático) — antes se apagaba TODA la sección (pregunta de Jair).
+  const hayBpa = aniosSerie.length >= 2 || hayTrimestres
+  const soloResumen = !hayBpa
+
   const qReciente = hayTrimestres ? clavesQ[clavesQ.length - 1].slice(5) : 'Q1'
   // default de "Un solo año": el último año COMPLETO (con Q4)
   const aniosCompletos = aniosQ.filter((a) => trims[`${a}-Q4`] != null)
-  const [modo, setModo] = useState('anual')
+  const [modo, setModo] = useState(hayBpa ? 'anual' : 'resumen')
   const [q, setQ] = useState(qReciente)
   const [anioSel, setAnioSel] = useState(
     aniosCompletos[aniosCompletos.length - 1] || aniosQ[aniosQ.length - 1]
@@ -196,9 +204,10 @@ export default function GraficaBPA({ ticker, empresa }) {
   const metales = metalesDe(ticker)
   const [metalSel, setMetalSel] = useState(metales[0] || null)
 
-  if (aniosSerie.length < 2 && !hayTrimestres) return null
+  // sin serie de BPA Y sin datos de empresa para el resumen → no hay nada que mostrar
+  if (soloResumen && !empresa) return null
 
-  const sim = SIMBOLO[emp.moneda] || emp.moneda || ''
+  const sim = SIMBOLO[emp?.moneda] || emp?.moneda || ''
   const precios = ctxData.precios?.[ticker]
   const divs = dividendosPorPeriodo(ticker)
   const esResumen = modo === 'resumen'
@@ -252,33 +261,47 @@ export default function GraficaBPA({ ticker, empresa }) {
   const vsQue = modo === 'anual' ? 'vs año anterior'
     : modo === 'trimestre' ? `vs ${q} anterior` : 'vs trimestre anterior'
 
-  const MODOS = [
+  const MODOS = hayBpa ? [
     { id: 'anual', icono: '📈', nombre: 'Año vs año' },
     ...(hayTrimestres
       ? [{ id: 'trimestre', icono: '🏆', nombre: 'Mismo trimestre' },
          { id: 'anio', icono: '📅', nombre: 'Un solo año' }]
       : []),
     ...(empresa ? [{ id: 'resumen', icono: '🧠', nombre: 'Resumen Inteligente' }] : []),
-  ]
+  ] : []
 
   return (
     <div>
       <div className="seccion-titulo">
-        📈 <Glosado text="BPA" /> — ¿gana más por acción que antes?
+        {soloResumen
+          ? <>🧠 Resumen Inteligente</>
+          : <>📈 <Glosado text="BPA" /> — ¿gana más por acción que antes?</>}
       </div>
 
+      {/* Sin serie de BPA histórico: nota honesta (los 10 de fix_eps) + solo el resumen */}
+      {soloResumen && (
+        <p className="muted" style={{ fontSize: 12, marginBottom: 10, lineHeight: 1.5 }}>
+          El <Glosado text="BPA" /> histórico de esta acción no se grafica: su EPS del
+          archivo XBRL individual no representa a la acción que cotiza (por clases de
+          acción, estructura de holding o moneda), así que dibujar años de barras
+          engañaría. El P/E y el resto del análisis sí usan su EPS corregido.
+        </p>
+      )}
+
       {/* ── modos de análisis: botones importantes, no simples chips ── */}
-      <div className="bpa-modos">
-        {MODOS.map((m) => (
-          <button
-            key={m.id}
-            className={'bpa-modo' + (modo === m.id ? ' on' : '') + (m.id === 'resumen' ? ' ri' : '')}
-            onClick={() => setModo(m.id)}
-          >
-            <span className="bpa-modo-icono">{m.icono}</span> {m.nombre}
-          </button>
-        ))}
-      </div>
+      {MODOS.length > 0 && (
+        <div className="bpa-modos">
+          {MODOS.map((m) => (
+            <button
+              key={m.id}
+              className={'bpa-modo' + (modo === m.id ? ' on' : '') + (m.id === 'resumen' ? ' ri' : '')}
+              onClick={() => setModo(m.id)}
+            >
+              <span className="bpa-modo-icono">{m.icono}</span> {m.nombre}
+            </button>
+          ))}
+        </div>
+      )}
       {modo === 'trimestre' && (
         <div className="spark-rangos bpa-sub">
           {['Q1', 'Q2', 'Q3', 'Q4'].map((nq) => (
