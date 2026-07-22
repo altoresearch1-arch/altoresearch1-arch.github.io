@@ -32,6 +32,29 @@ priorizadas [P0-P3]:
 honestidad → S2 tour por niveles + cáscara del Mentor → S3 combos/lectura de analista →
 S4 guiones y tarjetas del Mentor → S5 feed de hechos del día + precio de los metales.
 
+## 📈 21-jul (2): GRÁFICA BPA HISTÓRICO — 3 modos, nivel 3 (pedidos de Jair)
+En la ficha, debajo de "¿Barata o cara?" (`GraficaBPA.jsx`, gate `bpaHistorico: 3` en
+nivel.js): **Año vs año** (serie anual auditada 2020-2025) · **Mismo trimestre** (los Q1 —o
+Q2/Q3/Q4— a través de los años; esquiva la estacionalidad, término nuevo en terminos.json) ·
+**Un solo año** (Q1→Q4; default = último año COMPLETO). Pérdidas en rojo, hueco "s/d"
+punteado (Regla #1), moneda original (Regla #3), pastillas `.spark-rango` reusadas.
+- **Datos: `bpa_historico.json` (72 KB)** de `extractor/fetch_bpa_historico.py`: XBRL
+  anuales (A) + trimestrales (T1-T4) de 2025/2023/2021 — cada filing trae su periodo Y el
+  comparativo → serie completa con la mitad de descargas. Caché eterno en `cache_bpa/`
+  (~1000 filings; los periodos viejos nunca cambian). Bancos: solo anual (detalle HTML sin
+  desglose). Excluidos los 10 de fix_eps (su XBRL individual distorsiona). El trimestre EN
+  CURSO se siembra de empresas.json (epsTrimestreRaw) — el Q2, cuando se corra
+  `--trimestral`, entrará solo re-corriendo este script.
+- **HALLAZGO DE JAIR:** el "Q4 intermedio" EXISTE en la SMV (se presenta en enero con la
+  columna oct-dic separada + el año completo) — el Q4 sale de la fuente, nada derivado.
+- **CALIDAD XBRL DISPAREJA (curada en `curar_trimestres`)**: UNACEM taggea el trimestre
+  suelto; Gloria taggea ACUMULADOS en las columnas de trimestre (detector: Q4 etiquetado ==
+  anual → se desteje restando consecutivos, mismo filing). PRUEBA DE FUEGO por año: si
+  Q1+Q2+Q3+Q4 no suma el anual auditado (±5%), ESE año pierde sus trimestres (44 empresas
+  con años omitidos, nota visible en la UI). Resultado: 93 empresas con serie anual, 73 con
+  trimestres, **304 años testeables con CERO descuadres** y 2025 cuadra exacto con
+  eps_anual.json en todas.
+
 ## 🕵️ 17-jul: VIGILANCIA DEL BEM (regla de Jair) — arranque del Q2
 Caso real que trajo Jair: el HI de BVN del 16-jul reporta producción de oro del 2T26
 (37,266 oz incl. asociadas), pero el BEM de mayo muestra a BVN "vacío" en oro.

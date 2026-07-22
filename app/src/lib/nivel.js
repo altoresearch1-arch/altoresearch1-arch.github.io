@@ -52,7 +52,7 @@ export const NIVELES = [
     elemento: '❄️',
     frase: 'Ya sé lo básico, quiero explorar y comparar',
     detalle: 'Catalizadores, escenarios, riesgos y producción minera (si aplica).',
-    incluye: ['Catalizadores', 'Escenarios y riesgos', 'Producción minera'],
+    incluye: ['Catalizadores', 'Escenarios y riesgos', 'Producción minera', 'BPA año por año'],
     cargando: ['Cargando catalizadores y escenarios…', 'Midiendo los riesgos…', 'Subiendo la densidad de datos'],
   },
   {
@@ -80,6 +80,7 @@ export const NIVEL_SECCION = {
   guiaSector: 2,
   fundamentos: 2,
   valoracion: 3,
+  bpaHistorico: 3,
   termometro: 3,
   produccionMinera: 3,
   balanceDestacado: 3,

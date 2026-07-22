@@ -7,6 +7,18 @@ Lee esto primero y ya estás al día. La **fuente de verdad completa** es `ESTAD
 
 ---
 
+## ⚡ NUEVO 21-jul (2) (Fable): 📈 GRÁFICA BPA HISTÓRICO (nivel 3, 3 modos)
+> Pedidos de Jair la misma noche. `GraficaBPA.jsx` bajo "¿Barata o cara?": Año vs año /
+> Mismo trimestre (esquiva estacionalidad) / Un solo año (Q1→Q4). Datos:
+> `bpa_historico.json` ← `extractor/fetch_bpa_historico.py` (XBRL anuales+trimestrales
+> 2025/2023/2021, comparativos incluidos; caché eterno `cache_bpa/`). El "Q4 intermedio"
+> EXISTE (hallazgo de Jair: la SMV lo recibe en enero, oct-dic separado). OJO calidad XBRL:
+> unos taggean el trimestre suelto y otros ACUMULADOS (Gloria) — `curar_trimestres()` los
+> desteje y la PRUEBA DE FUEGO (Q1..Q4 debe sumar el anual auditado ±5%) bota el año que no
+> cuadre. 93 empresas anual / 73 con trimestres / 0 descuadres. Bancos solo anual. Los 10
+> de fix_eps excluidos. Al correr el Q2 (--trimestral): re-correr fetch_bpa_historico.py y
+> el trimestre nuevo entra solo (lee epsTrimestreRaw de empresas.json).
+
 ## ⚡ NUEVO 21-jul (Fable): EL PLAN EDUCATIVO MAESTRO — leer ANTES de la próxima sesión
 > Sesión de PURO ANÁLISIS (cero código, pedido de Jair antes de renovar Fable con sus US$100).
 > **Leer `ANALISIS_EDUCATIVO_Y_TOUR_POR_NIVELES.md` COMPLETO antes de tocar tour/guías/

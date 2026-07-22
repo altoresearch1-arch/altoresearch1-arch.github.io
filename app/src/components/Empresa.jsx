@@ -21,6 +21,7 @@ import Sentinel from './Sentinel'
 import DocumentosOficiales from './DocumentosOficiales'
 import NoticiasExtranjero from './NoticiasExtranjero'
 import ProduccionMinera from './ProduccionMinera'
+import GraficaBPA from './GraficaBPA'
 import { CountUp, Reveal } from '../lib/anim'
 import { useFavoritos, alternarFavorito } from '../lib/favoritos'
 import { peInfo } from '../lib/finanzas'
@@ -229,6 +230,9 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
         {ver('valoracion') && (
           <div id="sec-valoracion" className="sec-ancla"><Reveal><Valoracion empresa={e} /></Reveal></div>
         )}
+        {/* 📈 BPA año por año (SMV anual): ¿gana más por acción que antes? Va
+            pegado a "¿Barata o cara?" porque es el MISMO BPA que alimenta el P/E. */}
+        {ver('bpaHistorico') && <Reveal><GraficaBPA ticker={e.ticker} /></Reveal>}
         <Reveal>
           {pagaDividendos ? (
             <div className="sim-par">
