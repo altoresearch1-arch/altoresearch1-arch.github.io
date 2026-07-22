@@ -2,7 +2,7 @@
 
 > **Documento maestro vivo.** Captura TODO lo construido para que nada se pierda, sin
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
-> herramienta), lee esto primero. Última actualización: **17 jul 2026**. Estado: **EN VIVO (beta pública)**.
+> herramienta), lee esto primero. Última actualización: **21 jul 2026**. Estado: **EN VIVO (beta pública)**.
 
 ## 🧭 21-jul: EL PLAN EDUCATIVO MAESTRO (sesión de ANÁLISIS, sin código — pedido de Jair)
 Sesión completa de análisis antes de la renovación de Fable (Jair tiene US$100 de la oferta).
@@ -66,6 +66,30 @@ punteado (Regla #1), moneda original (Regla #3), pastillas `.spark-rango` reusad
   Q1-26 verificada contra la serie cruda). Gráfica más grande (158px). «—» = sin dato o
   sin pago; el periodo en curso se marca con nota. Correr este script junto a
   fetch_bpa_historico.py tras cada trimestre (no está en el robot de 30 min).
+
+## 🧠 21-jul (3): GRÁFICA BPA V2 + RESUMEN INTELIGENTE (pedidos de Jair, nombre elegido por él)
+La sección BPA de la ficha (nivel 3) se volvió un centro de análisis:
+- **Modos como botones de análisis** (📈 Año vs año · 🏆 Mismo trimestre · 📅 Un solo año ·
+  **🧠 Resumen Inteligente**), año/trimestre seleccionado estilo TradingView (borde
+  `--nivel-color` = azul acero en N3 + sombra + letra blanca), animación de 280 ms al
+  cambiar filtros (keyframes terminan en `transform:none` — el gotcha fill-mode de los
+  tooltips NO se repite), **tarjetas resumen** antes del gráfico (BPA último + ▲▼ vs
+  comparable, mejor periodo ⭐, peor 🔻 solo si fue pérdida), **▲▼ por barra** (solo con
+  base positiva: % contra pérdida confunde), barra **«Relacionar con este BPA»** con
+  fondo propio y chips por metal (🥇🥈🔵⚫), y **💡 Interpretación** como tarjeta.
+- **`ResumenInteligente.jsx` (4º modo)**: BPA anual + variación, precio hoy + 6M, P/E
+  (peInfo, con ⚠ referencial), yield; **🏦 caja** (evEbitdaRaw.efectivo) explicada;
+  **🏗 deuda hoy-y-futuro**: total + barra partida corriente («vence pronto», ámbar) vs
+  no corriente («deuda futura», azul) — el desglose se PARSEA de metricas.deuda (83
+  empresas lo tienen); **semáforo caja-vs-vence-pronto** (🟢≥1× 🟡≥0.5× 🔴) y «en cuántos
+  años la pagaría» (deuda ÷ utilidad trimestral anualizada, rotulado como ejercicio
+  educativo); **BANCOS: nota especial** (deber es su negocio; caja = encaje) y sin
+  semáforo; **⛏ factores del periodo** para mineras (metal BCRP último Q vs anterior) +
+  dividendo; **💡 cómo se lee todo junto** compuesto por slots verificados (estilo
+  redactor — sin slot, sin frase). Regla #1 y #9 respetadas: solo datos existentes, cero
+  recomendaciones. GraficaBPA ahora recibe `empresa={e}`. Términos 204→206 (deuda
+  corriente / deuda no corriente). Verificado en navegador (BVN minera, CREDITC1 banco,
+  los 3 modos de barras, móvil 375px sin desbordes nuevos); build PWA 3.43 MiB OK.
 
 ## 🕵️ 17-jul: VIGILANCIA DEL BEM (regla de Jair) — arranque del Q2
 Caso real que trajo Jair: el HI de BVN del 16-jul reporta producción de oro del 2T26

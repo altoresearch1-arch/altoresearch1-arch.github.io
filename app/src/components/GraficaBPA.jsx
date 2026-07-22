@@ -5,14 +5,21 @@ import dividendosData from '../data/dividendos.json'
 import familiaData from '../data/mineria_familia.json'
 import mineriaData from '../data/mineria.json'
 import Glosado from './Glosado'
+import ResumenInteligente from './ResumenInteligente'
 
 // 📈 BPA histórico (nivel 3) — pedidos de Jair 21-jul-2026.
-// TRES modos: Año vs año / Mismo trimestre (esquiva la estacionalidad) /
-// Un solo año (Q1→Q4). Y FILAS DE CONTEXTO activables, alineadas columna por
-// columna con las barras (2ª tanda de pedidos):
+// CUATRO modos de análisis: Año vs año / Mismo trimestre (esquiva la
+// estacionalidad) / Un solo año (Q1→Q4) / 🧠 Resumen Inteligente (nombre de
+// Jair: BPA + precio + dividendo + caja + deuda hoy-y-futuro, explicado).
+// Y FILAS DE CONTEXTO activables («Relacionar con este BPA»), alineadas
+// columna por columna con las barras:
 //   💵 precio de la acción = último cierre del periodo (BVL, bpa_contexto.json)
 //   💰 dividendo = lo pagado por acción EN ese periodo (dividendos.json)
 //   ⛏ metal = promedio del periodo (BCRP/LME, solo mineras; metal elegible)
+// Cada barra trae su ▲/▼ vs el periodo comparable anterior; el mejor periodo
+// lleva ⭐ y el peor 🔻 solo si fue pérdida (pedido de Jair). Tarjetas resumen
+// arriba y la explicación como tarjeta 💡 Interpretación. Animación de 280 ms
+// al cambiar filtros (re-key del wrapper .bpa-anim).
 // Datos BPA de bpa_historico.json (EE.FF. INDIVIDUALES SMV, moneda original —
 // Regla #3). El Q4 sale del intermedio oct-dic (hallazgo de Jair). Periodo sin
 // dato = "s/d" (Regla #1). Bancos: solo modo anual. Los tickers que fix_eps
@@ -23,6 +30,8 @@ const MES_EN = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6,
                  Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12 }
 const NOMBRE_METAL = { cobre: 'Cobre', oro: 'Oro', plata: 'Plata', zinc: 'Zinc',
                        plomo: 'Plomo', estano: 'Estaño', niquel: 'Níquel' }
+const EMOJI_METAL = { oro: '🥇', plata: '🥈', cobre: '🔵', zinc: '⚫',
+                      plomo: '🔘', estano: '🟤', niquel: '⚪' }
 const HOY = new Date()
 const ANIO_HOY = String(HOY.getFullYear())
 const Q_HOY = `${ANIO_HOY}-Q${Math.floor(HOY.getMonth() / 3) + 1}`
@@ -33,6 +42,16 @@ function fmt(v) {
   const abs = Math.abs(v)
   const dec = abs >= 100 ? 0 : abs >= 10 ? 1 : abs >= 0.1 || abs === 0 ? 2 : 3
   return v.toFixed(dec)
+}
+
+function fmtPct(p) {
+  const abs = Math.abs(p)
+  return (p > 0 ? '+' : p < 0 ? '−' : '') + abs.toFixed(abs >= 10 ? 0 : 1) + '%'
+}
+
+// "−US$ 0.53" / "US$ 3.08" — el signo VA ANTES del símbolo (como en las barras)
+function dinero(v, sim) {
+  return v < 0 ? `−${sim} ${fmt(-v)}` : `${sim} ${fmt(v)}`
 }
 
 // Dividendos pagados por periodo, desde dividendos.json:
@@ -75,15 +94,34 @@ function metalesDe(ticker) {
   return Object.keys(peso).sort((a, b) => peso[b] - peso[a])
 }
 
-// Barras genéricas: items = [{ etiqueta, valor|null }] — hueco honesto si null
+// ▲/▼ de cada barra vs el periodo comparable ANTERIOR con dato (solo si la
+// base es positiva: un % contra pérdida confunde más de lo que aclara)
+function conDeltas(items) {
+  let prev = null
+  return items.map((it) => {
+    const out = { ...it }
+    if (it.valor != null) {
+      if (prev != null && prev > 0) out.delta = ((it.valor - prev) / prev) * 100
+      prev = it.valor
+    }
+    return out
+  })
+}
+
+// Barras genéricas: items = [{ etiqueta, valor|null, delta? }] — hueco honesto
+// si null; ⭐ al mejor periodo y 🔻 al peor SOLO si fue pérdida.
 function Barras({ items, sim }) {
-  const max = Math.max(...items.filter((i) => i.valor != null).map((i) => Math.abs(i.valor))) || 1
+  const conValor = items.filter((i) => i.valor != null)
+  const max = Math.max(...conValor.map((i) => Math.abs(i.valor))) || 1
+  const marcar = conValor.length >= 3
+  const mejor = marcar ? Math.max(...conValor.map((i) => i.valor)) : null
+  const peor = marcar ? Math.min(...conValor.map((i) => i.valor)) : null
   return (
     <div className="bpagraf">
-      {items.map((it) => {
+      {items.map((it, idx) => {
         if (it.valor == null) {
           return (
-            <div key={it.etiqueta} className="bpagraf-col">
+            <div key={it.etiqueta} className="bpagraf-col" style={{ '--i': idx }}>
               <div className="bpagraf-valor muted">s/d</div>
               <div className="bpagraf-barra sindato" style={{ height: 12 }} />
               <div className="bpagraf-anio">{it.etiqueta}</div>
@@ -92,13 +130,22 @@ function Barras({ items, sim }) {
         }
         const v = it.valor
         const h = Math.max(8, (Math.abs(v) / max) * 96)
+        const esMejor = marcar && v === mejor && mejor !== peor
+        const esPeor = marcar && v === peor && peor < 0
         return (
-          <div key={it.etiqueta} className="bpagraf-col">
+          <div key={it.etiqueta} className="bpagraf-col" style={{ '--i': idx }}>
             <div className={'bpagraf-valor' + (v < 0 ? ' perdida' : '')}>
               {v < 0 ? `−${sim} ${fmt(-v)}` : `${sim} ${fmt(v)}`}
             </div>
-            <div className={'bpagraf-barra' + (v < 0 ? ' perdida' : '')} style={{ height: h }} />
-            <div className="bpagraf-anio">{it.etiqueta}</div>
+            {it.delta != null && (
+              <div className={'bpa-delta chico ' + (it.delta > 0 ? 'sube' : it.delta < 0 ? 'baja' : '')}>
+                {it.delta > 0 ? '▲' : it.delta < 0 ? '▼' : '='} {fmtPct(it.delta)}
+              </div>
+            )}
+            <div className={'bpagraf-barra' + (v < 0 ? ' perdida' : '') + (esMejor ? ' mejor' : '')} style={{ height: h }} />
+            <div className={'bpagraf-anio' + (esMejor ? ' mejor' : '')}>
+              {it.etiqueta}{esMejor ? ' ⭐' : ''}{esPeor ? ' 🔻' : ''}
+            </div>
           </div>
         )
       })}
@@ -125,7 +172,7 @@ function FilaContexto({ titulo, items, valores, formato }) {
   )
 }
 
-export default function GraficaBPA({ ticker }) {
+export default function GraficaBPA({ ticker, empresa }) {
   const emp = bpaData.empresas?.[ticker]
   const serie = emp?.serie || {}
   const trims = emp?.trimestres || {}
@@ -154,10 +201,11 @@ export default function GraficaBPA({ ticker }) {
   const sim = SIMBOLO[emp.moneda] || emp.moneda || ''
   const precios = ctxData.precios?.[ticker]
   const divs = dividendosPorPeriodo(ticker)
+  const esResumen = modo === 'resumen'
 
   // ── items según el modo ──
   let items = []
-  if (modo === 'anual') {
+  if (modo === 'anual' || esResumen) {
     const desde = parseInt(aniosSerie[0], 10)
     const hasta = parseInt(aniosSerie[aniosSerie.length - 1], 10)
     for (let a = desde; a <= hasta; a++) {
@@ -172,12 +220,13 @@ export default function GraficaBPA({ ticker }) {
       items.push({ etiqueta: nq, valor: trims[`${anioSel}-${nq}`] ?? null })
     }
   }
+  items = conDeltas(items)
   const hayBarras = items.some((i) => i.valor != null)
 
   // clave de contexto por etiqueta según el modo (año / año del Q / Q del año)
   const clavePeriodo = (etiqueta) =>
     modo === 'anual' ? etiqueta : modo === 'trimestre' ? `${etiqueta}-${q}` : `${anioSel}-${etiqueta}`
-  const esTrimestral = modo !== 'anual'
+  const esTrimestral = modo === 'trimestre' || modo === 'anio'
   const tomarCtx = (fuente) => {
     const mapa = {}
     for (const it of items) {
@@ -195,6 +244,22 @@ export default function GraficaBPA({ ticker }) {
   const conValor = items.filter((i) => i.valor != null)
   const primero = conValor[0]
   const ultimo = conValor[conValor.length - 1]
+  // tarjetas resumen sobre la gráfica (solo con historia suficiente)
+  const mejorItem = conValor.length >= 3
+    ? conValor.reduce((a, b) => (b.valor > a.valor ? b : a)) : null
+  const peorItem = conValor.length >= 3
+    ? conValor.reduce((a, b) => (b.valor < a.valor ? b : a)) : null
+  const vsQue = modo === 'anual' ? 'vs año anterior'
+    : modo === 'trimestre' ? `vs ${q} anterior` : 'vs trimestre anterior'
+
+  const MODOS = [
+    { id: 'anual', icono: '📈', nombre: 'Año vs año' },
+    ...(hayTrimestres
+      ? [{ id: 'trimestre', icono: '🏆', nombre: 'Mismo trimestre' },
+         { id: 'anio', icono: '📅', nombre: 'Un solo año' }]
+      : []),
+    ...(empresa ? [{ id: 'resumen', icono: '🧠', nombre: 'Resumen Inteligente' }] : []),
+  ]
 
   return (
     <div>
@@ -202,134 +267,185 @@ export default function GraficaBPA({ ticker }) {
         📈 <Glosado text="BPA" /> — ¿gana más por acción que antes?
       </div>
 
-      <div className="row" style={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, marginBottom: 10 }}>
-        <div className="spark-rangos">
-          <button className={'spark-rango' + (modo === 'anual' ? ' on' : '')} onClick={() => setModo('anual')}>
-            Año vs año
+      {/* ── modos de análisis: botones importantes, no simples chips ── */}
+      <div className="bpa-modos">
+        {MODOS.map((m) => (
+          <button
+            key={m.id}
+            className={'bpa-modo' + (modo === m.id ? ' on' : '') + (m.id === 'resumen' ? ' ri' : '')}
+            onClick={() => setModo(m.id)}
+          >
+            <span className="bpa-modo-icono">{m.icono}</span> {m.nombre}
           </button>
-          {hayTrimestres && (
-            <>
-              <button className={'spark-rango' + (modo === 'trimestre' ? ' on' : '')} onClick={() => setModo('trimestre')}>
-                Mismo trimestre
-              </button>
-              <button className={'spark-rango' + (modo === 'anio' ? ' on' : '')} onClick={() => setModo('anio')}>
-                Un solo año
-              </button>
-            </>
-          )}
-        </div>
-        {modo === 'trimestre' && (
-          <div className="spark-rangos">
-            {['Q1', 'Q2', 'Q3', 'Q4'].map((nq) => (
-              <button key={nq} className={'spark-rango' + (q === nq ? ' on' : '')} onClick={() => setQ(nq)}>
-                {nq}
-              </button>
-            ))}
-          </div>
-        )}
-        {modo === 'anio' && (
-          <div className="spark-rangos">
-            {aniosQ.map((a) => (
-              <button key={a} className={'spark-rango' + (anioSel === a ? ' on' : '')} onClick={() => setAnioSel(a)}>
-                {a}
-              </button>
-            ))}
-          </div>
-        )}
+        ))}
       </div>
-
-      {hayBarras
-        ? <Barras items={items} sim={sim} />
-        : <p className="muted">La SMV no tiene ese periodo para esta empresa.</p>}
-
-      {/* ── contexto activable: precio / dividendo / metal, alineado por columna ── */}
-      {hayBarras && (precios || divs || metales.length > 0) && (
-        <div className="bpagraf-extras">
-          <span className="bpagraf-extras-tit">Ver también:</span>
-          {precios && (
-            <button className={'spark-rango' + (verPrecio ? ' on' : '')} onClick={() => setVerPrecio(!verPrecio)}>
-              💵 Precio acción
-            </button>
-          )}
-          {divs && (
-            <button className={'spark-rango' + (verDiv ? ' on' : '')} onClick={() => setVerDiv(!verDiv)}>
-              💰 Dividendo
-            </button>
-          )}
-          {metales.length > 0 && (
-            <button className={'spark-rango' + (verMetal ? ' on' : '')} onClick={() => setVerMetal(!verMetal)}>
-              ⛏ Metal
-            </button>
-          )}
-          {verMetal && metales.length > 1 && metales.map((mt) => (
-            <button key={mt} className={'spark-rango chico' + (metalSel === mt ? ' on' : '')} onClick={() => setMetalSel(mt)}>
-              {NOMBRE_METAL[mt] || mt}
+      {modo === 'trimestre' && (
+        <div className="spark-rangos bpa-sub">
+          {['Q1', 'Q2', 'Q3', 'Q4'].map((nq) => (
+            <button key={nq} className={'spark-rango bpa-pill' + (q === nq ? ' on' : '')} onClick={() => setQ(nq)}>
+              {nq}
             </button>
           ))}
         </div>
       )}
-      {hayBarras && verPrecio && precios && (
-        <FilaContexto
-          titulo={<>💵 La acción {esTrimestral ? 'al cerrar ese trimestre' : 'al cerrar ese año'} ({precios.sim})</>}
-          items={items} valores={tomarCtx(precios)} formato={(v) => fmt(v)}
-        />
-      )}
-      {hayBarras && verDiv && divs && (
-        <FilaContexto
-          titulo={<>💰 <Glosado text="Dividendo" /> pagado por acción en el periodo ({divs.sim})</>}
-          items={items} valores={tomarCtx(divs)} formato={(v) => fmt(v)}
-        />
-      )}
-      {hayBarras && verMetal && metal && (
-        <FilaContexto
-          titulo={<>⛏ {NOMBRE_METAL[metalSel]} — promedio del periodo ({metal.unidad})</>}
-          items={items} valores={tomarCtx(metal)} formato={(v) => fmt(v)}
-        />
-      )}
-      {hayBarras && (verPrecio || verDiv || verMetal) && enCurso && (
-        <p className="muted" style={{ fontSize: 11.5, marginTop: 4 }}>
-          El periodo en curso muestra lo que VA de él (no está cerrado). «—» = sin dato o sin pago.
-        </p>
+      {modo === 'anio' && (
+        <div className="spark-rangos bpa-sub">
+          {aniosQ.map((a) => (
+            <button key={a} className={'spark-rango bpa-pill' + (anioSel === a ? ' on' : '')} onClick={() => setAnioSel(a)}>
+              {a}
+            </button>
+          ))}
+        </div>
       )}
 
-      <p className="muted" style={{ marginTop: 8, fontSize: 12.5 }}>
-        {modo === 'anual' && primero && ultimo && primero !== ultimo && (
+      {/* re-key: al cambiar el filtro TODO entra con la animación de 280 ms */}
+      <div key={`${modo}-${q}-${anioSel}`} className="bpa-anim">
+        {esResumen ? (
+          <ResumenInteligente ticker={ticker} empresa={empresa} metales={metales} />
+        ) : (
           <>
-            {ultimo.valor > primero.valor
-              ? <>De {sim} {fmt(primero.valor)} ({primero.etiqueta}) a {sim} {fmt(ultimo.valor)} ({ultimo.etiqueta}): gana más por acción que antes. </>
-              : ultimo.valor < primero.valor
-                ? <>De {sim} {fmt(primero.valor)} ({primero.etiqueta}) a {sim} {fmt(ultimo.valor)} ({ultimo.etiqueta}): gana menos por acción que antes — pregúntate por qué antes de mirar el precio. </>
-                : <>Igual que en {primero.etiqueta}: ni más ni menos por acción. </>}
-            Este es el mismo <Glosado text="BPA" /> que alimenta el <Glosado text="P/E" /> de
-            «¿Barata o cara?»: si el BPA cae y el precio no, la acción se encarece sola.
+            {/* ── tarjetas resumen: contexto inmediato antes del gráfico ── */}
+            {hayBarras && ultimo && conValor.length >= 3 && (
+              <div className="bpa-tarjetas">
+                <div className="bpa-tarjeta">
+                  <div className="bpa-tarjeta-t">BPA {ultimo.etiqueta}</div>
+                  <div className={'bpa-tarjeta-v' + (ultimo.valor < 0 ? ' perdida' : '')}>
+                    {ultimo.valor < 0 ? `−${sim} ${fmt(-ultimo.valor)}` : `${sim} ${fmt(ultimo.valor)}`}
+                  </div>
+                  {ultimo.delta != null && (
+                    <span className={'bpa-delta ' + (ultimo.delta > 0 ? 'sube' : ultimo.delta < 0 ? 'baja' : '')}>
+                      {ultimo.delta > 0 ? '▲' : ultimo.delta < 0 ? '▼' : '='} {fmtPct(ultimo.delta)}
+                      <span className="bpa-delta-vs"> {vsQue}</span>
+                    </span>
+                  )}
+                </div>
+                {mejorItem && mejorItem.valor !== peorItem?.valor && (
+                  <div className="bpa-tarjeta">
+                    <div className="bpa-tarjeta-t">Mejor periodo</div>
+                    <div className="bpa-tarjeta-v">{mejorItem.etiqueta} ⭐</div>
+                    <span className="bpa-delta">{sim} {fmt(mejorItem.valor)}</span>
+                  </div>
+                )}
+                {peorItem && peorItem.valor !== mejorItem?.valor && (
+                  <div className="bpa-tarjeta">
+                    <div className="bpa-tarjeta-t">Peor periodo</div>
+                    <div className="bpa-tarjeta-v">{peorItem.etiqueta}{peorItem.valor < 0 ? ' 🔻' : ''}</div>
+                    <span className={'bpa-delta' + (peorItem.valor < 0 ? ' baja' : '')}>
+                      {peorItem.valor < 0 ? `−${sim} ${fmt(-peorItem.valor)}` : `${sim} ${fmt(peorItem.valor)}`}
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {hayBarras
+              ? <Barras items={items} sim={sim} />
+              : <p className="muted">La SMV no tiene ese periodo para esta empresa.</p>}
+
+            {/* ── «Relacionar con este BPA»: contexto alineado por columna ── */}
+            {hayBarras && (precios || divs || metales.length > 0) && (
+              <div className="bpa-relacionar">
+                <span className="bpa-relacionar-tit">Relacionar con este BPA</span>
+                <div className="bpa-relacionar-chips">
+                  {precios && (
+                    <button className={'spark-rango' + (verPrecio ? ' on' : '')} onClick={() => setVerPrecio(!verPrecio)}>
+                      💵 Precio acción
+                    </button>
+                  )}
+                  {divs && (
+                    <button className={'spark-rango' + (verDiv ? ' on' : '')} onClick={() => setVerDiv(!verDiv)}>
+                      💰 Dividendo
+                    </button>
+                  )}
+                  {metales.map((mt) => (
+                    <button
+                      key={mt}
+                      className={'spark-rango' + (verMetal && metalSel === mt ? ' on' : '')}
+                      onClick={() => {
+                        if (verMetal && metalSel === mt) setVerMetal(false)
+                        else { setMetalSel(mt); setVerMetal(true) }
+                      }}
+                    >
+                      {EMOJI_METAL[mt] || '⛏'} {NOMBRE_METAL[mt] || mt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            {hayBarras && verPrecio && precios && (
+              <FilaContexto
+                titulo={<>💵 La acción {esTrimestral ? 'al cerrar ese trimestre' : 'al cerrar ese año'} ({precios.sim})</>}
+                items={items} valores={tomarCtx(precios)} formato={(v) => fmt(v)}
+              />
+            )}
+            {hayBarras && verDiv && divs && (
+              <FilaContexto
+                titulo={<>💰 <Glosado text="Dividendo" /> pagado por acción en el periodo ({divs.sim})</>}
+                items={items} valores={tomarCtx(divs)} formato={(v) => fmt(v)}
+              />
+            )}
+            {hayBarras && verMetal && metal && (
+              <FilaContexto
+                titulo={<>⛏ {NOMBRE_METAL[metalSel]} — promedio del periodo ({metal.unidad})</>}
+                items={items} valores={tomarCtx(metal)} formato={(v) => fmt(v)}
+              />
+            )}
+            {hayBarras && (verPrecio || verDiv || verMetal) && enCurso && (
+              <p className="muted" style={{ fontSize: 11.5, marginTop: 4 }}>
+                El periodo en curso muestra lo que VA de él (no está cerrado). «—» = sin dato o sin pago.
+              </p>
+            )}
+
+            {/* ── 💡 la explicación, con diseño de tarjeta ── */}
+            {hayBarras && (
+              <div className="bpa-interpreta">
+                <div className="bpa-interpreta-t">💡 Interpretación</div>
+                <p>
+                  {modo === 'anual' && primero && ultimo && primero !== ultimo && (
+                    <>
+                      {ultimo.valor > primero.valor
+                        ? <>De {dinero(primero.valor, sim)} ({primero.etiqueta}) a {dinero(ultimo.valor, sim)} ({ultimo.etiqueta}): gana más por acción que antes. </>
+                        : ultimo.valor < primero.valor
+                          ? <>De {dinero(primero.valor, sim)} ({primero.etiqueta}) a {dinero(ultimo.valor, sim)} ({ultimo.etiqueta}): gana menos por acción que antes — pregúntate por qué antes de mirar el precio. </>
+                          : <>Igual que en {primero.etiqueta}: ni más ni menos por acción. </>}
+                      Este es el mismo <Glosado text="BPA" /> que alimenta el <Glosado text="P/E" /> de
+                      «¿Barata o cara?»: si el BPA cae y el precio no, la acción se encarece sola.
+                    </>
+                  )}
+                  {modo === 'trimestre' && (
+                    <>
+                      Comparar el mismo {q} entre años esquiva la <Glosado text="estacionalidad" />:
+                      un {q} solo se compara justo con otro {q} (pesca, campaña navideña y cosechas
+                      hacen que los trimestres de un mismo año no se parezcan entre sí).
+                    </>
+                  )}
+                  {modo === 'anio' && (
+                    <>
+                      El {anioSel} desglosado: ¿la ganancia se hizo pareja o en un solo golpe?
+                      {mejorItem && mejorItem.valor !== peorItem?.valor && (
+                        <> El mejor trimestre fue el {mejorItem.etiqueta} ⭐{peorItem?.valor < 0 ? ` y el ${peorItem.etiqueta} cerró en pérdida 🔻` : ''}.</>
+                      )}
+                      {' '}El Q4 sale del estado intermedio oct-dic que la empresa presenta en enero.
+                    </>
+                  )}
+                  {items.some((i) => i.valor != null && i.valor < 0) && <> Las barras rojas son periodos en pérdida.</>}
+                </p>
+              </div>
+            )}
+            {modo !== 'anual' && emp.notaTrimestres && (
+              <p className="muted" style={{ fontSize: 11.5 }}>
+                ⚖ <Glosado text={emp.notaTrimestres} />
+              </p>
+            )}
+            <p className="muted" style={{ fontSize: 11.5 }}>
+              <Glosado text={emp.fuente} /> · moneda original
+              {verPrecio && <> · precio: BVL (cierres reales)</>}
+              {verDiv && <> · dividendos: stockanalysis + BVL</>}
+              {verMetal && <> · metales: BCRP (promedio mensual LME)</>}
+            </p>
           </>
         )}
-        {modo === 'trimestre' && (
-          <>
-            Comparar el mismo {q} entre años esquiva la <Glosado text="estacionalidad" />:
-            un {q} solo se compara justo con otro {q} (pesca, campaña navideña y cosechas
-            hacen que los trimestres de un mismo año no se parezcan entre sí).
-          </>
-        )}
-        {modo === 'anio' && (
-          <>
-            El {anioSel} desglosado: ¿la ganancia se hizo pareja o en un solo golpe?
-            El Q4 sale del estado intermedio oct-dic que la empresa presenta en enero.
-          </>
-        )}
-        {items.some((i) => i.valor != null && i.valor < 0) && <> Las barras rojas son periodos en pérdida.</>}
-      </p>
-      {modo !== 'anual' && emp.notaTrimestres && (
-        <p className="muted" style={{ fontSize: 11.5 }}>
-          ⚖ <Glosado text={emp.notaTrimestres} />
-        </p>
-      )}
-      <p className="muted" style={{ fontSize: 11.5 }}>
-        <Glosado text={emp.fuente} /> · moneda original
-        {verPrecio && <> · precio: BVL (cierres reales)</>}
-        {verDiv && <> · dividendos: stockanalysis + BVL</>}
-        {verMetal && <> · metales: BCRP (promedio mensual LME)</>}
-      </p>
+      </div>
     </div>
   )
 }

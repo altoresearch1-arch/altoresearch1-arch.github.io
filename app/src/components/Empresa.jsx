@@ -232,7 +232,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
         )}
         {/* 📈 BPA año por año (SMV anual): ¿gana más por acción que antes? Va
             pegado a "¿Barata o cara?" porque es el MISMO BPA que alimenta el P/E. */}
-        {ver('bpaHistorico') && <Reveal><GraficaBPA ticker={e.ticker} /></Reveal>}
+        {ver('bpaHistorico') && <Reveal><GraficaBPA ticker={e.ticker} empresa={e} /></Reveal>}
         <Reveal>
           {pagaDividendos ? (
             <div className="sim-par">

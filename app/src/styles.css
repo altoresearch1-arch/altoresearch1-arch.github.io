@@ -3015,12 +3015,16 @@ a.link {
 
 /* 📈 BPA año por año (GraficaBPA, nivel 3) — misma pista estilo BEM.
    Más grande que las otras mini-gráficas (pedido de Jair 21-jul) pero sin
-   volverse mural: barras de hasta 96px + filas de contexto alineadas. */
+   volverse mural: barras de hasta 96px + filas de contexto alineadas.
+   V2 (misma semana, pedidos de Jair): modos como BOTONES de análisis, tarjetas
+   resumen, ▲▼ por barra, animación de 280 ms al cambiar filtros, barra
+   «Relacionar con este BPA», 💡 Interpretación como tarjeta y el 4º modo
+   🧠 Resumen Inteligente. */
 .bpagraf {
   display: flex;
   align-items: flex-end;
   gap: 10px;
-  height: 158px;
+  height: 176px;
   padding: 0 6px;
   border-bottom: 1px solid color-mix(in srgb, var(--oro) 35%, transparent);
   background-image:
@@ -3042,7 +3046,7 @@ a.link {
   font-size: 13.5px;
   font-weight: 600;
   color: var(--oro);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   white-space: nowrap;
 }
 .bpagraf-valor.perdida { color: var(--rojo); }
@@ -3050,8 +3054,17 @@ a.link {
   width: 66%;
   border-radius: 4px 4px 0 0;
   background: var(--oro);
+  /* crece desde el piso al entrar (fill BACKWARDS + termina en transform:none:
+     el gotcha del fill-mode both ya nos rompió los tooltips fixed una vez) */
+  transform-origin: bottom;
+  animation: bpaCrece 0.3s var(--ease-salida) backwards;
+  animation-delay: calc(var(--i, 0) * 35ms);
+  transition: height 0.28s var(--ease-salida);
 }
 .bpagraf-barra.perdida { background: var(--rojo); }
+.bpagraf-barra.mejor {
+  box-shadow: 0 0 10px color-mix(in srgb, var(--oro) 55%, transparent);
+}
 .bpagraf-barra.sindato {
   background: transparent;
   border: 1.5px dashed color-mix(in srgb, var(--oro) 40%, transparent);
@@ -3060,22 +3073,195 @@ a.link {
   font-size: 12.5px;
   color: #ede7d2;
   margin-top: 6px;
+  white-space: nowrap;
+}
+.bpagraf-anio.mejor { color: var(--oro); font-weight: 700; }
+@keyframes bpaCrece {
+  from { transform: scaleY(0); }
+  to { transform: none; }
+}
+/* el bloque entero (gráfica o resumen) entra en ~280 ms al cambiar de filtro */
+.bpa-anim { animation: bpaEntra 0.28s var(--ease-salida) backwards; }
+@keyframes bpaEntra {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
 }
 
-/* "Ver también": chips que encienden las filas de contexto */
-.bpagraf-extras {
+/* ── modos de análisis: botones con peso, no simples chips ── */
+.bpa-modos {
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.bpa-modo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--negro-3);
+  border: 1px solid var(--gris);
+  color: var(--texto-tenue);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 7px 13px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.25s, color 0.25s, background 0.25s, box-shadow 0.25s, transform 0.25s;
+}
+.bpa-modo-icono { font-size: 14px; }
+.bpa-modo:hover { border-color: color-mix(in srgb, var(--nivel-color) 55%, transparent); }
+.bpa-modo.on {
+  border-color: var(--nivel-color);
+  color: #fff;
+  background: color-mix(in srgb, var(--nivel-color) 16%, var(--negro-3));
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--nivel-color) 28%, transparent);
+  transform: translateY(-1px);
+}
+/* el 🧠 lleva un borde con brillo propio: es el modo estrella */
+.bpa-modo.ri { border-style: dashed; }
+.bpa-modo.ri.on { border-style: solid; }
+.bpa-sub { margin-bottom: 10px; flex-wrap: wrap; }
+
+/* año/trimestre seleccionado estilo TradingView: borde del nivel + sombra +
+   letra blanca (a nivel 3 el acento ES azul acero — pedido de Jair) */
+.spark-rango.bpa-pill { transition: border-color 0.25s, color 0.25s, background 0.25s, box-shadow 0.25s; }
+.spark-rango.bpa-pill.on {
+  border-color: var(--nivel-color);
+  color: #fff;
+  background: color-mix(in srgb, var(--nivel-color) 22%, transparent);
+  box-shadow: 0 0 0 1px var(--nivel-color), 0 3px 10px color-mix(in srgb, var(--nivel-color) 30%, transparent);
+  font-weight: 700;
+}
+
+/* ── tarjetas resumen sobre la gráfica: contexto en 2 segundos ── */
+.bpa-tarjetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.bpa-tarjeta {
+  flex: 1;
+  min-width: 105px;
+  background: var(--negro-2);
+  border: 1px solid var(--gris);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+.bpa-tarjeta-t {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--texto-tenue);
+  margin-bottom: 3px;
+  white-space: nowrap;
+}
+.bpa-tarjeta-v {
+  font-size: 16.5px;
+  font-weight: 700;
+  color: var(--texto);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.bpa-tarjeta-v.perdida { color: var(--rojo); }
+
+/* ▲▼ de variación (en tarjetas y bajo el valor de cada barra) */
+.bpa-delta {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--texto-tenue);
+  white-space: nowrap;
+}
+.bpa-delta.sube { color: var(--verde); }
+.bpa-delta.baja { color: var(--rojo); }
+.bpa-delta.chico { font-size: 10px; margin-bottom: 3px; line-height: 1; }
+.bpa-delta-vs { font-weight: 400; color: var(--texto-tenue); }
+
+/* ── «Relacionar con este BPA»: barra propia con fondo, no lista suelta ── */
+.bpa-relacionar {
+  background: var(--negro-2);
+  border: 1px solid var(--gris);
+  border-radius: 10px;
+  padding: 8px 10px;
   margin-top: 12px;
 }
-.bpagraf-extras-tit {
-  font-size: 11.5px;
+.bpa-relacionar-tit {
+  display: block;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--texto-tenue);
-  margin-right: 3px;
+  margin-bottom: 6px;
 }
+.bpa-relacionar-chips { display: flex; flex-wrap: wrap; gap: 5px; }
 .spark-rango.chico { padding: 1px 7px; font-size: 10.5px; }
+
+/* ── 💡 Interpretación: tarjeta, no nota al pie cualquiera ── */
+.bpa-interpreta {
+  background: var(--negro-2);
+  border-left: 3px solid var(--nivel-color);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 12px;
+}
+.bpa-interpreta-t {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  color: var(--nivel-color);
+  margin-bottom: 4px;
+}
+.bpa-interpreta p { margin: 0; font-size: 12.5px; color: var(--texto); line-height: 1.55; }
+
+/* ── 🧠 Resumen Inteligente (4º modo, nombre de Jair) ── */
+.bpa-ri-intro { font-size: 12px; margin: 0 0 10px; }
+.bpa-ri-bloque {
+  background: var(--negro-2);
+  border: 1px solid var(--gris);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-top: 10px;
+}
+.bpa-ri-titulo { font-size: 13px; font-weight: 700; color: var(--texto); margin-bottom: 5px; }
+.bpa-ri-cifra {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--oro);
+  font-variant-numeric: tabular-nums;
+}
+.bpa-ri-exp { font-size: 12px; line-height: 1.5; margin: 4px 0 0; }
+.bpa-ri-semaforo { font-size: 12.5px; line-height: 1.55; margin: 8px 0 0; color: var(--texto); }
+/* la deuda partida en dos: lo que vence pronto vs la deuda futura */
+.bpa-ri-split {
+  display: flex;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 8px 0 6px;
+  gap: 2px;
+}
+.bpa-ri-split-corr { background: var(--ambar); transition: width 0.28s var(--ease-salida); }
+.bpa-ri-split-nocorr { background: color-mix(in srgb, var(--nivel-color) 75%, transparent); transition: width 0.28s var(--ease-salida); }
+.bpa-ri-partes { display: grid; gap: 8px; font-size: 12.5px; color: var(--texto); }
+.bpa-ri-parte-punto {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+.bpa-ri-parte-punto.corr { background: var(--ambar); }
+.bpa-ri-parte-punto.nocorr { background: color-mix(in srgb, var(--nivel-color) 75%, transparent); }
+.bpa-ri-factores { display: grid; gap: 5px; font-size: 12.5px; color: var(--texto); }
+.bpa-ri-factor { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.bpa-ri-fuente { font-size: 11px; margin-top: 10px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bpa-anim, .bpagraf-barra { animation: none; transition: none; }
+  .bpa-modo, .spark-rango.bpa-pill { transition: none; }
+  .bpa-modo.on { transform: none; }
+}
 
 /* Filas de contexto (precio / dividendo / metal) alineadas con las columnas:
    mismo flex y gap que .bpagraf para que cada celda caiga bajo su barra */
