@@ -24,6 +24,7 @@ export default function Gracias({ onApoyar }) {
   const roadmap = config.roadmap?.items || []
   const muro = config.muroApoyo?.nombres || []
   const recompensas = config.apoyo?.beneficios || []
+  const urgente = config.apoyo?.urgente
 
   const irAComentarios = () => { location.hash = '#/comentarios' }
 
@@ -43,6 +44,31 @@ export default function Gracias({ onApoyar }) {
           <button className="btn" onClick={irAComentarios}>💬 Dejar una idea</button>
         </div>
       </div>
+
+      {/* 🔥 URGENTE: a dónde va HOY cada aporte (pedido de Jair) */}
+      {urgente && (
+        <div className="card gracias-urgente">
+          <div className="gracias-urgente-cab">
+            <span className="gracias-urgente-fuego">🔥</span>
+            <div>
+              <div className="gracias-urgente-etiqueta">Urgente</div>
+              <h2 className="gracias-urgente-tit">{urgente.titulo}</h2>
+            </div>
+          </div>
+          <p className="muted" style={{ marginTop: 0 }}>{urgente.texto}</p>
+          <div className="gracias-urgente-lista">
+            {(urgente.puntos || []).map((p, i) => (
+              <div key={i} className="gracias-urgente-punto">
+                <span className="gracias-urgente-icono">{p.icono}</span>
+                <span>{p.texto}</span>
+              </div>
+            ))}
+          </div>
+          <div className="gracias-acciones">
+            <button className="btn btn-oro" onClick={onApoyar}>💛 Donar y hacerlo posible</button>
+          </div>
+        </div>
+      )}
 
       {/* Qué logras al apoyar (recompensa simbólica) */}
       <div className="card">
