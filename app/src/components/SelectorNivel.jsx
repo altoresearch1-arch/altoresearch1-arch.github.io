@@ -5,7 +5,10 @@ import { NIVELES } from '../lib/nivel'
 // v2 (15-jul): cada tarjeta lleva la identidad de su nivel (color de acento,
 // "NIVEL N DE 4" porque ES una escalera real, y chips de lo que desbloquea;
 // del 2 en adelante se suma a lo anterior). Entrada escalonada en CSS puro.
-export default function SelectorNivel({ onElegir }) {
+// v3 (23-jul): `onVolver` opcional — cuando se llega aquí desde la bienvenida,
+// «Ya sé algo de esto» tiene que poder deshacerse; sin salida, elegir mal el
+// nivel en la primera pantalla era una puerta de una sola dirección.
+export default function SelectorNivel({ onElegir, onVolver }) {
   return (
     <div className="nivel-gate">
       <div className="nivel-gate-inner">
@@ -42,6 +45,11 @@ export default function SelectorNivel({ onElegir }) {
             </button>
           ))}
         </div>
+        {onVolver && (
+          <button className="bienvenida-mirar" onClick={onVolver}>
+            ← Volver
+          </button>
+        )}
         <p className="nivel-gate-pie muted">
           Puedes cambiarlo cuando quieras desde el botón 🎚️ de arriba.
         </p>

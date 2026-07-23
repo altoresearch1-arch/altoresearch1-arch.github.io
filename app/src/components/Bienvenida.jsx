@@ -10,7 +10,11 @@
 // La puerta de niveles no desaparece: se MUEVE al final del primer recorrido,
 // cuando el usuario ya sabe qué está eligiendo (ver PuertaTardia.jsx).
 // ─────────────────────────────────────────────────────────────────────────
-export default function Bienvenida({ onNovato, onYaSe }) {
+import { pasoLeccion, TOTAL_TARJETAS } from './LeccionExpres'
+
+export default function Bienvenida({ onNovato, onYaSe, onMirar }) {
+  // Si ya empezó la lección y se salió, el 🐣 no le pide volver a empezar.
+  const paso = pasoLeccion()
   return (
     <div className="nivel-gate">
       <div className="nivel-gate-inner bienvenida">
@@ -29,10 +33,23 @@ export default function Bienvenida({ onNovato, onYaSe }) {
         <div className="bienvenida-puertas">
           <button className="bienvenida-puerta principal" onClick={onNovato}>
             <span className="bienvenida-icono" aria-hidden="true">🐣</span>
-            <span className="bienvenida-nombre">Nunca he invertido — empieza aquí</span>
+            <span className="bienvenida-nombre">
+              {paso > 0
+                ? 'Sigue donde te quedaste'
+                : 'Nunca he invertido — empieza aquí'}
+            </span>
             <span className="bienvenida-frase">
-              Cinco tarjetas de 15 segundos y entras. Qué es una acción, a dónde va tu plata y
-              por qué aquí no se compra.
+              {paso > 0 ? (
+                <>
+                  Dejaste la lección en la tarjeta {paso + 1} de {TOTAL_TARJETAS}. Retomas ahí
+                  mismo, no desde el principio.
+                </>
+              ) : (
+                <>
+                  Cinco tarjetas de 15 segundos y entras. Qué es una acción, a dónde va tu plata y
+                  por qué aquí no se compra.
+                </>
+              )}
             </span>
           </button>
           <button className="bienvenida-puerta" onClick={onYaSe}>
@@ -44,6 +61,14 @@ export default function Bienvenida({ onNovato, onYaSe }) {
             </span>
           </button>
         </div>
+
+        {/* La tercera salida: el que no quiere contestar NADA tampoco debería
+            quedarse afuera. Entra en «Aprender» y cambia con el 🎚️ si quiere. */}
+        {onMirar && (
+          <button className="bienvenida-mirar" onClick={onMirar}>
+            Solo quiero mirar la app →
+          </button>
+        )}
 
         <p className="nivel-gate-pie muted">
           Sea cual sea el camino, puedes cambiar de nivel cuando quieras con el 🎚️ de arriba.

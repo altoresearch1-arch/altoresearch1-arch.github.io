@@ -2,7 +2,28 @@
 
 > **Documento maestro vivo.** Captura TODO lo construido para que nada se pierda, sin
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
-> herramienta), lee esto primero. Última actualización: **22 jul 2026**. Estado: **EN VIVO (beta pública)**.
+> herramienta), lee esto primero. Última actualización: **23 jul 2026**. Estado: **EN VIVO (beta pública)**.
+
+## 🚪 23-jul: LA ENTRADA CON SALIDAS — cerrar, volver y retomar (pedido de Jair)
+La entrada del #135 (bienvenida + Lección Exprés) se armó el 23-jul de madrugada y era de
+UNA SOLA DIRECCIÓN: se entraba, pero no se salía ni se volvía atrás. Cuatro salidas nuevas:
+- **✕ y Esc en la Lección Exprés** (`.leccion-cerrar`, 36 px para el pulgar). **No es lo
+  mismo que «Saltar»** y por eso conviven: Saltar = *no la quiero leer, entro ya* (la marca
+  vista); la ✕ = *me salgo*, y **lo leído queda guardado**.
+- **Se retoma donde la dejó** (`CLAVE_PASO = 'alto-leccion-paso'`): si la cerró en la 3, el
+  🐣 de la bienvenida cambia a **«Sigue donde te quedaste — dejaste la lección en la tarjeta
+  3 de 5»**. Asomarse dejó de costar empezar de nuevo. Al terminarla el marcador se borra, y
+  en el **repaso desde el ☰** no se guarda nada (ahí no hay nada que retomar) ni aparece
+  «Saltar»: solo la ✕.
+- **«← Atrás» en la tarjeta 1 vuelve a la bienvenida** (antes quedaba muerto) y el selector
+  de niveles recibió **«← Volver»** (`onVolver` opcional en SelectorNivel: solo se pinta
+  cuando se llega desde la bienvenida, no cuando se abre desde el 🎚️).
+- **«Solo quiero mirar la app →»** en la bienvenida: el que no quiere contestar NADA entra en
+  nivel 2 y cambia con el 🎚️ cuando quiera. Discreto a propósito — no compite con los dos
+  caminos.
+- Verificado en el navegador con localStorage limpio (🐣 → 3 de 5 → Esc → «Sigue donde te
+  quedaste» → retoma en 3 → Atrás → bienvenida → niveles → Volver → mirar), móvil 375 px sin
+  desbordes, consola limpia y build PWA OK (3715.92 KiB).
 
 ## 🥇 22-jul: EL PRECIO DEL METAL — el driver #1 que faltaba (#116, pedido de Jair)
 Pedido textual: *"en los precios de los metales pon así estuvieron en ese año y fueron subiendo

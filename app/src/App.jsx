@@ -230,15 +230,21 @@ export default function App() {
         <div className="aurora" aria-hidden="true" />
         {entrada === 'leccion' ? (
           <LeccionExpres
+            retomar
             onFin={() => setNivel(2)}
             onSaltar={() => setNivel(2)}
+            // ✕ / Esc: no es lo mismo que saltar. Vuelve a la bienvenida con lo
+            // leído guardado, para que asomarse no cueste empezar de nuevo.
+            onCerrar={() => setEntrada('bienvenida')}
+            onAtras={() => setEntrada('bienvenida')}
           />
         ) : entrada === 'niveles' ? (
-          <SelectorNivel onElegir={setNivel} />
+          <SelectorNivel onElegir={setNivel} onVolver={() => setEntrada('bienvenida')} />
         ) : (
           <Bienvenida
             onNovato={() => setEntrada('leccion')}
             onYaSe={() => setEntrada('niveles')}
+            onMirar={() => setNivel(2)}
           />
         )}
         {transicion != null && (
@@ -527,7 +533,7 @@ export default function App() {
       {leccionAbierta && (
         <LeccionExpres
           onFin={() => setLeccionAbierta(false)}
-          onSaltar={() => setLeccionAbierta(false)}
+          onCerrar={() => setLeccionAbierta(false)}
         />
       )}
 
