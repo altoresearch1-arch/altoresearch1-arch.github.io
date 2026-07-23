@@ -63,6 +63,49 @@ PRODUCTOS = {
     "soya":     {"cod": "PN01664XM", "nombre": "Aceite de soya",   "unidad": "US$/tonelada","unidadLarga": "dólares por tonelada",        "mercado": "EE. UU.",       "icono": "🫒"},
 }
 
+# ─────────────────────────────────────────────────────────────────────────
+# 🏛️ EL MOTOR DE LOS QUE NO VENDEN MATERIA PRIMA (23-jul-2026)
+# El bloque de arriba solo alcanza a ~25 empresas (mineras, pesqueras,
+# azucareras y Petroperú). Pero el motor de los OTROS lentes también lo
+# publica el BCRP, en la misma API y con el mismo formato mensual:
+#   · la TASA DE REFERENCIA manda en bancos e inmobiliarias (el precio del
+#     dinero es su materia prima),
+#   · el TIPO DE CAMBIO manda en quien DEBE en dólares y VENDE en soles
+#     (el caso Petroperú del plan educativo, #49),
+#   · la INFLACIÓN manda en retail y consumo (sube el ticket, pero también
+#     el costo — y el sueldo del cliente no sube igual de rápido).
+# Van en el MISMO archivo que las cotizaciones, bajo "macro": es la misma
+# fuente, el mismo formato y lo consume el mismo componente.
+# `sentidoSube` dice qué significa que ese número SUBA — sin eso, un número
+# macro es solo un número.
+MACRO = {
+    "tasa": {
+        "cod": "PD04722MM", "nombre": "Tasa de referencia del BCRP",
+        "unidad": "%", "unidadLarga": "por ciento anual",
+        "mercado": "BCRP (la fija el Directorio del Banco Central)", "icono": "🏛️",
+        "decimales": 2,
+        "queEs": "el precio al que los bancos se prestan entre ellos de un día para otro. "
+                 "Todo lo demás — tu tarjeta, un préstamo vehicular, un crédito hipotecario, "
+                 "el plazo fijo — se cuelga de esta tasa.",
+    },
+    "tc": {
+        "cod": "PN01207PM", "nombre": "Tipo de cambio (S/ por US$)",
+        "unidad": "S/ por US$", "unidadLarga": "soles por dólar",
+        "mercado": "mercado interbancario", "icono": "💵",
+        "decimales": 3,
+        "queEs": "cuántos soles cuesta un dólar, en promedio del mes. Importa cuando una "
+                 "empresa cobra en una moneda y debe en la otra.",
+    },
+    "inflacion": {
+        "cod": "PN01273PM", "nombre": "Inflación (Lima, últimos 12 meses)",
+        "unidad": "%", "unidadLarga": "por ciento en los últimos 12 meses",
+        "mercado": "INEI, Lima Metropolitana", "icono": "🛒",
+        "decimales": 2,
+        "queEs": "cuánto subieron los precios en Lima en un año. Es el número que decide "
+                 "si el sueldo de tu cliente le alcanza igual que el año pasado.",
+    },
+}
+
 MESES_BCRP = {
     "ene": 1, "feb": 2, "mar": 3, "abr": 4, "may": 5, "jun": 6,
     "jul": 7, "ago": 8, "set": 9, "sep": 9, "oct": 10, "nov": 11, "dic": 12,
@@ -154,6 +197,7 @@ def main():
         "fuente": "BCRP — Cotizaciones de productos (promedio del periodo), series mensuales",
         "fuenteUrl": PORTAL,
         "productos": {},
+        "macro": {},
     }
 
     for clave, info in PRODUCTOS.items():
@@ -173,6 +217,23 @@ def main():
                   f"  ({len(resumen['anual'])} años)")
         except Exception as e:
             print(f"  ✘ {clave}: {e}")
+
+    for clave, info in MACRO.items():
+        try:
+            filas = serie_mensual(info["cod"])
+            resumen = resumir(filas)
+            if not resumen:
+                print(f"  ⚠ macro/{clave}: sin datos, se omite")
+                continue
+            salida["macro"][clave] = {
+                **{k: v for k, v in info.items() if k != "cod"},
+                "serieBCRP": info["cod"],
+                **resumen,
+            }
+            u = resumen["ultimo"]
+            print(f"  ✔ {info['nombre']:<34} {u['mes']}: {u['valor']} {info['unidad']}")
+        except Exception as e:
+            print(f"  ✘ macro/{clave}: {e}")
 
     if not salida["productos"]:
         print("FALLÓ: no se pudo bajar ninguna serie (¿sin internet?). No se toca el JSON.")

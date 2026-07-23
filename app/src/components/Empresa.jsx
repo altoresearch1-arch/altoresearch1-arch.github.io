@@ -27,6 +27,7 @@ import PorQueEsteTrimestre from './PorQueEsteTrimestre'
 import ListoParaDecidir from './ListoParaDecidir'
 import LecturaAnalista from './LecturaAnalista'
 import PrecioDelMotor from './PrecioDelMotor'
+import MotorMacro from './MotorMacro'
 import { CountUp, Reveal } from '../lib/anim'
 import { useFavoritos, alternarFavorito } from '../lib/favoritos'
 import { peInfo } from '../lib/finanzas'
@@ -260,6 +261,14 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
             gente mira. La cadena metal → ganancia → acción se cuenta dentro. */}
         {ver('precioMotor') && (
           <div id="sec-motor" className="sec-ancla"><Reveal><PrecioDelMotor empresa={e} /></Reveal></div>
+        )}
+
+        {/* 🏛️ El OTRO motor (23-jul): tasa, dólar o inflación, para los ~90
+            valores que no venden materia prima. Mismo lugar y mismo nivel que
+            el de arriba — y Petroperú muestra los dos, que es justo el punto
+            del caso #49: le manda el crudo Y le manda el dólar en que debe. */}
+        {ver('precioMotor') && (
+          <div className="sec-ancla"><Reveal><MotorMacro empresa={e} /></Reveal></div>
         )}
 
         {/* Gráfico de precio (cierres reales BVL) + termómetro de volatilidad

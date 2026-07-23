@@ -56,7 +56,7 @@ const CON_ARTICULO = {
 // Petroperú salía hablando de minas (bug visto en el deploy del 23-jul). Aquí
 // cada lente pone su propia versión de "la misma empresa de siempre".
 const MISMA_CASA = {
-  mineras: 'una minera con la misma mina, la misma gente y el mismo plan',
+  minas: 'una minera con la misma mina, la misma gente y el mismo plan',
   hidrocarburos: 'una refinería con la misma planta, la misma gente y el mismo plan',
   pesqueras: 'una pesquera con la misma flota, la misma gente y la misma cuota',
   agro: 'una azucarera con el mismo campo, la misma gente y la misma zafra',
