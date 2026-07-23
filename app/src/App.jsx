@@ -22,6 +22,9 @@ import Comentarios from './components/Comentarios'
 import Gracias from './components/Gracias'
 import AvisoNovedades from './components/AvisoNovedades'
 import SelectorNivel from './components/SelectorNivel'
+import Bienvenida from './components/Bienvenida'
+import LeccionExpres, { leccionVista } from './components/LeccionExpres'
+import PuertaTardia, { tocaPuertaTardia, marcarFichaVista } from './components/PuertaTardia'
 import NivelBadge from './components/NivelBadge'
 import NivelTransicion from './components/NivelTransicion'
 import MenuNav from './components/MenuNav'
@@ -58,6 +61,15 @@ export default function App() {
   const [nivel, setNivel] = useNivel()
   const [vista, setVista] = useState('inicio')
   const [menuAbierto, setMenuAbierto] = useState(false)
+  // 🚪 En qué paso de la entrada está quien todavía no tiene nivel:
+  // 'bienvenida' (qué es esto) → 'leccion' (las 5 tarjetas del 🐣) o
+  // 'niveles' (el selector de siempre, para el que ya sabe).
+  const [entrada, setEntrada] = useState('bienvenida')
+  // 🎚️ La puerta de niveles del final: se decide UNA vez al montar y cuando
+  // se vuelve al inicio, para no mirar localStorage en cada render.
+  const [puertaTardia, setPuertaTardia] = useState(false)
+  // 🐣 La lección exprés reabierta desde el menú ☰ (ya con nivel elegido).
+  const [leccionAbierta, setLeccionAbierta] = useState(false)
 
   // Transición de nivel: pantalla de carga honesta que tapa el re-armado de la
   // interfaz. Se dispara ante CUALQUIER cambio de nivel (puerta de entrada,
@@ -80,6 +92,12 @@ export default function App() {
 
   // Tema visual del nivel (densidad, radio, velocidad): vive en <html data-nivel>
   useEffect(() => { aplicarTemaNivel(nivel) }, [nivel])
+
+  // 🎚️ ¿Toca ofrecerle los 4 niveles? Solo al volver al INICIO, y solo si
+  // entró por el 🐣 y ya miró su primera ficha (ver PuertaTardia.jsx).
+  useEffect(() => {
+    if (vista === 'inicio') setPuertaTardia(tocaPuertaTardia(nivel))
+  }, [vista, nivel])
 
   // 🚶 Tour guiado: 'inicio' | 'ficha' | null. Se abre desde la burbuja ❓
   // (abajo-izquierda, siempre presente en inicio y ficha) o desde el menú ☰.
@@ -178,6 +196,9 @@ export default function App() {
 
   const abrirEmpresa = (ticker, origen) => {
     setOrigenEmpresa(origen)
+    // Cuenta las fichas vistas: con la primera ya se le puede ofrecer la
+    // puerta de niveles del final (#135) — antes no, porque no sabría qué elige.
+    marcarFichaVista()
     irA(`#/empresa/${ticker}`)
   }
 
@@ -197,13 +218,29 @@ export default function App() {
     { id: 'ia', label: '🧠 Atlas', hash: '#/ia', beta: true },
   ]
 
-  // Puerta de entrada obligatoria: hasta que elija un nivel, no ve nada más.
+  // 🚪 Entrada (#135, Parte IV §29): ya NO es la puerta de niveles a secas.
+  // 'bienvenida' → qué es esto + dos caminos · 'leccion' → las 5 tarjetas del
+  // 🐣 (y sale en nivel 2, «Aprender») · 'niveles' → el selector de siempre,
+  // para quien dijo que ya sabe. Sin nivel elegido no se ve nada más, como
+  // antes: lo que cambió es la PREGUNTA que se hace primero.
   if (nivel == null) {
     return (
       <>
         <FondoVivo />
         <div className="aurora" aria-hidden="true" />
-        <SelectorNivel onElegir={setNivel} />
+        {entrada === 'leccion' ? (
+          <LeccionExpres
+            onFin={() => setNivel(2)}
+            onSaltar={() => setNivel(2)}
+          />
+        ) : entrada === 'niveles' ? (
+          <SelectorNivel onElegir={setNivel} />
+        ) : (
+          <Bienvenida
+            onNovato={() => setEntrada('leccion')}
+            onYaSe={() => setEntrada('niveles')}
+          />
+        )}
         {transicion != null && (
           <NivelTransicion nivelId={transicion} onFin={() => setTransicion(null)} />
         )}
@@ -258,6 +295,7 @@ export default function App() {
             onIr={irA}
             onApoyar={() => setApoyoAbierto(true)}
             onTour={abrirTour}
+            onLeccion={() => setLeccionAbierta(true)}
             onCerrar={() => setMenuAbierto(false)}
           />
         )}
@@ -296,6 +334,12 @@ export default function App() {
                 )}
               </div>
             )
+
+            // 🎚️ El cierre de los primeros 5 minutos: la puerta de niveles
+            // aparece AQUÍ, cuando ya sabe qué está eligiendo (#135).
+            const bloquePuerta = puertaTardia ? (
+              <PuertaTardia onElegir={setNivel} onCerrar={() => setPuertaTardia(false)} />
+            ) : null
 
             const bloqueHero = (
               <div className="hero">
@@ -351,6 +395,7 @@ export default function App() {
               <div>
                 {/* 📟 La cinta bursátil: el mercado late apenas entras (todos los niveles) */}
                 <CintaBVL onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
+                {bloquePuerta}
                 {bloqueActualizaciones}
                 {nivel >= 3 ? (
                   <>
@@ -476,6 +521,15 @@ export default function App() {
       </button>
 
       {apoyoAbierto && <ApoyoModal onCerrar={() => setApoyoAbierto(false)} />}
+
+      {/* 🐣 Lección exprés reabierta desde el ☰ (el nivel ya está elegido: aquí
+          solo se lee y se cierra, no se toca nada). */}
+      {leccionAbierta && (
+        <LeccionExpres
+          onFin={() => setLeccionAbierta(false)}
+          onSaltar={() => setLeccionAbierta(false)}
+        />
+      )}
 
       <footer className="footer">
         {config.marca.nombre} · {config.marca.subtitulo}

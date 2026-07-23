@@ -7222,3 +7222,223 @@ body.cuaderno-marca .brand-logo {
     font-size: 9.5px;
   }
 }
+
+/* ============================================================
+   🐣 LOS PRIMEROS 5 MINUTOS (#135 — Parte IV §29 del plan educativo)
+   Tres piezas nuevas, todas CSS puro y sin dependencias:
+   1. .bienvenida — la entrada blanda (qué es esto + dos caminos), que
+      reemplaza a la puerta de niveles como primera pantalla.
+   2. .leccion — las cinco tarjetas de 15 segundos del 🐣.
+   3. .puerta-tardia — la cinta del inicio que ofrece los niveles DESPUÉS
+      de la primera ficha, cuando el usuario ya sabe qué está eligiendo.
+   Reutilizan .nivel-gate (el marco) para no duplicar el centrado ni el logo.
+   ============================================================ */
+
+/* ---------- 1. La bienvenida ---------- */
+.bienvenida-lead {
+  max-width: 500px;
+}
+.bienvenida-puertas {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.bienvenida-puerta {
+  appearance: none;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  background: linear-gradient(180deg, var(--negro-2), var(--negro));
+  border: 1px solid var(--gris);
+  border-radius: var(--radio);
+  padding: 20px 18px;
+  color: var(--texto);
+  transition: border-color 0.15s ease, transform 0.18s var(--ease-salida),
+    box-shadow 0.18s var(--ease-salida);
+  animation: nivelCardEntra 0.45s var(--ease-salida) backwards;
+  animation-delay: 120ms;
+}
+.bienvenida-puerta:last-child {
+  animation-delay: 210ms;
+}
+/* El 🐣 es el camino recomendado y se nota: es el único con el oro de ALTO. */
+.bienvenida-puerta.principal {
+  border-color: color-mix(in srgb, var(--oro) 55%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--oro) 18%, transparent) inset;
+}
+@media (hover: hover) and (pointer: fine) {
+  .bienvenida-puerta:hover {
+    border-color: var(--oro);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+  }
+}
+.bienvenida-puerta:active {
+  transform: scale(0.985);
+}
+.bienvenida-icono {
+  font-size: 30px;
+  line-height: 1;
+}
+.bienvenida-nombre {
+  font-weight: 700;
+  font-size: 16.5px;
+}
+.bienvenida-puerta.principal .bienvenida-nombre {
+  color: var(--oro);
+}
+.bienvenida-frase {
+  color: var(--texto-tenue);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+/* ---------- 2. La lección exprés ---------- */
+.leccion {
+  position: fixed;
+  inset: 0;
+  z-index: 85; /* sobre la transición de nivel (80): es una pantalla completa */
+  background: var(--negro);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 18px;
+  overflow-y: auto;
+}
+.leccion-inner {
+  width: 100%;
+  max-width: 560px;
+}
+.leccion-cab {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.leccion-saltar {
+  appearance: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--texto-tenue);
+  font-size: 12.5px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 4px;
+}
+.leccion-puntos {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.leccion-punto {
+  height: 3px;
+  flex: 1;
+  border-radius: 999px;
+  background: var(--gris);
+  transition: background 0.25s ease;
+}
+.leccion-punto.on {
+  background: var(--oro);
+}
+.leccion-card {
+  background: linear-gradient(180deg, var(--negro-2), var(--negro));
+  border: 1px solid var(--gris);
+  border-radius: var(--radio);
+  padding: 26px 22px;
+  animation: leccionEntra 0.32s var(--ease-salida) backwards;
+}
+@keyframes leccionEntra {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+.leccion-icono {
+  font-size: 38px;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.leccion-titulo {
+  font-size: 21px;
+  margin: 0 0 12px;
+  text-wrap: balance;
+}
+.leccion-cuerpo {
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.62;
+}
+.leccion-pie {
+  margin: 16px 0 0;
+  padding-top: 12px;
+  border-top: 1px dashed var(--gris);
+  color: var(--texto-tenue);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.leccion-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 16px;
+}
+.leccion-conteo {
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* ---------- 3. La puerta de niveles, tarde (cinta del inicio) ---------- */
+.puerta-tardia {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  background: linear-gradient(180deg, var(--negro-2), var(--negro));
+  border: 1px solid color-mix(in srgb, var(--oro) 45%, transparent);
+  border-radius: var(--radio);
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  animation: leccionEntra 0.4s var(--ease-salida) backwards;
+  animation-delay: 300ms;
+}
+.puerta-tardia-txt {
+  flex: 1 1 280px;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.puerta-tardia-botones {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.puerta-tardia-full {
+  position: fixed;
+  inset: 0;
+  z-index: 85;
+  background: var(--negro);
+  overflow-y: auto;
+}
+.puerta-tardia-volver {
+  display: block;
+  margin: 0 auto 40px;
+}
+
+@media (max-width: 560px) {
+  .bienvenida-puertas {
+    grid-template-columns: 1fr;
+  }
+  .leccion {
+    align-items: flex-start;
+  }
+  .leccion-cuerpo {
+    font-size: 15px;
+  }
+  .leccion-nav .btn {
+    flex: 1;
+  }
+}

@@ -17,7 +17,7 @@ const ITEMS = [
 
 const MS_CIERRE = 180 // espejo de .menu-nav-fondo.cerrando en styles.css
 
-export default function MenuNav({ vista, onIr, onApoyar, onTour, onCerrar }) {
+export default function MenuNav({ vista, onIr, onApoyar, onTour, onLeccion, onCerrar }) {
   const [cerrando, setCerrando] = useState(false)
 
   // Cierre con animación de salida (más corta que la entrada, como debe ser)
@@ -75,9 +75,22 @@ export default function MenuNav({ vista, onIr, onApoyar, onTour, onCerrar }) {
           <span className="menu-nav-icono" aria-hidden="true">❓</span>
           Tour guiado
         </button>
+        {/* 🐣 La lección exprés no se ve una sola vez y se pierde: queda aquí
+            para volver a ella (o para enseñársela a alguien) — #135. */}
+        <button
+          className="menu-nav-item"
+          style={{ '--i': ITEMS.length + 1 }}
+          onClick={() => {
+            onLeccion()
+            cerrar()
+          }}
+        >
+          <span className="menu-nav-icono" aria-hidden="true">🐣</span>
+          Lección exprés (5 tarjetas)
+        </button>
         <button
           className="menu-nav-item menu-nav-apoyo"
-          style={{ '--i': ITEMS.length + 1 }}
+          style={{ '--i': ITEMS.length + 2 }}
           onClick={() => {
             onApoyar()
             cerrar()
