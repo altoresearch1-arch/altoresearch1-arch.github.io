@@ -86,6 +86,10 @@ export const NIVEL_SECCION = {
   // cambio, lo ven todos: está en la radiografía de 10 segundos.
   deuda: 2,
   gerencia: 2,
+  // 🥇 El precio del metal / petróleo / harina que mueve a la empresa (#116).
+  // Nivel 2 porque es el "cómo gana dinero" llevado hasta el final: sin este
+  // precio, la mitad de la BVL no se entiende.
+  precioMotor: 2,
   valoracion: 3,
   bpaHistorico: 3,
   termometro: 3,

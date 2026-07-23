@@ -4,6 +4,31 @@
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
 > herramienta), lee esto primero. Última actualización: **22 jul 2026**. Estado: **EN VIVO (beta pública)**.
 
+## 🥇 22-jul: EL PRECIO DEL METAL — el driver #1 que faltaba (#116, pedido de Jair)
+Pedido textual: *"en los precios de los metales pon así estuvieron en ese año y fueron subiendo
+cada año; a inicios de 2026 bajaron y subieron mucho — y esto cambia el precio de la acción"*.
+- **Fuente nueva: el BCRP.** `extractor/fetch_cotizaciones.py` baja las "Cotizaciones de
+  productos (promedio del periodo)" del Banco Central — series MENSUALES oficiales desde 2015,
+  gratis y sin llave → `app/src/data/cotizaciones.json` (30 KB). 12 productos: cobre, oro,
+  plata, zinc, plomo, estaño, petróleo WTI, harina de pescado, azúcar, trigo, maíz y aceite de
+  soya. Ya está enganchado en `actualizar_todo.py` (modo rápido) — **no se tocó deploy.yml**.
+- **`PrecioDelMotor.jsx` (nivel 2):** tres bloques en el orden en que Jair lo contó. (1) **Año
+  por año**: barra por año con el promedio y su ▲/▼ contra el anterior; el año en curso va
+  PUNTEADO y se dice que es parcial. (2) **Este año**: arrancó en X, su mes más alto, su mes más
+  bajo, dónde está hoy, y el **vaivén** entre el mejor y el peor mes (lo que el promedio anual
+  esconde). (3) **¿Y la acción?**: las dos restas lado a lado a 12 meses — en BVN, *oro +26% vs
+  acción +86%* — con la cadena explicada (sube el metal → cobra más por lo mismo → la ganancia
+  sube MÁS que el precio → sube la acción) y el aviso de que no es una regla de tres.
+- **Contexto de ciclo (#53):** "el oro está 86% por encima de su promedio de los últimos 5 años
+  → zona ALTA de su ciclo; es el momento en que un P/E bajo engaña más".
+- **Caso especial resuelto:** en Petroperú el crudo es su COSTO y a la vez la referencia de lo
+  que vende, así que la cadena no aplica: la ficha lo dice y manda a mirar el margen. Shougang
+  queda sin bloque a propósito (el BCRP no publica el hierro; no se le pone el precio de otro).
+- **Los combos se enriquecen solos:** el de "pico de ciclo" ahora cierra con la zona del ciclo,
+  y el de producción del BEM ya tiene sus dos mitades — *"produce 11% menos zinc, pero el zinc
+  subió 34%: van en sentidos opuestos, mira cuál pesa más"*. Antes eso era un condicional.
+- Paso nuevo del tour (nivel 2) "🥇 El precio que de verdad manda". Móvil: 6 años en vez de 8.
+
 ## 🧠 22-jul: SESIÓN 3 DEL PLAN EDUCATIVO — LOS COMBOS DEL ANALISTA (implementada)
 Tercera sesión del `ANALISIS_EDUCATIVO_Y_TOUR_POR_NIVELES.md` (§5 y §9: mejoras #43, #47 y
 #50). La regla de Jair —**nunca se evalúa un indicador solo**— por fin es código.

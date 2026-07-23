@@ -26,6 +26,7 @@ import PuedePagarDeuda from './PuedePagarDeuda'
 import PorQueEsteTrimestre from './PorQueEsteTrimestre'
 import ListoParaDecidir from './ListoParaDecidir'
 import LecturaAnalista from './LecturaAnalista'
+import PrecioDelMotor from './PrecioDelMotor'
 import { CountUp, Reveal } from '../lib/anim'
 import { useFavoritos, alternarFavorito } from '../lib/favoritos'
 import { peInfo } from '../lib/finanzas'
@@ -252,6 +253,14 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
             palabras de la propia gerencia (dato ya digerido en gerencia.json
             que hasta hoy solo se veía en el nivel 4). */}
         {ver('gerencia') && <Reveal><PorQueEsteTrimestre empresa={e} /></Reveal>}
+
+        {/* 🥇 El precio de su MOTOR (#116, pedido de Jair): el driver #1 de
+            media BVL. Va aquí, pegado a "vive de", y ANTES del gráfico de la
+            acción: primero el precio que manda, después el precio que la
+            gente mira. La cadena metal → ganancia → acción se cuenta dentro. */}
+        {ver('precioMotor') && (
+          <div id="sec-motor" className="sec-ancla"><Reveal><PrecioDelMotor empresa={e} /></Reveal></div>
+        )}
 
         {/* Gráfico de precio (cierres reales BVL) + termómetro de volatilidad
             (los id sec-* son las anclas de la radiografía de arriba).

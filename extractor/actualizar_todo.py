@@ -21,6 +21,7 @@ simultáneas y fetch_anual_eps ya falló una vez así):
   4. div_stockanalysis   -> dividendos.json     (dividendos base)
   5. fetch_beneficios    -> dividendos.json     (parcha FIBRAs/chicas + CORRIGE moneda)
   6. fetch_bem           -> mineria.json        (producción minera mensual MINEM; solo baja ediciones nuevas)
+  6c. fetch_cotizaciones -> cotizaciones.json   (precio del metal/petróleo/harina/azúcar; BCRP, series mensuales)
   6b. fetch_produccion   -> produccion.json     (producción/ventas del trimestre del HI de la empresa; parsea el PDF, caché por URL)
   7. fetch_anual_eps     -> eps_anual.json      (ganancia anual + TC, para el P/E)
   8. fix_eps             -> eps_anual.json      (parcha EPS distorsionados; SIEMPRE tras el 7)
@@ -48,6 +49,7 @@ PASOS_RAPIDOS = [
     "div_stockanalysis.py",
     "fetch_beneficios.py",
     "fetch_bem.py",       # producción minera MINEM (mensual; con caché, solo baja lo nuevo)
+    "fetch_cotizaciones.py",  # 🥇 precio del metal/petróleo/harina/azúcar (BCRP, mensual y rápido)
     "fetch_produccion.py", # 📣 producción/ventas del trimestre del HI de la empresa (parsea el PDF; caché por URL)
 ]
 

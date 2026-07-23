@@ -1,6 +1,7 @@
 import { lenteDe, esCiclico, deudaInfo, aniosTexto, PALABRA_DEUDA, umbralesDe } from './lente'
 import { peInfo, precioDe, dividendosDe, cambio6M } from './finanzas'
 import { combosDe } from './analista'
+import { productoDe, zonaDelCiclo } from './cotizacion'
 import { NIVELES } from './nivel'
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -79,6 +80,21 @@ function fraseValoracion(empresa) {
   return `Su P/E es ${info.pe.toFixed(1)}: por cada acción pagas ${info.pe.toFixed(1)} veces lo que la empresa gana en un año. Aquí abajo está la cuenta completa y contra qué rango la comparamos.${ref}${ciclo}`
 }
 
+// El precio del producto que mueve a la empresa (#116), con su número real.
+function fraseMotor(empresa) {
+  const prod = productoDe(empresa)
+  if (!prod) return 'El precio del producto del que vive esta empresa.'
+  const c = zonaDelCiclo(prod)
+  const base = `Esta empresa no fija el precio ${prod.conArticulo}: lo recibe. Aquí lo tienes año por año, `
+    + 'lo que hizo este año, y las dos restas puestas lado a lado — cuánto se movió el precio y cuánto se movió la acción. '
+  if (!c) return base
+  return base + (c.zona === 'alta'
+    ? `Hoy está ${c.pct.toFixed(0)}% por encima de su promedio de 5 años: sus ganancias actuales son las de una temporada BUENA, y eso hay que tenerlo en la cabeza al mirar lo barata que parece.`
+    : c.zona === 'baja'
+      ? `Hoy está ${Math.abs(c.pct).toFixed(0)}% por debajo de su promedio de 5 años: sus ganancias actuales son las de una temporada MALA, y eso hay que tenerlo en la cabeza al mirar lo cara que parece.`
+      : 'Hoy está cerca de su promedio de los últimos 5 años: sus ganancias no vienen ni de una temporada excepcional ni de una mala.')
+}
+
 // El paso que cierra el análisis: los combos que SÍ aplican a esta empresa,
 // nombrados con su propio título (nada de "aquí verás cosas interesantes").
 function fraseAnalista(empresa) {
@@ -123,6 +139,11 @@ export function pasosFicha(empresa, nivel = 4) {
       n: 2, sel: '.gerencia-tarjeta',
       icono: '🗣', titulo: '3️⃣ ¿Por qué le fue así este trimestre?',
       texto: 'Estas frases son de la propia gerencia, textuales del documento que presentó a la SMV: ellos explicando su trimestre. Es la versión de la parte interesada — contrástala con los números, pero es la respuesta más directa a "¿por qué ganó (o perdió) más este año?".',
+    },
+    {
+      n: 2, sel: '[data-tour="motor"]',
+      icono: '🥇', titulo: 'El precio que de verdad manda',
+      texto: fraseMotor(empresa),
     },
     {
       n: 1, sel: '.precio',

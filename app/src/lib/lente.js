@@ -134,6 +134,7 @@ export const PALABRA_DEUDA = {
 // (el trimestre × 4 manda), así que se dice "más de 15 años" y punto.
 export function aniosTexto(anios) {
   if (anios > 15) return 'más de 15 años'
-  if (anios < 0.6) return `${anios.toFixed(1)} años (menos de un año)`
+  // Por debajo de medio año el decimal es ruido ("0.0 años" no se dice).
+  if (anios < 0.6) return 'menos de un año'
   return `${anios.toFixed(1)} años`
 }

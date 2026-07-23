@@ -5,6 +5,7 @@ import mineriaData from '../data/mineria.json'
 import familiaData from '../data/mineria_familia.json'
 import { deudaInfo, lenteDe, esCiclico, aniosTexto, PALABRA_DEUDA } from './lente'
 import { peInfo, veredictoPE, dividendosDe } from './finanzas'
+import { productoDe, zonaDelCiclo } from './cotizacion'
 
 // ─────────────────────────────────────────────────────────────────────────
 // 🧠 LA LECTURA DE ANALISTA — "nunca un indicador solo" (§5 del plan
@@ -260,6 +261,10 @@ export function combosDe(empresa) {
   const dv = dividendosDe(t)
 
   // ── Combo 1: P/E bajo + margen alto + cíclica = probable pico de ciclo ──
+  // Desde #116 este combo tiene su tercera pata: dónde está HOY el precio de
+  // su producto respecto de su propio promedio de 5 años (BCRP).
+  const prod = productoDe(empresa)
+  const ciclo = prod ? zonaDelCiclo(prod) : null
   if (ciclico && vpe?.estado === 'BARATA' && info?.pe) {
     const mn = margenNeto(empresa)
     const med = medianaMargenSector(empresa.sector)
@@ -274,7 +279,10 @@ export function combosDe(empresa) {
         (margenAlto
           ? `Pero al mismo tiempo su margen neto es ${mn.toFixed(1)}%, muy por encima del ${med.toFixed(1)}% típico de las demás ${empresa.sector} de la app. `
           : 'Pero es un negocio que vive de un precio que sube y baja. ') +
-        `Y aquí manda ${l?.queManda || 'el precio de su producto'}: cuando ese precio está alto, la ganancia se infla, ` +
+        (ciclo?.zona === 'alta'
+          ? `Y el dato que cierra la foto: el precio ${prod.conArticulo} está hoy ${ciclo.pct.toFixed(0)}% POR ENCIMA de su promedio de los últimos 5 años. `
+          : '') +
+        `Aquí manda ${l?.queManda || 'el precio de su producto'}: cuando ese precio está alto, la ganancia se infla, ` +
         `el P/E se desploma solo y la acción PARECE una ganga justo en el momento más caro del ciclo. ` +
         `La cuenta honesta: si su ganancia volviera a la mitad, ese P/E de ${info.pe.toFixed(1)} pasaría a ${(info.pe * 2).toFixed(1)} — ` +
         'sin que la acción se moviera un centavo.',
@@ -453,22 +461,39 @@ export function combosDe(empresa) {
   }
 
   // ── Combo 10: producción subiendo = ingresos del trimestre que viene, hoy ──
-  const prod = tendenciaProduccion(t)
-  if (prod && Math.abs(prod.pct) >= 8) {
-    const sube = prod.pct > 0
+  const pr = tendenciaProduccion(t)
+  if (pr && Math.abs(pr.pct) >= 8) {
+    const sube = pr.pct > 0
+    // La otra mitad del ingreso: ¿y el precio de ese producto, cómo viene en
+    // los mismos 12 meses? (BCRP). Sin esto el combo cojeaba: kilos × precio.
+    // Solo si el metal que más pesa en su producción es EL MISMO del que
+    // tenemos precio (BVN produce plata en el BEM y su motor es el oro: en un
+    // caso así no se mezclan los dos, se calla el precio).
+    const m = prod?.clave === pr.metal ? (prod.mensual || []) : []
+    const pctPrecio = m.length >= 13 && m[m.length - 13][1]
+      ? ((m[m.length - 1][1] - m[m.length - 13][1]) / m[m.length - 13][1]) * 100
+      : null
     combos.push({
       id: 'produccionAdelanto',
       icono: '⛏️',
       titulo: sube
-        ? `Está sacando ${prod.pct.toFixed(0)}% más ${METAL_NOMBRE[prod.metal] || prod.metal} que hace un año`
-        : `Está sacando ${Math.abs(prod.pct).toFixed(0)}% menos ${METAL_NOMBRE[prod.metal] || prod.metal} que hace un año`,
+        ? `Está sacando ${pr.pct.toFixed(0)}% más ${METAL_NOMBRE[pr.metal] || pr.metal} que hace un año`
+        : `Está sacando ${Math.abs(pr.pct).toFixed(0)}% menos ${METAL_NOMBRE[pr.metal] || pr.metal} que hace un año`,
       tono: sube ? 'bien' : 'ojo',
       texto:
-        `Entre ${mesTexto(prod.desde)} y ${mesTexto(prod.hasta)} produjo ${sube ? '+' : ''}${prod.pct.toFixed(1)}% frente a esos mismos meses del año anterior ` +
+        `Entre ${mesTexto(pr.desde)} y ${mesTexto(pr.hasta)} produjo ${sube ? '+' : ''}${pr.pct.toFixed(1)}% frente a esos mismos meses del año anterior ` +
         '(boletín del MINEM, dato oficial mes a mes). Esto es un ADELANTO: el informe de resultados de ese trimestre todavía no sale, pero los kilos ya se ' +
-        `movieron, y los ingresos de una minera son, en esencia, kilos × precio del metal. ${sube
-          ? 'Si el precio del metal no cayó en el mismo periodo, sus ingresos del próximo reporte deberían venir mejores.'
-          : 'Si el precio del metal no subió para compensar, sus ingresos del próximo reporte deberían venir más flojos.'}`,
+        'movieron, y los ingresos de una minera son, en esencia, kilos × precio del metal. ' +
+        (pctPrecio != null
+          // Las dos mitades del ingreso, juntas: por fin se puede decir si una
+          // compensa a la otra en vez de dejarlo como condicional.
+          ? `Y la otra mitad ya la tenemos: en esos 12 meses el precio ${prod.conArticulo} ${pctPrecio >= 0 ? 'subió' : 'bajó'} ${Math.abs(pctPrecio).toFixed(0)}% (BCRP). ` +
+            (sube === (pctPrecio >= 0)
+              ? `Los dos van en el mismo sentido, así que el efecto se SUMA: sus ingresos del próximo reporte deberían venir ${sube ? 'claramente mejores' : 'claramente más flojos'}.`
+              : `Van en sentidos opuestos, así que se compensan: ${sube ? 'produce más pero cada kilo vale menos' : 'produce menos pero cada kilo vale más'} — mira cuál de los dos movimientos es más grande antes de sacar conclusiones.`)
+          : (sube
+            ? 'Si el precio del metal no cayó en el mismo periodo, sus ingresos del próximo reporte deberían venir mejores.'
+            : 'Si el precio del metal no subió para compensar, sus ingresos del próximo reporte deberían venir más flojos.')),
       porque: 'La producción es el único dato de una minera que se conoce ANTES de sus resultados. Producción × precio del metal es el 90% de su ingreso: mirarlos juntos es adelantarse al informe.',
     })
   }
