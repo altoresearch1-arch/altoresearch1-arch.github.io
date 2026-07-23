@@ -260,7 +260,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
             acción: primero el precio que manda, después el precio que la
             gente mira. La cadena metal → ganancia → acción se cuenta dentro. */}
         {ver('precioMotor') && (
-          <div id="sec-motor" className="sec-ancla"><Reveal><PrecioDelMotor empresa={e} /></Reveal></div>
+          <div id="sec-motor" className="sec-ancla" data-mentor="motor"><Reveal><PrecioDelMotor empresa={e} /></Reveal></div>
         )}
 
         {/* 🏛️ El OTRO motor (23-jul): tasa, dólar o inflación, para los ~90
@@ -275,24 +275,24 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
             (los id sec-* son las anclas de la radiografía de arriba).
             El medidor y la valoración con fórmula son nivel 3+: en 1-2 solo se
             ve el veredicto arriba — el detalle es el premio por subir. */}
-        <div id="sec-precio" className="sec-ancla"><Sparkline ticker={e.ticker} /></div>
+        <div id="sec-precio" className="sec-ancla" data-mentor="spark"><Sparkline ticker={e.ticker} /></div>
         {ver('termometro') && (
-          <div id="sec-movimiento" className="sec-ancla"><Termometro ticker={e.ticker} /></div>
+          <div id="sec-movimiento" className="sec-ancla" data-mentor="volatilidad"><Termometro ticker={e.ticker} /></div>
         )}
 
         {/* Dividendos (resumen) + ¿Barata o cara? + simuladores — lo más importante, arriba */}
-        <div id="sec-dividendos" className="sec-ancla"><Reveal><DividendoResumen empresa={e} /></Reveal></div>
+        <div id="sec-dividendos" className="sec-ancla" data-mentor="dividendo"><Reveal><DividendoResumen empresa={e} /></Reveal></div>
         {ver('valoracion') && (
-          <div id="sec-valoracion" className="sec-ancla"><Reveal><Valoracion empresa={e} /></Reveal></div>
+          <div id="sec-valoracion" className="sec-ancla" data-mentor="pe"><Reveal><Valoracion empresa={e} /></Reveal></div>
         )}
         {/* 📈 BPA año por año (SMV anual): ¿gana más por acción que antes? Va
             pegado a "¿Barata o cara?" porque es el MISMO BPA que alimenta el P/E. */}
-        {ver('bpaHistorico') && <Reveal><GraficaBPA ticker={e.ticker} empresa={e} /></Reveal>}
+        {ver('bpaHistorico') && <div data-mentor="bpa"><Reveal><GraficaBPA ticker={e.ticker} empresa={e} /></Reveal></div>}
         {/* 💳 ¿Puede pagar su deuda? — el indicador que faltaba (#41): la deuda
             deja de ser un monto suelto y pasa a ser AÑOS de caja, con el
             veredicto de SU lente (en un banco, la lección es que no se mide así). */}
         {ver('deuda') && (
-          <div id="sec-deuda" className="sec-ancla"><Reveal><PuedePagarDeuda empresa={e} /></Reveal></div>
+          <div id="sec-deuda" className="sec-ancla" data-mentor="deuda"><Reveal><PuedePagarDeuda empresa={e} /></Reveal></div>
         )}
         <Reveal>
           {pagaDividendos ? (
@@ -322,11 +322,11 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
 
         {/* ⛏️ Producción mensual del MINEM + minas y participaciones. Aparece si el
             ticker tiene familia minera (cubre a Shougang, que es sector acereras). */}
-        {ver('produccionMinera') && <Reveal data-tour="produccion"><ProduccionMinera ticker={e.ticker} /></Reveal>}
+        {ver('produccionMinera') && <div data-mentor="produccion"><Reveal data-tour="produccion"><ProduccionMinera ticker={e.ticker} /></Reveal></div>}
 
         {/* Fundamentos */}
         {ver('fundamentos') && (
-        <Reveal data-tour="fundamentos">
+        <Reveal data-tour="fundamentos" data-mentor="fcf">
           <div className="seccion-titulo">Fundamentos · {e.fundamentosFuente
             ? <Glosado text={e.fundamentosFuente} />
             : <><Glosado text="individual" /> (<Glosado text="SMV" />)</>}</div>
@@ -466,7 +466,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
 
         {/* Riesgos — documentado vs rumor */}
         {ver('riesgos') && e.riesgos?.length > 0 && (
-          <div data-tour="riesgos">
+          <div data-tour="riesgos" data-mentor="riesgos">
             <div className="seccion-titulo">Riesgos</div>
             {e.riesgos.map((r, i) => (
               <div key={i} className="riesgo-row">

@@ -5712,80 +5712,252 @@ body.cuaderno-marca .brand-logo {
   padding: 7px 14px;
 }
 
-/* ---------- Burbuja ❓ (siempre a la mano, abajo a la izquierda) ---------- */
-.burbuja-tour-wrap {
+@media (prefers-reduced-motion: reduce) {
+  .tour-foco,
+  .tour-tarjeta,
+  .mentor-saludo,
+  .mentor-panel,
+  .mentor-card {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ============================================================
+   🎓 EL MENTOR ALTO (mejora #151, idea de Jair)
+   Un solo flotante de aprendizaje, abajo a la izquierda — hereda el sitio
+   de la ❓ que absorbió. El lenguaje visual es el que la app ya tiene para
+   "esto se toca y se explica": el ORO y los puntitos de Glosado, no el azul
+   del nivel 3 (§31-1: consistencia > novedad).
+   ============================================================ */
+.mentor-wrap {
   position: fixed;
   left: 16px;
   bottom: 18px;
-  z-index: 40; /* misma capa que la pill de apoyo (derecha) */
+  z-index: 40; /* misma capa que la pill de apoyo, al otro lado */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
+  max-width: min(320px, calc(100vw - 32px));
 }
-.burbuja-tour {
+.mentor-pill {
   appearance: none;
   cursor: pointer;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1px solid var(--oro);
-  background: linear-gradient(180deg, var(--negro-3), var(--negro-2));
-  color: var(--oro);
-  font-size: 18px;
+  text-align: left;
+  border: none;
+  border-radius: 999px;
+  background: var(--oro);
+  color: #1a1503;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 10px 15px;
+  max-width: 100%;
   box-shadow: var(--sombra);
-  transition: transform 0.16s var(--ease-salida), background 0.15s ease;
+  transition: transform 0.16s var(--ease-salida), filter 0.15s ease;
 }
 @media (hover: hover) and (pointer: fine) {
-  .burbuja-tour:hover {
-    background: var(--oro-tenue);
+  .mentor-pill:hover {
     transform: translateY(-1px);
+    filter: brightness(1.06);
   }
 }
-.burbuja-tour:active {
-  transform: scale(0.94);
+.mentor-pill:active {
+  transform: scale(0.96);
 }
-.burbuja-tour-saludo {
+
+.mentor-panel,
+.mentor-card,
+.mentor-saludo {
   position: relative;
-  width: min(250px, calc(100vw - 90px));
+  width: min(320px, calc(100vw - 32px));
   background: linear-gradient(180deg, var(--negro-2), var(--negro));
   border: 1px solid var(--oro);
   border-radius: 14px;
   padding: 12px 13px;
   box-shadow: var(--sombra);
   font-size: 13px;
-  animation: tourTarjetaEntra 0.35s var(--ease-salida) 0.6s backwards;
+  /* Animación PROPIA: la del tour (tourTarjetaEntra) lleva un translateX(-50%)
+     porque su tarjeta va centrada en la pantalla — reusarla empujaba este
+     panel media pantalla a la izquierda. */
+  animation: mentorEntra 0.3s var(--ease-salida) backwards;
   transform-origin: bottom left;
 }
-.burbuja-tour-saludo p {
+@keyframes mentorEntra {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+}
+.mentor-saludo {
+  animation-delay: 0.6s;
+}
+.mentor-saludo p {
   margin: 4px 0 10px;
   color: var(--texto-tenue);
   font-size: 12.5px;
   line-height: 1.45;
 }
-.burbuja-tour-saludo .burbuja-tour-si {
+.mentor-saludo-si {
   font-size: 13px;
   padding: 7px 13px;
 }
-.burbuja-tour-x {
+.mentor-panel-cab {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.mentor-marca {
+  color: var(--oro);
+  font-weight: 600;
+  font-size: 13px;
+}
+.mentor-x {
   appearance: none;
   cursor: pointer;
-  position: absolute;
-  top: 6px;
-  right: 8px;
   background: transparent;
   border: none;
   color: var(--texto-tenue);
-  font-size: 12px;
+  font-size: 13px;
   padding: 3px 5px;
+  flex-shrink: 0;
+}
+.mentor-saludo .mentor-x {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 12px;
+}
+.mentor-op {
+  appearance: none;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 1px solid var(--gris);
+  border-radius: 8px;
+  color: var(--texto);
+  font-size: 13px;
+  line-height: 1.4;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  text-decoration: none;
+  transition: border-color 0.15s ease;
+}
+.mentor-op:hover {
+  border-color: var(--oro);
+}
+.mentor-op:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.mentor-op-link {
+  color: var(--texto-tenue);
+}
+.mentor-progreso {
+  font-size: 11.5px;
+  line-height: 1.4;
+  margin-top: 2px;
+}
+.mentor-cuerpo {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.mentor-lente {
+  margin: 8px 0 0;
+  padding-top: 8px;
+  border-top: 1px dashed var(--gris);
+  color: var(--texto-tenue);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.mentor-acciones {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.mentor-mini {
+  appearance: none;
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--gris);
+  border-radius: 8px;
+  color: var(--texto);
+  font-size: 12px;
+  padding: 6px 10px;
+  transition: border-color 0.15s ease;
+}
+.mentor-mini:hover {
+  border-color: var(--oro);
+}
+.mentor-mini.principal {
+  border-color: var(--oro);
+  color: var(--oro);
+}
+.mentor-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--negro-2);
+  border: 1px solid var(--oro);
+  border-radius: 10px;
+  padding: 7px 11px;
+  font-size: 12.5px;
+  box-shadow: var(--sombra);
+}
+.mentor-hint-x {
+  appearance: none;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  color: var(--texto-tenue);
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 2px 4px;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .tour-foco,
-  .tour-tarjeta,
-  .burbuja-tour-saludo {
-    animation: none !important;
-    transition: none !important;
+/* 👆 MODO TOCAR: los bordes dorados punteados sobre las secciones REALES.
+   Se enciende con un atributo en el <html>, así el CSS hace todo el trabajo
+   y no hay que tocar el DOM sección por sección. */
+[data-mentor-tocando] [data-mentor]:not([data-mentor-off]) {
+  /* En propiedades sueltas y no en el atajo `outline:`: con el shorthand, el
+     var() del color se pierde y queda el currentColor (blanco). */
+  outline-width: 1px;
+  outline-style: dashed;
+  outline-color: var(--oro);
+  outline-offset: 4px;
+  border-radius: var(--radio);
+  cursor: pointer;
+  /* Además del borde, un relleno tenue: en alto contraste el sistema fuerza
+     el color del outline, y el usuario igual tiene que ver qué es tocable. */
+  background: var(--oro-tenue);
+  transition: outline-color 0.15s ease, background 0.15s ease;
+}
+[data-mentor-tocando] [data-mentor]:not([data-mentor-off]):hover {
+  background: color-mix(in srgb, var(--oro) 22%, transparent);
+  outline-style: solid;
+}
+/* Lo de adentro no se puede tocar mientras dure el modo: el clic es para
+   pedir la explicación, no para disparar el botón que haya debajo. */
+[data-mentor-tocando] [data-mentor]:not([data-mentor-off]) * {
+  pointer-events: none;
+}
+
+@media (max-width: 560px) {
+  .mentor-wrap {
+    left: 12px;
+    bottom: 12px;
+    max-width: calc(100vw - 24px);
+  }
+  .mentor-pill {
+    font-size: 12.5px;
+    padding: 9px 13px;
   }
 }
 

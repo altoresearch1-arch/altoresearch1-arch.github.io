@@ -33,7 +33,7 @@ import BuscadorInicio from './components/BuscadorInicio'
 import CintaBVL from './components/CintaBVL'
 import GanchoDatos from './components/GanchoDatos'
 import TourGuia, { PASOS_INICIO, PASOS_EXPLORAR, PASOS_COMPARADOR, PASOS_RESULTADOS } from './components/TourGuia'
-import BurbujaTour from './components/BurbujaTour'
+import MentorALTO from './components/MentorALTO'
 import OfertaDesbloqueo from './components/OfertaDesbloqueo'
 import { pasosFicha, pasosDesbloqueo } from './lib/guiontour'
 import { useNivel, aplicarTemaNivel } from './lib/nivel'
@@ -498,12 +498,21 @@ export default function App() {
         <NivelTransicion nivelId={transicion} onFin={() => setTransicion(null)} />
       )}
 
-      {/* 🚶 Tour guiado: burbuja ❓ siempre a la mano (inicio y ficha) + el tour */}
-      {/* key={vista}: al cambiar de pantalla se remonta y re-lee su saludo
-          (si no, el estado inicial del saludo se queda pegado al del inicio) */}
+      {/* 🎓 EL MENTOR ALTO (#151): el ÚNICO flotante de aprendizaje. Absorbió
+          la burbuja ❓ — el tour pasó a ser una de sus opciones — y suma el
+          modo 👆 tocar, el "🤔 no entendí" de la sección donde está parado y
+          el progreso ✔. key={vista}: al cambiar de pantalla se remonta y
+          re-lee su saludo (si no, el del inicio se queda pegado). */}
       {tour == null && transicion == null && oferta == null
         && ['inicio', 'empresa', 'cuaderno', 'explorar', 'comparar', 'resultados'].includes(vista) && (
-        <BurbujaTour key={vista} vista={vista} onAbrir={abrirTour} />
+        <MentorALTO
+          key={vista}
+          vista={vista}
+          nivel={nivel ?? 2}
+          empresa={vista === 'empresa' ? empresaSel : null}
+          onTour={abrirTour}
+          onAtlas={() => irA('#/ia')}
+        />
       )}
       {/* ✨ La oferta del tour de desbloqueo, cuando la transición ya terminó */}
       {oferta != null && transicion == null && vista === 'empresa' && tickerSel && (

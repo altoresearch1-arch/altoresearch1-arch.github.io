@@ -4,6 +4,39 @@
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
 > herramienta), lee esto primero. Última actualización: **23 jul 2026**. Estado: **EN VIVO (beta pública)**.
 
+## 🎓 23-jul: EL MENTOR ALTO — LA CÁSCARA (#151, idea de Jair, P0 del plan)
+La última puerta grande del `ANALISIS_EDUCATIVO_Y_TOUR_POR_NIVELES.md` (§31). **Un solo
+flotante de aprendizaje**: el Mentor ABSORBIÓ la burbuja ❓ (BurbujaTour.jsx borrado, su CSS
+también) y el tour pasó a ser una de sus opciones. Tres piezas nuevas, cero dependencias:
+- **`data/mentor.json` (editable por Jair):** 13 tarjetas con el texto POR NIVEL (`niveles`:
+  se usa el escalón más alto que no pase el del usuario) y una línea extra POR LENTE — el
+  P/E en nivel 1 es la bodega y en nivel 4 la trampa cíclica; la deuda en una minera se
+  juzga «con el metal barato» y en un banco «aquí no se mide así». Cada tarjeta puede traer
+  `ejemplo` (la empresa canónica) y `siguiente` (la cadena conversacional #105).
+- **`lib/mentor.js`:** resuelve la tarjeta, filtra las dudas que TODAVÍA no tienen respuesta
+  en ese nivel, y lleva el progreso en localStorage (`alto-mentor-visto`). **✔ es «visto»,
+  nunca «dominado»** (§31-4): el ✔✔ llega el día que exista la mini-pregunta (#14) y no
+  antes. El techo del contador se calcula por nivel: «1 de 9» en nivel 1, «1 de 13» en el 4.
+- **`MentorALTO.jsx`:** pill contextual + 4 modos — 👆 tocar (enciende bordes punteados sobre
+  las secciones que YA existen vía `data-mentor`, con el mismo fix del tour: lo que no ocupa
+  espacio no se enciende), 🤔 no entendí (las dudas de la sección donde está parado, §25),
+  🚶 tour y 🧠 Atlas. La etiqueta cambia por sección con freno de 4 s (§31-6).
+- **Tres bugs cazados al probar**: (a) la animación del tour lleva un `translateX(-50%)` —
+  reusarla empujaba el panel media pantalla a la izquierda en móvil (ahora `mentorEntra`
+  propia); (b) el freno de la etiqueta comparaba contra `0` y `performance.now()` vale pocos
+  ms recién cargada la página, así que se comía el PRIMER cambio; (c) el IntersectionObserver
+  se armaba una vez y las secciones que llegan con `Reveal` nunca entraban — ahora se
+  re-observa cuando cambia el DOM.
+- **11/11 en la prueba del motor** (esbuild + node: profundidad por nivel, nota por lente,
+  Regla #1 con clave inexistente, la cadena apunta solo a tarjetas que existen, el techo sube
+  con el nivel). En el navegador: ciclo completo en BVN (minera) y CREDITC1 (banco), tarjeta
+  → ejemplo → cadena → ✔ → progreso, tour desde el panel, móvil 375 px sin desbordes, build
+  PWA OK (3737.40 KiB). ⚠ **Lo único sin verificar en vivo**: el cambio de etiqueta al
+  scrollear — el IntersectionObserver no entrega callbacks con el panel del navegador oculto
+  (no compositing). Revisarlo a ojo en la próxima sesión.
+- **Lo que sigue (S4):** llenar mentor.json con los guiones de §6 para el resto de secciones,
+  y engancharle a Glosado los tres botoncitos (📖 más / 📊 ejemplo / 🧠 Atlas) del §31-3.
+
 ## 🚪 23-jul: LA ENTRADA CON SALIDAS — cerrar, volver y retomar (pedido de Jair)
 La entrada del #135 (bienvenida + Lección Exprés) se armó el 23-jul de madrugada y era de
 UNA SOLA DIRECCIÓN: se entraba, pero no se salía ni se volvía atrás. Cuatro salidas nuevas:
