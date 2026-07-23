@@ -59,6 +59,17 @@ const SALUDOS = {
   resultados: { clave: 'resultados', titulo: '¿De dónde salieron estas?', texto: 'Te explico tu perfil, por qué estas empresas y qué hacer ahora.' },
 }
 
+// Cómo se llama, en cristiano, la pantalla que el tour va a recorrer. Solo
+// para la línea chica del botón destacado: si no está, el botón no la escribe.
+const NOMBRE_VISTA = {
+  empresa: 'la ficha',
+  inicio: 'el inicio',
+  explorar: 'el explorador',
+  cuaderno: 'tu Cuaderno',
+  comparar: 'el duelo',
+  resultados: 'tus resultados',
+}
+
 export default function MentorALTO({ vista, nivel = 2, empresa = null, onTour, onAtlas }) {
   // null = en reposo (solo la pill) · 'panel' · 'tocar' · 'card' · 'noent'
   const [modo, setModo] = useState(null)
@@ -246,6 +257,20 @@ export default function MentorALTO({ vista, nivel = 2, empresa = null, onTour, o
             <span className="mentor-marca">🎓 Mentor ALTO</span>
             <button className="mentor-x" onClick={() => setModo(null)} aria-label="Cerrar">✕</button>
           </div>
+          {/* El tour va PRIMERO y resaltado: de las cuatro puertas es la única
+              que no exige que el usuario ya sepa qué preguntar — las otras tres
+              esperan una duda concreta. Al que llega perdido se le ofrece la
+              mano antes que el índice (#151-7). */}
+          {onTour && (
+            <button
+              className="mentor-op mentor-op-destacada"
+              onClick={() => { setModo(null); onTour() }}
+            >
+              <span className="mentor-op-cinta">Recomendado</span>
+              🚶 Tour de esta pantalla
+              <small>Te la muestro entera, de la mano{NOMBRE_VISTA[vista] ? ` — ${NOMBRE_VISTA[vista]}` : ''}</small>
+            </button>
+          )}
           {vista === 'empresa' && (
             <button className="mentor-op" onClick={() => setModo('tocar')}>
               👆 ¿Qué es esto? — toca algo
@@ -254,11 +279,6 @@ export default function MentorALTO({ vista, nivel = 2, empresa = null, onTour, o
           <button className="mentor-op" onClick={() => setModo('noent')}>
             🤔 No entendí{nombreSeccion ? ` — ${nombreSeccion.toLowerCase()}` : ''}
           </button>
-          {onTour && (
-            <button className="mentor-op" onClick={() => { setModo(null); onTour() }}>
-              🚶 Tour de esta pantalla
-            </button>
-          )}
           {onAtlas && (
             <button className="mentor-op" onClick={() => { setModo(null); onAtlas() }}>
               🧠 Preguntar a Atlas

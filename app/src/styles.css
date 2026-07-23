@@ -5909,6 +5909,51 @@ body.cuaderno-marca .brand-logo {
 .mentor-op-link {
   color: var(--texto-tenue);
 }
+/* 🚶 La opción destacada: el tour. Es la primera de la lista y la única con
+   fondo — el resto del panel queda en contorno para que el ojo caiga aquí
+   sin que haya que gritarle (§31-1: el oro ya es "esto se toca y se explica").
+   Nada de animación: un panel que late al abrirse cansa a la tercera vez. */
+.mentor-op-destacada {
+  position: relative;
+  border-color: var(--oro);
+  border-width: 1.5px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--oro) 16%, transparent),
+    color-mix(in srgb, var(--oro) 6%, transparent)
+  );
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--oro) 12%, transparent);
+  font-weight: 600;
+  padding-right: 92px; /* el hueco de la cinta, para que no pise el texto */
+  margin-bottom: 10px;
+}
+.mentor-op-destacada:hover {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--oro) 24%, transparent),
+    color-mix(in srgb, var(--oro) 10%, transparent)
+  );
+}
+.mentor-op-destacada small {
+  display: block;
+  margin-top: 3px;
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--texto-tenue);
+}
+.mentor-op-cinta {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--oro);
+  color: var(--negro);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
 .mentor-progreso {
   font-size: 11.5px;
   line-height: 1.4;
