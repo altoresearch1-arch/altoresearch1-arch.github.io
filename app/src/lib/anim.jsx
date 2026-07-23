@@ -20,6 +20,16 @@ export function CountUp({ valor, decimales = 2, duracion = 700 }) {
       setMostrado(valor)
       return
     }
+    // ⚠️ Pestaña en segundo plano: el navegador CONGELA requestAnimationFrame.
+    // Si alguien abre la ficha en una pestaña nueva (o bloquea el celular a
+    // media carga), la animación nunca arranca y el precio se queda clavado en
+    // "US$ 0.0" hasta que recargue. Visto en el deploy del 23-jul con BVN, que
+    // vale US$ 31.9. Por eso: si la pestaña está oculta se pone el valor final
+    // de una y no se anima nada — nunca un cero que no es cero.
+    if (typeof document !== 'undefined' && document.hidden) {
+      setMostrado(valor)
+      return
+    }
     const inicio = performance.now()
     const desde = 0
     const paso = (ahora) => {
@@ -29,7 +39,11 @@ export function CountUp({ valor, decimales = 2, duracion = 700 }) {
       if (t < 1) rafRef.current = requestAnimationFrame(paso)
     }
     rafRef.current = requestAnimationFrame(paso)
-    return () => cancelAnimationFrame(rafRef.current)
+    // Red de seguridad: si por lo que sea el rAF se detiene a medio camino
+    // (la pestaña se oculta justo después de montar), a los duracion+300 ms se
+    // escribe el valor real igual.
+    const red = setTimeout(() => setMostrado(valor), duracion + 300)
+    return () => { cancelAnimationFrame(rafRef.current); clearTimeout(red) }
   }, [valor, duracion])
 
   if (valor == null) return null

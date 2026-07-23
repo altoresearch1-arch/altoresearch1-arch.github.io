@@ -121,8 +121,8 @@ export default function PrecioDelMotor({ empresa }) {
             diferencia{anio.subioDespues
               ? ' — primero cayó y después se recuperó'
               : ' — primero subió y después cedió'}. Ese vaivén es la parte que el promedio anual
-            esconde, y es exactamente lo que hace que una minera con la misma mina, la misma
-            gente y el mismo plan gane mucho un trimestre y poco el siguiente.
+            esconde, y es exactamente lo que hace que {prod.mismaCasa} gane mucho un
+            trimestre y poco el siguiente.
           </p>
         </>
       )}

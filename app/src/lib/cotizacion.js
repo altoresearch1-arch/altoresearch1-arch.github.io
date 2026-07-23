@@ -51,6 +51,18 @@ const CON_ARTICULO = {
   maiz: 'del maíz', soya: 'del aceite de soya',
 }
 
+// La frase "una minera con la misma mina, la misma gente y el mismo plan" es
+// la que hace entender el vaivén… pero solo si la empresa ES una minera. En
+// Petroperú salía hablando de minas (bug visto en el deploy del 23-jul). Aquí
+// cada lente pone su propia versión de "la misma empresa de siempre".
+const MISMA_CASA = {
+  mineras: 'una minera con la misma mina, la misma gente y el mismo plan',
+  hidrocarburos: 'una refinería con la misma planta, la misma gente y el mismo plan',
+  pesqueras: 'una pesquera con la misma flota, la misma gente y la misma cuota',
+  agro: 'una azucarera con el mismo campo, la misma gente y la misma zafra',
+}
+const MISMA_CASA_GENERICA = 'una empresa con los mismos activos, la misma gente y el mismo plan'
+
 // ¿Qué papel juega ese precio en la empresa? En una minera o una azucarera es
 // su INGRESO (vende eso). En una refinería el crudo entra por los dos lados:
 // es su materia prima Y la referencia de lo que vende, así que lo suyo es la
@@ -68,6 +80,7 @@ export function productoDe(empresa) {
     clave,
     rol: ROL_POR_LENTE[lente] || 'ingreso',
     conArticulo: CON_ARTICULO[clave] || `de ${p.nombre.toLowerCase()}`,
+    mismaCasa: MISMA_CASA[lente] || MISMA_CASA_GENERICA,
     ...p,
   }
 }
