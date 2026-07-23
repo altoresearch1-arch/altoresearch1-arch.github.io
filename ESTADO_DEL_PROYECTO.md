@@ -67,6 +67,37 @@ punteado (Regla #1), moneda original (Regla #3), pastillas `.spark-rango` reusad
   sin pago; el periodo en curso se marca con nota. Correr este script junto a
   fetch_bpa_historico.py tras cada trimestre (no está en el robot de 30 min).
 
+## 🔍 22-jul (3): «SI VES 0 REVISA DE NUEVO» — 2 bugs más + recuadro Anual (Jair)
+Jair: «agrega un recuadro que diga anual y verifica que todos estén bien; si ves 0 revisa
+de nuevo». Esa revisión destapó **dos bugs más**, ambos por confiar en un `0.000` del XBRL:
+- **🐞 Clase de acción mal elegida (SPCC).** `eps_por_duracion` prefería SIEMPRE
+  `OrdinarySharesMember`. SPCC taguea ahí **0.0** y el valor REAL en
+  `smv:AccionesDeInversionMiembro` (2025: **6.095**) — y en la BVL cotizan justamente sus
+  acciones de inversión (SPCC**PI1**) → su gráfica salía **plana en cero**. Fix: un valor
+  CON CONTENIDO le gana siempre a un 0 de relleno; entre los no-cero se mantiene la
+  preferencia por común. **SPCC rescatada: 2020 2.373 → 2025 6.095 US$ (+157%)**.
+  Hubo que invalidar los 201 filings cacheados que tenían algún 0 y re-bajarlos.
+- **🐞 El 0.000 que INVENTA una historia.** Varias emisoras dejan la utilidad por acción en
+  0.000 aunque ganen millones (**Sedapal: S/ 248 M de utilidad, EPS 0.0**; Los Portales
+  S/ 36 M; Electro Sur Este S/ 30 M; Norvial S/ 16 M; Indeco, Futura, BAM) — muchas
+  presentan a la SMV por sus **BONOS**, no por acciones. Peor aún en series parciales:
+  **Hermes** venía 0.928 (2023) y marcaba 0.0 en 2024-25 pese a ganar S/ 28 M ese
+  trimestre → la gráfica diría «se desplomó a cero»; **Incrai** venía en −1.8 y marcaba
+  0.0 → diría «se recuperó». Fix en dos capas: (a) serie ENTERA en cero → sin gráfica,
+  con `MOTIVO_SIN_EPS` en `excluidas` (7 empresas); (b) `quitar_ceros_falsos()` — si la
+  escala propia de la empresa (mediana de |anuales| no nulos) es ≥ 0.02, un 0.000 es
+  campo sin llenar → va como HUECO, salvo que el año esté **corroborado aritméticamente**
+  por un anual REAL (ojo: un año todo-en-cero se "corrobora" solo — se excluye
+  explícitamente, era la trampa que dejaba pasar a Incrai). Las de centavos (Volcan,
+  Enpaci, Atacocha) conservan sus ceros: ahí sí pueden ser redondeo real.
+- **📅 Recuadro «Anual»** (lo pedido): en «Un solo año», primera tarjeta en dorado con el
+  anual AUDITADO del año elegido y la leyenda «= la suma de los 4 trimestres» cuando
+  cuadra (BVN 2025 US$ 3.08 = 0.55+0.36+0.66+1.51 ✓; Volcan US$ 0.030 ✓). La app también
+  muestra ya el motivo REAL de exclusión (`bpaData.excluidas[ticker]`) y `notaCeros`.
+- **Estado final auditado: 87 empresas con gráfica, 16 excluidas con razón escrita,
+  253 años con 4 trimestres y CERO descuadres.** Todo cero que sobrevive está justificado:
+  «centavos» (escala <0.02) o «cuadra» (corroborado por un anual real).
+
 ## 🐞 22-jul (2): BUG GRAVE EN `curar_trimestres` — 39 años mal, cazado por Jair
 Jair: «¿por qué el Q2 de Volcan 2025 está vacío si sí tiene BPA?». **Tenía razón y el
 bug era GENERALIZADO** (no solo Volcan): **28 de 94 empresas y 39 de 309 años (12%)

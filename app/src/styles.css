@@ -3176,6 +3176,12 @@ a.link {
   white-space: nowrap;
 }
 .bpa-tarjeta-v.perdida { color: var(--rojo); }
+/* la tarjeta "Anual" manda: es el número auditado que resume el año */
+.bpa-tarjeta.anual {
+  border-color: color-mix(in srgb, var(--oro) 55%, transparent);
+  background: color-mix(in srgb, var(--oro) 9%, var(--negro-2));
+}
+.bpa-tarjeta.anual .bpa-tarjeta-v { color: var(--oro); }
 
 /* ▲▼ de variación (en tarjetas y bajo el valor de cada barra) */
 .bpa-delta {

@@ -58,6 +58,17 @@ MOTIVO_EXCLUSION = ("El BPA del XBRL individual no representa a la acción que c
 #   verdad, la nota diría lo contrario. Siguen excluidos.
 # Ampliar SOLO tras verificar que el individual es coherente con la acción que cotiza.
 MOSTRAR_INDIVIDUAL = {"VOLCABC1"}
+
+# 22-jul (Jair: «si ves 0 revisa de nuevo»): hay emisoras que dejan la utilidad
+# por acción en 0.000 en TODOS los periodos aunque ganen millones — varias
+# presentan a la SMV por sus BONOS, no por acciones (Sedapal S/248 M de utilidad
+# con EPS 0.0; Norvial, Electro Sur Este, Los Portales, Indeco, Futura, BAM).
+# Una línea plana en cero haría creer que no ganan nada → sin gráfica (Regla #1).
+MOTIVO_SIN_EPS = ("Su archivo XBRL en la SMV trae la utilidad por acción en 0.000 en "
+                  "TODOS los periodos (aunque la empresa sí tenga resultados): varias "
+                  "emisoras presentan sus estados por los BONOS que emiten, no por "
+                  "acciones, y nunca llenan ese campo. Graficar una línea plana en cero "
+                  "haría creer que no gana nada.")
 NOTA_INDIVIDUAL = ("Este BPA es el que la empresa reporta en sus estados INDIVIDUALES "
                    "(solo la matriz), en su moneda original. Como es un holding, el P/E "
                    "de «¿Barata o cara?» usa el resultado CONSOLIDADO (todo el grupo), "
@@ -119,18 +130,27 @@ def eps_por_duracion(raw):
 
     dur = {}
     for clave, cands in candidatos.items():
+        # BUG CAZADO 22-jul (Jair: «si ves 0 revisa de nuevo»): varias empresas
+        # taguean 0.0 en la clase que NO les aplica y el valor REAL en la otra.
+        # Caso SPCC: OrdinarySharesMember 0.0 y AccionesDeInversionMiembro 6.095
+        # (y en la BVL cotizan justamente sus acciones de inversión, SPCCPI1) →
+        # con la preferencia ciega por "OrdinaryShares" salía una gráfica plana
+        # en cero. Regla: un valor CON CONTENIDO le gana siempre a un 0 de relleno;
+        # entre los no-cero se mantiene la preferencia por acción común.
+        no_cero = [(m, v) for m, v in cands if v != 0]
+        pool = no_cero or cands
         elegido = None
-        for miembro, v in cands:
+        for miembro, v in pool:
             if "OrdinaryShares" in miembro:
                 elegido = v
                 break
         if elegido is None:
-            for miembro, v in cands:
+            for miembro, v in pool:
                 if miembro == "":
                     elegido = v
                     break
         if elegido is None:
-            elegido = cands[0][1]
+            elegido = pool[0][1]
         dur[clave] = elegido
     return dur, moneda
 
@@ -271,6 +291,51 @@ def curar_trimestres(serie, trimestres):
     return t, nota
 
 
+def quitar_ceros_falsos(serie, trimestres):
+    """Un 0.000 en el XBRL casi nunca significa "ganó exactamente cero": es el
+    campo SIN LLENAR. Es peligroso porque INVENTA una historia (22-jul, revisión
+    pedida por Jair «si ves 0 revisa de nuevo»): Hermes venía 0.928 en 2023 y
+    marca 0.0 en 2024-25 aunque ese trimestre ganó S/ 28 M → la gráfica diría que
+    se desplomó a cero; Incrai venía en −1.8 y marca 0.0 → diría que se recuperó.
+    Se limpia SOLO si la empresa maneja cifras muy por encima del redondeo del
+    XBRL (escala ≥ 0.02): las de centavos (Volcan, Enpaci) sí pueden redondear a
+    0.000 de verdad y ahí el cero se respeta. Y un trimestre en 0 se CONSERVA si
+    su año cuadra con el anual: la aritmética lo corrobora.
+    Devuelve (serie, trimestres, nota | None)."""
+    no_cero = sorted(abs(v) for v in serie.values() if v)
+    if not no_cero:
+        return serie, trimestres, None
+    escala = no_cero[len(no_cero) // 2]          # mediana de |valores| no nulos
+    if escala < 0.02:
+        return serie, trimestres, None
+    corroborado = set()
+    for a, anual in serie.items():
+        # OJO: un año TODO en cero se "corrobora" solo (0+0+0+0 == 0) — es una
+        # verificación vacía que dejaba pasar a Incrai (2022-25 en 0 con escala
+        # 1.8). Solo un anual REAL puede respaldar a un trimestre en cero.
+        if anual == 0:
+            continue
+        qs = [trimestres.get(f"{a}-Q{i}") for i in (1, 2, 3, 4)]
+        if (all(v is not None for v in qs)
+                and abs(sum(qs) - anual) <= max(0.003, abs(anual) * 0.05)):
+            corroborado.add(a)
+    fuera = {a for a, v in serie.items() if v == 0 and a not in corroborado}
+    s = {a: v for a, v in serie.items() if a not in fuera}
+    t = {}
+    for k, v in trimestres.items():
+        if k[:4] in fuera:
+            continue
+        if v == 0 and k[:4] not in corroborado:
+            continue
+        t[k] = v
+    nota = None
+    if fuera:
+        nota = ("Años sin dato de BPA en la SMV (" + "/".join(sorted(fuera)) + "): su "
+                "archivo trae la utilidad por acción en 0.000 aunque la empresa sí tuvo "
+                "resultados, así que van como hueco y no como un cero que no fue.")
+    return s, t, nota
+
+
 def cargar_salida():
     if os.path.exists(SALIDA):
         with open(SALIDA, encoding="utf-8") as f:
@@ -374,6 +439,14 @@ def main():
             print(f"  {tk:10} sin anuales en la SMV (extranjera/sin documentos) — queda fuera, honesto")
             continue
 
+        # BPA en 0.000 en TODOS los años → la SMV no reporta el dato (ver
+        # MOTIVO_SIN_EPS). Mejor sin gráfica que una línea plana engañosa.
+        if serie and all(v == 0 for v in serie.values()):
+            salida["excluidas"][tk] = MOTIVO_SIN_EPS
+            salida["empresas"].pop(tk, None)
+            print(f"  {tk:10} BPA 0.000 en todos los años — sin gráfica (la SMV no llena el campo)")
+            continue
+
         # siembra del trimestre en curso (Q1-2026) desde empresas.json
         e_app = EMPRESAS.get(tk) or {}
         if (tipo_visto == "xbrl" and e_app.get("epsTrimestreRaw") is not None
@@ -381,6 +454,12 @@ def main():
             trimestres[q_vivo] = e_app["epsTrimestreRaw"]
 
         trimestres, nota_q = curar_trimestres(serie, trimestres)
+        serie, trimestres, nota_cero = quitar_ceros_falsos(serie, trimestres)
+        if not serie and not trimestres:
+            salida["excluidas"][tk] = MOTIVO_SIN_EPS
+            salida["empresas"].pop(tk, None)
+            print(f"  {tk:10} sin BPA utilizable tras limpiar los 0.000 — sin gráfica")
+            continue
         moneda = c.get("monedaForzada") or moneda
         fuente = ("SMV — EE.FF. individuales, utilidad básica por acción: anual auditado "
                   "+ trimestrales intermedios (XBRL)" if tipo_visto == "xbrl" else
@@ -397,6 +476,9 @@ def main():
         if nota_q:
             salida["empresas"][tk]["notaTrimestres"] = nota_q
             print(f"    {tk}: {nota_q}")
+        if nota_cero:
+            salida["empresas"][tk]["notaCeros"] = nota_cero
+            print(f"    {tk}: {nota_cero}")
         if fallo:
             salida["empresas"][tk]["incompleta"] = True  # otra corrida la completa
 

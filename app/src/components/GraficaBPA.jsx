@@ -188,6 +188,9 @@ export default function GraficaBPA({ ticker, empresa }) {
   // BPA problemático) — antes se apagaba TODA la sección (pregunta de Jair).
   const hayBpa = aniosSerie.length >= 2 || hayTrimestres
   const soloResumen = !hayBpa
+  // motivo REAL por el que quedó fuera (lo escribe el extractor): EPS distorsionado
+  // por clase/holding, o la SMV que deja el campo en 0.000. Sin él, texto genérico.
+  const motivoExcluida = bpaData.excluidas?.[ticker] || null
 
   const qReciente = hayTrimestres ? clavesQ[clavesQ.length - 1].slice(5) : 'Q1'
   // default de "Un solo año": el último año COMPLETO (con Q4)
@@ -260,6 +263,12 @@ export default function GraficaBPA({ ticker, empresa }) {
     ? conValor.reduce((a, b) => (b.valor < a.valor ? b : a)) : null
   const vsQue = modo === 'anual' ? 'vs año anterior'
     : modo === 'trimestre' ? `vs ${q} anterior` : 'vs trimestre anterior'
+  // 📅 recuadro "Anual" (pedido de Jair): en «Un solo año», el anual AUDITADO del
+  // año elegido — sirve para ver de un vistazo que los 4 trimestres lo componen.
+  const anualDelAnio = modo === 'anio' ? (serie[anioSel] ?? null) : null
+  const cuadraElAnio = anualDelAnio != null && conValor.length === 4 &&
+    Math.abs(conValor.reduce((s, i) => s + i.valor, 0) - anualDelAnio) <=
+      Math.max(0.003, Math.abs(anualDelAnio) * 0.05)
 
   const MODOS = hayBpa ? [
     { id: 'anual', icono: '📈', nombre: 'Año vs año' },
@@ -289,10 +298,12 @@ export default function GraficaBPA({ ticker, empresa }) {
       {/* Sin serie de BPA histórico: nota honesta (los 10 de fix_eps) + solo el resumen */}
       {soloResumen && (
         <p className="muted" style={{ fontSize: 12, marginBottom: 10, lineHeight: 1.5 }}>
-          El <Glosado text="BPA" /> histórico de esta acción no se grafica: su EPS del
-          archivo XBRL individual no representa a la acción que cotiza (por clases de
-          acción, estructura de holding o moneda), así que dibujar años de barras
-          engañaría. El P/E y el resto del análisis sí usan su EPS corregido.
+          {motivoExcluida
+            ? <>Sin gráfica del <Glosado text="BPA" /> histórico: <Glosado text={motivoExcluida} /></>
+            : <>El <Glosado text="BPA" /> histórico de esta acción no se grafica: su EPS del
+               archivo XBRL individual no representa a la acción que cotiza (por clases de
+               acción, estructura de holding o moneda), así que dibujar años de barras
+               engañaría. El P/E y el resto del análisis sí usan su EPS corregido.</>}
         </p>
       )}
 
@@ -336,8 +347,21 @@ export default function GraficaBPA({ ticker, empresa }) {
         ) : (
           <>
             {/* ── tarjetas resumen: contexto inmediato antes del gráfico ── */}
-            {hayBarras && ultimo && conValor.length >= 3 && (
+            {hayBarras && ultimo && (conValor.length >= 3 || anualDelAnio != null) && (
               <div className="bpa-tarjetas">
+                {/* 📅 ANUAL del año elegido (pedido de Jair): el auditado de la SMV,
+                    y si los 4 trimestres están, se dice que son sus partes */}
+                {anualDelAnio != null && (
+                  <div className="bpa-tarjeta anual">
+                    <div className="bpa-tarjeta-t">Anual {anioSel}</div>
+                    <div className={'bpa-tarjeta-v' + (anualDelAnio < 0 ? ' perdida' : '')}>
+                      {dinero(anualDelAnio, sim)}
+                    </div>
+                    <span className="bpa-delta">
+                      {cuadraElAnio ? '= la suma de los 4 trimestres' : 'auditado (SMV)'}
+                    </span>
+                  </div>
+                )}
                 <div className="bpa-tarjeta">
                   <div className="bpa-tarjeta-t">BPA {ultimo.etiqueta}</div>
                   <div className={'bpa-tarjeta-v' + (ultimo.valor < 0 ? ' perdida' : '')}>
@@ -466,6 +490,11 @@ export default function GraficaBPA({ ticker, empresa }) {
             {modo !== 'anual' && emp.notaTrimestres && (
               <p className="muted" style={{ fontSize: 11.5 }}>
                 ⚖ <Glosado text={emp.notaTrimestres} />
+              </p>
+            )}
+            {emp.notaCeros && (
+              <p className="muted" style={{ fontSize: 11.5 }}>
+                ⚖ <Glosado text={emp.notaCeros} />
               </p>
             )}
             <p className="muted" style={{ fontSize: 11.5 }}>
