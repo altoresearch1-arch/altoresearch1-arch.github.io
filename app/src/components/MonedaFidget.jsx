@@ -1,67 +1,13 @@
 import { useRef } from 'react'
+import { cling as sonarMoneda, tunk as sonarIntento } from '../lib/sonido'
 
 // El LOGO gigante del inicio es la "moneda" anti-estrés (guiño al coin de TF2).
 // v2 (pedido de Jair 09-jul): ahora la moneda SE RESISTE — cada toque es un
 // intento (tiembla y suena sordo) y recién al 3º-6º intento (aleatorio) se da
 // la vuelta completa, suena el "cling" y SUELTA PARTÍCULAS doradas. Todo
-// sintetizado (cero archivos): sonidos con Web Audio, partículas con spans +
-// Web Animations API. El giro va sobre el WRAP para no chocar con el aura.
-
-let _ac = null // un solo AudioContext, se crea con el primer clic (gesto del usuario)
-
-function contexto() {
-  const AC = window.AudioContext || window.webkitAudioContext
-  if (!AC) return null
-  if (!_ac) _ac = new AC()
-  if (_ac.state === 'suspended') _ac.resume().catch(() => {})
-  return _ac
-}
-
-// "Cling" metálico del giro logrado (el de siempre)
-function sonarMoneda() {
-  try {
-    const ctx = contexto()
-    if (!ctx) return
-    const now = ctx.currentTime
-    const parciales = [[1175, 0], [1568, 0.045], [2350, 0.02]]
-    parciales.forEach(([f, dt]) => {
-      const o = ctx.createOscillator()
-      const g = ctx.createGain()
-      o.type = 'triangle'
-      o.frequency.setValueAtTime(f, now + dt)
-      o.frequency.exponentialRampToValueAtTime(f * 0.985, now + dt + 0.3)
-      o.connect(g)
-      g.connect(ctx.destination)
-      g.gain.setValueAtTime(0.0001, now + dt)
-      g.gain.exponentialRampToValueAtTime(0.15, now + dt + 0.006)
-      g.gain.exponentialRampToValueAtTime(0.0001, now + dt + 0.34)
-      o.start(now + dt)
-      o.stop(now + dt + 0.42)
-    })
-  } catch { /* sin audio, igual se mueve */ }
-}
-
-// "Tunk" sordo del intento fallido: la moneda pesa
-function sonarIntento(intento) {
-  try {
-    const ctx = contexto()
-    if (!ctx) return
-    const now = ctx.currentTime
-    const o = ctx.createOscillator()
-    const g = ctx.createGain()
-    o.type = 'triangle'
-    // cada intento suena un pelín más agudo: se siente que "ya casi"
-    o.frequency.setValueAtTime(180 + intento * 40, now)
-    o.frequency.exponentialRampToValueAtTime(120, now + 0.09)
-    o.connect(g)
-    g.connect(ctx.destination)
-    g.gain.setValueAtTime(0.0001, now)
-    g.gain.exponentialRampToValueAtTime(0.12, now + 0.005)
-    g.gain.exponentialRampToValueAtTime(0.0001, now + 0.12)
-    o.start(now)
-    o.stop(now + 0.15)
-  } catch { /* nada */ }
-}
+// sintetizado (cero archivos): sonidos en lib/sonido.js (compartidos con el
+// premio del Mentor desde el 23-jul), partículas con spans + Web Animations
+// API. El giro va sobre el WRAP para no chocar con el aura.
 
 // 🎉 Partículas doradas al lograr el giro: chispas que salen disparadas del
 // centro y caen con "gravedad" (todo con spans + WAAPI; se autodestruyen).

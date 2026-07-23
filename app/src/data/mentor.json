@@ -1,5 +1,7 @@
 {
-  "_comment": "🎓 EL MENTOR ALTO (mejora #151, idea de Jair). Las tarjetas que explican cada parte de la ficha cuando el usuario toca algo en el modo 👆. EDITABLE POR JAIR como todos los JSON — aquí se escribe el CONTENIDO, la cáscara (MentorALTO.jsx) no se toca. Estructura de cada tarjeta: icono · titulo · seccion (para el «🤔 no entendí» contextual) · niveles (el texto según el nivel del usuario: se usa el más alto que no lo pase — si solo hay '1', el nivel 4 también lee ese) · lentes (una línea EXTRA solo para ciertos negocios; sin lente que calce no se escribe nada, Regla #1) · ejemplo (el «ver ejemplo con…», la empresa canónica) · siguiente (la pregunta que encadena con la próxima tarjeta, mejora #105).",
+  "_comment": "🎓 EL MENTOR ALTO (mejora #151, idea de Jair). Las tarjetas que explican cada parte de la ficha cuando el usuario toca algo en el modo 👆. EDITABLE POR JAIR como todos los JSON — aquí se escribe el CONTENIDO, la cáscara (MentorALTO.jsx) no se toca. Estructura de cada tarjeta: icono · titulo · seccion (para el «🤔 no entendí» contextual) · niveles (el texto según el nivel del usuario: se usa el más alto que no lo pase — si solo hay '1', el nivel 4 también lee ese) · lentes (una línea EXTRA solo para ciertos negocios; sin lente que calce no se escribe nada, Regla #1) · trampa · combo · ejemplo (el «ver ejemplo con…», la empresa canónica) · pregunta (la mini-pregunta del ✔✔) · siguiente (la pregunta que encadena con la próxima tarjeta, mejora #105).",
+  "_profundidades_comment": "LAS 5 PROFUNDIDADES de §6 del plan, sin inventar niveles nuevos: `niveles.1` = qué es (sin asumir nada) · `niveles.2` = cómo se interpreta, con el lente del sector (+ la línea de `lentes`) · `niveles.3` = cómo se usa para decidir · `trampa` = cuándo el número MIENTE (se agrega desde el nivel 3) · `combo` = cómo lo cruza un analista con los demás (se agrega en el nivel 4). Así el nivel 4 lee cuerpo+trampa+combo y el nivel 1 lee una sola frase: la misma tarjeta, cinco hondos.",
+  "_pregunta_comment": "LA MINI-PREGUNTA (#14) es la que habilita el ✔✔ «dominado». Regla #151-4: leer es ✔ visto; solo contestar bien es ✔✔. Se escribe UNA pregunta por tarjeta, sobre la LECCIÓN (no sobre el dato de una empresa, que cambia cada trimestre), con 3 opciones: la buena lleva `ok: true` y las otras llevan `pista` — un empujón, nunca un regaño. Sin `pregunta`, la tarjeta simplemente se cierra con ✔ y no pasa nada: no se inventa examen (Regla #1).",
   "_orden_comment": "El orden de este archivo es el orden en que se cuenta la ficha (la escalera de aprendizaje), y es el que usa el contador «✔ aprendidos N de M».",
   "_terminos_comment": "`terminos` engancha la tarjeta con las palabras punteadas de Glosado: cuando el usuario toca «P/E» en cualquier texto de la app, su tooltip ofrece 📖 explícamelo / 📊 ejemplo, que abren ESTA tarjeta. Escribir las palabras en minúscula y tal como aparecen en terminos.json.",
   "tarjetas": {
@@ -8,7 +10,19 @@
       "titulo": "¿Qué es una acción?",
       "seccion": null,
       "niveles": {
-        "1": "Un pedacito de una empresa de verdad. Si compras una acción de Alicorp, eres dueño de una parte chiquita de Alicorp: de sus fábricas, de sus marcas y de lo que gane. Chiquita en serio — hay cientos de millones de acciones. Por eso ALTO te hace mirar la EMPRESA y no el gráfico: lo que estás comprando es el negocio."
+        "1": "Un pedacito de una empresa de verdad. Si compras una acción de Alicorp, eres dueño de una parte chiquita de Alicorp: de sus fábricas, de sus marcas y de lo que gane. Chiquita en serio — hay cientos de millones de acciones. Por eso ALTO te hace mirar la EMPRESA y no el gráfico: lo que estás comprando es el negocio.",
+        "2": "Un pedacito de una empresa de verdad. Siendo dueño, la plata te puede llegar por solo dos caminos: que la empresa reparta parte de su ganancia (el dividendo) o que más adelante alguien pague por tu pedacito más de lo que pagaste tú. Nada más — no hay tasa pactada ni fecha de vencimiento. De ahí sale todo lo demás que verás en la ficha: si el negocio gana, si reparte, y a qué precio te lo están vendiendo.",
+        "3": "Un título de propiedad sobre una parte del negocio y de sus utilidades futuras. Se decide por el negocio, no por el papel: cuánto gana hoy, con qué estabilidad, cuánto de eso reparte y cuánto te cobra el mercado por entrar. El precio es lo último que se mira, y siempre contra esas cuatro cosas."
+      },
+      "trampa": "En la BVL muchas empresas tienen DOS clases: la común y la «de inversión». La de inversión normalmente no vota en junta y cotiza más barata — no es la misma acción aunque el nombre se parezca, y a veces ni se negocia. Mira siempre qué clase estás viendo.",
+      "combo": "Ser dueño se traduce en tres números que se leen juntos: cuánto gana por acción (BPA), cuánto de eso te llega (dividendo) y cuántos años de esa ganancia estás pagando (P/E). La acción es el envase; el contenido son esos tres.",
+      "pregunta": {
+        "q": "Compras una acción de Alicorp. ¿Qué tienes en la mano?",
+        "opciones": [
+          { "t": "Una parte chiquita del negocio de Alicorp", "ok": true },
+          { "t": "Un préstamo que Alicorp me debe devolver", "pista": "Eso sería un bono: le prestas y te devuelve con intereses. Con una acción eres SOCIO, no acreedor: nadie te debe devolver nada." },
+          { "t": "Un depósito con una tasa pactada", "pista": "No hay tasa pactada. La empresa decide cada año si reparte y cuánto; el precio lo pone el mercado." }
+        ]
       },
       "siguiente": {
         "texto": "¿Y cómo gano con eso?",
@@ -24,11 +38,22 @@
       "seccion": "identidad",
       "niveles": {
         "1": "La pregunta que va PRIMERO, antes que cualquier número: ¿de dónde saca la plata esta empresa? ¿Vende metal, cobra un peaje, presta dinero, cobra una tarifa? De eso depende todo lo demás — la misma deuda, el mismo P/E y el mismo margen significan cosas distintas según de qué viva.",
-        "3": "Es el LENTE. ALTO lo declara arriba de la ficha a propósito: mirar un indicador sin saber de qué vive la empresa es el error más caro y más común. Una eléctrica endeudada está haciendo su trabajo; una minera con esa misma deuda está apostando a que el metal no baje."
+        "2": "De dónde saca la plata, y esa respuesta es el LENTE con que se lee toda la ficha. Cuatro familias, cuatro lecturas: quien vende materia prima (mineras, pesqueras) no elige su precio y por eso salta de un año a otro; quien cobra una tarifa regulada (eléctricas, agua) es aburrido y previsible; quien presta dinero (bancos, seguros) juega con reglas propias; y quien le vende al público (retail, consumo) vive de vender mucho ganando poquito en cada venta.",
+        "3": "Es el LENTE. ALTO lo declara arriba de la ficha a propósito: mirar un indicador sin saber de qué vive la empresa es el error más caro y más común. Una eléctrica endeudada está haciendo su trabajo; una minera con esa misma deuda está apostando a que el metal no baje. Antes de juzgar cualquier número, pregúntate qué sería NORMAL para un negocio así."
       },
+      "trampa": "Dos casos donde el rótulo engaña: los holdings (Credicorp, Intercorp) no operan nada, solo son dueños de otras empresas — sus márgenes y su deuda no se leen como los de una empresa que fabrica algo. Y el cajón «diversas» de la BVL no es un sector: adentro hay negocios que no tienen nada que ver entre sí.",
+      "combo": "El lente no es un dato, es el orden de lectura: primero de qué vive, después cuál es su motor externo, después qué margen deja ese negocio y recién ahí si su deuda y su precio tienen sentido. Un analista que cambia ese orden termina comparando un banco con una mina.",
       "ejemplo": {
         "titulo": "La misma deuda, cuatro lecturas",
         "texto": "Tres años de deuda: en una eléctrica es normal (cobra tarifa todos los meses), en un hospital es manejable (la gente se enferma en crisis igual), en una minera es una alerta (su caja depende del metal) y en un banco es un error de categoría — deber es su negocio."
+      },
+      "pregunta": {
+        "q": "¿Por qué ALTO te muestra «de qué vive» ANTES que cualquier número?",
+        "opciones": [
+          { "t": "Porque el mismo número significa cosas distintas según el negocio", "ok": true },
+          { "t": "Porque es un dato de relleno mientras cargan los precios", "pista": "Al revés: es el dato que le da sentido a todos los demás. Sin él, la deuda o el P/E se leen a ciegas." },
+          { "t": "Porque las empresas con negocios conocidos son mejores", "pista": "No hay negocios buenos y malos por rubro. Lo que cambia es la VARA con la que se juzga a cada uno." }
+        ]
       },
       "siguiente": {
         "texto": "¿Y por qué le fue así este año?",
@@ -41,7 +66,18 @@
       "seccion": "gerencia",
       "niveles": {
         "1": "Las palabras de la propia gerencia, sacadas del informe que le entrega a la SMV cada trimestre. No es opinión de ALTO ni de nadie: es la empresa explicando su propio resultado. Sirve para saber si lo que pasó fue por el negocio o por algo de una sola vez.",
+        "2": "La empresa explicando su propio trimestre. Léelo como leerías la explicación de alguien que te cuenta cómo le fue: importa la razón que da (¿vendió más? ¿le subieron los costos? ¿le ayudó el dólar?) y también lo que se le nota que evita mencionar. Es el puente entre «los números cambiaron» y «por qué cambiaron», y ninguna cifra de la ficha te lo va a contar sola.",
         "3": "El «Análisis y Discusión de la Gerencia». Léelo buscando dos cosas: qué explicación dan (¿precio, volumen, costos, tipo de cambio?) y qué NO mencionan. Cuando el resultado mejora por un efecto único —la venta de un activo, un tipo de cambio favorable— conviene no proyectarlo al futuro."
+      },
+      "trampa": "Es la parte interesada hablando de sí misma: los buenos resultados son «nuestra gestión» y los malos «el entorno». No miente (es un documento oficial), pero elige qué contar. La prueba es cruzarlo con los números: si dice que mejoró el volumen, la producción y las ventas deberían mostrarlo.",
+      "combo": "Un analista usa este texto como hipótesis, no como conclusión: toma la razón que da la gerencia y la contrasta con la producción del mes, con el precio del motor y con el margen. Cuando las tres apuntan a lo mismo, la explicación es sólida; cuando no, ahí está la pregunta que vale.",
+      "pregunta": {
+        "q": "La gerencia explica que la utilidad subió por la venta de un terreno. ¿Cómo lo lees?",
+        "opciones": [
+          { "t": "Es una ganancia de una sola vez: no la proyecto al próximo año", "ok": true },
+          { "t": "El negocio mejoró y va a seguir mejorando", "pista": "Vender un terreno no es su negocio. Ese ingreso no se repite: sube la utilidad de este trimestre y desaparece del siguiente." },
+          { "t": "Da igual de dónde venga: la utilidad es utilidad", "pista": "Justo eso es lo que se paga caro. Una utilidad que no se repite infla la ganancia de hoy y hace ver el P/E más barato de lo que es." }
+        ]
       },
       "siguiente": {
         "texto": "¿Y qué precio le manda?",
@@ -54,6 +90,7 @@
       "seccion": "motor",
       "niveles": {
         "1": "Casi toda empresa tiene UN precio de afuera que le manda: el del metal que vende, el dólar, la tasa del banco. Ella no lo decide — lo recibe. Por eso se mira primero: explica la mitad de lo que verás después.",
+        "2": "El precio de afuera que le manda, y que ella no decide. Saberlo cambia cómo juzgas a la empresa: si el cobre subió 40% y sus ganancias subieron 45%, no hizo nada extraordinario — la llevó la corriente. Si el cobre cayó y ella aguantó, ahí sí hay gestión. La pregunta útil no es «¿ganó más?» sino «¿ganó más de lo que le tocaba por el viento que tenía?».",
         "3": "El driver externo. Antes de juzgar si la empresa lo hizo bien o mal, hay que saber si el viento venía a favor: la misma gestión con el cobre a US$ 3 o a US$ 5 da resultados distintos. La cadena es precio → ganancia → acción, y la ganancia se mueve MÁS que el precio (los costos no bajan al mismo ritmo)."
       },
       "lentes": {
@@ -61,6 +98,16 @@
         "bancos": "En un banco el motor es la tasa de referencia: el precio del dinero es su materia prima.",
         "retail": "En retail el motor es la inflación: le sube el ticket y a la vez le encoge al cliente.",
         "hidrocarburos": "Aquí hay DOS motores y tiran distinto: el crudo (que es su costo y su referencia de venta) y el dólar en que debe."
+      },
+      "trampa": "El precio de hoy no es el precio al que vendió: muchas empresas venden con contratos y liquidaciones de meses atrás, así que el metal caro de esta semana aparece en los estados financieros del trimestre que viene. Y ojo con el sentido: para una refinería el crudo caro es un COSTO, no una buena noticia.",
+      "combo": "El combo del ciclo: precio del motor × producción = adelanto de las ventas del trimestre; ese adelanto contra el margen dice si los costos le están comiendo la mejora; y todo eso contra el P/E dice si el mercado ya lo dio por hecho. Los tres juntos son el oficio; el precio solo es un titular.",
+      "pregunta": {
+        "q": "El cobre subió 40% y la ganancia de la minera subió 45%. ¿Qué dice eso de su gestión?",
+        "opciones": [
+          { "t": "Casi nada: la llevó el precio, que ella no decide", "ok": true },
+          { "t": "Que la gerencia hizo un trabajo excelente", "pista": "Con el metal disparado, subir la ganancia es lo que le tocaba. La gestión se mide sobre todo en la parte MALA del ciclo." },
+          { "t": "Que la acción va a subir 45% también", "pista": "La ganancia y la acción no se mueven al mismo ritmo: el mercado suele adelantarse al ciclo y ya tener el precio del metal metido en la cotización." }
+        ]
       },
       "siguiente": {
         "texto": "¿Y eso cómo se le nota en la ganancia?",
@@ -73,7 +120,18 @@
       "seccion": "precio",
       "niveles": {
         "1": "Cómo se movió el precio, con los cierres reales de la Bolsa de Lima. Mira el PASADO. No promete nada del futuro — si bastara con ver la línea subir, todos ganaríamos.",
+        "2": "El camino que hizo el precio, con cierres reales de la BVL. Sirve para una sola cosa: darte contexto de dónde está parado hoy («viene de subir fuerte» o «viene golpeada»), no para adivinar hacia dónde va. Y una línea que sube no significa «barata» ni «cara»: eso lo dice la ganancia de la empresa, no la forma del dibujo.",
         "3": "Cierres oficiales de la BVL. Los saltos suelen coincidir con noticias: resultados trimestrales, dividendos, hechos de importancia. Vale más preguntarse QUÉ pasó en el salto que mirar la forma de la curva."
+      },
+      "trampa": "Dos escalones que no son movimientos reales: el día del corte del dividendo la acción amanece más barata justo por lo que repartió, y en las acciones poco negociadas la línea es plana porque nadie operó — no porque el precio esté quieto. Una raya recta de varios días suele ser silencio, no calma.",
+      "combo": "El recorrido se cruza con los hechos y con los resultados: cada salto grande debería tener un dueño (un hecho de importancia, un trimestre, un dividendo). Cuando el precio se movió y no hay noticia que lo explique, o hay algo que no está publicado, o simplemente hubo poca liquidez.",
+      "pregunta": {
+        "q": "La acción cayó 4% exactamente el día del corte del dividendo. ¿Qué pasó?",
+        "opciones": [
+          { "t": "Nada raro: pagó ese dividendo y salió de su precio", "ok": true },
+          { "t": "El mercado se asustó con la empresa", "pista": "El día del corte la acción vale menos justo por la plata que repartió. Si tenías la acción, esa caída ya la tienes en el bolsillo." },
+          { "t": "Es el momento perfecto para comprarla barata", "pista": "No está más barata: vale menos porque repartió. Comprar el día después no te da derecho a ese dividendo." }
+        ]
       },
       "siguiente": {
         "texto": "¿Y cuánto se sacude normalmente?",
@@ -86,7 +144,18 @@
       "seccion": "precio",
       "niveles": {
         "1": "Cuánto se sacude el precio en un año normal. Mucho vaivén no significa «mala empresa»: significa que verás números rojos y verdes grandes, y que hay que tener estómago para no vender en el peor día.",
+        "2": "Cuánto se sacude el precio en un año normal, y eso depende del negocio: una eléctrica que cobra tarifa se mueve poquito, una minera junior se mueve como montaña rusa porque su valor depende de un metal que sube y baja. La pregunta no es «¿cuál es mejor?» sino «¿cuál aguantas TÚ sin vender en el peor día?» — que es exactamente lo que midió tu quiz.",
         "3": "Mide el vaivén del PRECIO, no la solidez del negocio. Ojo con la trampa: una acción que casi no se negocia sale «tranquila» en este medidor, y su riesgo real es otro — que el día que quieras vender no haya a quién."
+      },
+      "trampa": "«Poco negociada» NO es «tranquila»: es un precio congelado. Si en el mes hubo tres operaciones, el medidor sale bajo y el riesgo verdadero es peor — puedes quedarte con la acción en la mano sin comprador. Por eso ALTO marca aparte las poco negociadas en vez de dejar que este número hable por ellas.",
+      "combo": "La volatilidad no se juzga sola sino contra tu cartera: una acción movida pesando 5% del Cuaderno es una anécdota; la misma pesando 40% es tu resultado del año. Un analista mira volatilidad × concentración, y recién después decide si el vaivén importa.",
+      "pregunta": {
+        "q": "Una acción casi no se negocia y el medidor la marca «tranquila». ¿Qué significa?",
+        "opciones": [
+          { "t": "Que su precio está congelado por falta de operaciones, no que sea segura", "ok": true },
+          { "t": "Que es de las más seguras de la bolsa", "pista": "Se ve quieta porque nadie la compra ni la vende. Ese es un riesgo distinto y peor: el día que quieras salir, puede no haber a quién venderle." },
+          { "t": "Que la empresa es grande y sólida", "pista": "El medidor mide el vaivén del precio, no el tamaño ni la salud del negocio. Una empresa chica y olvidada también sale «tranquila»." }
+        ]
       },
       "siguiente": {
         "texto": "¿Y esta empresa reparte plata?",
@@ -102,15 +171,26 @@
       "seccion": "dividendos",
       "niveles": {
         "1": "La parte de la ganancia que la empresa le reparte a sus dueños. Si tienes la acción, te llega a la cuenta sin vender nada. **No es una tasa fija como un plazo fijo del banco**: la empresa decide cada año cuánto reparte, y puede repartir menos, o nada.",
+        "2": "La parte de la ganancia que reparte entre sus dueños, y su regularidad depende del negocio: una eléctrica con tarifa regulada reparte parecido todos los años, una minera reparte fuerte en el año bueno del metal y recorta sin aviso en el malo. El «yield» que ves es esa plata comparada con el precio de hoy — pero es lo que PAGÓ, no lo que promete pagar. Un yield mucho más alto que el de sus pares casi siempre esconde una historia detrás.",
         "3": "El yield que muestra ALTO es lo que PAGÓ en los últimos 12 meses dividido entre el precio de hoy — es historia, no promesa. Dos avisos: un yield altísimo suele ser un pago extraordinario que no se repite, y conviene mirar el semáforo «¿se lo puede pagar?», que compara lo repartido contra el flujo de caja libre real."
       },
       "lentes": {
         "minas": "En una minera el dividendo sigue al ciclo del metal: años buenos reparten fuerte, años malos recortan sin aviso.",
         "electricas": "Es el caso donde el dividendo es más previsible: cobra tarifas reguladas todos los meses."
       },
+      "trampa": "Tres formas en que este número engaña: (a) el extraordinario —vendió un activo y repartió una vez— infla el yield de un año que no se repite; (b) la fecha de corte manda: comprar un día tarde deja el dividendo en manos del vendedor anterior; (c) varias empresas pagan en dólares o en ACCIONES (típico en bancos), y un dividendo en acciones no te deposita plata.",
+      "combo": "El dividendo nunca se lee solo: se cruza con el flujo de caja libre (¿le alcanza sin endeudarse?), con la deuda (¿reparte mientras debe?) y con el historial (¿lo sostuvo en el año malo?). Un yield alto con flujo negativo es una promesa que se paga con préstamos — el semáforo de ALTO existe justo para eso.",
       "ejemplo": {
         "titulo": "El caso de las eléctricas",
         "texto": "Una eléctrica cobra una tarifa regulada mes a mes, así que su dividendo se parece a un sueldo. Una minera reparte según cómo estuvo el metal ese año. El MISMO 6% de yield significa cosas muy distintas en cada una."
+      },
+      "pregunta": {
+        "q": "Una empresa muestra 14% de yield, el triple que sus pares. ¿Qué haces?",
+        "opciones": [
+          { "t": "Reviso si fue un pago extraordinario de una sola vez", "ok": true },
+          { "t": "Compro: es la que más paga de la bolsa", "pista": "El yield mira hacia atrás. Un número muy por encima del sector casi siempre es un pago único que no se repite, o un precio que se desplomó." },
+          { "t": "La descarto: un yield tan alto es siempre una estafa", "pista": "Tampoco. No es estafa, es una pregunta: ¿de dónde salió esa plata y se puede repetir? Eso lo contesta el flujo de caja libre." }
+        ]
       },
       "siguiente": {
         "texto": "¿Y está barata o cara?",
@@ -129,16 +209,26 @@
       "seccion": "valoracion",
       "niveles": {
         "1": "Imagina comprar una bodega. Si gana S/ 10 al año y te la venden a S/ 100, estás pagando 10 años de sus ganancias. Ese número —10— es el P/E. Mientras más bajo, menos años de ganancia estás pagando… si la ganancia se mantiene, que es justo lo que hay que averiguar.",
-        "3": "Precio ÷ ganancia por acción. Nunca se lee solo: se compara contra su propio sector y contra su propia historia, y siempre preguntando de qué ganancia sale. Un P/E bajo puede ser una ganga o una advertencia de que el mercado espera que esa ganancia caiga.",
-        "4": "Precio ÷ BPA. Lo importante es el denominador: ganancia de HOY, con márgenes de hoy y precios de insumos de hoy. Para una cíclica en pico de ciclo, el P/E bajo es la trampa clásica — por eso la app muestra el P/E estresado, con la ganancia partida a la mitad."
+        "2": "Cuántos años de la ganancia actual estás pagando por entrar. Y «alto» o «bajo» no existe en el aire: existe frente a su sector. Un banco o una eléctrica suelen moverse en un rango bajo porque su ganancia es previsible; una empresa de consumo con marcas fuertes cotiza más caro justo por eso; una minera muestra P/E bajísimos cuando el metal está caro, que es cuando MENOS hay que fiarse. Compara siempre contra sus pares y contra su propia historia, nunca contra otro rubro.",
+        "3": "Precio ÷ ganancia por acción. Nunca se lee solo: se compara contra su propio sector y contra su propia historia, y siempre preguntando de qué ganancia sale. Un P/E bajo puede ser una ganga o una advertencia de que el mercado espera que esa ganancia caiga. Úsalo como punto de partida del estudio, no como veredicto."
       },
       "lentes": {
         "minas": "En una minera el P/E bajo es sospechoso cuando el metal está caro: es el momento en que más engaña.",
         "bancos": "En un banco se mira además cuánto paga sobre su patrimonio, porque su «fábrica» es dinero, no maquinaria."
       },
+      "trampa": "Lo delicado es el denominador: es la ganancia de HOY, con los precios y márgenes de hoy. En una cíclica en pico de ciclo el P/E bajo es la trampa clásica —si el metal cae 25%, ese 9.6 se convierte en 19 sin que la acción se mueva— y por eso la app muestra el P/E estresado. Además: si la empresa perdió plata no hay P/E (no existe, no es «cero»), y si la acción casi no se negocia el precio del numerador puede ser viejo.",
+      "combo": "El P/E se cruza con tres cosas antes de decir nada: con el margen (¿la ganancia viene del negocio o de un extraordinario?), con el ciclo del motor (¿esa ganancia es de pico o de valle?) y con la deuda (dos empresas con el mismo P/E no valen lo mismo si una debe cinco años de caja). Y en las que no publican su depreciación, ALTO cambia a EV/EBIT en vez de inventar el dato.",
       "ejemplo": {
         "titulo": "Gloria vs. una minera",
         "texto": "Gloria vende leche todos los meses: su ganancia es parecida año a año, así que su P/E se parece al de la bodega del ejemplo. En una minera la ganancia baila con el metal — el mismo número 9 se lee distinto, porque nadie sabe cuánto durará esa ganancia."
+      },
+      "pregunta": {
+        "q": "Una minera cotiza a P/E 9 con el oro en máximos. ¿Qué te dice ese 9?",
+        "opciones": [
+          { "t": "Poco: está calculado con una ganancia de pico que puede no repetirse", "ok": true },
+          { "t": "Que está barata: paga sola en 9 años", "pista": "Ese cálculo asume que la ganancia de este año se repite. Con el metal en máximos es la suposición más frágil que existe: si el oro cae 25%, el mismo 9 se vuelve 19." },
+          { "t": "Que es más barata que un banco a P/E 12", "pista": "No se comparan entre rubros. La ganancia de un banco es mucho más previsible que la de una minera, y por eso el mercado le paga distinto." }
+        ]
       },
       "siguiente": {
         "texto": "¿Y cuánto debe?",
@@ -154,7 +244,19 @@
       "titulo": "La ganancia por acción, año a año",
       "seccion": "valoracion",
       "niveles": {
+        "1": "Cuánta ganancia le tocó a cada acción en el año. Si la empresa ganó 100 y hay 100 acciones, a cada una le tocó 1. Es la ganancia repartida entre todos los pedacitos, y es el número del que cuelga casi todo lo demás.",
+        "2": "La ganancia del año dividida entre todas las acciones. Míralo como una barra al lado de la otra: lo que importa no es cuánto ganó este año sino la FORMA de la serie. Escalones que suben es un negocio que crece; una sierra de subidas y caídas es un negocio a merced de su ciclo; y un año en rojo se ve de inmediato. Esa forma es la que le da (o le quita) sentido al P/E que verás arriba.",
         "3": "Cuánto ganó la empresa por cada acción, según los estados financieros de la SMV. Es el denominador del P/E: si esta barra sube año tras año, el P/E de hoy está parado sobre algo firme; si salta como sierra, ese mismo P/E no significa lo mismo. Los huecos son años que no cuadraron con el anual auditado — mejor un vacío que un dato inventado."
+      },
+      "trampa": "La ganancia contable admite maquillaje que la caja no admite: la venta de un activo, una revaluación o un efecto de tipo de cambio pueden levantar el BPA de un año sin que el negocio haya mejorado. Por eso se lee junto al análisis de la gerencia, que dice de dónde salió, y contra el flujo de caja, que no se deja adornar.",
+      "combo": "El BPA es el eje: divide el precio entre él y tienes el P/E; compáralo con el dividendo y sabes qué proporción reparte (y si eso es sostenible); mira su tendencia contra el margen y sabes si crece vendiendo más o apretando costos. Una sola barra no dice nada; la serie completa dice casi todo.",
+      "pregunta": {
+        "q": "Mirando el BPA de 8 años, ¿qué te importa más?",
+        "opciones": [
+          { "t": "La forma de la serie: si sube parejo o salta como sierra", "ok": true },
+          { "t": "Solo la barra más alta que haya tenido", "pista": "El mejor año de una cíclica es justo el que no se repite. La serie completa muestra qué tan confiable es esa ganancia." },
+          { "t": "Que no tenga ningún hueco", "pista": "Los huecos son honestidad: son años que no cuadraron con el auditado y ALTO prefiere dejarlos vacíos antes que inventar el dato." }
+        ]
       },
       "siguiente": {
         "texto": "¿Y la deuda le pesa?",
@@ -172,13 +274,24 @@
       "seccion": "deuda",
       "niveles": {
         "1": "Lo que la empresa debe y le cobra intereses. La pregunta útil no es «¿debe mucho?» sino «¿cuántos años de su propia ganancia necesita para pagarlo?». Debiendo tres años de ganancia se vive tranquilo; debiendo ocho, cualquier tropiezo se vuelve grave.",
-        "3": "Deuda neta ÷ ganancia operativa anual = años de caja. El umbral cambia según el negocio, y esa es la lección entera: 3 años son cómodos para un hospital o una eléctrica, y una alerta para una minera. Cuando la empresa no publica su depreciación, el número es un TECHO y la app lo dice en vez de afirmar de más."
+        "2": "Cuántos años de su propia ganancia necesitaría para pagar todo lo que debe. Deber no es una enfermedad — depende de qué tan seguro sea su ingreso, igual que una hipoteca se aguanta con sueldo fijo y no con propinas. Una eléctrica o un hospital cobran todos los meses y aguantan más; una minera vive de un precio que sube y baja, y ahí la misma deuda es una apuesta. Y un banco es otra cosa: sus «pasivos» son los depósitos de la gente, o sea su materia prima.",
+        "3": "Deuda neta ÷ ganancia operativa anual = años de caja. El umbral cambia según el negocio, y esa es la lección entera: 3 años son cómodos para un hospital o una eléctrica, y una alerta para una minera. Menos de 2 es holgado casi siempre; más de 4 necesita una razón documentada. Cuando la empresa no publica su depreciación, el número es un TECHO y la app lo dice en vez de afirmar de más."
       },
       "lentes": {
         "minas": "Se juzga imaginando el metal BARATO: la deuda cómoda de hoy puede pesar el doble en la parte mala del ciclo.",
         "bancos": "Aquí no se mide así, y es el error de categoría más común: para un banco deber ES el negocio (los depósitos de la gente). Se mira su mora y su capital, no sus «años de deuda».",
         "electricas": "Aguantan más deuda que casi cualquiera: cobran una tarifa regulada todos los meses, pase lo que pase.",
         "salud": "Deuda alta con flujo estable es manejable — la gente se enferma en crisis igual que en bonanza."
+      },
+      "trampa": "Tres cosas que el monto no muestra: (a) la MONEDA — deber en dólares cobrando en soles es un riesgo escondido que aparece de golpe cuando el tipo de cambio salta; (b) los VENCIMIENTOS — no es lo mismo deber a 2035 que tener que pagarlo en diciembre; (c) los HOLDINGS — la deuda de la matriz no es la del grupo, y viceversa.",
+      "combo": "La deuda se cruza con tres números: con el flujo de caja libre (¿la paga sola o se refinancia?), con el margen (si el margen se aprieta, ¿sigue alcanzando?) y con los catalizadores (¿hay una refinanciación o una emisión anunciada?). Y con el dividendo: repartir fuerte debiendo mucho es una decisión, y conviene saber que se está tomando.",
+      "pregunta": {
+        "q": "Una eléctrica y una minera deben, las dos, tres años de su ganancia. ¿Es lo mismo?",
+        "opciones": [
+          { "t": "No: la eléctrica cobra tarifa fija y la minera depende del metal", "ok": true },
+          { "t": "Sí: tres años son tres años", "pista": "El número es igual, la capacidad de pagarlo no. La eléctrica cobra todos los meses pase lo que pase; a la minera le puede caer el metal 30% y esos tres años se le vuelven seis." },
+          { "t": "No: la minera está mejor porque gana más en el pico", "pista": "Ganar mucho en el pico es justo el problema: la deuda se juzga imaginando el metal BARATO, no caro." }
+        ]
       },
       "siguiente": {
         "texto": "¿Y de dónde sale la plata para pagarla?",
@@ -194,8 +307,19 @@
       "titulo": "El flujo de caja libre",
       "seccion": "fundamentos",
       "niveles": {
-        "3": "La plata que de verdad le sobró después de operar y de invertir en mantenerse en pie. Es distinta de la «utilidad»: la utilidad es contable y admite maquillaje; la caja, no. De aquí sale el dividendo y de aquí se paga la deuda — si el flujo es negativo, ambas cosas salen de otro lado (deuda nueva o caja vieja).",
-        "4": "ALTO lo calcula con 12 meses reales (operación menos capex) para 80 empresas; en el resto lo dice y usa el trimestre anualizado, que es un método más pobre. Un flujo negativo no es automáticamente malo: puede ser una empresa construyendo su próxima mina. La pregunta es si ese proyecto está documentado."
+        "1": "La plata que de verdad sobra en la caja al final del año, después de operar y de mantener las máquinas andando. Es lo que le queda disponible de verdad — con eso paga deuda, reparte dividendos o guarda. Si no sobra nada, esas cosas salen de otro lado.",
+        "2": "La plata que de verdad sobró en la caja. Es distinta de la «utilidad» que sale en los titulares: la utilidad es un cálculo contable y la caja es plata que está o no está. Cuando el flujo es holgado, el dividendo y la deuda se pagan solos; cuando es negativo, la empresa está sacando esa plata de un préstamo nuevo o de sus ahorros. Ojo: en un banco este número no se calcula así — su negocio ES mover plata.",
+        "3": "La plata que de verdad le sobró después de operar y de invertir en mantenerse en pie. Es distinta de la «utilidad»: la utilidad es contable y admite maquillaje; la caja, no. De aquí sale el dividendo y de aquí se paga la deuda — si el flujo es negativo, ambas cosas salen de otro lado (deuda nueva o caja vieja)."
+      },
+      "trampa": "Un flujo negativo no es automáticamente una enfermedad: puede ser una empresa construyendo su próxima mina o su próximo puerto. La pregunta es si ese gasto está DOCUMENTADO y tiene fecha de término. Y el método importa: ALTO usa 12 meses reales en 80 empresas y en el resto avisa que está anualizando el trimestre, que es un cálculo más pobre.",
+      "combo": "Es el juez de dos promesas: dividendo ÷ flujo dice si lo que reparte es sostenible, y deuda ÷ flujo dice en cuántos años la paga sola. Cruzado con el capex separa a la que invierte para crecer de la que apenas se mantiene en pie. Cuando el flujo contradice a la utilidad, un analista le cree a la caja.",
+      "pregunta": {
+        "q": "La empresa reporta buena utilidad pero su flujo de caja libre es negativo hace tres años. ¿A cuál le crees?",
+        "opciones": [
+          { "t": "A la caja, y averiguo en qué se está yendo la plata", "ok": true },
+          { "t": "A la utilidad: es la cifra oficial", "pista": "Las dos son oficiales. Pero la utilidad es un cálculo contable y la caja es plata que está o no está; cuando se contradicen, la caja manda." },
+          { "t": "Flujo negativo siempre significa que va a quebrar", "pista": "Tampoco. Puede estar construyendo una mina o un puerto. La pregunta es si esa inversión está documentada y tiene fecha de término." }
+        ]
       },
       "siguiente": {
         "texto": "¿Y qué margen le queda de lo que vende?",
@@ -213,7 +337,18 @@
       "seccion": "fundamentos",
       "niveles": {
         "1": "De cada 100 soles que vende, cuántos le quedan. Un margen alto significa que puede aguantar un golpe —que le suban los costos, que le bajen el precio— sin entrar en pérdidas. Un margen finito vive al borde.",
-        "3": "Se compara solo contra su propio sector: un supermercado sano vive con márgenes de un dígito y una minera con el metal caro pasa del 40%. Lo que dice más es la TENDENCIA, y esa la cuenta la gerencia en su análisis trimestral."
+        "2": "De cada 100 soles que vende, cuántos le quedan — y lo normal cambia muchísimo según el negocio. Un supermercado sano gana centavos por cada venta y vive de vender muchísimo; una minera con el metal caro puede quedarse con 40 de cada 100; una eléctrica se mantiene en el mismo número año tras año. Por eso «margen alto» no es sinónimo de mejor empresa: la comparación válida es contra sus pares y contra su propio año pasado.",
+        "3": "Se compara solo contra su propio sector: un supermercado sano vive con márgenes de un dígito y una minera con el metal caro pasa del 40%. Lo que dice más es la TENDENCIA —un margen apretándose es la alerta temprana más útil que existe— y esa la cuenta la gerencia en su análisis trimestral."
+      },
+      "trampa": "Dos márgenes que mienten: el de un HOLDING (que casi no tiene ventas propias y por eso muestra porcentajes absurdos, a veces cercanos al 100%) y el de una cíclica en el pico del metal, que hace ver como estructural algo que es del momento. Y un margen que sube por un ingreso extraordinario no es una mejora del negocio.",
+      "combo": "El margen es el detector de mentiras del P/E: si la ganancia creció pero el margen se apretó, la empresa está vendiendo más y ganando peor, y ese P/E bajo dura poco. Cruzado con el motor dice quién se está quedando con la mejora del precio; cruzado con el flujo de caja dice si esa ganancia llega a la caja o se queda en el papel.",
+      "pregunta": {
+        "q": "Un supermercado tiene 3% de margen y una minera 40%. ¿Cuál es mejor empresa?",
+        "opciones": [
+          { "t": "No se puede saber: cada rubro tiene su rango normal", "ok": true },
+          { "t": "La minera, por lejos", "pista": "Ese 40% es del año bueno del metal y puede desaparecer. El supermercado gana poquito por venta, pero vende todos los días y pase lo que pase." },
+          { "t": "El supermercado, porque es más estable", "pista": "También es un salto: la estabilidad se ve en la serie de varios años, no en el margen de un trimestre." }
+        ]
       },
       "siguiente": {
         "texto": "¿Y qué puede salir mal?",
@@ -233,7 +368,19 @@
       "titulo": "Cuánto produce",
       "seccion": "produccion",
       "niveles": {
+        "1": "Cuánto metal sacó de sus minas, mes a mes, según lo que le reporta al Ministerio de Energía y Minas. Es lo más parecido a mirar la fábrica por dentro: antes de que salga cualquier estado financiero, esto ya te dice si estuvo produciendo o no.",
+        "2": "Las toneladas y onzas que reportó al Ministerio, mes a mes. Es el dato más adelantado que existe de una minera: sus ventas son, más o menos, producción × precio. Míralo contra los mismos meses del año pasado, no contra el mes anterior — hay paradas de mantenimiento y estacionalidad que hacen ver caídas donde no las hay. Y si produjo menos pero el metal subió, los dos jalan en sentidos opuestos y hay que ver cuál pesa más.",
         "3": "Las toneladas y onzas que reportó al Ministerio de Energía y Minas, mes a mes. Es el adelanto más honesto del próximo trimestre: la venta de una minera es, más o menos, producción × precio. Si produce menos pero el metal subió, van en sentidos opuestos y hay que ver cuál pesa más."
+      },
+      "trampa": "La fuente publica el TOP 10 de cada metal: si una minera no entra en ese top, su casilla sale vacía — y vacío no quiere decir cero. ALTO deja el hueco en vez de escribir un cero falso. Además, participación no es propiedad: una empresa puede tener el 40% de una unidad minera y la estadística figurar a nombre del operador.",
+      "combo": "Producción × precio del motor = adelanto de las ventas del trimestre, y ese es el combo que le gana de mano a los estados financieros. Se contrasta después con lo que dice la gerencia (¿mencionan la parada de planta?) y con el margen (¿producir menos le subió el costo por onza?).",
+      "pregunta": {
+        "q": "En la tabla de producción, un mes aparece vacío. ¿Qué significa?",
+        "opciones": [
+          { "t": "Que no entró al top 10 de ese metal: no hay dato, no es cero", "ok": true },
+          { "t": "Que ese mes no produjo nada", "pista": "Sería un cero, y ALTO escribiría un cero. El vacío es falta de dato: la fuente solo publica el top 10 de cada metal." },
+          { "t": "Que hubo un error en la app", "pista": "Es a propósito: preferimos el hueco honesto antes que rellenarlo con un número inventado." }
+        ]
       },
       "siguiente": {
         "texto": "¿Y qué precio recibe por eso?",
@@ -246,7 +393,18 @@
       "seccion": "hechos",
       "niveles": {
         "1": "Las noticias OFICIALES que la empresa está obligada a publicar cuando pasa algo que puede mover su precio: un dividendo, un accidente, un contrato grande, un cambio de dueño. No son rumores ni prensa: es la empresa hablando en el canal de la Bolsa.",
+        "2": "Las noticias oficiales que la empresa está OBLIGADA a publicar cuando pasa algo que puede mover su precio. Aquí no hay opinión ni rumor: es el canal formal de la Bolsa, y todos los inversionistas lo ven al mismo tiempo. Los tres que más te van a servir: los avisos de dividendo (con su fecha de corte), los cambios en la gerencia o el accionariado, y los acuerdos de junta.",
         "3": "El robot de ALTO baja el PDF de cada hecho y lo lee: por eso ves 🟢/🔴/🟡. Ojo con el semáforo — dice el TONO del comunicado, no si el precio va a subir. Y ojo con las fechas de un dividendo: la fecha de corte decide si te toca o no, y equivocarse ahí cuesta plata de verdad."
+      },
+      "trampa": "El semáforo lo pone una lectura automática del texto, no un humano: es un resumen del TONO, no un pronóstico. Un hecho 🟢 puede venir acompañado de una caída (si el mercado esperaba más) y un 🔴 puede no mover nada (si ya estaba descontado). Léelo como índice para abrir el PDF, no como veredicto.",
+      "combo": "Los hechos son el nexo causal de todo lo demás: cada salto del gráfico debería tener su hecho, cada dividendo del historial su aviso con fecha de corte, y cada catalizador que se cumple aparece primero aquí. Un analista lee el hecho y va a ver qué número de la ficha cambia por eso.",
+      "pregunta": {
+        "q": "Un hecho sale marcado 🟢 y ese día la acción baja. ¿Se equivocó el robot?",
+        "opciones": [
+          { "t": "No: el color describe el tono del comunicado, no lo que hará el precio", "ok": true },
+          { "t": "Sí, el semáforo está mal calibrado", "pista": "El semáforo no predice el precio. Una buena noticia puede hacer caer la acción si el mercado esperaba una MEJOR." },
+          { "t": "Significa que la noticia era falsa", "pista": "Son documentos oficiales que la empresa está obligada a publicar. Lo que no son es una predicción del precio." }
+        ]
       },
       "siguiente": {
         "texto": "¿Y qué se espera que pase?",
@@ -259,7 +417,19 @@
       "titulo": "Catalizadores",
       "seccion": "catalizadores",
       "niveles": {
+        "1": "Las cosas concretas que podrían cambiarle la historia a esta empresa en los próximos meses: una mina que arranca, un contrato que se firma, un juicio que se resuelve. No son predicciones ni promesas — son lo que conviene tener en el radar para que ninguna noticia te agarre de sorpresa.",
+        "2": "Lo que podría cambiar la historia de la empresa, con su fecha cuando la hay. Sirven para saber QUÉ mirar y CUÁNDO, no para adivinar el precio. Y cada rubro tiene los suyos: en una minera es un proyecto que entra en producción, en una eléctrica una revisión de tarifas, en un banco un cambio de tasa, en una concesión la fecha en que vence el contrato. Que un catalizador se demore es lo normal, no una mala noticia.",
         "3": "Lo que podría cambiar la historia de la empresa en los próximos meses: una mina que arranca, una concesión que vence, un juicio que se resuelve. No son promesas ni predicciones — son las cosas concretas que conviene tener en el radar, con su fecha cuando la hay. Un catalizador que se demora no es una sorpresa: es lo normal."
+      },
+      "trampa": "El calendario minero y regulatorio se corre casi siempre: permisos, comunidades, obras. Contar con la fecha prometida es el error clásico. Y un catalizador que todo el mercado ya conoce suele estar metido en el precio hace rato — la sorpresa no está en que ocurra, sino en que ocurra distinto de lo esperado.",
+      "combo": "Se leen contra el resto de la ficha: un catalizador que suma producción se verifica después en la serie del MEM, uno que baja la deuda se verifica en el flujo de caja, y todos se confirman —o se caen— en los hechos de importancia. El escenario bueno de la ficha suele ser justo «los catalizadores se cumplen a tiempo».",
+      "pregunta": {
+        "q": "Un catalizador anunciado para junio se corrió a diciembre. ¿Qué es eso?",
+        "opciones": [
+          { "t": "Lo más normal del mundo: los plazos de proyectos casi siempre se corren", "ok": true },
+          { "t": "Una señal de que la empresa está en problemas", "pista": "Los permisos, las comunidades y las obras se demoran de rutina. Preocupa cuando cambia el proyecto entero, no cuando se mueve la fecha." },
+          { "t": "Que el catalizador ya no cuenta", "pista": "Sigue contando, solo que más tarde. Lo que cambia es cuándo mirar, no si va a pasar." }
+        ]
       },
       "siguiente": {
         "texto": "¿Y qué puede salir mal?",
@@ -271,10 +441,22 @@
       "titulo": "El simulador",
       "seccion": "simulador",
       "niveles": {
-        "1": "Sirve para VER el tamaño de lo que estás mirando, no para adivinar. Si pones S/ 1,000 y la acción sube 20%, te muestra cuánto sería eso — y también cuánto sería si baja 20%, que es la mitad que casi nadie quiere mirar. No es una proyección: es una calculadora."
+        "1": "Sirve para VER el tamaño de lo que estás mirando, no para adivinar. Si pones S/ 1,000 y la acción sube 20%, te muestra cuánto sería eso — y también cuánto sería si baja 20%, que es la mitad que casi nadie quiere mirar. No es una proyección: es una calculadora.",
+        "2": "Una calculadora para dimensionar, no para adivinar. Úsala siempre en las dos direcciones: mueve el porcentaje hacia arriba y exactamente igual hacia abajo, y quédate mirando el número rojo unos segundos. Esa es la pregunta de verdad —«¿aguantaría ver esto en mi cuenta sin vender?»— y el rango que conviene probar depende del negocio: una eléctrica no se mueve como una minera junior.",
+        "3": "Una calculadora de tamaños. Su uso serio es fijar tu propio límite antes de entrar: cuánto estarías dispuesto a ver caer sin cambiar de opinión. Combínala con el termómetro de volatilidad —que te dice qué caída es NORMAL en esta acción— y sabrás si el número rojo que estás mirando es un escenario extremo o un martes cualquiera."
       },
       "lentes": {
         "minas": "En una minera conviene mover el simulador hacia ABAJO igual de lejos que hacia arriba: sus caídas son tan grandes como sus subidas."
+      },
+      "trampa": "Es una regla de tres, no un pronóstico: no sabe nada de esta empresa ni de la bolsa. Además no descuenta comisiones ni impuestos, y si la empresa cotiza en dólares el tipo de cambio mueve el resultado por su cuenta. El número que te muestra es aritmética, no probabilidad.",
+      "combo": "El simulador cobra sentido pegado a otras tres cosas: la volatilidad (¿qué caída es normal aquí?), tu horizonte (¿esta plata la necesitas el año que viene?) y el peso en tu cartera del Cuaderno (¿este −30% es el 5% o el 40% de tu patrimonio?). Solo, es una calculadora; con esos tres, es una decisión.",
+      "pregunta": {
+        "q": "¿Para qué sirve de verdad el simulador?",
+        "opciones": [
+          { "t": "Para ver el tamaño de la ganancia Y de la pérdida antes de entrar", "ok": true },
+          { "t": "Para saber cuánto va a subir la acción", "pista": "No sabe nada del futuro: es una regla de tres. Tú pones el porcentaje y él hace la multiplicación." },
+          { "t": "Para elegir la empresa que más rinde", "pista": "El resultado depende del porcentaje que TÚ escribes, así que todas «rinden» lo mismo si les pones el mismo número." }
+        ]
       },
       "siguiente": {
         "texto": "¿Ya puedo decidir yo?",
@@ -287,7 +469,18 @@
       "seccion": "riesgos",
       "niveles": {
         "1": "Lo que puede salir mal, dicho antes de que pase. No están para asustar: están para que ningún titular te agarre de sorpresa. Si un riesgo te parece imposible de tolerar, esa empresa no es para ti — y saberlo hoy vale más que descubrirlo con plata adentro.",
+        "2": "Lo que puede salir mal, dicho antes de que pase, y cada negocio tiene los suyos: a una minera le pesan el precio del metal y el conflicto social; a una eléctrica, la revisión de tarifas; a un banco, que sus clientes dejen de pagar; a una empresa endeudada en dólares, que el tipo de cambio salte. No son predicciones — son las palancas que hay que vigilar, y sirven para una pregunta muy personal: ¿cuál de estas podrías aguantar sin arrepentirte?",
         "3": "Escenarios, no predicciones. Nadie sabe cuál va a pasar; lo que se puede saber es cuáles son las palancas —el precio del insumo, la tasa, un juicio, una concesión que vence— y cuánto mueven el resultado."
+      },
+      "trampa": "El riesgo más caro no suele ser el que está en la lista: es el que no está. Estas listas se arman con lo conocido y lo documentado; los golpes de verdad (una pandemia, un cambio de gobierno, un accidente) llegan sin figurar. Por eso el tamaño de la posición protege más que la lista más completa.",
+      "combo": "Los escenarios se arman cruzando lo que ya viste: el motor (¿qué pasa si el metal cae 30%?) entra al margen, el margen a la ganancia, la ganancia al P/E y a la capacidad de pagar la deuda. El escenario malo no es un número que alguien inventó: es esa cadena recorrida hacia abajo.",
+      "pregunta": {
+        "q": "Lees los riesgos de una empresa y ninguno te parece tolerable. ¿Qué significa?",
+        "opciones": [
+          { "t": "Que esa empresa no es para ti, y saberlo ahora vale plata", "ok": true },
+          { "t": "Que la empresa es mala", "pista": "Puede ser un negocio excelente cuyo riesgo no calza contigo. Los riesgos no califican a la empresa: te califican como su dueño." },
+          { "t": "Que hay que esperar a que se resuelvan esos riesgos", "pista": "Casi nunca se resuelven del todo: son parte del negocio. Se elige convivir con ellos o no entrar." }
+        ]
       },
       "siguiente": {
         "texto": "¿Ya puedo decidir yo?",
@@ -299,7 +492,19 @@
       "titulo": "¿Listo para decidir?",
       "seccion": "riesgos",
       "niveles": {
-        "1": "ALTO nunca te va a decir si comprar. Lo que sí puede decirte es si YA SABES LO SUFICIENTE para decidirlo tú: de qué vive, por qué le fue así, cuál es su riesgo número uno y por qué su P/E dice lo que dice. Si puedes contestar eso con tus palabras, estás listo. Si no, todavía te falta una sección."
+        "1": "ALTO nunca te va a decir si comprar. Lo que sí puede decirte es si YA SABES LO SUFICIENTE para decidirlo tú: de qué vive, por qué le fue así, cuál es su riesgo número uno y por qué su P/E dice lo que dice. Si puedes contestar eso con tus palabras, estás listo. Si no, todavía te falta una sección.",
+        "2": "ALTO nunca te va a decir si comprar. La prueba es contarle la empresa a alguien en un minuto, sin mirar la pantalla: de qué vive, qué precio de afuera le manda, por qué le fue así este año, cuál es su riesgo número uno y por qué está a este precio. Donde te trabes, ahí falta una sección — y esa es justo la que conviene volver a leer.",
+        "3": "Decidir no es opinar sobre el precio: es tener una tesis que se pueda equivocar. Escribe en el Cuaderno por qué la compras, qué esperas que pase y qué cosa concreta te haría cambiar de opinión. Sin esas tres líneas no hay decisión, hay corazonada — y dentro de seis meses no vas a poder distinguir si acertaste por buen análisis o por suerte."
+      },
+      "trampa": "Sentirse seguro no es estar listo: mientras más datos ves, más confianza da, y la confianza sube más rápido que el acierto. Y no decidir también es decidir. La señal honesta no es «ya entendí todo» —eso no llega nunca— sino «sé qué es lo que NO sé de esta empresa».",
+      "combo": "La decisión final no vive en la ficha sino en tu cartera: cuánto pesa esta empresa entre todo lo tuyo, si ya tienes tres del mismo sector, si la plata que vas a poner la necesitas el año que viene. La mejor empresa en el tamaño equivocado sigue siendo una mala decisión.",
+      "pregunta": {
+        "q": "Según ALTO, ¿cuándo estás listo para decidir sobre una empresa?",
+        "opciones": [
+          { "t": "Cuando puedes explicarla con tus palabras, incluido su riesgo principal", "ok": true },
+          { "t": "Cuando la app dice que está barata", "pista": "ALTO no da veredictos de compra. «Barata» es un punto de partida del estudio, nunca el final." },
+          { "t": "Cuando leíste todas las secciones de la ficha", "pista": "Leer no es entender. La prueba es contarla sin mirar la pantalla; donde te trabas, ahí falta." }
+        ]
       }
     }
   }

@@ -11,11 +11,21 @@ import { claveLente } from './lente'
 //  · Regla #1 — si no hay texto para esa clave, NO se inventa: no se abre la
 //    tarjeta. Un "no tenemos nada que explicarte" es mejor que un relleno.
 //  · #151-4 — el ✔ es "visto", nunca "dominado". Marcar dominado por haber
-//    leído sería mentirle al usuario sobre sí mismo. El ✔✔ llega el día que
-//    exista la mini-pregunta (#14), y no antes.
+//    leído sería mentirle al usuario sobre sí mismo. Desde el 23-jul el ✔✔
+//    SÍ existe, y se gana del único modo honesto: contestando la mini-pregunta
+//    de la tarjeta (#14). Leer sigue valiendo ✔ y nada más.
 //  · #151-5 — la profundidad la decide el NIVEL: la misma tarjeta de P/E da
 //    la bodega en nivel 1 y la trampa cíclica en nivel 4.
 // ─────────────────────────────────────────────────────────────────────────
+
+// LAS 5 PROFUNDIDADES de §6 dentro de los 4 niveles de la app, sin inventar
+// un nivel 5 que el usuario no puede elegir: el cuerpo sube por `niveles`
+// (qué es → cómo se interpreta → cómo se decide) y los dos escalones finales
+// se AGREGAN al mismo cuerpo en vez de reemplazarlo — así el nivel 4 lee la
+// tarjeta entera (decidir + cuándo miente + cómo se combina) y no pierde lo
+// de abajo, que es justamente lo que pasaba cuando `niveles.4` pisaba al 3.
+const NIVEL_TRAMPA = 3 // ⚠️ "cuándo el número miente"
+const NIVEL_COMBO = 4 // 🔗 "cómo lo cruza un analista"
 
 const TARJETAS = mentorData.tarjetas ?? {}
 export const CLAVES = Object.keys(TARJETAS)
@@ -51,7 +61,11 @@ export function tarjetaMentor(clave, { nivel = 2, empresa = null } = {}) {
     seccion: t.seccion,
     cuerpo,
     notaLente,
+    // Los dos escalones de arriba, cada uno a su altura (§6-4 y §6-5).
+    trampa: nivel >= NIVEL_TRAMPA ? t.trampa ?? null : null,
+    combo: nivel >= NIVEL_COMBO ? t.combo ?? null : null,
     ejemplo: t.ejemplo ?? null,
+    pregunta: t.pregunta ?? null,
     siguiente: t.siguiente && TARJETAS[t.siguiente.clave] ? t.siguiente : null,
   }
 }
@@ -210,30 +224,59 @@ export function dudasDe(seccion, nivel) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────
-// ✔ EL PROGRESO (localStorage, mismo patrón que favoritos)
-// "Visto", no "dominado" — ver #151-4 arriba.
+// ✔ / ✔✔ EL PROGRESO (localStorage, mismo patrón que favoritos)
+// Dos listas separadas a propósito, y no un solo campo con estado: leer y
+// saber son cosas distintas y el usuario tiene derecho a ver la diferencia.
+//   ✔  visto     → cerró la tarjeta con "entendido". Lo pone él.
+//   ✔✔ dominado  → contestó bien la mini-pregunta (#14). Lo prueba él.
+// Dominar implica haber visto; visto NUNCA implica dominar (#151-4).
 // ─────────────────────────────────────────────────────────────────────────
 export const CLAVE_PROGRESO = 'alto-mentor-visto'
+export const CLAVE_DOMINADO = 'alto-mentor-dominado'
 
-export function vistos() {
+function leerLista(clave) {
   try {
-    const v = JSON.parse(localStorage.getItem(CLAVE_PROGRESO) || '[]')
+    const v = JSON.parse(localStorage.getItem(clave) || '[]')
     return Array.isArray(v) ? v.filter((k) => TARJETAS[k]) : []
   } catch {
     return []
   }
 }
 
+function sumarA(clave, valor) {
+  const v = leerLista(clave)
+  if (v.includes(valor)) return v
+  const nuevo = [...v, valor]
+  try { localStorage.setItem(clave, JSON.stringify(nuevo)) } catch { /* incógnito */ }
+  return nuevo
+}
+
+export function vistos() {
+  return leerLista(CLAVE_PROGRESO)
+}
+
 export function marcarVisto(clave) {
   if (!TARJETAS[clave]) return vistos()
-  const v = vistos()
-  if (v.includes(clave)) return v
-  const nuevo = [...v, clave]
-  try { localStorage.setItem(CLAVE_PROGRESO, JSON.stringify(nuevo)) } catch { /* incógnito */ }
-  return nuevo
+  return sumarA(CLAVE_PROGRESO, clave)
+}
+
+export function dominados() {
+  return leerLista(CLAVE_DOMINADO)
+}
+
+/** Solo lo llama la respuesta CORRECTA de la mini-pregunta. */
+export function marcarDominado(clave) {
+  if (!TARJETAS[clave]) return dominados()
+  marcarVisto(clave) // si la contestó, es que la leyó
+  return sumarA(CLAVE_DOMINADO, clave)
 }
 
 /** Cuántas tarjetas puede aprender alguien de este nivel (el techo honesto). */
 export function alcanzables(nivel) {
   return CLAVES.filter((k) => hayTarjeta(k, nivel))
+}
+
+/** De esas, cuántas se pueden llegar a DOMINAR (las que tienen pregunta). */
+export function examinables(nivel) {
+  return alcanzables(nivel).filter((k) => TARJETAS[k].pregunta)
 }

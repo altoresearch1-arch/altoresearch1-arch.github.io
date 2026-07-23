@@ -4,6 +4,40 @@
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
 > herramienta), lee esto primero. Última actualización: **23 jul 2026**. Estado: **EN VIVO (beta pública)**.
 
+## 🪙 23-jul: LAS 5 PROFUNDIDADES Y EL ✔✔ «DOMINADO» (§6 + mejora #14)
+Las dos deudas que dejó la Sesión 4. Ninguna pantalla nueva: la MISMA tarjeta del Mentor
+ahora tiene cinco hondos y una pregunta.
+- **Las 5 profundidades de §6 sin inventar un nivel 5** (el usuario solo puede elegir 4).
+  El cuerpo sube por `niveles` (1 qué es → 2 cómo se interpreta con el lente → 3 cómo se
+  decide) y los dos escalones finales se **SUMAN** al cuerpo en vez de reemplazarlo:
+  `trampa` (⚠️ cuándo el número miente) aparece desde el nivel 3 y `combo` (🔗 cómo lo cruza
+  un analista) en el 4. Antes `niveles.4` PISABA al 3 y el nivel máximo perdía lo de abajo;
+  ahora el lobo lee la tarjeta entera. **Las 18 tarjetas tienen las 5** (antes 2-3): 18
+  cuerpos de nivel 2 escritos a mano (el escalón que faltaba en todas), 18 trampas y 18
+  combos. `mentor.json` pasó de 18 KB a 41 KB — todo texto, editable por Jair.
+- **LA MINI-PREGUNTA (#14) — el ✔✔ existe desde hoy.** Cada tarjeta trae una `pregunta` con
+  3 opciones: la buena y dos con `pista` (un empujón, nunca un regaño). «✔ Entendido» ya no
+  cierra: dice «✔ Entendido — pruébame» y ofrece la pregunta. Acertar suena con el **cling
+  de la moneda del inicio** (el mismo, a propósito) y marca la tarjeta como dominada.
+  Fallar deja la pista, permite reintentar y **no** da el ✔✔. Leer sigue valiendo ✔ y nada
+  más — §31-4 cumplido al pie: el sello lo prueba el usuario, no se lo regala la app.
+  Dos contadores separados en el panel: «✔ Leídas: N de 18 · ✔✔ Dominadas: K de 18».
+- **`lib/sonido.js` (nuevo):** el `cling()` y el `tunk()` salieron de MonedaFidget y ahora
+  se comparten. Cero archivos de audio, cero peso — siguen sintetizados con Web Audio.
+- **Un bug viejo de paso:** los `**negritas**` que Jair escribe en los JSON salían con los
+  asteriscos a la vista en la tarjeta (el `<p>` no entiende markdown). Ahora las traduce
+  `conNegritas()`, cuatro líneas y ninguna dependencia.
+- **Un desborde cazado al probar:** en un celular de 667 px de alto, la tarjeta del nivel 4
+  (cuerpo + lente + trampa + combo = 723 px) se salía por ARRIBA y esa parte era imposible
+  de leer. Ahora `.mentor-card` tiene techo (`100vh - 96px`) y scroll propio con
+  `overscroll-behavior: contain`, para que la ficha de atrás no se mueva.
+- Verificado en el navegador: nivel 4 muestra cuerpo+lente+⚠️+🔗 y el nivel 1 solo la
+  bodega (sin trampa ni combo, como debe ser); ciclo completo de la pregunta en el P/E —
+  opción mala → pista y `alto-mentor-dominado` vacío, opción buena → ✔✔ + cling + el
+  contador en «1 de 18»; la cadena «¿y cuánto debe?» salta a Deuda desde la pantalla del
+  premio; el ✔✔ persiste al bajar a nivel 1; 375×667 sin desbordes; build PWA OK.
+- **Lo que sigue:** S5 (feed de hechos del día en el inicio).
+
 ## 🎓 23-jul: EL MENTOR ALTO — LA CÁSCARA (#151, idea de Jair, P0 del plan)
 La última puerta grande del `ANALISIS_EDUCATIVO_Y_TOUR_POR_NIVELES.md` (§31). **Un solo
 flotante de aprendizaje**: el Mentor ABSORBIÓ la burbuja ❓ (BurbujaTour.jsx borrado, su CSS
@@ -65,9 +99,9 @@ y dejó de vivir solo dentro del modo 👆.
   completo en el navegador (📖 abre la tarjeta · 📊 abre el ejemplo · 🧠 lleva a Atlas y Atlas
   RESPONDE «¿Qué es yield?» solo), móvil 375 px con el tooltip centrado y tocable, build PWA
   OK (3744.21 KiB). El desborde de 3 px que se ve en móvil es de `.aurora` y es anterior.
-- **Lo que sigue:** los guiones más profundos por nivel (§6 tiene 5 profundidades y las
-  tarjetas hoy usan 2-3), la mini-pregunta #14 que habilitaría el ✔✔ «dominado», y S5 (feed
-  de hechos del día).
+- **Lo que sigue:** ~~los guiones más profundos por nivel~~ y ~~la mini-pregunta #14~~ —
+  ambas hechas el mismo 23-jul, ver la sección «Las 5 profundidades y el ✔✔» arriba. Queda
+  S5 (feed de hechos del día).
 
 ## 🚪 23-jul: LA ENTRADA CON SALIDAS — cerrar, volver y retomar (pedido de Jair)
 La entrada del #135 (bienvenida + Lección Exprés) se armó el 23-jul de madrugada y era de

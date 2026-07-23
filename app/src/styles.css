@@ -5820,6 +5820,15 @@ body.cuaderno-marca .brand-logo {
     transform: translateY(8px) scale(0.97);
   }
 }
+/* La tarjeta del nivel 4 puede traer cuerpo + lente + ⚠️ trampa + 🔗 combo:
+   en un celular chico eso pasa de largo el alto de la pantalla y se salía por
+   arriba, sin forma de leerlo. Se le pone techo y scroll PROPIO — la página de
+   atrás no se mueve, que es justo lo que el usuario está mirando. */
+.mentor-card {
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
 .mentor-saludo {
   animation-delay: 0.6s;
 }
@@ -5906,6 +5915,35 @@ body.cuaderno-marca .brand-logo {
   font-size: 12.5px;
   line-height: 1.5;
 }
+/* Los dos escalones de profundidad que se SUMAN al cuerpo según el nivel
+   (§6): el aviso de cuándo el número miente (nivel 3) y el cruce del
+   analista (nivel 4). Comparten la caja de .mentor-lente y solo cambian de
+   acento, para que se lean como capas de la misma tarjeta y no como avisos
+   sueltos. */
+.mentor-trampa b {
+  color: var(--ambar);
+}
+.mentor-combo b {
+  color: var(--oro);
+}
+
+/* La mini-pregunta (#14) — el camino al ✔✔ */
+.mentor-op-fallo {
+  border-color: color-mix(in srgb, var(--rojo) 70%, transparent);
+}
+.mentor-pista {
+  border-top-style: solid;
+  color: var(--texto);
+}
+.mentor-premio {
+  border-top: none;
+  padding-top: 4px;
+}
+.mentor-sello {
+  color: var(--oro);
+  font-variant-numeric: tabular-nums;
+}
+
 .mentor-acciones {
   display: flex;
   gap: 6px;

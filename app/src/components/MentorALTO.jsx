@@ -7,9 +7,13 @@ import {
   ETIQUETA_REPOSO,
   vistos,
   marcarVisto,
+  dominados,
+  marcarDominado,
   alcanzables,
+  examinables,
   EVENTO_MENTOR,
 } from '../lib/mentor'
+import { cling } from '../lib/sonido'
 
 // ─────────────────────────────────────────────────────────────────────────
 // 🎓 EL MENTOR ALTO (mejora #151, idea de Jair — la cáscara)
@@ -32,6 +36,19 @@ import {
 // Cero dependencias nuevas.
 // ─────────────────────────────────────────────────────────────────────────
 
+// Los JSON de la casa se escriben con **negritas** (Jair las usa en tips y
+// tesis). Un <p> no las entiende, así que la tarjeta las traduce aquí mismo:
+// cuatro líneas y ninguna dependencia de markdown.
+function conNegritas(texto) {
+  return String(texto ?? '')
+    .split(/(\*\*[^*]+\*\*)/g)
+    .map((trozo, i) =>
+      trozo.startsWith('**') && trozo.endsWith('**') && trozo.length > 4
+        ? <strong key={i}>{trozo.slice(2, -2)}</strong>
+        : trozo,
+    )
+}
+
 // Saludo de la primera vez, heredado de la BurbujaTour que este botón absorbe.
 const SALUDOS = {
   empresa: { clave: 'ficha', titulo: '¿Te explico esta ficha?', texto: 'Toca cualquier parte y te la explico con un ejemplo, o te llevo de la mano en un tour.' },
@@ -49,6 +66,9 @@ export default function MentorALTO({ vista, nivel = 2, empresa = null, onTour, o
   const [verEjemplo, setVerEjemplo] = useState(false)
   const [seccion, setSeccion] = useState(null) // dónde está parado el usuario
   const [aprendidos, setAprendidos] = useState(vistos)
+  const [sabidos, setSabidos] = useState(dominados)
+  // La mini-pregunta (#14): null = no la está rindiendo · {elegida, acerto}
+  const [examen, setExamen] = useState(null)
 
   const info = SALUDOS[vista] || SALUDOS.inicio
   const claveSaludo = 'alto-mentor-saludo-' + info.clave
@@ -152,17 +172,19 @@ export default function MentorALTO({ vista, nivel = 2, empresa = null, onTour, o
     if (!modo) return
     const al = (e) => {
       if (e.key !== 'Escape') return
-      if (modo === 'card' || modo === 'noent') setModo('panel')
+      if (examen) setExamen(null) // del examen se vuelve a la tarjeta, no afuera
+      else if (modo === 'card' || modo === 'noent') setModo('panel')
       else setModo(null)
     }
     window.addEventListener('keydown', al)
     return () => window.removeEventListener('keydown', al)
-  }, [modo])
+  }, [modo, examen])
 
   const abrirTarjeta = (k) => {
     if (!hayTarjeta(k, nivel)) return // Regla #1: no se abre un panel vacío
     setClave(k)
     setVerEjemplo(false)
+    setExamen(null)
     setModo('card')
   }
 
@@ -170,14 +192,31 @@ export default function MentorALTO({ vista, nivel = 2, empresa = null, onTour, o
     () => (clave ? tarjetaMentor(clave, { nivel, empresa }) : null),
     [clave, nivel, empresa],
   )
+  const yaDominada = !!clave && sabidos.includes(clave)
 
+  // ✔ Entendido: eso es SIEMPRE "visto". Si la tarjeta tiene mini-pregunta y
+  // todavía no la ha dominado, en vez de cerrarse le ofrece probarse — el ✔✔
+  // no se regala por leer (#151-4).
   const entendido = () => {
     setAprendidos(marcarVisto(clave))
-    setModo(null)
+    if (tarjeta?.pregunta && !yaDominada) setExamen({ elegida: null, acerto: false })
+    else setModo(null)
+  }
+
+  // Se puede reintentar tras fallar: la pista es la lección, no el castigo.
+  // El ✔✔ se gana igual al acertar — lo que nunca se gana es sin contestar.
+  const responder = (op, i) => {
+    setExamen({ elegida: i, acerto: !!op.ok })
+    if (!op.ok) return
+    setSabidos(marcarDominado(clave))
+    setAprendidos(vistos())
+    cling() // el mismo premio de la moneda del inicio
   }
 
   const techo = useMemo(() => alcanzables(nivel).length, [nivel])
+  const conPregunta = useMemo(() => examinables(nivel).length, [nivel])
   const contados = aprendidos.filter((k) => hayTarjeta(k, nivel))
+  const dominadosNivel = sabidos.filter((k) => hayTarjeta(k, nivel))
   const etiqueta = seccion ? SECCIONES[seccion]?.etiqueta ?? ETIQUETA_REPOSO : ETIQUETA_REPOSO
   const dudas = dudasDe(seccion, nivel)
   const nombreSeccion = seccion ? (SECCIONES[seccion]?.etiqueta ?? '').replace(/^\S+\s/, '') : null
@@ -224,11 +263,21 @@ export default function MentorALTO({ vista, nivel = 2, empresa = null, onTour, o
               🧠 Preguntar a Atlas
             </button>
           )}
+          {/* Dos contadores distintos porque son dos cosas distintas: haber
+              leído y haber contestado. Mezclarlos sería el halago fácil. */}
           <div className="mentor-progreso muted">
-            ✔ Aprendidos: {contados.length} de {techo}
-            {contados.length > 0 && (
+            ✔ Leídas: {contados.length} de {techo}
+            {conPregunta > 0 && (
               <>
                 {' · '}
+                <span className={dominadosNivel.length ? 'mentor-sello' : undefined}>
+                  ✔✔ Dominadas: {dominadosNivel.length} de {conPregunta}
+                </span>
+              </>
+            )}
+            {contados.length > 0 && (
+              <>
+                <br />
                 {contados
                   .map((k) => tarjetaMentor(k, { nivel, empresa })?.titulo)
                   .filter(Boolean)
@@ -249,21 +298,34 @@ export default function MentorALTO({ vista, nivel = 2, empresa = null, onTour, o
       )}
 
       {/* ── La tarjeta ── */}
-      {modo === 'card' && tarjeta && (
+      {modo === 'card' && tarjeta && !examen && (
         <div className="mentor-card">
           <div className="mentor-panel-cab">
             <span className="mentor-marca">
               {verEjemplo && tarjeta.ejemplo
                 ? `${tarjeta.icono} ${tarjeta.ejemplo.titulo}`
                 : `${tarjeta.icono} ${tarjeta.titulo}`}
+              {yaDominada && !verEjemplo && <span className="mentor-sello" title="Dominado: contestaste bien su pregunta"> ✔✔</span>}
             </span>
             <button className="mentor-x" onClick={() => setModo(null)} aria-label="Cerrar">✕</button>
           </div>
           <p className="mentor-cuerpo">
-            {verEjemplo && tarjeta.ejemplo ? tarjeta.ejemplo.texto : tarjeta.cuerpo}
+            {conNegritas(verEjemplo && tarjeta.ejemplo ? tarjeta.ejemplo.texto : tarjeta.cuerpo)}
           </p>
           {!verEjemplo && tarjeta.notaLente && (
-            <p className="mentor-lente">🔍 {tarjeta.notaLente}</p>
+            <p className="mentor-lente">🔍 {conNegritas(tarjeta.notaLente)}</p>
+          )}
+          {/* Los dos escalones de arriba (§6): aparecen solos según el nivel —
+              el nivel 3 gana "cuándo miente" y el 4 suma "cómo se combina". */}
+          {!verEjemplo && tarjeta.trampa && (
+            <p className="mentor-lente mentor-trampa">
+              <b>⚠️ Cuándo miente:</b> {conNegritas(tarjeta.trampa)}
+            </p>
+          )}
+          {!verEjemplo && tarjeta.combo && (
+            <p className="mentor-lente mentor-combo">
+              <b>🔗 Cómo lo cruza un analista:</b> {conNegritas(tarjeta.combo)}
+            </p>
           )}
           <div className="mentor-acciones">
             {tarjeta.ejemplo && !verEjemplo && (
@@ -282,9 +344,69 @@ export default function MentorALTO({ vista, nivel = 2, empresa = null, onTour, o
               </button>
             )}
             <button className="mentor-mini principal" onClick={entendido}>
-              ✔ Entendido
+              {tarjeta.pregunta && !yaDominada ? '✔ Entendido — pruébame' : '✔ Entendido'}
             </button>
           </div>
+        </div>
+      )}
+
+      {/* ── La mini-pregunta (#14): el único camino al ✔✔ ── */}
+      {modo === 'card' && tarjeta?.pregunta && examen && (
+        <div className="mentor-card">
+          <div className="mentor-panel-cab">
+            <span className="mentor-marca">
+              {examen.acerto ? '✔✔ ¡Esa es!' : `${tarjeta.icono} Una sola pregunta`}
+            </span>
+            <button className="mentor-x" onClick={() => setModo(null)} aria-label="Cerrar">✕</button>
+          </div>
+
+          {examen.acerto ? (
+            <>
+              <p className="mentor-cuerpo">
+                {conNegritas(tarjeta.pregunta.opciones[examen.elegida].t)}
+              </p>
+              <p className="mentor-lente mentor-premio">
+                🪙 <b>{tarjeta.titulo}</b> queda marcada como <b>dominada</b> — no por
+                haberla leído, sino porque la contestaste.
+              </p>
+              <div className="mentor-acciones">
+                {tarjeta.siguiente && (
+                  <button className="mentor-mini" onClick={() => abrirTarjeta(tarjeta.siguiente.clave)}>
+                    {tarjeta.siguiente.texto} →
+                  </button>
+                )}
+                <button className="mentor-mini principal" onClick={() => setModo(null)}>
+                  Seguir mirando
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="mentor-cuerpo">{conNegritas(tarjeta.pregunta.q)}</p>
+              {tarjeta.pregunta.opciones.map((op, i) => (
+                <button
+                  key={op.t}
+                  className={`mentor-op${examen.elegida === i ? ' mentor-op-fallo' : ''}`}
+                  onClick={() => responder(op, i)}
+                >
+                  ○ {op.t}
+                </button>
+              ))}
+              {examen.elegida != null && (
+                <p className="mentor-lente mentor-pista">
+                  💡 {conNegritas(tarjeta.pregunta.opciones[examen.elegida].pista || 'Esa no es. Vuelve a leerla y prueba otra.')}
+                </p>
+              )}
+              <div className="mentor-acciones">
+                <button className="mentor-mini" onClick={() => setExamen(null)}>
+                  ← Volver a leerla
+                </button>
+                <button className="mentor-mini" onClick={() => setModo(null)}>
+                  Otro día
+                </button>
+              </div>
+            </>
+          )}
         </div>
       )}
 

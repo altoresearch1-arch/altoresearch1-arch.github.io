@@ -361,6 +361,12 @@ materialización literal de tu regla: ningún número se pronuncia solo.
 
 ## 6. El tour progresivo — 5 profundidades por indicador
 
+> ✅ **HECHO el 23-jul, en las 18 tarjetas del Mentor.** Los 5 hondos entran en los 4 niveles
+> de la app así: `niveles.1/2/3` de mentor.json llevan qué es → cómo se interpreta → cómo se
+> decide, y los dos últimos se **suman** al cuerpo en vez de reemplazarlo — `trampa` (⚠️
+> cuándo miente) desde el nivel 3 y `combo` (🔗 cómo lo cruza un analista) en el 4. Los
+> guiones de abajo son la fuente de esos textos; si escribes uno nuevo, va a mentor.json.
+
 Tu esquema de 5 niveles, mapeado a los 4 niveles de la app (el N5 tuyo = "cómo lo combina un
 analista" vive dentro del nivel 4 como "Lectura de analista"):
 
@@ -467,7 +473,11 @@ Sentinel (con documento de ejemplo precargado, patrón cartera-demo del Cuaderno
 11. **[P1]** Paso condicional en Explorar cuando el usuario ordena por yield (la trampa del yield).
 12. **[P1]** Paso condicional en la ficha si la empresa es `pocoNegociada` ("esto cambia todo lo de abajo").
 13. **[P2]** Micro-tour de 2 pasos al ELEGIR nivel por primera vez (qué desbloqueaste / qué te espera).
-14. **[P2]** Mini-quiz de 1 pregunta al cerrar un tour ("¿qué aprendiste?") con la moneda como premio sonoro.
+14. **[P2]** ~~Mini-quiz de 1 pregunta al cerrar un tour ("¿qué aprendiste?") con la moneda como premio sonoro.~~
+    ✅ **HECHO 23-jul**, en el MENTOR y no en el tour: la pregunta vive en cada tarjeta
+    (`pregunta` en mentor.json, 3 opciones con pista) y es lo único que da el ✔✔ «dominado».
+    Premio sonoro: el mismo cling de la moneda, ya compartido en `lib/sonido.js`. Cuando el
+    tour tenga su propio cierre con quiz, reusa esa pregunta — no escribas otra.
 15. **[P2]** "Tours vistos" en localStorage con badge de progreso (3 de 7 pantallas exploradas).
 16. **[P2]** Tour del Glosario: cómo buscar, las ramas, y las rutas (mejora 47).
 17. **[P2]** Re-ofrecer el tour de desbloqueo si el usuario cambió de nivel desde el badge 🎚️ (no solo desde la CTA).
