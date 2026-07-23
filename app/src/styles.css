@@ -6846,3 +6846,176 @@ body.cuaderno-marca .brand-logo {
 @media (prefers-reduced-motion: reduce) {
   .desbloqueo { animation: none; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   🧠 LECTURA DE ANALISTA + ¿SE PUEDE PAGAR EL DIVIDENDO? + P/E DEL CICLO
+   (Sesión 3 del ANALISIS_EDUCATIVO_Y_TOUR_POR_NIVELES.md — mejoras #43,
+   #47 y #50). Mismo lenguaje visual que la tarjeta de deuda: borde
+   izquierdo de color = veredicto. Cero dependencias nuevas.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.analista {
+  margin-top: 22px;
+}
+.analista-intro {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--texto-tenue);
+  margin: 2px 0 12px;
+}
+.analista-intro strong {
+  color: var(--texto);
+}
+.analista-lista {
+  display: grid;
+  gap: 12px;
+}
+.analista-card {
+  border: 1px solid var(--gris);
+  border-left: 4px solid var(--gris);
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: var(--negro-3);
+}
+.analista-ojo {
+  border-left-color: var(--ambar);
+}
+.analista-bien {
+  border-left-color: var(--verde);
+}
+.analista-neutro {
+  border-left-color: var(--oro);
+}
+.analista-cab {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.analista-icono {
+  font-size: 16px;
+  line-height: 1;
+}
+.analista-tit {
+  font-weight: 800;
+  font-size: 14.5px;
+  color: var(--texto);
+  flex: 1 1 220px;
+}
+.analista-tag {
+  font-size: 10.5px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+.analista-ojo .analista-tag {
+  color: var(--ambar);
+}
+.analista-bien .analista-tag {
+  color: var(--verde);
+}
+.analista-neutro .analista-tag {
+  color: var(--oro);
+}
+.analista-txt {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--texto-tenue);
+  margin: 8px 0 0;
+}
+.analista-porque {
+  margin-top: 9px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--texto-tenue);
+  background: var(--negro-2);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+.analista-porque strong {
+  color: var(--oro-suave);
+}
+.analista-pie {
+  font-size: 11.5px;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+
+/* 💸 El semáforo del dividendo dentro del resumen (#47) */
+.divsost {
+  margin-top: 14px;
+  border: 1px solid var(--gris);
+  border-left: 4px solid var(--gris);
+  border-radius: 10px;
+  padding: 11px 13px;
+  background: var(--negro-3);
+}
+.divsost-bien {
+  border-left-color: var(--verde);
+}
+.divsost-neutro {
+  border-left-color: var(--oro);
+}
+.divsost-ojo {
+  border-left-color: var(--ambar);
+}
+.divsost-cab {
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--texto);
+}
+.divsost-estado {
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 2px 8px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.divsost-bien .divsost-estado {
+  color: var(--verde);
+}
+.divsost-neutro .divsost-estado {
+  color: var(--oro);
+}
+.divsost-ojo .divsost-estado {
+  color: var(--ambar);
+}
+.divsost-cuenta {
+  font-size: 12.5px;
+  color: var(--texto-tenue);
+  margin-top: 5px;
+}
+.divsost-cuenta strong {
+  color: var(--texto);
+}
+.divsost-txt {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--texto-tenue);
+  margin-top: 6px;
+}
+.divsost-metodo {
+  font-size: 11.5px;
+  line-height: 1.5;
+  margin-top: 7px;
+}
+
+/* 🌀 La prueba del ciclo aplicada al P/E (#50), dentro del aviso cíclico */
+.val-estres {
+  margin-top: 8px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--texto-tenue);
+  background: var(--negro-2);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+.val-estres strong {
+  color: var(--texto);
+}

@@ -1,5 +1,6 @@
 import { lenteDe, esCiclico, deudaInfo, aniosTexto, PALABRA_DEUDA, umbralesDe } from './lente'
 import { peInfo, precioDe, dividendosDe, cambio6M } from './finanzas'
+import { combosDe } from './analista'
 import { NIVELES } from './nivel'
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -76,6 +77,19 @@ function fraseValoracion(empresa) {
   const ref = info.referencial ? ` ⚠ Su último precio es del ${fechaCorta(info.fechaPrecio)} (negocia poco), así que este P/E es referencial.` : ''
   // Ojo con la moneda: varias cotizan en US$ — la frase no dice "soles".
   return `Su P/E es ${info.pe.toFixed(1)}: por cada acción pagas ${info.pe.toFixed(1)} veces lo que la empresa gana en un año. Aquí abajo está la cuenta completa y contra qué rango la comparamos.${ref}${ciclo}`
+}
+
+// El paso que cierra el análisis: los combos que SÍ aplican a esta empresa,
+// nombrados con su propio título (nada de "aquí verás cosas interesantes").
+function fraseAnalista(empresa) {
+  const combos = combosDe(empresa)
+  const base = 'Aquí abajo está el paso que separa leer números de entenderlos: los indicadores CRUZADOS. '
+    + 'Ninguno significa nada solo — un P/E bajo puede ser ganga o pico de ciclo, y lo que decide cuál es el número de al lado. '
+  if (!combos.length) {
+    return base + 'En esta empresa hoy no hay ningún cruce con todos sus datos completos, así que no te inventamos ninguno.'
+  }
+  const cuantos = combos.length === 1 ? 'un cruce' : `${combos.length} cruces`
+  return base + `En ${empresa.ticker} se pueden armar ${cuantos}, y el primero es este: «${combos[0].titulo}».`
 }
 
 // ── El guion, en el orden de la ESCALERA (no el del DOM) ──────────────────
@@ -213,6 +227,11 @@ export function pasosFicha(empresa, nivel = 4) {
       n: 4, sel: '[data-tour="fuentes"]',
       icono: '🔎', titulo: 'De dónde salió todo',
       texto: 'La jerarquía que respetamos: filings SMV → reporte auditado → comunicaciones oficiales → medios verificados. Nunca al revés.',
+    },
+    {
+      n: 3, sel: '[data-tour="analista"]',
+      icono: '🧠', titulo: 'Y ahora, todo junto',
+      texto: fraseAnalista(empresa),
     },
     {
       n: 1, sel: '[data-tour="listo"]',

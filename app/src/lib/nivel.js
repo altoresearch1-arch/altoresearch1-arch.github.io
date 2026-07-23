@@ -52,7 +52,7 @@ export const NIVELES = [
     elemento: '❄️',
     frase: 'Ya sé lo básico, quiero explorar y comparar',
     detalle: 'Catalizadores, escenarios, riesgos y producción minera (si aplica).',
-    incluye: ['Catalizadores', 'Escenarios y riesgos', 'Producción minera', 'BPA año por año'],
+    incluye: ['Catalizadores', 'Escenarios y riesgos', 'Producción minera', 'BPA año por año', '🧠 Lectura de analista'],
     cargando: ['Cargando catalizadores y escenarios…', 'Midiendo los riesgos…', 'Subiendo la densidad de datos'],
   },
   {
@@ -94,6 +94,11 @@ export const NIVEL_SECCION = {
   catalizadores: 3,
   escenarios: 3,
   riesgos: 3,
+  // 🧠 Los combos del analista (#43): cruzar indicadores es el oficio del
+  // nivel 3 ("quiero analizarla"). No sube al 4 porque no necesita ningún
+  // dato exclusivo del 4 — necesita que el usuario ya haya visto los
+  // números sueltos, y eso pasa recién aquí.
+  lecturaAnalista: 3,
   relojDatos: 4,
   hechos: 4,
   noticiasExtranjero: 4,

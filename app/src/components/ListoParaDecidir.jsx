@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { lenteDe } from '../lib/lente'
 import { NIVELES, NIVEL_SECCION, verSeccion } from '../lib/nivel'
+import { combosDe } from '../lib/analista'
 
 // ─────────────────────────────────────────────────────────────────────────
 // ✅ ¿ESTÁS LISTO PARA DECIDIR? (mejora #104 — el escalón 6 de la escalera)
@@ -72,6 +73,16 @@ export default function ListoParaDecidir({ empresa, nivel, onSubirNivel }) {
     },
   ]
 
+  // 🧠 El séptimo escalón (#43): solo se pide si esta empresa TIENE cruces
+  // que mostrar — pedir lo que la ficha no puede responder sería trampa.
+  if (combosDe(empresa).length > 0) {
+    items.push({
+      id: 'combos', texto: 'Sé qué dicen sus números CRUZADOS, no solo sueltos',
+      sel: '#sec-analista', seccion: 'lecturaAnalista',
+      pista: 'Ningún indicador significa nada solo: lo que manda es con qué lo cruzas.',
+    })
+  }
+
   const ir = (sel) => {
     const el = document.querySelector(sel)
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
@@ -124,7 +135,7 @@ export default function ListoParaDecidir({ empresa, nivel, onSubirNivel }) {
       <div className="listo-pie">
         {listas === total ? (
           <p className="listo-final">
-            🎉 Las seis marcadas. Ya no necesitas que nadie te diga qué hacer con {empresa.ticker}:
+            🎉 Las {total} marcadas. Ya no necesitas que nadie te diga qué hacer con {empresa.ticker}:
             tienes con qué decidirlo tú — y con qué explicárselo a alguien más, que es la prueba
             definitiva de que lo entendiste.
           </p>

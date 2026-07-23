@@ -3,6 +3,7 @@ import epsAnualData from '../data/eps_anual.json'
 import escenariosData from '../data/escenarios.json'
 import Glosado from './Glosado'
 import { esCiclico, lenteDe } from '../lib/lente'
+import { peEstresado } from '../lib/analista'
 
 // ¿La acción está barata, en rango o cara? Método: P/E actual vs el rango justo del
 // sector. P/E = precio (BVL) ÷ ganancia anual por acción (SMV). Educativo y con la fórmula.
@@ -99,6 +100,8 @@ export default function Valoracion({ empresa }) {
   }
 
   const simEstados = ea.moneda === 'USD' ? 'US$' : 'S/'
+  // (#50) El P/E con la ganancia partida a la mitad — solo en las cíclicas.
+  const esta = peEstresado(empresa)
 
   if (capConfiable && r && r.utilidadOperativa != null && r.utilidadNeta != null) {
     const fx = epsAnualData.tipoCambioUSDPEN
@@ -198,6 +201,21 @@ export default function Valoracion({ empresa }) {
               : 'Con el ciclo alto la ganancia se infla'} y la acción parece barata
             justo cuando podría estar cara. El P/E de una cíclica se juzga imaginando su producto
             BARATO, no al precio de hoy.
+            {/* (#50) La resta que vale más que tres párrafos: el mismo gesto
+                que la "prueba del ciclo" de la tarjeta de deuda, para que el
+                usuario reconozca el patrón. No predice nada — solo muestra qué
+                queda del número que tiene delante si el motor afloja. */}
+            {esta && (
+              <div className="val-estres">
+                🌀 <strong>Hazle la prueba:</strong> este P/E de {esta.pe.toFixed(1)} se calcula con la
+                ganancia de HOY, con {esta.motor} en su nivel actual. Si esa ganancia volviera a la
+                mitad — algo que en este negocio ya pasó otras veces — el mismo precio pasaría a un
+                P/E de <strong>{esta.peEstres.toFixed(1)}</strong>, sin que la acción se moviera un
+                centavo. Y ojo con la trampa fina: no hace falta que {esta.motor} caiga a la mitad
+                para eso. Los costos de la empresa casi no bajan cuando su producto baja, así que una
+                caída de 25–30% en el precio puede llevarse la mitad de la ganancia.
+              </div>
+            )}
           </div>
         )}
       </div>

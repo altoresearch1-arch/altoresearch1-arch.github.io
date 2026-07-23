@@ -4,6 +4,44 @@
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
 > herramienta), lee esto primero. Última actualización: **22 jul 2026**. Estado: **EN VIVO (beta pública)**.
 
+## 🧠 22-jul: SESIÓN 3 DEL PLAN EDUCATIVO — LOS COMBOS DEL ANALISTA (implementada)
+Tercera sesión del `ANALISIS_EDUCATIVO_Y_TOUR_POR_NIVELES.md` (§5 y §9: mejoras #43, #47 y
+#50). La regla de Jair —**nunca se evalúa un indicador solo**— por fin es código.
+- **`lib/analista.js` (nuevo):** el motor de combos, con el patrón de `redactor.js` (slots
+  verificados: si falta un dato, la frase no se escribe). Cruza lo que YA tenemos —P/E,
+  margen, deuda por lente, FCF, dividendos, capex, catalizadores y producción del MINEM— y
+  devuelve solo los cruces completos. **93 de las 115 empresas** tienen al menos uno.
+- **`LecturaAnalista.jsx` (#43):** sección "🧠 Lectura de analista" en **nivel 3**, entre los
+  riesgos y el checklist de cierre. Cada tarjeta trae el cruce, su semáforo (🟠 ojo / 🟢 a
+  favor / 🟡 cómo se lee) y **"📌 La regla que te llevas"** — la lección general, que es lo
+  que el usuario se lleva a la siguiente ficha. Combos implementados: pico de ciclo (P/E bajo
+  + margen sobre la mediana de su sector + cíclica), barata-pero-ilíquida, dividendo vs FCF
+  (las 4 variantes), yield extraordinario de un solo pago, deuda cíclica con la prueba del
+  fondo, deuda alta con flujo estable (el caso AUNA), deuda "gigante" de banco = materia
+  prima, FCF negativo con o sin proyecto documentado, y producción del BEM como adelanto del
+  próximo trimestre.
+- **`sostenibilidadDividendo` (#47):** lo repartido al año (dividendos.json × acciones del
+  XBRL) frente al **flujo de caja libre** anualizado → semáforo **"💸 ¿Se lo puede pagar?"**
+  dentro del resumen de dividendos, visible en **TODOS los niveles** (es una advertencia, y
+  las advertencias no se filtran por nivel — regla E1). Zonas anchas a propósito (≤70% holgado
+  · ≤110% justo · más, forzado) porque el FCF es de un trimestre × 4, y el método se declara.
+  En banco/seguro/AFP el FCF no significa lo mismo y se dice, no se calcula.
+- **`peEstresado` (#50):** dentro del aviso de cíclica en "¿Barata o cara?" — "este P/E de
+  10.4 se calcula con la ganancia de HOY; con la ganancia a la mitad sería 20.7, sin que la
+  acción se mueva un centavo", más la trampa fina (los costos no bajan con el metal, así que
+  una caída de 25-30% del precio puede llevarse media ganancia). Misma aritmética que la
+  prueba del ciclo de la deuda, para que el usuario reconozca el gesto.
+- **Enganches:** paso nuevo del tour "🧠 Y ahora, todo junto" (nivel 3, nombra el primer combo
+  real de esa empresa), séptima casilla en "¿Estás listo para decidir?" (solo si la empresa
+  tiene cruces) y "🧠 Lectura de analista" en lo que promete el nivel 3.
+- **Decisiones de honestidad (no re-discutir):** el combo 9 de §5 (margen que se aprieta) NO
+  se implementó — necesita la SERIE de márgenes y hoy solo hay el último trimestre. En la
+  producción del BEM solo entran los **metales principales** (cobre, oro, zinc, plata, estaño,
+  hierro): con los subproductos, BVN salía titulada por su arsénico y Cerro Verde por su
+  molibdeno. El metal que se destaca es aquel donde la empresa pesa más en el total del país
+  (número sin unidades, comparable entre metales), y solo se habla si el cambio es ≥8%.
+- Cero dependencias nuevas, sin tocar los robots. Verificado en build de producción.
+
 ## 🚶 22-jul: SESIÓN 2 DEL PLAN EDUCATIVO — EL TOUR POR NIVELES (implementada)
 Segunda sesión del `ANALISIS_EDUCATIVO_Y_TOUR_POR_NIVELES.md` (§7 y §9). El tour dejó de
 explicar INTERFAZ y pasó a enseñar la EMPRESA, en el orden en que la cabeza pregunta.

@@ -1,6 +1,7 @@
 import dividendosData from '../data/dividendos.json'
 import DividendoGrafico from './DividendoGrafico'
 import { precioEnFecha } from '../lib/finanzas'
+import { sostenibilidadDividendo, PALABRA_DIVIDENDO } from '../lib/analista'
 
 // Resumen de dividendos (parte de ARRIBA de la ficha). Muestra los pagos INDIVIDUALES
 // con su fecha (estilo stockanalysis), NO sumados, destacando el/los de este año (2026),
@@ -34,6 +35,47 @@ function fmtMonto(n, mon) {
 
 function vez(n) {
   return n === 1 ? 'vez' : 'veces'
+}
+
+function fmtGrande(n, sim) {
+  const signo = n < 0 ? '-' : ''
+  const abs = Math.abs(n)
+  if (abs >= 1e9) return `${signo}${sim} ${(abs / 1e9).toFixed(2)} MM`
+  if (abs >= 1e6) return `${signo}${sim} ${(abs / 1e6).toFixed(1)} M`
+  return `${signo}${sim} ${abs.toFixed(1)}`
+}
+
+// 💸 ¿Se lo puede pagar? (mejora #47) — el semáforo que le faltaba al yield:
+// lo repartido frente al flujo de caja libre. Va DENTRO del resumen de
+// dividendos y en TODOS los niveles: es una advertencia, y las advertencias
+// nunca se filtran por nivel (regla E1 del análisis educativo).
+function Sostenibilidad({ empresa }) {
+  const s = sostenibilidadDividendo(empresa)
+  if (!s || s.noAplica) return null
+  const p = PALABRA_DIVIDENDO[s.estado]
+  return (
+    <div className={'divsost divsost-' + p.tono}>
+      <div className="divsost-cab">
+        💸 ¿Se lo puede pagar? <span className="divsost-estado">{p.corto}</span>
+      </div>
+      <div className="divsost-cuenta">
+        reparte {fmtGrande(s.pagado, s.sim)} al año · le queda {fmtGrande(s.fcf, s.sim)} de{' '}
+        flujo de caja libre (último trimestre × 4)
+        {s.ratio != null && <> · se lleva el <strong>{Math.round(s.ratio * 100)}%</strong></>}
+      </div>
+      <div className="divsost-txt">
+        {s.estado === 'holgado' && 'El dividendo cabe en la caja que le sobra después de operar e invertir: hoy no necesita endeudarse para pagarlo.'}
+        {s.estado === 'justo' && 'Casi todo lo que le sobra se va en dividendo. No es alarma, pero no le queda colchón para un año flojo.'}
+        {s.estado === 'forzado' && 'Está repartiendo más de lo que su caja genera. Esa diferencia sale de caja acumulada, de vender activos o de deuda — y ninguna de las tres dura para siempre.'}
+        {s.estado === 'fcfNegativo' && 'Reparte dividendo con el flujo de caja libre en negativo: después de operar e invertir no le sobró caja, así que ese pago salió de otro lado.'}
+      </div>
+      <div className="divsost-metodo muted">
+        Método: el flujo de caja libre es el del último trimestre presentado a la SMV × 4, y el
+        dividendo es el de los últimos 12 meses — sirve para el orden de magnitud, no para el decimal.
+        Un trimestre atípico (una veda, una parada de planta) mueve este número.
+      </div>
+    </div>
+  )
 }
 
 export default function DividendoResumen({ empresa }) {
@@ -118,6 +160,8 @@ export default function DividendoResumen({ empresa }) {
           <DividendoGrafico dv={dv} ticker={empresa.ticker} />
         </div>
       </div>
+
+      <Sostenibilidad empresa={empresa} />
 
       {nota && (
         <div className="divres-pend" style={{ marginTop: 8 }}>

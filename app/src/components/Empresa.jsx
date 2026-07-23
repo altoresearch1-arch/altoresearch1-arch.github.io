@@ -25,6 +25,7 @@ import GraficaBPA from './GraficaBPA'
 import PuedePagarDeuda from './PuedePagarDeuda'
 import PorQueEsteTrimestre from './PorQueEsteTrimestre'
 import ListoParaDecidir from './ListoParaDecidir'
+import LecturaAnalista from './LecturaAnalista'
 import { CountUp, Reveal } from '../lib/anim'
 import { useFavoritos, alternarFavorito } from '../lib/favoritos'
 import { peInfo } from '../lib/finanzas'
@@ -457,6 +458,16 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
                 <span><Glosado text={r.texto} /></span>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* 🧠 Lectura de analista (#43): el CIERRE del análisis — los números
+            de arriba cruzados entre sí, que es donde por fin significan algo.
+            Va después de riesgos y antes del checklist: es el último paso
+            antes de "¿ya puedes decidir tú?". */}
+        {ver('lecturaAnalista') && (
+          <div id="sec-analista" className="sec-ancla">
+            <Reveal><LecturaAnalista empresa={e} /></Reveal>
           </div>
         )}
 

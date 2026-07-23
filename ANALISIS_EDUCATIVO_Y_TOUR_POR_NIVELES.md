@@ -661,8 +661,19 @@ Orden sugerido de implementación, máximo aprendizaje por sol invertido:
    **Lo que quedó fuera a propósito:** #6 (micro-tours de indicador, son la Sesión 4), #7/#8
    (tours de Atlas y Sentinel), #9 (partir el tour del inicio), #13/#14/#15 (micro-tour al
    elegir nivel, mini-quiz de cierre, badge de tours vistos).
-3. **Sesión 3 — Los combos (mejoras 43, 47, 50):** "Lectura de analista" con los combos de §5,
-   sostenibilidad del dividendo vs FCF, y el ejemplo numérico del ciclo.
+3. ~~**Sesión 3 — Los combos (mejoras 43, 47, 50)**~~ ✅ **HECHA el 22-jul-2026.**
+   Entregado: `lib/analista.js` (motor de combos con slots verificados, patrón redactor) ·
+   `LecturaAnalista.jsx` con la sección "🧠 Lectura de analista" en nivel 3, cada cruce con su
+   semáforo y su "📌 la regla que te llevas" (#43) · semáforo "💸 ¿Se lo puede pagar?"
+   (dividendos repartidos vs FCF anualizado) dentro del resumen de dividendos y en TODOS los
+   niveles, porque es una advertencia (#47) · el P/E con la ganancia partida a la mitad dentro
+   del aviso de cíclica (#50) · paso de tour "🧠 Y ahora, todo junto" y séptima casilla del
+   checklist de cierre. 93 de 115 empresas tienen al menos un cruce.
+   **Lo que quedó fuera a propósito:** el combo 9 de §5 (margen apretándose + costos subiendo)
+   necesita la SERIE de márgenes trimestre a trimestre y hoy solo existe el último trimestre —
+   inventar la tendencia con un punto sería justo lo que esta app no hace. Y #53 (precio del
+   metal hoy vs su promedio), que le daría al combo 10 su segunda mitad, sigue pendiente
+   porque falta la fuente de precios de metales (#116).
 4. **Sesión 4 — Los micro-tours de indicador (mejora 6)** con los guiones de §6 escritos como datos.
 
 > Nota final de método: casi todo lo propuesto se construye con datos que YA existen en los JSON
