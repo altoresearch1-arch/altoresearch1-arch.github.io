@@ -884,7 +884,10 @@ a.link {
   left: 50%;
   transform: translateX(-50%);
   width: max-content;
-  max-width: 230px;
+  /* El tope tiene que contar con la pantalla: con los botoncitos dentro, un
+     max-width fijo de 230 px se estiraba igual (el contenido manda) y en un
+     celular de 375 px el tooltip empujaba la página de lado. */
+  max-width: min(240px, calc(100vw - 32px));
   background: var(--negro-3);
   color: var(--texto);
   border: 1px solid var(--oro);
@@ -900,6 +903,34 @@ a.link {
   box-shadow: var(--sombra);
   z-index: 70;
   pointer-events: none;
+}
+/* 🎓 Los tres botoncitos del §31-3: el tooltip deja de ser el final del camino
+   y ofrece seguir (la tarjeta del Mentor, su ejemplo, o Atlas). Es la única
+   parte del tooltip que SÍ recibe el mouse. */
+.termino-pop-acciones {
+  pointer-events: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px dashed var(--gris);
+}
+.termino-pop-btn {
+  appearance: none;
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--gris);
+  border-radius: 7px;
+  color: var(--texto);
+  font-size: 11px;
+  line-height: 1.2;
+  padding: 5px 8px;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.termino-pop-btn:hover {
+  border-color: var(--oro);
+  color: var(--oro);
 }
 
 /* ---------- Valoración: ¿barata o cara? ---------- */

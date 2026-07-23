@@ -69,6 +69,20 @@ export function hayTarjeta(clave, nivel) {
 // sección (#151-6), con moderación: cambia por sección, no por scroll.
 // ─────────────────────────────────────────────────────────────────────────
 export const SECCIONES = {
+  identidad: {
+    etiqueta: '💰 ¿De qué vive esta empresa?',
+    dudas: [
+      { q: '¿Qué significa «vive de»?', clave: 'viveDe' },
+      { q: '¿Qué es una acción, en simple?', clave: 'accion' },
+    ],
+  },
+  gerencia: {
+    etiqueta: '🗣 ¿Por qué le fue así?',
+    dudas: [
+      { q: '¿Quién dice esto?', clave: 'gerencia' },
+      { q: '¿Y esto se va a repetir el próximo año?', clave: 'gerencia' },
+    ],
+  },
   motor: {
     etiqueta: '🥇 ¿Qué es «su motor»?',
     dudas: [
@@ -120,6 +134,27 @@ export const SECCIONES = {
       { q: '¿Y a qué precio vende eso?', clave: 'motor' },
     ],
   },
+  hechos: {
+    etiqueta: '📰 ¿Qué son estas noticias?',
+    dudas: [
+      { q: '¿Quién publica esto?', clave: 'hechos' },
+      { q: '¿Qué significan los colores 🟢🔴🟡?', clave: 'hechos' },
+    ],
+  },
+  catalizadores: {
+    etiqueta: '🎯 ¿Qué se espera que pase?',
+    dudas: [
+      { q: '¿Esto es una predicción?', clave: 'catalizadores' },
+      { q: '¿Y qué puede salir mal?', clave: 'riesgos' },
+    ],
+  },
+  simulador: {
+    etiqueta: '🧮 ¿Esto predice mi ganancia?',
+    dudas: [
+      { q: '¿Este número es una promesa?', clave: 'simulador' },
+      { q: '¿Y si baja en vez de subir?', clave: 'simulador' },
+    ],
+  },
   riesgos: {
     etiqueta: '⚠️ ¿Qué puede salir mal?',
     dudas: [
@@ -127,6 +162,35 @@ export const SECCIONES = {
       { q: '¿Ya sé lo suficiente para decidir?', clave: 'decidir' },
     ],
   },
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// 📖 EL PUENTE CON GLOSADO (§31-3)
+// El "mantener presionado cualquier palabra" NO se construye aparte: Glosado
+// ya intercepta los términos técnicos. Lo que se agrega es que su tooltip
+// pueda saltar a la tarjeta del Mentor que explica ESE término de verdad —
+// con analogía, ejemplo y la pregunta siguiente— en vez de morir en la
+// definición de diccionario.
+// ─────────────────────────────────────────────────────────────────────────
+const POR_TERMINO = {}
+for (const [clave, t] of Object.entries(TARJETAS)) {
+  for (const palabra of t.terminos ?? []) POR_TERMINO[palabra.toLowerCase()] = clave
+}
+
+/** La tarjeta que explica esta palabra del glosario, si alguna la reclama. */
+export function claveDeTermino(palabra) {
+  return POR_TERMINO[String(palabra || '').toLowerCase().trim()] ?? null
+}
+
+// Glosado y el Mentor viven en ramas lejanas del árbol: se hablan por un
+// evento del documento y no por un contexto nuevo (más barato, y el Mentor
+// puede no estar montado — en ese caso simplemente no pasa nada).
+export const EVENTO_MENTOR = 'alto-mentor-abrir'
+
+export function pedirTarjeta(clave, { ejemplo = false } = {}) {
+  if (!TARJETAS[clave]) return false
+  window.dispatchEvent(new CustomEvent(EVENTO_MENTOR, { detail: { clave, ejemplo } }))
+  return true
 }
 
 export const ETIQUETA_REPOSO = '💡 Explícamelo'

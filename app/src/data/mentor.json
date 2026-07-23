@@ -1,6 +1,7 @@
 {
   "_comment": "🎓 EL MENTOR ALTO (mejora #151, idea de Jair). Las tarjetas que explican cada parte de la ficha cuando el usuario toca algo en el modo 👆. EDITABLE POR JAIR como todos los JSON — aquí se escribe el CONTENIDO, la cáscara (MentorALTO.jsx) no se toca. Estructura de cada tarjeta: icono · titulo · seccion (para el «🤔 no entendí» contextual) · niveles (el texto según el nivel del usuario: se usa el más alto que no lo pase — si solo hay '1', el nivel 4 también lee ese) · lentes (una línea EXTRA solo para ciertos negocios; sin lente que calce no se escribe nada, Regla #1) · ejemplo (el «ver ejemplo con…», la empresa canónica) · siguiente (la pregunta que encadena con la próxima tarjeta, mejora #105).",
   "_orden_comment": "El orden de este archivo es el orden en que se cuenta la ficha (la escalera de aprendizaje), y es el que usa el contador «✔ aprendidos N de M».",
+  "_terminos_comment": "`terminos` engancha la tarjeta con las palabras punteadas de Glosado: cuando el usuario toca «P/E» en cualquier texto de la app, su tooltip ofrece 📖 explícamelo / 📊 ejemplo, que abren ESTA tarjeta. Escribir las palabras en minúscula y tal como aparecen en terminos.json.",
   "tarjetas": {
     "accion": {
       "icono": "🧩",
@@ -9,9 +10,44 @@
       "niveles": {
         "1": "Un pedacito de una empresa de verdad. Si compras una acción de Alicorp, eres dueño de una parte chiquita de Alicorp: de sus fábricas, de sus marcas y de lo que gane. Chiquita en serio — hay cientos de millones de acciones. Por eso ALTO te hace mirar la EMPRESA y no el gráfico: lo que estás comprando es el negocio."
       },
-      "siguiente": { "texto": "¿Y cómo gano con eso?", "clave": "dividendo" }
+      "siguiente": {
+        "texto": "¿Y cómo gano con eso?",
+        "clave": "dividendo"
+      },
+      "terminos": [
+        "acción de inversión"
+      ]
     },
-
+    "viveDe": {
+      "icono": "💰",
+      "titulo": "De qué vive",
+      "seccion": "identidad",
+      "niveles": {
+        "1": "La pregunta que va PRIMERO, antes que cualquier número: ¿de dónde saca la plata esta empresa? ¿Vende metal, cobra un peaje, presta dinero, cobra una tarifa? De eso depende todo lo demás — la misma deuda, el mismo P/E y el mismo margen significan cosas distintas según de qué viva.",
+        "3": "Es el LENTE. ALTO lo declara arriba de la ficha a propósito: mirar un indicador sin saber de qué vive la empresa es el error más caro y más común. Una eléctrica endeudada está haciendo su trabajo; una minera con esa misma deuda está apostando a que el metal no baje."
+      },
+      "ejemplo": {
+        "titulo": "La misma deuda, cuatro lecturas",
+        "texto": "Tres años de deuda: en una eléctrica es normal (cobra tarifa todos los meses), en un hospital es manejable (la gente se enferma en crisis igual), en una minera es una alerta (su caja depende del metal) y en un banco es un error de categoría — deber es su negocio."
+      },
+      "siguiente": {
+        "texto": "¿Y por qué le fue así este año?",
+        "clave": "gerencia"
+      }
+    },
+    "gerencia": {
+      "icono": "🗣",
+      "titulo": "¿Por qué le fue así?",
+      "seccion": "gerencia",
+      "niveles": {
+        "1": "Las palabras de la propia gerencia, sacadas del informe que le entrega a la SMV cada trimestre. No es opinión de ALTO ni de nadie: es la empresa explicando su propio resultado. Sirve para saber si lo que pasó fue por el negocio o por algo de una sola vez.",
+        "3": "El «Análisis y Discusión de la Gerencia». Léelo buscando dos cosas: qué explicación dan (¿precio, volumen, costos, tipo de cambio?) y qué NO mencionan. Cuando el resultado mejora por un efecto único —la venta de un activo, un tipo de cambio favorable— conviene no proyectarlo al futuro."
+      },
+      "siguiente": {
+        "texto": "¿Y qué precio le manda?",
+        "clave": "motor"
+      }
+    },
     "motor": {
       "icono": "🥇",
       "titulo": "El precio de su motor",
@@ -26,9 +62,11 @@
         "retail": "En retail el motor es la inflación: le sube el ticket y a la vez le encoge al cliente.",
         "hidrocarburos": "Aquí hay DOS motores y tiran distinto: el crudo (que es su costo y su referencia de venta) y el dólar en que debe."
       },
-      "siguiente": { "texto": "¿Y eso cómo se le nota en la ganancia?", "clave": "bpa" }
+      "siguiente": {
+        "texto": "¿Y eso cómo se le nota en la ganancia?",
+        "clave": "bpa"
+      }
     },
-
     "spark": {
       "icono": "📈",
       "titulo": "Su recorrido",
@@ -37,9 +75,11 @@
         "1": "Cómo se movió el precio, con los cierres reales de la Bolsa de Lima. Mira el PASADO. No promete nada del futuro — si bastara con ver la línea subir, todos ganaríamos.",
         "3": "Cierres oficiales de la BVL. Los saltos suelen coincidir con noticias: resultados trimestrales, dividendos, hechos de importancia. Vale más preguntarse QUÉ pasó en el salto que mirar la forma de la curva."
       },
-      "siguiente": { "texto": "¿Y cuánto se sacude normalmente?", "clave": "volatilidad" }
+      "siguiente": {
+        "texto": "¿Y cuánto se sacude normalmente?",
+        "clave": "volatilidad"
+      }
     },
-
     "volatilidad": {
       "icono": "🌡️",
       "titulo": "¿Cuánto se mueve?",
@@ -48,9 +88,14 @@
         "1": "Cuánto se sacude el precio en un año normal. Mucho vaivén no significa «mala empresa»: significa que verás números rojos y verdes grandes, y que hay que tener estómago para no vender en el peor día.",
         "3": "Mide el vaivén del PRECIO, no la solidez del negocio. Ojo con la trampa: una acción que casi no se negocia sale «tranquila» en este medidor, y su riesgo real es otro — que el día que quieras vender no haya a quién."
       },
-      "siguiente": { "texto": "¿Y esta empresa reparte plata?", "clave": "dividendo" }
+      "siguiente": {
+        "texto": "¿Y esta empresa reparte plata?",
+        "clave": "dividendo"
+      },
+      "terminos": [
+        "volatilidad"
+      ]
     },
-
     "dividendo": {
       "icono": "💰",
       "titulo": "Dividendos",
@@ -67,9 +112,17 @@
         "titulo": "El caso de las eléctricas",
         "texto": "Una eléctrica cobra una tarifa regulada mes a mes, así que su dividendo se parece a un sueldo. Una minera reparte según cómo estuvo el metal ese año. El MISMO 6% de yield significa cosas muy distintas en cada una."
       },
-      "siguiente": { "texto": "¿Y está barata o cara?", "clave": "pe" }
+      "siguiente": {
+        "texto": "¿Y está barata o cara?",
+        "clave": "pe"
+      },
+      "terminos": [
+        "dividendo",
+        "dividendos",
+        "yield",
+        "dividendo extraordinario"
+      ]
     },
-
     "pe": {
       "icono": "💎",
       "titulo": "¿Barata o cara? (el P/E)",
@@ -87,9 +140,15 @@
         "titulo": "Gloria vs. una minera",
         "texto": "Gloria vende leche todos los meses: su ganancia es parecida año a año, así que su P/E se parece al de la bodega del ejemplo. En una minera la ganancia baila con el metal — el mismo número 9 se lee distinto, porque nadie sabe cuánto durará esa ganancia."
       },
-      "siguiente": { "texto": "¿Y cuánto debe?", "clave": "deuda" }
+      "siguiente": {
+        "texto": "¿Y cuánto debe?",
+        "clave": "deuda"
+      },
+      "terminos": [
+        "p/e",
+        "ev/ebitda"
+      ]
     },
-
     "bpa": {
       "icono": "📊",
       "titulo": "La ganancia por acción, año a año",
@@ -97,9 +156,16 @@
       "niveles": {
         "3": "Cuánto ganó la empresa por cada acción, según los estados financieros de la SMV. Es el denominador del P/E: si esta barra sube año tras año, el P/E de hoy está parado sobre algo firme; si salta como sierra, ese mismo P/E no significa lo mismo. Los huecos son años que no cuadraron con el anual auditado — mejor un vacío que un dato inventado."
       },
-      "siguiente": { "texto": "¿Y la deuda le pesa?", "clave": "deuda" }
+      "siguiente": {
+        "texto": "¿Y la deuda le pesa?",
+        "clave": "deuda"
+      },
+      "terminos": [
+        "bpa",
+        "eps",
+        "ganancia anual por acción"
+      ]
     },
-
     "deuda": {
       "icono": "🏦",
       "titulo": "¿Puede pagar su deuda?",
@@ -114,9 +180,15 @@
         "electricas": "Aguantan más deuda que casi cualquiera: cobran una tarifa regulada todos los meses, pase lo que pase.",
         "salud": "Deuda alta con flujo estable es manejable — la gente se enferma en crisis igual que en bonanza."
       },
-      "siguiente": { "texto": "¿Y de dónde sale la plata para pagarla?", "clave": "fcf" }
+      "siguiente": {
+        "texto": "¿Y de dónde sale la plata para pagarla?",
+        "clave": "fcf"
+      },
+      "terminos": [
+        "deuda neta",
+        "ebitda"
+      ]
     },
-
     "fcf": {
       "icono": "💵",
       "titulo": "El flujo de caja libre",
@@ -125,9 +197,16 @@
         "3": "La plata que de verdad le sobró después de operar y de invertir en mantenerse en pie. Es distinta de la «utilidad»: la utilidad es contable y admite maquillaje; la caja, no. De aquí sale el dividendo y de aquí se paga la deuda — si el flujo es negativo, ambas cosas salen de otro lado (deuda nueva o caja vieja).",
         "4": "ALTO lo calcula con 12 meses reales (operación menos capex) para 80 empresas; en el resto lo dice y usa el trimestre anualizado, que es un método más pobre. Un flujo negativo no es automáticamente malo: puede ser una empresa construyendo su próxima mina. La pregunta es si ese proyecto está documentado."
       },
-      "siguiente": { "texto": "¿Y qué margen le queda de lo que vende?", "clave": "margen" }
+      "siguiente": {
+        "texto": "¿Y qué margen le queda de lo que vende?",
+        "clave": "margen"
+      },
+      "terminos": [
+        "flujo de caja libre",
+        "fcf",
+        "capex"
+      ]
     },
-
     "margen": {
       "icono": "📐",
       "titulo": "El margen",
@@ -136,9 +215,19 @@
         "1": "De cada 100 soles que vende, cuántos le quedan. Un margen alto significa que puede aguantar un golpe —que le suban los costos, que le bajen el precio— sin entrar en pérdidas. Un margen finito vive al borde.",
         "3": "Se compara solo contra su propio sector: un supermercado sano vive con márgenes de un dígito y una minera con el metal caro pasa del 40%. Lo que dice más es la TENDENCIA, y esa la cuenta la gerencia en su análisis trimestral."
       },
-      "siguiente": { "texto": "¿Y qué puede salir mal?", "clave": "riesgos" }
+      "siguiente": {
+        "texto": "¿Y qué puede salir mal?",
+        "clave": "riesgos"
+      },
+      "terminos": [
+        "margen",
+        "margen neto",
+        "margen bruto",
+        "margen financiero",
+        "utilidad neta",
+        "utilidad operativa"
+      ]
     },
-
     "produccion": {
       "icono": "⛏️",
       "titulo": "Cuánto produce",
@@ -146,9 +235,52 @@
       "niveles": {
         "3": "Las toneladas y onzas que reportó al Ministerio de Energía y Minas, mes a mes. Es el adelanto más honesto del próximo trimestre: la venta de una minera es, más o menos, producción × precio. Si produce menos pero el metal subió, van en sentidos opuestos y hay que ver cuál pesa más."
       },
-      "siguiente": { "texto": "¿Y qué precio recibe por eso?", "clave": "motor" }
+      "siguiente": {
+        "texto": "¿Y qué precio recibe por eso?",
+        "clave": "motor"
+      }
     },
-
+    "hechos": {
+      "icono": "📰",
+      "titulo": "Hechos de importancia",
+      "seccion": "hechos",
+      "niveles": {
+        "1": "Las noticias OFICIALES que la empresa está obligada a publicar cuando pasa algo que puede mover su precio: un dividendo, un accidente, un contrato grande, un cambio de dueño. No son rumores ni prensa: es la empresa hablando en el canal de la Bolsa.",
+        "3": "El robot de ALTO baja el PDF de cada hecho y lo lee: por eso ves 🟢/🔴/🟡. Ojo con el semáforo — dice el TONO del comunicado, no si el precio va a subir. Y ojo con las fechas de un dividendo: la fecha de corte decide si te toca o no, y equivocarse ahí cuesta plata de verdad."
+      },
+      "siguiente": {
+        "texto": "¿Y qué se espera que pase?",
+        "clave": "catalizadores"
+      },
+      "terminos": ["hecho de importancia"]
+    },
+    "catalizadores": {
+      "icono": "🎯",
+      "titulo": "Catalizadores",
+      "seccion": "catalizadores",
+      "niveles": {
+        "3": "Lo que podría cambiar la historia de la empresa en los próximos meses: una mina que arranca, una concesión que vence, un juicio que se resuelve. No son promesas ni predicciones — son las cosas concretas que conviene tener en el radar, con su fecha cuando la hay. Un catalizador que se demora no es una sorpresa: es lo normal."
+      },
+      "siguiente": {
+        "texto": "¿Y qué puede salir mal?",
+        "clave": "riesgos"
+      }
+    },
+    "simulador": {
+      "icono": "🧮",
+      "titulo": "El simulador",
+      "seccion": "simulador",
+      "niveles": {
+        "1": "Sirve para VER el tamaño de lo que estás mirando, no para adivinar. Si pones S/ 1,000 y la acción sube 20%, te muestra cuánto sería eso — y también cuánto sería si baja 20%, que es la mitad que casi nadie quiere mirar. No es una proyección: es una calculadora."
+      },
+      "lentes": {
+        "minas": "En una minera conviene mover el simulador hacia ABAJO igual de lejos que hacia arriba: sus caídas son tan grandes como sus subidas."
+      },
+      "siguiente": {
+        "texto": "¿Ya puedo decidir yo?",
+        "clave": "decidir"
+      }
+    },
     "riesgos": {
       "icono": "⚠️",
       "titulo": "Riesgos y escenarios",
@@ -157,9 +289,11 @@
         "1": "Lo que puede salir mal, dicho antes de que pase. No están para asustar: están para que ningún titular te agarre de sorpresa. Si un riesgo te parece imposible de tolerar, esa empresa no es para ti — y saberlo hoy vale más que descubrirlo con plata adentro.",
         "3": "Escenarios, no predicciones. Nadie sabe cuál va a pasar; lo que se puede saber es cuáles son las palancas —el precio del insumo, la tasa, un juicio, una concesión que vence— y cuánto mueven el resultado."
       },
-      "siguiente": { "texto": "¿Ya puedo decidir yo?", "clave": "decidir" }
+      "siguiente": {
+        "texto": "¿Ya puedo decidir yo?",
+        "clave": "decidir"
+      }
     },
-
     "decidir": {
       "icono": "✅",
       "titulo": "¿Listo para decidir?",

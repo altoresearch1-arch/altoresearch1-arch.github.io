@@ -240,7 +240,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
             Una sola palabra (metal, comisión, peaje, prima, tarifa) instala el
             LENTE desde el segundo cero: todo lo de abajo se juzga con ese ojo. */}
         {lente && (
-          <div className="vive-de">
+          <div className="vive-de" data-mentor="viveDe">
             <span className="vive-de-k">💰 Vive de:</span>{' '}
             <strong>{lente.viveDeLargo}</strong>
             <div className="muted vive-de-manda">
@@ -253,7 +253,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
         {/* 🗣 ¿Por qué le fue así este trimestre? — el escalón 3, con las
             palabras de la propia gerencia (dato ya digerido en gerencia.json
             que hasta hoy solo se veía en el nivel 4). */}
-        {ver('gerencia') && <Reveal><PorQueEsteTrimestre empresa={e} /></Reveal>}
+        {ver('gerencia') && <div data-mentor="gerencia"><Reveal><PorQueEsteTrimestre empresa={e} /></Reveal></div>}
 
         {/* 🥇 El precio de su MOTOR (#116, pedido de Jair): el driver #1 de
             media BVL. Va aquí, pegado a "vive de", y ANTES del gráfico de la
@@ -294,7 +294,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
         {ver('deuda') && (
           <div id="sec-deuda" className="sec-ancla" data-mentor="deuda"><Reveal><PuedePagarDeuda empresa={e} /></Reveal></div>
         )}
-        <Reveal>
+        <Reveal data-mentor="simulador">
           {pagaDividendos ? (
             <div className="sim-par">
               <Simulador empresa={e} />
@@ -408,7 +408,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
 
         {/* Catalizadores: eventos que podrían mover el precio (documentado/rumor) */}
         {ver('catalizadores') && (catalizadoresData.catalizadores?.[e.ticker]?.length > 0 || e.catalizadores?.length > 0) && (
-          <Reveal data-tour="catalizadores">
+          <Reveal data-tour="catalizadores" data-mentor="catalizadores">
             <div className="seccion-titulo">⚡ Catalizadores (eventos que vienen)</div>
             {catalizadoresData.catalizadores?.[e.ticker]?.length > 0 ? (
               <ul className="lista-limpia">
@@ -435,7 +435,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
         {ver('relojDatos') && <Reveal><RelojDatos /></Reveal>}
 
         {/* Hechos de Importancia: comunicados oficiales SMV/BVL (hechos.json) */}
-        {ver('hechos') && <Reveal data-tour="hechos"><HechosImportancia ticker={e.ticker} /></Reveal>}
+        {ver('hechos') && <div data-mentor="hechos"><Reveal data-tour="hechos"><HechosImportancia ticker={e.ticker} /></Reveal></div>}
 
         {/* 📰 Noticias de la web oficial (extranjeras: Rio2 no tiene Hechos BVL) */}
         {ver('noticiasExtranjero') && <Reveal><NoticiasExtranjero ticker={e.ticker} /></Reveal>}

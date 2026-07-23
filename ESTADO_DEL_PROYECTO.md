@@ -34,8 +34,40 @@ también) y el tour pasó a ser una de sus opciones. Tres piezas nuevas, cero de
   PWA OK (3737.40 KiB). ⚠ **Lo único sin verificar en vivo**: el cambio de etiqueta al
   scrollear — el IntersectionObserver no entrega callbacks con el panel del navegador oculto
   (no compositing). Revisarlo a ojo en la próxima sesión.
-- **Lo que sigue (S4):** llenar mentor.json con los guiones de §6 para el resto de secciones,
-  y engancharle a Glosado los tres botoncitos (📖 más / 📊 ejemplo / 🧠 Atlas) del §31-3.
+
+## 📖 23-jul: SESIÓN 4 — EL MENTOR SE LLENA Y GLOSADO LE ABRE LA PUERTA
+Lo que el plan pone después de la cáscara (§6 y §31-3). El Mentor pasó de 13 a **18 tarjetas**
+y dejó de vivir solo dentro del modo 👆.
+- **Cinco tarjetas nuevas**, las de la escalera que faltaban: 💰 **de qué vive** (con el
+  ejemplo «la misma deuda, cuatro lecturas»), 🗣 **por qué le fue así** (qué buscar en el
+  análisis de la gerencia: la explicación que dan y la que NO dan), 📰 **hechos de importancia**
+  (con el aviso de que el semáforo dice el TONO, no si el precio sube, y que la fecha de corte
+  de un dividendo cuesta plata real), 🎯 **catalizadores** (no son predicciones) y 🧮 **el
+  simulador** (es una calculadora de tamaño, no una proyección — en minera, mover la barra
+  hacia abajo igual de lejos que hacia arriba). Con sus secciones en el «🤔 no entendí».
+- **EL PUENTE CON GLOSADO (#151-3):** cada tarjeta declara qué `terminos` del glosario le
+  pertenecen (23 enganchados, todos verificados contra terminos.json) y el tooltip de las
+  palabras punteadas gana **📖 Explícamelo · 📊 Ejemplo · 🧠 Atlas**. Tocar «P/E» ya no muere
+  en la definición de diccionario: salta a la tarjeta con la bodega, su ejemplo con Gloria y
+  la pregunta siguiente. El long-press estilo Android NO se construyó (§31-3): Glosado ya
+  interceptaba las palabras, solo le faltaba a dónde ir.
+- **Cómo se hablan** (sin refactor): un evento del documento (`alto-mentor-abrir`) — el Mentor
+  puede no estar montado y entonces simplemente no pasa nada. Y «🧠 Atlas» manda la pregunta
+  YA ESCRITA por sessionStorage (mismo patrón que «enviar al equipo»): Atlas la hace solo al
+  abrirse, sin que el usuario reescriba con el dedo lo que ya preguntó.
+- **Dos arreglos que salieron al probar:** (a) el tooltip tenía `pointer-events:none` y su
+  `pointerdown` global lo cerraba al tocarlo — en el celular era imposible llegar a los
+  botones; ahora las acciones sí reciben el toque y el cierre las exceptúa; (b) en escritorio
+  hay un hueco entre la palabra y el tooltip, así que el cierre lleva 220 ms de respiro y
+  entrar al tooltip lo cancela (si no, el cursor nunca llegaba vivo).
+- Verificado: 14/14 en la prueba del motor (las 11 de ayer + los 23 términos existen en el
+  glosario, `claveDeTermino` sin importar mayúsculas, palabra sin tarjeta → null), ciclo
+  completo en el navegador (📖 abre la tarjeta · 📊 abre el ejemplo · 🧠 lleva a Atlas y Atlas
+  RESPONDE «¿Qué es yield?» solo), móvil 375 px con el tooltip centrado y tocable, build PWA
+  OK (3744.21 KiB). El desborde de 3 px que se ve en móvil es de `.aurora` y es anterior.
+- **Lo que sigue:** los guiones más profundos por nivel (§6 tiene 5 profundidades y las
+  tarjetas hoy usan 2-3), la mini-pregunta #14 que habilitaría el ✔✔ «dominado», y S5 (feed
+  de hechos del día).
 
 ## 🚪 23-jul: LA ENTRADA CON SALIDAS — cerrar, volver y retomar (pedido de Jair)
 La entrada del #135 (bienvenida + Lección Exprés) se armó el 23-jul de madrugada y era de

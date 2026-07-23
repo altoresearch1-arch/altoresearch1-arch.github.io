@@ -36,6 +36,18 @@ export default function Atlas({ onVerEmpresa }) {
   // ya saludó con el documento de Sentinel / la biblioteca → marcarlos vistos (idempotente)
   useEffect(() => { marcarContextoVisto(); marcarBibliotecaVista() }, [])
 
+  // 🎓 Llegó desde el tooltip de una palabra técnica ("🧠 Preguntar a Atlas"):
+  // la pregunta viene escrita y se hace sola, para que el usuario no tenga que
+  // reescribir lo que ya preguntó con el dedo.
+  useEffect(() => {
+    let q = null
+    try {
+      q = sessionStorage.getItem('alto-atlas-pregunta')
+      if (q) sessionStorage.removeItem('alto-atlas-pregunta')
+    } catch { /* sin storage */ }
+    if (q) setTimeout(() => preguntar(q), 250)
+  }, [])
+
   useEffect(() => {
     finRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
   }, [mensajes, pensando])

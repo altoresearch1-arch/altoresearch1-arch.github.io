@@ -8,6 +8,7 @@ import {
   vistos,
   marcarVisto,
   alcanzables,
+  EVENTO_MENTOR,
 } from '../lib/mentor'
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -132,6 +133,19 @@ export default function MentorALTO({ vista, nivel = 2, empresa = null, onTour, o
       muertos.forEach((el) => el.removeAttribute('data-mentor-off'))
     }
   }, [modo, nivel])
+
+  // 📖 Alguien pide una tarjeta desde fuera (hoy: el tooltip de Glosado).
+  useEffect(() => {
+    const al = (ev) => {
+      const { clave: k, ejemplo } = ev.detail ?? {}
+      if (!hayTarjeta(k, nivel)) return
+      setClave(k)
+      setVerEjemplo(!!ejemplo)
+      setModo('card')
+    }
+    window.addEventListener(EVENTO_MENTOR, al)
+    return () => window.removeEventListener(EVENTO_MENTOR, al)
+  }, [nivel])
 
   // Esc: cierra lo que esté abierto, un escalón por vez.
   useEffect(() => {
