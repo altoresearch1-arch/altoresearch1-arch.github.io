@@ -21,6 +21,15 @@ UNA SOLA DIRECCIÓN: se entraba, pero no se salía ni se volvía atrás. Cuatro 
 - **«Solo quiero mirar la app →»** en la bienvenida: el que no quiere contestar NADA entra en
   nivel 2 y cambia con el 🎚️ cuando quiera. Discreto a propósito — no compite con los dos
   caminos.
+- **🐣 LA PUERTA DE VUELTA (`RepasoLeccion.jsx`, pedido de Jair):** la lección quedaba
+  reabrible SOLO desde el ☰, y el ☰ es justo donde NO mira el que no entendió nada — se va.
+  Ahora hay una cinta en el inicio (niveles 1-2; del 3 en adelante sigue en el ☰ para no
+  meterle ruido al que analiza) con **tres textos según en qué está el usuario**: «¿Eres nuevo
+  por aquí?» (nunca la abrió) · «Dejaste la lección a medias — te quedaste en la tarjeta 3 de
+  5» (la cerró a medias, y el botón dice «Seguir la lección») · **«¿No entendiste algo? …
+  releer no es retroceder: es como se aprende esto»** con «Míralo de nuevo» (ya la terminó).
+  El modal reabierto respeta la promesa: `retomar={!leccionVista()}` — a medias retoma donde
+  iba, terminada empieza de la primera.
 - Verificado en el navegador con localStorage limpio (🐣 → 3 de 5 → Esc → «Sigue donde te
   quedaste» → retoma en 3 → Atrás → bienvenida → niveles → Volver → mirar), móvil 375 px sin
   desbordes, consola limpia y build PWA OK (3715.92 KiB).

@@ -25,6 +25,7 @@ import SelectorNivel from './components/SelectorNivel'
 import Bienvenida from './components/Bienvenida'
 import LeccionExpres, { leccionVista } from './components/LeccionExpres'
 import PuertaTardia, { tocaPuertaTardia, marcarFichaVista } from './components/PuertaTardia'
+import RepasoLeccion from './components/RepasoLeccion'
 import NivelBadge from './components/NivelBadge'
 import NivelTransicion from './components/NivelTransicion'
 import MenuNav from './components/MenuNav'
@@ -414,6 +415,11 @@ export default function App() {
                     {bloqueMercado}
                   </>
                 )}
+                {/* 🐣 La puerta de vuelta a la Lección Exprés: «¿eres nuevo?
+                    ¿no entendiste algo? míralo de nuevo». Vive en los niveles
+                    1-2 (el público que la necesita); del 3 en adelante sigue
+                    disponible en el ☰, para no meterle ruido al que analiza. */}
+                {nivel <= 2 && <RepasoLeccion onAbrir={() => setLeccionAbierta(true)} />}
                 <Pildora />
                 <div className="space" />
                 <Disclaimer />
@@ -532,6 +538,10 @@ export default function App() {
           solo se lee y se cierra, no se toca nada). */}
       {leccionAbierta && (
         <LeccionExpres
+          // Quien la dejó a medias la retoma donde iba (es lo que le promete la
+          // cinta 🐣 del inicio); quien ya la terminó y vuelve a mirarla,
+          // empieza de la primera — ahí no hay nada que retomar.
+          retomar={!leccionVista()}
           onFin={() => setLeccionAbierta(false)}
           onCerrar={() => setLeccionAbierta(false)}
         />

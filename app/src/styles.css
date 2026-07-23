@@ -7437,6 +7437,39 @@ body.cuaderno-marca .brand-logo {
   white-space: nowrap;
 }
 
+/* ---------- 2b. La puerta de VUELTA a la lección (cinta del inicio) ----------
+   «¿Eres nuevo? ¿No entendiste algo? Míralo de nuevo». Discreta a propósito:
+   sin oro y sin borde encendido — no compite con el quiz ni con la cinta de
+   niveles, solo tiene que estar ahí el día que alguien se pierda. */
+.repaso-leccion {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  background: var(--negro-2);
+  border: 1px dashed var(--gris);
+  border-radius: var(--radio);
+  padding: 14px 16px;
+  margin: 18px 0;
+}
+.repaso-leccion-icono {
+  font-size: 26px;
+  line-height: 1;
+}
+.repaso-leccion-txt {
+  flex: 1 1 260px;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.repaso-leccion-btn {
+  white-space: nowrap;
+}
+@media (max-width: 560px) {
+  .repaso-leccion-btn {
+    flex: 1;
+  }
+}
+
 /* ---------- 3. La puerta de niveles, tarde (cinta del inicio) ---------- */
 .puerta-tardia {
   display: flex;
