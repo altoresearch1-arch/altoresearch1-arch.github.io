@@ -5909,50 +5909,60 @@ body.cuaderno-marca .brand-logo {
 .mentor-op-link {
   color: var(--texto-tenue);
 }
-/* 🚶 La opción destacada: el tour. Es la primera de la lista y la única con
-   fondo — el resto del panel queda en contorno para que el ojo caiga aquí
-   sin que haya que gritarle (§31-1: el oro ya es "esto se toca y se explica").
-   Nada de animación: un panel que late al abrirse cansa a la tercera vez. */
-.mentor-op-destacada {
-  position: relative;
-  border-color: var(--oro);
-  border-width: 1.5px;
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--oro) 16%, transparent),
-    color-mix(in srgb, var(--oro) 6%, transparent)
-  );
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--oro) 12%, transparent);
-  font-weight: 600;
-  padding-right: 92px; /* el hueco de la cinta, para que no pise el texto */
-  margin-bottom: 10px;
-}
-.mentor-op-destacada:hover {
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--oro) 24%, transparent),
-    color-mix(in srgb, var(--oro) 10%, transparent)
-  );
-}
-.mentor-op-destacada small {
+/* 🚶 El tour: LA acción del panel, no una opción más. Botón lleno de oro —
+   el mismo lenguaje que el «Sí, ayúdame» del saludo — mientras las otras
+   tres puertas se quedan en contorno bajo un «o si prefieres». Sin animación:
+   un panel que late cada vez que se abre cansa a la tercera. */
+.mentor-cta {
+  appearance: none;
+  cursor: pointer;
   display: block;
-  margin-top: 3px;
-  font-size: 11.5px;
-  font-weight: 400;
-  color: var(--texto-tenue);
-}
-.mentor-op-cinta {
-  position: absolute;
-  top: 8px;
-  right: 8px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  border-radius: 10px;
   background: var(--oro);
   color: var(--negro);
-  border-radius: 999px;
-  padding: 2px 8px;
-  font-size: 10px;
+  font-size: 13.5px;
   font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
+  line-height: 1.35;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--oro) 30%, transparent);
+  transition: filter 0.15s ease;
+}
+.mentor-cta:hover {
+  filter: brightness(1.08);
+}
+.mentor-cta small {
+  display: block;
+  margin-top: 2px;
+  font-size: 11.5px;
+  font-weight: 500;
+  /* Sobre el oro, el gris de la casa no se lee: se oscurece el propio negro. */
+  color: color-mix(in srgb, var(--negro) 72%, transparent);
+}
+.mentor-o-si {
+  margin: 0 0 6px;
+  font-size: 11px;
+}
+/* El «otras formas de ayuda» del saludo: existe, pero no compite con el sí. */
+.mentor-saludo-otras {
+  appearance: none;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  background: none;
+  border: none;
+  color: var(--texto-tenue);
+  font-size: 11.5px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  padding: 4px;
+}
+.mentor-saludo-otras:hover {
+  color: var(--texto);
 }
 .mentor-progreso {
   font-size: 11.5px;
@@ -6128,11 +6138,13 @@ body.cuaderno-marca .brand-logo {
     min-height: 44px;
     padding: 10px 13px;
   }
-  .mentor-op {
+  .mentor-op,
+  .mentor-cta {
     min-height: 44px;
     padding: 11px 12px;
   }
-  .mentor-saludo-si {
+  .mentor-saludo-si,
+  .mentor-saludo-otras {
     min-height: 44px;
   }
   .mentor-acciones {

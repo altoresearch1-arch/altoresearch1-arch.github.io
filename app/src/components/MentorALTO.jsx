@@ -241,12 +241,29 @@ export default function MentorALTO({ vista, nivel = 2, empresa = null, onTour, o
           <button className="mentor-x" onClick={cerrarSaludo} aria-label="Cerrar">✕</button>
           <strong>🎓 {info.titulo}</strong>
           <p>{info.texto}</p>
-          <button
-            className="btn btn-oro mentor-saludo-si"
-            onClick={() => { cerrarSaludo(); setModo('panel') }}
-          >
-            Sí, ayúdame
-          </button>
+          {/* «Sí, ayúdame» abría un menú: el que dice que sí quiere que le
+              expliquen, no quiere elegir CÓMO. El sí arranca el tour de una;
+              el menú queda debajo, en chico, para quien buscaba otra cosa. */}
+          {onTour ? (
+            <>
+              <button
+                className="btn btn-oro mentor-saludo-si"
+                onClick={() => { cerrarSaludo(); onTour() }}
+              >
+                🚶 Sí, muéstramela
+              </button>
+              <button className="mentor-saludo-otras" onClick={() => { cerrarSaludo(); setModo('panel') }}>
+                Otras formas de ayuda
+              </button>
+            </>
+          ) : (
+            <button
+              className="btn btn-oro mentor-saludo-si"
+              onClick={() => { cerrarSaludo(); setModo('panel') }}
+            >
+              Sí, ayúdame
+            </button>
+          )}
         </div>
       )}
 
@@ -257,19 +274,23 @@ export default function MentorALTO({ vista, nivel = 2, empresa = null, onTour, o
             <span className="mentor-marca">🎓 Mentor ALTO</span>
             <button className="mentor-x" onClick={() => setModo(null)} aria-label="Cerrar">✕</button>
           </div>
-          {/* El tour va PRIMERO y resaltado: de las cuatro puertas es la única
-              que no exige que el usuario ya sepa qué preguntar — las otras tres
-              esperan una duda concreta. Al que llega perdido se le ofrece la
-              mano antes que el índice (#151-7). */}
+          {/* El tour no es una opción más de la lista: es LA acción del panel.
+              De las cuatro puertas es la única que no exige que el usuario ya
+              sepa qué preguntar — las otras tres esperan una duda concreta. Al
+              que llega perdido se le da la mano antes que el índice (#151-7).
+              Por eso va arriba y con el botón lleno de la casa; el resto baja a
+              «o si prefieres», en contorno. */}
           {onTour && (
-            <button
-              className="mentor-op mentor-op-destacada"
-              onClick={() => { setModo(null); onTour() }}
-            >
-              <span className="mentor-op-cinta">Recomendado</span>
-              🚶 Tour de esta pantalla
-              <small>Te la muestro entera, de la mano{NOMBRE_VISTA[vista] ? ` — ${NOMBRE_VISTA[vista]}` : ''}</small>
-            </button>
+            <>
+              <button
+                className="mentor-cta"
+                onClick={() => { setModo(null); onTour() }}
+              >
+                🚶 Muéstrame esta pantalla
+                <small>Te la explico entera, de la mano{NOMBRE_VISTA[vista] ? ` — ${NOMBRE_VISTA[vista]}` : ''}</small>
+              </button>
+              <p className="mentor-o-si muted">o si prefieres:</p>
+            </>
           )}
           {vista === 'empresa' && (
             <button className="mentor-op" onClick={() => setModo('tocar')}>
