@@ -2734,6 +2734,15 @@ a.link {
     z-index: 300;
     box-shadow: 0 14px 40px rgba(0, 0, 0, 0.65);
   }
+  /* Dedos: los tres botoncitos del tooltip medían 25 px de alto. Misma regla
+     que en el Mentor — crece el ÁREA, no la letra. */
+  .termino-pop-btn {
+    min-height: 44px;
+    padding: 6px 11px;
+  }
+  .termino-pop-acciones {
+    gap: 7px;
+  }
 }
 
 /* ⚖ Comparador v2: carrera, duelos y barras */
@@ -6022,14 +6031,40 @@ body.cuaderno-marca .brand-logo {
 }
 
 @media (max-width: 560px) {
+  /* 📱 CENTRADO EN CELULAR (pedido de Jair 23-jul). En escritorio el Mentor es
+     un panel al costado y está bien; en un celular de 375 px medía 310 y
+     quedaba pegado a la izquierda, con una franja muerta a la derecha — las
+     explicaciones se leían "en el borde". Aquí el wrap toma el ANCHO COMPLETO
+     con el mismo margen a los dos lados, así que todo lo que se abre queda
+     centrado por construcción. La pill se queda a la izquierda: es el ancla
+     que el usuario ya conoce y al otro lado vive la pill de apoyo. */
   .mentor-wrap {
     left: 12px;
+    right: 12px;
     bottom: 12px;
-    max-width: calc(100vw - 24px);
+    max-width: none;
+  }
+  .mentor-panel,
+  .mentor-card,
+  .mentor-saludo {
+    width: 100%;
+  }
+  /* El aviso del modo 👆 hugueaba su texto (297 px de 375) y su «salir» tenía
+     18 px de alto: mismo trato que el resto. */
+  .mentor-hint {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .mentor-hint-x {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 6px;
   }
   .mentor-pill {
     font-size: 12.5px;
     padding: 9px 13px;
+    align-self: flex-start;
   }
   /* 👆 DEDOS, NO CURSORES. Medido en 375 px: la ✕ tenía 22 px de alto, los
      botones chicos 27 y una opción de la pregunta 35 — por debajo de los
@@ -6051,6 +6086,9 @@ body.cuaderno-marca .brand-logo {
   .mentor-op {
     min-height: 44px;
     padding: 11px 12px;
+  }
+  .mentor-saludo-si {
+    min-height: 44px;
   }
   .mentor-acciones {
     gap: 8px;

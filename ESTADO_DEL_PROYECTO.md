@@ -28,16 +28,31 @@ ahora tiene cinco hondos y una pregunta.
   asteriscos a la vista en la tarjeta (el `<p>` no entiende markdown). Ahora las traduce
   `conNegritas()`, cuatro líneas y ninguna dependencia.
 - **CELULAR (auditado midiendo el DOM a 375 px, no a ojo):**
+  - **CENTRADO (lo que reportó Jair: «todo a un costado y las explicaciones en los bordes»).**
+    El Mentor medía 310 px en una pantalla de 375 y colgaba de la izquierda, con una franja
+    muerta a la derecha. En ≤560 px el `.mentor-wrap` toma el ancho completo con el mismo
+    margen a los dos lados (12/12) y panel, tarjeta, saludo y el aviso del modo 👆 van al
+    100% — quedan centrados por construcción, no por un `left` calculado. La pill se queda a
+    la izquierda a propósito: es el ancla conocida y al otro lado vive la de apoyo.
+  - ⚠️ **Truco de medición que hay que conocer:** con el panel del navegador oculto la página
+    NO compone frames y las animaciones de entrada quedan CONGELADAS en su primer fotograma
+    (`opacity:0`, `scale(.97)`). Todo lo que midas ahí sale ~3% chico y descentrado, y los
+    `position:fixed` de adentro parecen anclados a la página (el `.vista-anim` con transform
+    es containing block mientras dura su animación). Antes de medir:
+    `el.getAnimations().forEach(a => a.finish())`. Con eso comprobado: el tooltip de Glosado
+    SÍ queda centrado en el celular (23/23) — el «se va a los bordes» era el artefacto.
   - **Desborde:** en 375×667 la tarjeta del nivel 4 (cuerpo + lente + trampa + combo = 776 px)
     se salía por ARRIBA y esa parte era ilegible. Ahora `.mentor-card` tiene techo y scroll
     propio con `overscroll-behavior: contain` (la ficha de atrás no se mueve). El techo va en
     **`dvh`** con `vh` de respaldo: con la barra del navegador desplegada, `100vh` es más alto
     que lo que se ve y el techo no protegía nada.
-  - **Dedos, no cursores:** la ✕ medía 22 px de alto, los botones chicos 27 y una opción de la
-    pregunta 35 — todos por debajo de los ~44 px de un pulgar. En ≤560 px se sube el ÁREA con
-    `min-height` + padding (la letra NO crece: la tarjeta ya es larga). Medido después: 0
-    botones bajo 40 px, 0 desborde horizontal, la tarjeta larga scrollea hasta el final y sus
-    botones se alcanzan.
+  - **Dedos, no cursores:** la ✕ medía 22 px de alto, los botones chicos 27, una opción de la
+    pregunta 35, el «salir» del modo 👆 18, el «Sí, ayúdame» del saludo y los 📖/📊/🧠 del
+    tooltip de Glosado 25 — todos por debajo de los ~44 px de un pulgar. En ≤560 px se sube el
+    ÁREA con `min-height` + padding (la letra NO crece: la tarjeta ya es larga). Medido
+    después: **0 botones bajo 44 px** en tarjeta, pregunta, panel, saludo, aviso y tooltip;
+    0 desborde horizontal en toda la ficha; la tarjeta larga scrollea hasta el final y sus
+    botones se alcanzan. En escritorio no cambia nada (sigue el panel de 320 px al costado).
   - Nivel 2 en un celular chico entra sin scroll (463 px); el saludo mantiene su ✕ de 43 px en
     la esquina sin tapar el título.
 - **Un bug propio cazado al probar:** si Glosado pedía otra tarjeta mientras el usuario estaba
