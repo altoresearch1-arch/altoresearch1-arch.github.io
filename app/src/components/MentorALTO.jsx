@@ -161,6 +161,7 @@ export default function MentorALTO({ vista, nivel = 2, empresa = null, onTour, o
       if (!hayTarjeta(k, nivel)) return
       setClave(k)
       setVerEjemplo(!!ejemplo)
+      setExamen(null) // si venía rindiendo otra, la nueva empieza por su texto
       setModo('card')
     }
     window.addEventListener(EVENTO_MENTOR, al)

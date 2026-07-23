@@ -5826,6 +5826,9 @@ body.cuaderno-marca .brand-logo {
    atrás no se mueve, que es justo lo que el usuario está mirando. */
 .mentor-card {
   max-height: calc(100vh - 96px);
+  /* dvh y no vh en el celular: con la barra del navegador desplegada, 100vh
+     es MÁS alto que lo que se ve y el techo dejaba de proteger nada. */
+  max-height: calc(100dvh - 96px);
   overflow-y: auto;
   overscroll-behavior: contain;
 }
@@ -6027,6 +6030,30 @@ body.cuaderno-marca .brand-logo {
   .mentor-pill {
     font-size: 12.5px;
     padding: 9px 13px;
+  }
+  /* 👆 DEDOS, NO CURSORES. Medido en 375 px: la ✕ tenía 22 px de alto, los
+     botones chicos 27 y una opción de la pregunta 35 — por debajo de los
+     ~44 px que pide un pulgar. Se sube el ÁREA con padding y min-height (la
+     letra no crece: la tarjeta ya es larga en el nivel 4). */
+  .mentor-x {
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 15px;
+  }
+  .mentor-saludo .mentor-x {
+    top: 0;
+    right: 0;
+  }
+  .mentor-mini {
+    min-height: 44px;
+    padding: 10px 13px;
+  }
+  .mentor-op {
+    min-height: 44px;
+    padding: 11px 12px;
+  }
+  .mentor-acciones {
+    gap: 8px;
   }
 }
 

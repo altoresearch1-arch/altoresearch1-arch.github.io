@@ -27,10 +27,22 @@ ahora tiene cinco hondos y una pregunta.
 - **Un bug viejo de paso:** los `**negritas**` que Jair escribe en los JSON salían con los
   asteriscos a la vista en la tarjeta (el `<p>` no entiende markdown). Ahora las traduce
   `conNegritas()`, cuatro líneas y ninguna dependencia.
-- **Un desborde cazado al probar:** en un celular de 667 px de alto, la tarjeta del nivel 4
-  (cuerpo + lente + trampa + combo = 723 px) se salía por ARRIBA y esa parte era imposible
-  de leer. Ahora `.mentor-card` tiene techo (`100vh - 96px`) y scroll propio con
-  `overscroll-behavior: contain`, para que la ficha de atrás no se mueva.
+- **CELULAR (auditado midiendo el DOM a 375 px, no a ojo):**
+  - **Desborde:** en 375×667 la tarjeta del nivel 4 (cuerpo + lente + trampa + combo = 776 px)
+    se salía por ARRIBA y esa parte era ilegible. Ahora `.mentor-card` tiene techo y scroll
+    propio con `overscroll-behavior: contain` (la ficha de atrás no se mueve). El techo va en
+    **`dvh`** con `vh` de respaldo: con la barra del navegador desplegada, `100vh` es más alto
+    que lo que se ve y el techo no protegía nada.
+  - **Dedos, no cursores:** la ✕ medía 22 px de alto, los botones chicos 27 y una opción de la
+    pregunta 35 — todos por debajo de los ~44 px de un pulgar. En ≤560 px se sube el ÁREA con
+    `min-height` + padding (la letra NO crece: la tarjeta ya es larga). Medido después: 0
+    botones bajo 40 px, 0 desborde horizontal, la tarjeta larga scrollea hasta el final y sus
+    botones se alcanzan.
+  - Nivel 2 en un celular chico entra sin scroll (463 px); el saludo mantiene su ✕ de 43 px en
+    la esquina sin tapar el título.
+- **Un bug propio cazado al probar:** si Glosado pedía otra tarjeta mientras el usuario estaba
+  rindiendo la pregunta, la nueva se abría en modo examen (con la pregunta de la otra). El
+  listener del evento ahora resetea el examen.
 - Verificado en el navegador: nivel 4 muestra cuerpo+lente+⚠️+🔗 y el nivel 1 solo la
   bodega (sin trampa ni combo, como debe ser); ciclo completo de la pregunta en el P/E —
   opción mala → pista y `alto-mentor-dominado` vacío, opción buena → ✔✔ + cling + el
