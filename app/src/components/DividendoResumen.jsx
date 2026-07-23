@@ -37,12 +37,25 @@ function vez(n) {
   return n === 1 ? 'vez' : 'veces'
 }
 
+const MES_CORTO = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'set', 'oct', 'nov', 'dic']
+// "2025-03-31" -> "abr 2025" para el INICIO de la ventana: el TTM arranca el
+// mes SIGUIENTE al corte del año anterior (abr-2025 → mar-2026 son 12 meses).
+function mesAnio(iso, siguiente = false) {
+  const [a, m] = String(iso || '').split('-')
+  if (!m) return iso
+  let mi = parseInt(m, 10) - 1
+  let anio = parseInt(a, 10)
+  if (siguiente) { mi += 1; if (mi > 11) { mi = 0; anio += 1 } }
+  return `${MES_CORTO[mi]} ${anio}`
+}
+
 function fmtGrande(n, sim) {
   const signo = n < 0 ? '-' : ''
   const abs = Math.abs(n)
   if (abs >= 1e9) return `${signo}${sim} ${(abs / 1e9).toFixed(2)} MM`
   if (abs >= 1e6) return `${signo}${sim} ${(abs / 1e6).toFixed(1)} M`
-  return `${signo}${sim} ${abs.toFixed(1)}`
+  // Sin separadores esto salía "S/ 400000.0" (Pacasmayo): ilegible de un vistazo.
+  return `${signo}${sim} ${Math.round(abs).toLocaleString('es-PE')}`
 }
 
 // 💸 ¿Se lo puede pagar? (mejora #47) — el semáforo que le faltaba al yield:
@@ -60,7 +73,7 @@ function Sostenibilidad({ empresa }) {
       </div>
       <div className="divsost-cuenta">
         reparte {fmtGrande(s.pagado, s.sim)} al año · le queda {fmtGrande(s.fcf, s.sim)} de{' '}
-        flujo de caja libre (último trimestre × 4)
+        flujo de caja libre ({s.doceMeses ? '12 meses reales' : 'último trimestre × 4'})
         {s.ratio != null && <> · se lleva el <strong>{Math.round(s.ratio * 100)}%</strong></>}
       </div>
       <div className="divsost-txt">
@@ -70,9 +83,23 @@ function Sostenibilidad({ empresa }) {
         {s.estado === 'fcfNegativo' && 'Reparte dividendo con el flujo de caja libre en negativo: después de operar e invertir no le sobró caja, así que ese pago salió de otro lado.'}
       </div>
       <div className="divsost-metodo muted">
-        Método: el flujo de caja libre es el del último trimestre presentado a la SMV × 4, y el
-        dividendo es el de los últimos 12 meses — sirve para el orden de magnitud, no para el decimal.
-        Un trimestre atípico (una veda, una parada de planta) mueve este número.
+        {s.doceMeses ? (
+          <>
+            Método: el flujo de caja libre son <strong>12 meses reales</strong>
+            {s.ventana && <> ({mesAnio(s.ventana.desde, true)} → {mesAnio(s.ventana.hasta)})</>}, armados
+            con los estados de la SMV: el año pasado completo, menos lo que llevaba acumulado al
+            mismo corte, más lo que lleva este año. Así un trimestre flojo (una veda, una parada
+            de planta, la temporada de lluvias) ya no manda sobre el veredicto. El dividendo
+            también es el de los últimos 12 meses.
+          </>
+        ) : (
+          <>
+            Método: a esta empresa le falta alguna pieza para armar los 12 meses, así que el
+            flujo de caja libre es el del <strong>último trimestre presentado a la SMV × 4</strong> —
+            sirve para el orden de magnitud, no para el decimal, y un trimestre atípico lo mueve
+            mucho. El dividendo sí es el de los últimos 12 meses.
+          </>
+        )}
       </div>
     </div>
   )

@@ -3,6 +3,7 @@ import epsAnualData from '../data/eps_anual.json'
 import catalizadoresData from '../data/catalizadores.json'
 import mineriaData from '../data/mineria.json'
 import familiaData from '../data/mineria_familia.json'
+import fcfTtmData from '../data/fcf_ttm.json'
 import { deudaInfo, lenteDe, esCiclico, aniosTexto, PALABRA_DEUDA } from './lente'
 import { peInfo, veredictoPE, dividendosDe } from './finanzas'
 import { productoDe, zonaDelCiclo } from './cotizacion'
@@ -98,10 +99,23 @@ function accionesDe(empresa) {
 // El más valioso para el público dividendero: un yield alto sostenido con
 // deuda o con caja vieja no es un yield, es una liquidación en cuotas.
 // Se compara lo que REPARTE al año (dividendos.json, por acción × acciones)
-// contra su FLUJO DE CAJA LIBRE anualizado (metricas.fcf del XBRL × 4).
+// contra su FLUJO DE CAJA LIBRE de los últimos 12 MESES REALES (fcf_ttm.json:
+// anual del año pasado − su acumulado al mismo corte + el acumulado de este
+// año, todo del XBRL de la SMV).
+//
+// 23-jul-2026 — POR QUÉ CAMBIÓ: antes era el flujo del trimestre presentado
+// × 4, y un trimestre atípico volvía el veredicto falso y muy duro. Pacasmayo
+// salía "reparte más de lo que le entra" con un 442x porque su Q1 tuvo el
+// flujo casi en cero (estacionalidad de la construcción): con 12 meses reales
+// su flujo es S/ 175.8 M y el dividendo cabe. El semáforo está EN VIVO en
+// todos los niveles diciendo cosas fuertes, así que el error costaba
+// credibilidad. Si a una empresa le falta alguna pieza de la resta no sale en
+// fcf_ttm.json y se cae al método viejo — pero se DICE cuál se usó.
+//
 // Devuelve null si falta cualquier pieza, o:
 //   { noAplica:true, lente }              · banco/seguro/AFP/fondo
-//   { estado, ratio, pagado, fcf, sim }   · estado: holgado|justo|forzado|fcfNegativo
+//   { estado, ratio, pagado, fcf, sim, doceMeses, ventana }
+//   estado: holgado|justo|forzado|fcfNegativo
 // ─────────────────────────────────────────────────────────────────────────
 export function sostenibilidadDividendo(empresa) {
   const dv = dividendosDe(empresa.ticker)
@@ -114,7 +128,9 @@ export function sostenibilidadDividendo(empresa) {
 
   const acciones = accionesDe(empresa)
   if (!acciones) return null
-  const f = parseMonto(empresa.metricas?.fcf)
+  // 12 meses reales si los hay; si no, el trimestre × 4 de siempre.
+  const ttm = fcfTtmData.empresas?.[empresa.ticker]
+  const f = ttm ? { v: ttm.fcf } : parseMonto(empresa.metricas?.fcf)
   if (!f) return null
 
   const fx = epsAnualData.tipoCambioUSDPEN
@@ -131,16 +147,19 @@ export function sostenibilidadDividendo(empresa) {
   }
 
   const pagado = porAccion * acciones
-  const fcf = f.v * 4  // el trimestre presentado, anualizado (igual que la deuda)
+  // Con TTM el número YA son 12 meses; sin él, el trimestre presentado × 4.
+  const fcf = ttm ? f.v : f.v * 4
+  const ventana = ttm ? { desde: ttm.desde, hasta: ttm.hasta } : null
+  const base = { pagado, fcf, sim, doceMeses: !!ttm, ventana }
   if (pagado <= 0) return null
 
-  if (fcf <= 0) return { estado: 'fcfNegativo', pagado, fcf, sim, ratio: null }
+  if (fcf <= 0) return { ...base, estado: 'fcfNegativo', ratio: null }
   const ratio = pagado / fcf
-  // Zonas anchas a propósito: el FCF es de UN trimestre × 4 y los dividendos
-  // no se pagan parejos durante el año. Un 0.95 y un 1.05 no son mundos
-  // distintos, así que en el medio se dice "justo", no un veredicto.
+  // Zonas anchas a propósito: los dividendos no se pagan parejos durante el
+  // año y el capex tampoco. Un 0.95 y un 1.05 no son mundos distintos, así que
+  // en el medio se dice "justo", no un veredicto.
   const estado = ratio <= 0.7 ? 'holgado' : ratio <= 1.1 ? 'justo' : 'forzado'
-  return { estado, ratio, pagado, fcf, sim }
+  return { ...base, estado, ratio }
 }
 
 export const PALABRA_DIVIDENDO = {
