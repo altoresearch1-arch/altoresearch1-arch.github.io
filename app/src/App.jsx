@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import config from './data/config.json'
 import empresasData from './data/empresas.json'
 import Quiz from './components/Quiz'
@@ -28,8 +28,10 @@ import MenuNav from './components/MenuNav'
 import BuscadorInicio from './components/BuscadorInicio'
 import CintaBVL from './components/CintaBVL'
 import GanchoDatos from './components/GanchoDatos'
-import TourGuia, { PASOS_INICIO, PASOS_FICHA, PASOS_EXPLORAR } from './components/TourGuia'
+import TourGuia, { PASOS_INICIO, PASOS_EXPLORAR, PASOS_COMPARADOR, PASOS_RESULTADOS } from './components/TourGuia'
 import BurbujaTour from './components/BurbujaTour'
+import OfertaDesbloqueo from './components/OfertaDesbloqueo'
+import { pasosFicha, pasosDesbloqueo } from './lib/guiontour'
 import { useNivel, aplicarTemaNivel } from './lib/nivel'
 
 // "2026-06-24" -> "24 de junio de 2026"
@@ -63,10 +65,18 @@ export default function App() {
   // el estado, no los botones. En la primera carga no hay transición.
   const [transicion, setTransicion] = useState(null)
   const nivelPrevio = useRef(nivel)
+  // 🔓 Tour de DESBLOQUEO (#2 del plan educativo): si el usuario SUBE de nivel
+  // estando dentro de una ficha, ese momento — el de mayor curiosidad y mayor
+  // confusión — dejaba de estar mudo: le ofrecemos presentarle SOLO lo que
+  // acaba de aparecer, con los datos de esa empresa.
+  const [oferta, setOferta] = useState(null)
   useEffect(() => {
-    if (nivelPrevio.current !== nivel && nivel != null) setTransicion(nivel)
+    if (nivelPrevio.current !== nivel && nivel != null) {
+      setTransicion(nivel)
+      if (vista === 'empresa' && nivel > (nivelPrevio.current ?? 0)) setOferta(nivel)
+    }
     nivelPrevio.current = nivel
-  }, [nivel])
+  }, [nivel, vista])
 
   // Tema visual del nivel (densidad, radio, velocidad): vive en <html data-nivel>
   useEffect(() => { aplicarTemaNivel(nivel) }, [nivel])
@@ -84,6 +94,8 @@ export default function App() {
     if (vista === 'empresa') setTour('ficha')
     else if (vista === 'inicio') setTour('inicio')
     else if (vista === 'explorar') setTour('explorar')
+    else if (vista === 'comparar') setTour('comparar')
+    else if (vista === 'resultados') setTour('resultados')
     else if (vista === 'cuaderno' && arrancarTourCuaderno.current) arrancarTourCuaderno.current()
     else {
       // desde otra pantalla: primero al inicio, luego arranca (deja montar el DOM)
@@ -150,6 +162,19 @@ export default function App() {
     setTickerSel(null)
     irA('#/')
   }
+
+  // La empresa abierta ahora mismo (el tour de la ficha se arma con SUS datos)
+  const empresaSel = tickerSel ? empresasData.empresas.find((x) => x.ticker === tickerSel) : null
+  // Los pasos se memorizan: TourGuia mide el elemento de cada paso en un
+  // efecto, y un array nuevo en cada render lo dispararía sin parar.
+  const pasosTour = useMemo(() => {
+    if (tour === 'ficha') return pasosFicha(empresaSel, nivel)
+    if (tour === 'desbloqueo') return pasosDesbloqueo(empresaSel, nivel)
+    if (tour === 'explorar') return PASOS_EXPLORAR
+    if (tour === 'comparar') return PASOS_COMPARADOR
+    if (tour === 'resultados') return PASOS_RESULTADOS
+    return PASOS_INICIO
+  }, [tour, empresaSel, nivel])
 
   const abrirEmpresa = (ticker, origen) => {
     setOrigenEmpresa(origen)
@@ -419,12 +444,22 @@ export default function App() {
       {/* 🚶 Tour guiado: burbuja ❓ siempre a la mano (inicio y ficha) + el tour */}
       {/* key={vista}: al cambiar de pantalla se remonta y re-lee su saludo
           (si no, el estado inicial del saludo se queda pegado al del inicio) */}
-      {tour == null && transicion == null && (vista === 'inicio' || vista === 'empresa' || vista === 'cuaderno' || vista === 'explorar') && (
+      {tour == null && transicion == null && oferta == null
+        && ['inicio', 'empresa', 'cuaderno', 'explorar', 'comparar', 'resultados'].includes(vista) && (
         <BurbujaTour key={vista} vista={vista} onAbrir={abrirTour} />
+      )}
+      {/* ✨ La oferta del tour de desbloqueo, cuando la transición ya terminó */}
+      {oferta != null && transicion == null && vista === 'empresa' && tickerSel && (
+        <OfertaDesbloqueo
+          ticker={tickerSel}
+          nivel={oferta}
+          onAceptar={() => { setOferta(null); setTour('desbloqueo') }}
+          onCerrar={() => setOferta(null)}
+        />
       )}
       {tour != null && (
         <TourGuia
-          pasos={tour === 'ficha' ? PASOS_FICHA : tour === 'explorar' ? PASOS_EXPLORAR : PASOS_INICIO}
+          pasos={pasosTour}
           onCerrar={() => setTour(null)}
         />
       )}

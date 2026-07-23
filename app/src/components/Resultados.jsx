@@ -86,6 +86,7 @@ export default function Resultados({ respuestas, onVerEmpresa, onReiniciar }) {
           </div>
         )}
 
+        <div data-tour="res-empresas">
         {mostradas.map(({ empresa, coincidencia }, i) => (
           <div
             key={empresa.ticker}
@@ -109,8 +110,9 @@ export default function Resultados({ respuestas, onVerEmpresa, onReiniciar }) {
             </div>
           </div>
         ))}
+        </div>
 
-        <div className="row" style={{ marginTop: 18 }}>
+        <div className="row" style={{ marginTop: 18 }} data-tour="res-reintentar">
           <button className="btn btn-fantasma" onClick={() => setOffset((o) => o + 1)}>
             ↻ Intentar de nuevo
           </button>
@@ -127,7 +129,7 @@ export default function Resultados({ respuestas, onVerEmpresa, onReiniciar }) {
 
       {/* Explora TODAS las empresas, con un tip por sector */}
       <Reveal>
-      <div className="card" style={{ marginTop: 18 }}>
+      <div className="card" style={{ marginTop: 18 }} data-tour="res-todas">
         <h2 style={{ marginBottom: 4 }}>📚 Explora todas las empresas</h2>
         <p className="muted" style={{ marginTop: 0 }}>
           No te quedes solo con tu perfil: aquí están todas, con un tip para

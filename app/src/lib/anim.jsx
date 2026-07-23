@@ -38,7 +38,9 @@ export function CountUp({ valor, decimales = 2, duracion = 700 }) {
 
 // Revela el contenido con un fade-up cuando entra a la pantalla (scroll).
 // Uso: <Reveal><MiSeccion /></Reveal>
-export function Reveal({ children, retraso = 0 }) {
+// Los props extra (ej. data-tour="tips") viajan al div: así el tour puede
+// apuntar a una sección sin envolverla en otra capa (sesión 2 del plan).
+export function Reveal({ children, retraso = 0, ...resto }) {
   const ref = useRef(null)
   const [visible, setVisible] = useState(prefiereQuieto())
 
@@ -67,6 +69,7 @@ export function Reveal({ children, retraso = 0 }) {
       ref={ref}
       className={'reveal' + (visible ? ' reveal-visto' : '')}
       style={retraso ? { transitionDelay: `${retraso}ms` } : undefined}
+      {...resto}
     >
       {children}
     </div>

@@ -24,6 +24,7 @@ import ProduccionMinera from './ProduccionMinera'
 import GraficaBPA from './GraficaBPA'
 import PuedePagarDeuda from './PuedePagarDeuda'
 import PorQueEsteTrimestre from './PorQueEsteTrimestre'
+import ListoParaDecidir from './ListoParaDecidir'
 import { CountUp, Reveal } from '../lib/anim'
 import { useFavoritos, alternarFavorito } from '../lib/favoritos'
 import { peInfo } from '../lib/finanzas'
@@ -287,7 +288,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
 
         {/* Tips para estudiarla */}
         {ver('tips') && tipsData.tips?.[e.ticker]?.length > 0 && (
-          <Reveal>
+          <Reveal data-tour="tips">
             <div className="seccion-titulo">💡 Tips para estudiarla</div>
             <ul className="lista-limpia">
               {tipsData.tips[e.ticker].map((t, i) => (
@@ -302,11 +303,11 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
 
         {/* ⛏️ Producción mensual del MINEM + minas y participaciones. Aparece si el
             ticker tiene familia minera (cubre a Shougang, que es sector acereras). */}
-        {ver('produccionMinera') && <Reveal><ProduccionMinera ticker={e.ticker} /></Reveal>}
+        {ver('produccionMinera') && <Reveal data-tour="produccion"><ProduccionMinera ticker={e.ticker} /></Reveal>}
 
         {/* Fundamentos */}
         {ver('fundamentos') && (
-        <Reveal>
+        <Reveal data-tour="fundamentos">
           <div className="seccion-titulo">Fundamentos · {e.fundamentosFuente
             ? <Glosado text={e.fundamentosFuente} />
             : <><Glosado text="individual" /> (<Glosado text="SMV" />)</>}</div>
@@ -388,7 +389,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
 
         {/* Catalizadores: eventos que podrían mover el precio (documentado/rumor) */}
         {ver('catalizadores') && (catalizadoresData.catalizadores?.[e.ticker]?.length > 0 || e.catalizadores?.length > 0) && (
-          <Reveal>
+          <Reveal data-tour="catalizadores">
             <div className="seccion-titulo">⚡ Catalizadores (eventos que vienen)</div>
             {catalizadoresData.catalizadores?.[e.ticker]?.length > 0 ? (
               <ul className="lista-limpia">
@@ -415,7 +416,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
         {ver('relojDatos') && <Reveal><RelojDatos /></Reveal>}
 
         {/* Hechos de Importancia: comunicados oficiales SMV/BVL (hechos.json) */}
-        {ver('hechos') && <Reveal><HechosImportancia ticker={e.ticker} /></Reveal>}
+        {ver('hechos') && <Reveal data-tour="hechos"><HechosImportancia ticker={e.ticker} /></Reveal>}
 
         {/* 📰 Noticias de la web oficial (extranjeras: Rio2 no tiene Hechos BVL) */}
         {ver('noticiasExtranjero') && <Reveal><NoticiasExtranjero ticker={e.ticker} /></Reveal>}
@@ -431,7 +432,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
           ['favorable', 'neutral', 'presion', 'riesgo'].some(
             (k) => e.escenarios[k] && e.escenarios[k] !== 'Pendiente'
           ) && (
-          <>
+          <div data-tour="escenarios">
             <div className="seccion-titulo">Escenarios</div>
             <div className="escenarios">
               {['favorable', 'neutral', 'presion', 'riesgo'].map((k) => (
@@ -441,12 +442,12 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
                 </div>
               ))}
             </div>
-          </>
+          </div>
         )}
 
         {/* Riesgos — documentado vs rumor */}
         {ver('riesgos') && e.riesgos?.length > 0 && (
-          <>
+          <div data-tour="riesgos">
             <div className="seccion-titulo">Riesgos</div>
             {e.riesgos.map((r, i) => (
               <div key={i} className="riesgo-row">
@@ -456,12 +457,12 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
                 <span><Glosado text={r.texto} /></span>
               </div>
             ))}
-          </>
+          </div>
         )}
 
         {/* Fuentes */}
         {ver('fuentes') && e.fuentes?.length > 0 && (
-          <>
+          <div data-tour="fuentes">
             <div className="seccion-titulo">Fuentes</div>
             <ul className="lista-limpia">
               {e.fuentes.map((s, i) => (
@@ -472,8 +473,13 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
               Jerarquía: filings SMV → reporte auditado → comunicaciones oficiales →
               medios locales verificados.
             </p>
-          </>
+          </div>
         )}
+
+        {/* ✅ El cierre de la escalera (#104): no "compra o no", sino "¿ya
+            puedes decidirlo tú?". Lo ven TODOS los niveles — las casillas
+            cuya sección aún no está desbloqueada invitan a subir. */}
+        <Reveal><ListoParaDecidir empresa={e} nivel={nivel} onSubirNivel={setNivel} /></Reveal>
 
         {/* ¿Subimos el nivel? — CTA para desbloquear más secciones (nivel guardado en localStorage) */}
         {nivel != null && nivel < 4 && (() => {

@@ -651,8 +651,16 @@ Orden sugerido de implementación, máximo aprendizaje por sol invertido:
    **Lo que quedó fuera a propósito:** #32 (rangos de P/E por lente — cambia veredictos de ~20
    empresas y merece calibrarse con datos, no a ojo), #43/#47/#50 (son la Sesión 3) y #23 en su
    versión completa para más grupos de salud (hoy solo AUNA existe en la app).
-2. **Sesión 2 — El tour por niveles (mejoras 1-5):** pasos por nivel + tour de desbloqueo + guiones
-   con datos reales + tours de Comparador y Resultados. El TourGuia actual ya lo soporta casi todo.
+2. ~~**Sesión 2 — El tour por niveles (mejoras 1-5)**~~ ✅ **HECHA el 22-jul-2026.**
+   Entregado: `lib/guiontour.js` — los pasos de la ficha se arman por NIVEL y con los datos
+   reales de cada empresa (#1, #3), en el orden de la ESCALERA y no del DOM (#101) ·
+   `OfertaDesbloqueo.jsx` con el mini-tour de lo recién desbloqueado, disparado también desde
+   el badge 🎚️ (#2 y #17) · tour del Comparador (#4) y de Resultados del quiz (#5) ·
+   `ListoParaDecidir.jsx`, el checklist de cierre "¿Estás listo para decidir?" (#104) ·
+   TourGuia ahora salta también los envoltorios vacíos. Detalle en ESTADO_DEL_PROYECTO.md.
+   **Lo que quedó fuera a propósito:** #6 (micro-tours de indicador, son la Sesión 4), #7/#8
+   (tours de Atlas y Sentinel), #9 (partir el tour del inicio), #13/#14/#15 (micro-tour al
+   elegir nivel, mini-quiz de cierre, badge de tours vistos).
 3. **Sesión 3 — Los combos (mejoras 43, 47, 50):** "Lectura de analista" con los combos de §5,
    sostenibilidad del dividendo vs FCF, y el ejemplo numérico del ciclo.
 4. **Sesión 4 — Los micro-tours de indicador (mejora 6)** con los guiones de §6 escritos como datos.

@@ -4,6 +4,38 @@
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
 > herramienta), lee esto primero. Última actualización: **22 jul 2026**. Estado: **EN VIVO (beta pública)**.
 
+## 🚶 22-jul: SESIÓN 2 DEL PLAN EDUCATIVO — EL TOUR POR NIVELES (implementada)
+Segunda sesión del `ANALISIS_EDUCATIVO_Y_TOUR_POR_NIVELES.md` (§7 y §9). El tour dejó de
+explicar INTERFAZ y pasó a enseñar la EMPRESA, en el orden en que la cabeza pregunta.
+- **`lib/guiontour.js` (#1, #3, #101):** los pasos de la ficha ya no viven en TourGuia.jsx —
+  se ARMAN por empresa y por nivel. Cada paso declara en qué nivel nace (`n`) y los textos
+  se componen con los datos reales: el lente ("BVN vive de vender metal, aquí manda el precio
+  del metal"), el precio del último cierre, el % de 6 meses, el dividendo con su yield, los
+  AÑOS de deuda con el umbral de su lente y la prueba del ciclo, el P/E con su ⚠ de cíclica.
+  El orden es el de **la escalera** (#101), no el del DOM: vistazo → 1️⃣ qué hace → 2️⃣ de qué
+  vive → 3️⃣ por qué le fue así → 4️⃣ deuda y riesgos → 5️⃣ recién ahí "¿está barata?" → 6️⃣ ¿ya
+  puedes decidir tú? Verificado: BVN en N2 = 15 pasos, BAP en N4 = 21, y en un banco el paso
+  de la deuda enseña que **no se mide así**.
+- **Tour de DESBLOQUEO (#2) — `OfertaDesbloqueo.jsx`:** al subir de nivel DENTRO de una ficha
+  (desde la CTA o desde el badge 🎚️, porque escucha el estado y no el botón — eso cubre #17),
+  aparece "✨ Acabas de desbloquear 5 secciones nuevas en BVN — ¿te las presento?" y el
+  mini-tour recorre SOLO lo nuevo. Cuenta lo que existe de verdad en ESA ficha; si no hay nada
+  nuevo visible, no ofrece nada.
+- **Tours nuevos de pantalla:** Comparador (#4, 7 pasos — la pantalla más densa y hasta hoy la
+  única sin tour; incluye el paso "ojo: no se leen igual") y Resultados del quiz (#5, 6 pasos:
+  qué es tu perfil, la trampa de tu perfil, POR QUÉ salieron esas empresas y que no son
+  recomendación). Con sus saludos en la burbuja ❓.
+- **`ListoParaDecidir.jsx` (#104, el escalón 6):** checklist de cierre "¿Estás listo para
+  decidir?" con 6 casillas (de qué vive · por qué le fue así · su riesgo #1 · si su deuda es
+  del tipo peligroso para SU sector · por qué su P/E dice lo que dice · qué vigilar el próximo
+  trimestre). Compatible con la Regla #9: no responde si comprar, responde si YA PUEDES
+  decidirlo tú. Las casillas en blanco enlazan a su sección; si la sección es de un nivel
+  superior, invitan a subir. Se guardan por empresa en el navegador.
+- **Fix generalizable:** TourGuia ahora exige que el elemento del paso OCUPE espacio (no basta
+  con existir): los envoltorios `Reveal` vacíos —producción minera en un banco— ya no capturan
+  un paso. `Reveal` reenvía props (`data-tour`) para poder anclar pasos sin capas nuevas.
+- Cero dependencias nuevas, sin tocar los robots. Verificado en el navegador los 5 tours.
+
 ## 🔍 22-jul: SESIÓN 1 DEL PLAN EDUCATIVO — EL LENTE Y LA DEUDA (implementada)
 Primera sesión de código del `ANALISIS_EDUCATIVO_Y_TOUR_POR_NIVELES.md` (§9). Responde el
 ejemplo ácido de Jair: la MISMA deuda es peligro en una minera, normal en una eléctrica,

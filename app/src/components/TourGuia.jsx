@@ -69,47 +69,85 @@ export const PASOS_INICIO = [
   },
 ]
 
-// Pasos de la FICHA de empresa.
-export const PASOS_FICHA = [
+// ⚠ Los pasos de la FICHA ya NO viven aquí: se arman por NIVEL y con los datos
+// reales de la empresa en lib/guiontour.js (sesión 2 del plan educativo, #1/#3/
+// #101). Este archivo se queda con los tours de pantalla que no dependen de una
+// empresa concreta.
+
+// Pasos del COMPARADOR (#4) — la pantalla más densa de la app y hasta hoy la
+// única sin tour. El hilo: elige el par → mira la carrera → lee la tabla →
+// y sobre todo, entiende CUÁNDO comparar dos empresas no tiene sentido.
+export const PASOS_COMPARADOR = [
   {
-    sel: '.rx',
-    icono: '🩻', titulo: 'La empresa en un vistazo',
-    texto: 'Estos globitos resumen todo: cómo le fue al precio, si te paga dividendos, si está cara o barata, y cuánto se sacude. Tócalos — te llevan al detalle (o te cuentan cómo verlo).',
+    sel: '.comp-cabecera',
+    icono: '⚖️', titulo: 'Las dos que se baten',
+    texto: 'Arriba eliges quién pelea. Puedes cambiar cualquiera de las dos sin salir de aquí, y el link de la barra se actualiza solo: si lo compartes, tu amigo ve el mismo duelo.',
   },
   {
-    sel: '.precio',
-    icono: '💵', titulo: 'El precio',
-    texto: 'Lo que costó UNA acción en el último cierre de la bolsa. Comprando una acción ya eres socio (chiquitito) de la empresa, con derecho a su suerte.',
+    sel: '.comp-sector-aviso',
+    icono: '🔍', titulo: 'Ojo: no se leen igual',
+    texto: 'Cuando las dos viven de cosas distintas, te avisamos aquí con la razón concreta del par. No es un detalle: comparar la deuda de un banco con la de una minera es como comparar la harina del panadero con la deuda del taxista. Mismo número, significado distinto.',
   },
   {
-    sel: '.tesis',
-    icono: '📌', titulo: 'La idea en una línea',
-    texto: 'Qué es esta empresa, de qué vive y cuál es su gracia — sin vueltas. Las palabras con puntitos se tocan y te explican el término.',
+    sel: '.comp-carrera',
+    icono: '🏁', titulo: 'La carrera',
+    texto: 'Las dos acciones puestas en la misma pista: ambas arrancan en 100 y se ve quién va ganando en el período que elijas. Así se comparan precios distintos (una de S/ 2 y otra de S/ 300) sin engañarse.',
   },
   {
-    sel: '.spark',
-    icono: '📉', titulo: 'Su recorrido',
-    texto: 'El dibujo del precio en los últimos meses, con cierres reales de la bolsa. Pasa el dedo por encima y te dice cuánto costaba cada día.',
+    sel: '.comp-tabla',
+    icono: '📊', titulo: 'Dato por dato',
+    texto: 'Los mismos números para las dos, lado a lado. Las barras muestran MAGNITUD relativa, no cuál es mejor — y donde falta un dato decimos "Pendiente (SMV)" en vez de inventarlo. Toca las notas grises: explican qué significa cada fila.',
   },
   {
-    sel: '#sec-dividendos',
-    icono: '💰', titulo: 'Dividendos',
-    texto: 'La plata que la empresa reparte a sus socios, pago por pago y con fechas. Si no reparte, también te lo decimos clarito.',
+    sel: '.comp-duelo',
+    icono: '💰', titulo: 'Duelo de dividendos',
+    texto: 'Cuál te devuelve más al año por cada sol invertido. Si ves un yield gigante (>20%), casi siempre es un pago extraordinario que no se repite o un precio viejo — no un regalo.',
   },
   {
-    sel: '.sim-par, .sim-card',
-    icono: '🧮', titulo: 'Juega sin arriesgar',
-    texto: 'El simulador: pon un monto imaginario y mira qué habría pasado. Es para entrenar el ojo — no es una promesa ni una recomendación.',
+    sel: '.comp-tesis-par',
+    icono: '📜', titulo: 'La historia de cada una',
+    texto: 'Los números no deciden solos: aquí está en una línea de qué vive cada una. Si no entiendes el negocio, ningún ratio te va a salvar.',
   },
   {
-    sel: '.btn-fav',
-    icono: '⭐', titulo: 'Guárdala',
-    texto: 'Toca la estrellita y la empresa queda en tu lista del inicio, vigilada: si publica una noticia importante, te suena un aviso.',
+    sel: '.comp-tabla',
+    icono: '🧠', titulo: 'Y ahora, decide TÚ',
+    texto: 'No hay ganador declarado a propósito: no existe "la mejor" en abstracto, existe la que encaja con tu plazo, tu estómago y tu perfil. El duelo sirve para elegir cuál estudiar primero. 🎉',
+  },
+]
+
+// Pasos de RESULTADOS del quiz (#5) — hoy el usuario ve 3 empresas y no sabe
+// de dónde salieron. Aquí se explica el cruce perfil × sector y, sobre todo,
+// que esto es un punto de partida y no una recomendación.
+export const PASOS_RESULTADOS = [
+  {
+    sel: '.perfil-tag',
+    icono: '🧭', titulo: 'Tu perfil',
+    texto: 'Esto salió de tus 4 respuestas: qué tanto aguantas los sustos, en cuánto tiempo piensas, y si prefieres que te paguen o que crezca. No es un test de personalidad — es una brújula para saber qué mirar primero.',
   },
   {
-    sel: '.nivel-cta',
-    icono: '🔓', titulo: '¿Quieres más?',
-    texto: 'Cuando esto te quede chico, sube de nivel aquí: se desbloquean el porqué de cada dato, los catalizadores, los riesgos… hasta los documentos oficiales.',
+    sel: '.lead',
+    icono: '📖', titulo: 'Qué significa',
+    texto: 'La descripción de tu perfil en cristiano. Si no te suena a ti, rehaz el quiz sin miedo: nadie te está calificando y las respuestas no se guardan en ningún servidor.',
+  },
+  {
+    sel: '.aviso-perfil',
+    icono: '⚠️', titulo: 'La trampa de tu perfil',
+    texto: 'Cada perfil tiene su error clásico y te lo decimos aquí mismo, antes de que lo cometas. Este avisito vale más que las tres empresas de abajo.',
+  },
+  {
+    sel: '[data-tour="res-empresas"]',
+    icono: '🃏', titulo: 'Por qué estas empresas',
+    texto: 'Son las del sector que elegiste que MEJOR encajan con tu perfil: "coincidencia alta" es que casi todo cuadra, "parcial" es que cuadra a medias. No son las mejores de la bolsa ni una recomendación de compra: son un punto de partida para estudiar.',
+  },
+  {
+    sel: '[data-tour="res-reintentar"]',
+    icono: '↻', titulo: 'Muéstrame otras',
+    texto: '"Intentar de nuevo" rota a otras empresas del mismo perfil — hay más de tres. "Rehacer el quiz" empieza de cero si sientes que respondiste apurado.',
+  },
+  {
+    sel: '[data-tour="res-todas"]',
+    icono: '📚', titulo: 'No te encierres en tu perfil',
+    texto: 'Abajo están TODAS las empresas agrupadas por sector, cada sector con un tip para leerlo. Toca cualquiera y entras a su ficha, donde el ❓ te da el tour de esa empresa. 🎉',
   },
 ]
 
@@ -214,7 +252,12 @@ export default function TourGuia({ pasos, onCerrar }) {
   const lista = useMemo(
     () => pasos.filter((p) => {
       const el = document.querySelector(p.sel)
-      return el && el.getClientRects().length > 0
+      if (!el) return false
+      // Además de existir tiene que OCUPAR espacio: los envoltorios cuyo
+      // contenido no se pintó (ej. la producción minera de un banco) dejan un
+      // div vacío de alto 0 — y un paso apuntando a la nada rompe el hilo.
+      const r = el.getBoundingClientRect()
+      return r.width > 0 && r.height > 0
     }),
     [pasos],
   )

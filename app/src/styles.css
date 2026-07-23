@@ -6714,3 +6714,135 @@ body.cuaderno-marca .brand-logo {
   font-size: 11.5px;
   line-height: 1.5;
 }
+
+/* ─────────────────────────────────────────────────────────────────
+   ✅ ¿ESTÁS LISTO PARA DECIDIR? (#104 — el cierre de la escalera)
+   ───────────────────────────────────────────────────────────────── */
+.listo {
+  margin-top: 20px;
+  border: 1px solid var(--gris);
+  border-radius: var(--radio);
+  padding: 14px 14px 10px;
+  background: linear-gradient(180deg, var(--negro-2), transparent);
+}
+.listo-intro {
+  font-size: 13px;
+  line-height: 1.55;
+  margin: 2px 0 10px;
+}
+.listo-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.listo-item {
+  border-left: 3px solid var(--gris);
+  padding-left: 10px;
+  transition: border-color 0.25s var(--ease-salida);
+}
+.listo-item.on {
+  border-left-color: var(--verde);
+}
+.listo-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  cursor: pointer;
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+.listo-check input {
+  margin-top: 2px;
+  accent-color: var(--oro);
+  width: 17px;
+  height: 17px;
+  flex: none;
+}
+.listo-item.on .listo-check span {
+  color: var(--texto-tenue);
+  text-decoration: line-through;
+  text-decoration-color: var(--verde);
+}
+.listo-ayuda {
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 3px 0 0 26px;
+}
+.listo-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--oro-suave);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline dotted;
+}
+.listo-pie {
+  margin-top: 12px;
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+.listo-final {
+  color: var(--oro-suave);
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   ✨ OFERTA DE TOUR AL DESBLOQUEAR NIVEL (#2)
+   ───────────────────────────────────────────────────────────────── */
+.desbloqueo {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  z-index: 60;
+  width: min(92vw, 420px);
+  background: var(--negro-2);
+  border: 1px solid color-mix(in srgb, var(--nivel-color) 55%, transparent);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 14px 16px 12px;
+  animation: desbloqueo-entra 0.42s var(--ease-salida) both;
+}
+@keyframes desbloqueo-entra {
+  from { opacity: 0; transform: translate(-50%, 18px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+.desbloqueo-x {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: var(--texto-tenue);
+  font-size: 15px;
+  cursor: pointer;
+}
+.desbloqueo-cab {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 14px;
+  line-height: 1.4;
+  padding-right: 18px;
+}
+.desbloqueo-icono {
+  font-size: 20px;
+  line-height: 1;
+}
+.desbloqueo-txt {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--texto-tenue);
+  margin: 8px 0 10px;
+}
+.desbloqueo-botones {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+@media (prefers-reduced-motion: reduce) {
+  .desbloqueo { animation: none; }
+}

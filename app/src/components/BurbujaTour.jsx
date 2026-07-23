@@ -8,6 +8,8 @@ const SALUDOS = {
   empresa: { clave: 'ficha', titulo: '¿Te explico esta ficha?', texto: 'Te llevo de la mano y te explico todo, pasito a pasito.' },
   explorar: { clave: 'explorar', titulo: '¿Te explico cómo explorar?', texto: 'Cómo buscar, filtrar y batir 2 empresas en duelo — pasito a pasito.' },
   cuaderno: { clave: 'cuaderno', titulo: '¿Te muestro tu Cuaderno?', texto: 'Cargo una cartera de ejemplo y te enseño cada parte, de la mano.' },
+  comparar: { clave: 'comparar', titulo: '¿Te explico el duelo?', texto: 'Cómo leer la carrera, la tabla y cuándo comparar dos empresas NO tiene sentido.' },
+  resultados: { clave: 'resultados', titulo: '¿De dónde salieron estas?', texto: 'Te explico tu perfil, por qué estas empresas y qué hacer ahora.' },
   inicio: { clave: 'inicio', titulo: '¿Primera vez por aquí?', texto: 'Te llevo de la mano y te explico todo, pasito a pasito.' },
 }
 
