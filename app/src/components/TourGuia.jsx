@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { prefiereQuieto } from '../lib/anim'
+import { conNegritas } from '../lib/negritas'
 
 // 🚶 TOUR GUIADO (pedido de Jair 15-jul: "que te lleve de la mano y explique
 // todo como si fuera un bebé, con opción a cerrarlo y que esté ahí siempre").
@@ -186,35 +187,91 @@ export const PASOS_EXPLORAR = [
   },
 ]
 
-// Pasos de MI CUADERNO (pedido de Jair 17-jul). Al arrancar, el Cuaderno carga
-// una cartera de EJEMPLO (simulación) para que todo esté lleno y se pueda
-// mostrar de la mano; al cerrar el tour la borra sola (si el usuario no metió
-// la suya). Los pasos cuyo elemento no exista se saltan igual.
+// Pasos de MI CUADERNO (pedido de Jair 17-jul; ampliado a punto por punto el
+// 23-jul). Al arrancar, el Cuaderno SIMULA una cartera de 5 acciones para que
+// todo esté lleno y se pueda mostrar de la mano; al cerrar el tour la borra
+// sola (si el usuario no metió la suya). Los pasos cuyo elemento no exista se
+// saltan igual, así que aquí se declaran todos sin condicionales.
+//
+// El orden es el del DOM, de arriba abajo: un tour que sube y baja marea. Y
+// cada palabra rara se explica la PRIMERA vez que aparece en pantalla — «SAB»
+// se explica en la fila que dice «repartida en 2 SAB», no tres pantallas
+// después en su resumen.
 export const PASOS_CUADERNO = [
   {
+    sel: '.cd-cuadernos',
+    icono: '📚', titulo: 'Puedes tener hasta 3 cuadernos',
+    texto: 'Uno para lo tuyo, otro para el de tu familia, otro para practicar. Cada uno con su nombre y su color, y con su propia cartera: lo que anotes en uno no se mezcla con el otro. El ⚙️ le cambia nombre y color.',
+  },
+  {
     sel: '.cd-patrimonio',
-    icono: '📓', titulo: 'Tu Cuaderno (con ejemplo)',
-    texto: 'Para mostrarte cómo se ve lleno, cargué una cartera de EJEMPLO — no es real, y al cerrar el tour la borro sola. Este número grande es tu patrimonio: todo lo que tienes sumado, latiendo con los precios del día.',
+    icono: '📓', titulo: 'Simulé 5 acciones tuyas',
+    texto: 'Para enseñarte el cuaderno lleno te puse una cartera de EJEMPLO con 5 empresas reales de la BVL — Ferreycorp, Alicorp, Buenaventura, Engie y Volcan — con cantidades inventadas. No es real y al cerrar el tour la borro sola. Este número grande es tu patrimonio: las 5 sumadas al precio de hoy.',
+  },
+  {
+    sel: '.cd-variacion',
+    icono: '📈', titulo: 'Cuánto llevas ganado (o perdido)',
+    texto: 'La comparación entre lo que PAGASTE y lo que valen hoy. Ojo con esto: mientras no vendas, esa ganancia no está en tu bolsillo — sube y baja cada día. Y el «hoy» del final es solo lo que se movió en la jornada.',
+  },
+  {
+    sel: '.cd-pulso-hoy',
+    icono: '🫀', titulo: 'El latido del día',
+    texto: 'Cuántas de tus empresas suben y cuántas bajan hoy, en cuántos días cae tu próximo dividendo y cuántas noticias oficiales soltaron esta semana. Es el resumen de un vistazo, antes de entrar al detalle.',
+  },
+  {
+    sel: '[data-tour="cd-acciones"]',
+    icono: '📊', titulo: 'Este es tu portafolio',
+    texto: 'De aquí para abajo está todo lo que TIENES. Arriba mandan los totales; ahora empieza el detalle, empresa por empresa.',
   },
   {
     sel: '.cd-botonera',
     icono: '🛰', titulo: 'Así armas la tuya',
-    texto: 'Aquí empiezas: «Importar de mi broker» lee una foto o PDF de tu estado de cuenta y reconoce tus acciones solo; «+ Agregar» las pones a mano. Todo se guarda en tu teléfono — sin cuentas ni nube.',
+    texto: '«🛰 Importar de mi broker» lee una foto o el PDF de tu estado de cuenta y reconoce tus acciones solo. «+ Agregar» las pones a mano, una por una. «🧹 Limpiar» borra las empresas pero te respeta las notas y recordatorios. Todo se guarda en TU teléfono: sin cuentas, sin nube.',
   },
   {
-    sel: '[data-tour="cd-acciones"]',
-    icono: '📄', titulo: 'Tu hoja de acciones',
-    texto: 'Cada empresa que tienes, con cuánto va ganando o perdiendo. Tócala para ver el detalle, ponerle una nota o editar cuántas tienes y a qué precio las compraste.',
+    sel: '.cd-filtros',
+    icono: '🔖', titulo: 'Los filtros',
+    texto: 'Parten tu cartera en pedazos para mirarla mejor: 📈 Ganando, 📉 Perdiendo, 💰 Pagan dividendos, Sin dividendos. Los últimos chips son tus SAB — tócalos para ver solo lo que compraste por cada casa de bolsa.',
+  },
+  {
+    sel: '.cd-hoja-cab',
+    icono: '📄', titulo: 'Las 6 columnas, una por una',
+    texto: '**Empresa**: cuál es y por dónde la compraste. **Acciones**: cuántas tienes. **Precio compra**: a cuánto te salió cada una (el promedio si compraste en varias veces). **Precio**: cuánto vale hoy. **Gan./pérd.**: la resta entre esas dos, en %. **Div. 12m**: lo que te pagaría en dividendos en un año.',
+  },
+  {
+    sel: '.cd-hoja-fila',
+    icono: '🏛', titulo: '¿Qué es una SAB?',
+    texto: 'Debajo del nombre dice por dónde la compraste. Una **SAB** (Sociedad Agente de Bolsa) es la casa autorizada por la que se compra y se vende en la BVL: Kallpa, Renta4, BBVA, Trii… La app no la sabe sola — la anotas tú al agregar la empresa.',
+  },
+  {
+    sel: '.cd-hoja-fila',
+    icono: '🧾', titulo: 'La misma empresa en dos SAB',
+    texto: 'Mira Ferreycorp: dice «repartida en 2 SAB» porque en el ejemplo la compraste en dos sitios. El cuaderno junta las 1,500 acciones en una sola fila y te promedia el precio de compra, pero se acuerda de cada lote por separado — ábrela y ves cuántas tienes en cada una. Y eso vale para todas: toca cualquier fila y se abre su detalle para editar, ponerle una nota o quitarla.',
+  },
+  {
+    sel: '.cd-hoja-total',
+    icono: '🧮', titulo: 'El pie de la hoja',
+    texto: 'Cuántas empresas estás viendo de las que tienes (cambia si filtras) y cuánto suman esas. Sirve para preguntas como «¿cuánta plata tengo en las que están perdiendo?»: filtras 📉 y lo lees aquí.',
+  },
+  {
+    sel: '.cd-hoja-leyenda',
+    icono: '💱', titulo: 'Los dividendos, y la trampa de la moneda',
+    texto: 'Ábrelo y tienes cada columna explicada. La importante: **Div. 12m** es lo que recibirías en un año si la empresa repite lo que pagó el año pasado — es un ESTIMADO con su historial real, no una promesa. Y va en la moneda que ella paga: Buenaventura reparte en US$, Alicorp en soles. Sumarlos sin convertir es el error clásico.',
+  },
+  {
+    sel: '[data-tour="cd-comprar"]',
+    icono: '➕', titulo: 'Comprar más',
+    texto: 'Si le metieras otro monto a una de tus empresas, ¿cómo te quedaría el precio promedio de compra y cuánto pasarías a tener? Aquí se prueba antes de hacerlo. Es una calculadora, no un consejo.',
   },
   {
     sel: '[data-tour="cd-flujo"]',
     icono: '💰', titulo: 'Tu lluvia de dividendos',
-    texto: 'Los próximos pagos que caerían a tu bolsillo, mes a mes, según lo que cada empresa suele repartir. El mes más gordo lleva su corona 👑. Son estimados con el patrón real — no promesas.',
+    texto: 'Los próximos pagos que caerían a tu bolsillo, mes a mes, según lo que cada empresa suele repartir. El mes más gordo lleva su corona 👑. Fíjate en lo desparejo que cae: los dividendos no llegan todos los meses ni en partes iguales, y aquí ves de dónde sale cada sol.',
   },
   {
     sel: '[data-tour="cd-calendario"]',
     icono: '📅', titulo: 'Calendario inteligente',
-    texto: 'Las fechas que te importan — cortes de dividendo, pagos, juntas — marcadas en el mes. Toca un día con puntito y te dice qué pasa.',
+    texto: 'Las fechas que te importan marcadas en el mes: corte de dividendo (hay que tener la acción ANTES de ese día para cobrarlo), fecha de pago, juntas de accionistas. Toca un día con puntito y te dice qué pasa.',
   },
   {
     sel: '[data-tour="cd-pulso"]',
@@ -232,18 +289,37 @@ export const PASOS_CUADERNO = [
     texto: 'Apúntate lo que no quieras olvidar — «revisar Ferreycorp tras sus resultados» — y queda guardado aquí. Tú mandas.',
   },
   {
+    sel: '[data-tour="cd-diario"]',
+    icono: '📖', titulo: 'Mi historia',
+    texto: 'Tu cartera contada como historia: qué compraste, qué se movió, qué te pagaron. Sirve para lo más difícil de todo — acordarte de POR QUÉ compraste algo, meses después.',
+  },
+  {
+    sel: '[data-tour="cd-sab"]',
+    icono: '🏛', titulo: 'Resumen por SAB',
+    texto: 'Cuánta plata tienes en cada casa de bolsa y cuánto pesa sobre el total. Sirve para dos cosas de gente ordenada: cuadrar tu cuaderno contra el estado de cuenta de cada SAB, y ver si tienes todo en una sola.',
+  },
+  {
+    sel: '[data-tour="cd-salud"]',
+    icono: '🩺', titulo: 'Salud de la cartera',
+    texto: 'El chequeo general: si estás muy concentrado en una empresa o un sector, si todo tu dinero depende del mismo metal, si te falta variedad. No te dice qué comprar — te dice dónde estás parado.',
+  },
+  {
     sel: '[data-tour="cd-torta"]',
     icono: '🥧', titulo: 'Tu torta',
-    texto: 'Cómo está repartido tu dinero entre empresas y sectores. Si una tajada se ve enorme, es señal de que estás muy concentrado en una sola apuesta.',
+    texto: 'Lo mismo, pero dibujado: cómo está repartido tu dinero entre empresas y sectores. Si una tajada se ve enorme, estás muy concentrado en una sola apuesta.',
   },
   {
     sel: '.cd-pie',
     icono: '🔒', titulo: 'Todo es tuyo y privado',
-    texto: 'Nada de esto sale de tu navegador: sin cuentas, sin nube, sin que nadie lo vea. Y listo — ya conoces tu Cuaderno. Borro la cartera de ejemplo y te dejo empezar la tuya. 🎉',
+    texto: 'Nada de esto sale de tu navegador: sin cuentas, sin nube, sin que nadie lo vea. Y listo — ya conoces tu Cuaderno punto por punto. Borro las 5 acciones del ejemplo y te dejo empezar la tuya. 🎉',
   },
 ]
 
-const ALTO_TARJETA = 230 // alto estimado de la tarjeta para decidir arriba/abajo
+// Alto de arranque, solo para el primer pintado: a partir de ahí se usa el alto
+// REAL de la tarjeta (ver `alto` más abajo). Con el estimado fijo, un paso de
+// texto largo — los del Cuaderno punto por punto — se pasaba de la pantalla y
+// se llevaba el botón «Siguiente» con él.
+const ALTO_TARJETA = 230
 
 export default function TourGuia({ pasos, onCerrar }) {
   // solo los pasos cuyo elemento SÍ está en pantalla ahora mismo — y VISIBLE
@@ -263,8 +339,17 @@ export default function TourGuia({ pasos, onCerrar }) {
   )
   const [i, setI] = useState(0)
   const [caja, setCaja] = useState(null)
+  // Alto REAL de la tarjeta de este paso: los textos no miden todos igual, y en
+  // celular uno largo pasa de 400 px. Se mide tras pintar, con useLayoutEffect
+  // para que el usuario no llegue a ver la posición provisional.
+  const [altoReal, setAltoReal] = useState(0)
+  const tarjetaRef = useRef(null)
   const quieto = prefiereQuieto()
   const paso = lista[i]
+  useLayoutEffect(() => {
+    if (!tarjetaRef.current) return
+    setAltoReal(tarjetaRef.current.getBoundingClientRect().height)
+  }, [i, paso])
 
   // medir el elemento del paso (tras el scroll suave) y seguirlo si algo se mueve
   useEffect(() => {
@@ -313,13 +398,17 @@ export default function TourGuia({ pasos, onCerrar }) {
 
   // tarjeta debajo del foco si hay sitio; si no, encima; siempre dentro de pantalla
   const vh = window.innerHeight
-  let topTarjeta = vh / 2 - ALTO_TARJETA / 2
+  const alto = Math.min(altoReal || ALTO_TARJETA, vh - 20)
+  let topTarjeta = vh / 2 - alto / 2
   if (caja) {
-    const cabeAbajo = caja.top + caja.height + 12 + ALTO_TARJETA < vh
+    const cabeAbajo = caja.top + caja.height + 12 + alto < vh
     topTarjeta = cabeAbajo
       ? caja.top + caja.height + 12
-      : Math.max(10, caja.top - ALTO_TARJETA - 12)
+      : Math.max(10, caja.top - alto - 12)
   }
+  // El cinturón: pase lo que pase, la tarjeta entera cabe en la pantalla. Sin
+  // esto, un foco muy abajo empujaba el botón «Siguiente» fuera del borde.
+  topTarjeta = Math.min(Math.max(10, topTarjeta), Math.max(10, vh - alto - 10))
 
   return (
     <div className="tour" role="dialog" aria-modal="true" aria-label={`Tour: ${paso.titulo}`}>
@@ -336,13 +425,13 @@ export default function TourGuia({ pasos, onCerrar }) {
           }}
         />
       )}
-      <div className="tour-tarjeta" style={{ top: topTarjeta }} key={i}>
+      <div className="tour-tarjeta" style={{ top: topTarjeta }} key={i} ref={tarjetaRef}>
         <div className="tour-cab">
           <span className="tour-icono" aria-hidden="true">{paso.icono}</span>
           <strong className="tour-titulo">{paso.titulo}</strong>
           <button className="tour-x" onClick={onCerrar} aria-label="Cerrar el tour">✕</button>
         </div>
-        <p className="tour-texto">{paso.texto}</p>
+        <p className="tour-texto">{conNegritas(paso.texto)}</p>
         <div className="tour-pie">
           <span className="tour-cuenta">{i + 1} de {lista.length}</span>
           <div className="tour-botones">

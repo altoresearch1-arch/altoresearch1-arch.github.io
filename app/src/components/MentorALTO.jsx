@@ -14,6 +14,7 @@ import {
   EVENTO_MENTOR,
 } from '../lib/mentor'
 import { cling } from '../lib/sonido'
+import { conNegritas } from '../lib/negritas'
 
 // ─────────────────────────────────────────────────────────────────────────
 // 🎓 EL MENTOR ALTO (mejora #151, idea de Jair — la cáscara)
@@ -35,19 +36,6 @@ import { cling } from '../lib/sonido'
 // vive en mentor.json (editable por Jair) y el progreso en localStorage.
 // Cero dependencias nuevas.
 // ─────────────────────────────────────────────────────────────────────────
-
-// Los JSON de la casa se escriben con **negritas** (Jair las usa en tips y
-// tesis). Un <p> no las entiende, así que la tarjeta las traduce aquí mismo:
-// cuatro líneas y ninguna dependencia de markdown.
-function conNegritas(texto) {
-  return String(texto ?? '')
-    .split(/(\*\*[^*]+\*\*)/g)
-    .map((trozo, i) =>
-      trozo.startsWith('**') && trozo.endsWith('**') && trozo.length > 4
-        ? <strong key={i}>{trozo.slice(2, -2)}</strong>
-        : trozo,
-    )
-}
 
 // Saludo de la primera vez, heredado de la BurbujaTour que este botón absorbe.
 const SALUDOS = {

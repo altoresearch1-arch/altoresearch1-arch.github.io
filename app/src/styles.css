@@ -5688,6 +5688,12 @@ body.cuaderno-marca .brand-logo {
   box-shadow: var(--sombra);
   animation: tourTarjetaEntra 0.3s var(--ease-salida) backwards;
   transition: top 0.35s var(--ease-salida);
+  /* Último recurso para un texto muy largo en una pantalla muy chica: la
+     tarjeta no crece más que la pantalla y su contenido se desplaza dentro.
+     El JS ya la coloca entera a la vista; esto cubre el caso extremo. */
+  max-height: calc(100dvh - 20px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 @keyframes tourTarjetaEntra {
   from {

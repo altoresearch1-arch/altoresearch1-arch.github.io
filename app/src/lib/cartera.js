@@ -91,6 +91,24 @@ export function leerCartera(id) {
   return Array.isArray(c) ? c : []
 }
 export function guardarCartera(c, id) { pon(claves(id).cartera, c) }
+
+// 🎭 La marca de la SIMULACIÓN del tour: mientras está puesta, la cartera de
+// ese cuaderno es la de ejemplo, no la del usuario. El tour la quita al cerrar;
+// si el navegador se cierra a mitad, la marca sobrevive y el Cuaderno la barre
+// al volver a abrirse. Sin esto, 5 posiciones inventadas se quedaban guardadas
+// pareciendo reales — y en esta app eso no se hace.
+const MARCA_DEMO = 'alto-cuaderno-demo'
+export function marcarDemo(id, si) {
+  const k = MARCA_DEMO + ((!id || id === 'principal') ? '' : '-' + id)
+  try { si ? localStorage.setItem(k, '1') : localStorage.removeItem(k) } catch { /* incógnito */ }
+}
+export function cuadernosConDemo() {
+  try {
+    return Object.keys(localStorage)
+      .filter((k) => k === MARCA_DEMO || k.startsWith(MARCA_DEMO + '-'))
+      .map((k) => (k === MARCA_DEMO ? 'principal' : k.slice(MARCA_DEMO.length + 1)))
+  } catch { return [] }
+}
 export function leerNotas(id) { return lee(claves(id).notas, {}) || {} }
 export function guardarNotas(n, id) { pon(claves(id).notas, n) }
 export function leerRecordatorios(id) {
@@ -410,15 +428,30 @@ export function buscarTicker(crudo) {
 
 // Cartera de ejemplo (posiciones inventadas sobre empresas REALES): para que
 // el que llega sin nada vea al cuaderno vivo antes de anotar lo suyo.
+//
+// Son CINCO y no ocho a propósito: el tour las explica una por una, y con ocho
+// el paseo se hacía una lista. Cada una está para enseñar algo distinto —
+// juntas encienden todas las secciones del cuaderno sin repetir lección:
+//   FERREYC1 → la MISMA empresa comprada en dos SAB (el desglose por lotes)
+//   ALICORC1 → consumo, dividendo en SOLES
+//   BVN      → minera que cotiza en US$: la columna Div. 12m en otra moneda
+//   ENGIEC1  → eléctrica: la que más engorda la lluvia de dividendos
+//   VOLCABC1 → la barata y volátil: para que la torta no se vea toda verde
 export const CARTERA_DEMO = [
-  { t: 'NEXAPEC1', cant: 1200, costo: 3.25, sab: 'Kallpa SAB' },
-  { t: 'BVN', cant: 150, costo: 28.4, sab: 'Kallpa SAB' },
-  { t: 'MINSURI1', cant: 800, costo: 5.9, sab: 'BBVA SAB' },
-  { t: 'FERREYC1', cant: 1500, costo: 3.1, sab: 'Renta4' },
-  { t: 'ENGIEC1', cant: 900, costo: 4.2, sab: 'Kallpa SAB' },
-  { t: 'VOLCABC1', cant: 5000, costo: 1.05, sab: 'BBVA SAB' },
+  // Repartida entre dos SAB: `sab: null` + `lotes`, tal como la deja
+  // fusionarPosicion cuando importas dos veces la misma empresa. El costo de
+  // arriba es el promedio ponderado: (1000×3.00 + 500×3.30) / 1500 = 3.10.
+  {
+    t: 'FERREYC1', cant: 1500, costo: 3.1, sab: null,
+    lotes: [
+      { sab: 'Kallpa SAB', cant: 1000, costo: 3.0 },
+      { sab: 'Renta4', cant: 500, costo: 3.3 },
+    ],
+  },
   { t: 'ALICORC1', cant: 250, costo: 11.1, sab: 'Trii' },
-  { t: 'FIBPRIME', cant: 400, costo: 6.8, sab: 'Renta4' },
+  { t: 'BVN', cant: 150, costo: 28.4, sab: 'Kallpa SAB' },
+  { t: 'ENGIEC1', cant: 900, costo: 4.2, sab: 'BBVA SAB' },
+  { t: 'VOLCABC1', cant: 5000, costo: 1.05, sab: 'BBVA SAB' },
 ]
 
 export function leerVisitaAnterior() { return lee(LS.visita, null) }

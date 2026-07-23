@@ -11,6 +11,7 @@ import {
   TC, esUSD, enSoles, fmtS, fmtP, fmtPrecioExacto, fmtSyD, fmtUSD, nombreCorto, MESES, MESES_C, fechaCorta, haceDias,
   empresaDe, filasDe, divUlt12PorAccion, proyecciones, recibidosRecientes,
   catBonita, tipoPunto, acuerdoDividendo, normTicker, SABS, CARTERA_DEMO,
+  marcarDemo, cuadernosConDemo,
 } from '../lib/cartera'
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -155,6 +156,7 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
     if (cartera.length === 0) {
       ponCartera(CARTERA_DEMO.map((c) => ({ ...c })))
       demoTemporal.current = true
+      marcarDemo(activo, true)
       espera = 430 // deja montar y pintar las secciones antes de medir el 1er paso
     }
     setTimeout(() => setTourAbierto(true), espera)
@@ -166,13 +168,24 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
     setTourAbierto(false)
     if (demoTemporal.current) {
       demoTemporal.current = false
+      marcarDemo(activo, false)
       ponCartera([])
-      avisar('🧹 Borré la cartera de ejemplo del tour. Ahora arma la tuya: 🛰 Importar de mi broker o + Agregar.')
+      avisar(`🧹 Borré las ${CARTERA_DEMO.length} acciones de ejemplo del tour. Ahora arma la tuya: 🛰 Importar de mi broker o + Agregar.`)
     }
   }
   // Si te vas del cuaderno con el ejemplo puesto (ej. botón atrás), no lo dejes pegado.
   useEffect(() => () => {
-    if (demoTemporal.current) guardarCartera([], activo)
+    if (demoTemporal.current) { guardarCartera([], activo); marcarDemo(activo, false) }
+  }, [])
+  // …y si te vas de la peor manera (cerrar el navegador a mitad del tour), el
+  // desmontaje nunca corre y el ejemplo quedaría guardado como si fuera TUYA
+  // cartera. Por eso la simulación deja una marca en disco: al volver a abrir
+  // el Cuaderno se barre sola. Nada inventado se queda haciéndose pasar por real.
+  useEffect(() => {
+    const sucios = cuadernosConDemo()
+    if (!sucios.length) return
+    sucios.forEach((id) => { guardarCartera([], id); marcarDemo(id, false) })
+    if (sucios.includes(activo)) setCartera([])
   }, [])
 
   const { filas, totalValor, totalCosto, ganTotal, cambioDia, suben, bajan } =
@@ -336,7 +349,7 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
         }}
         onEjemplo={() => {
           ponCartera(CARTERA_DEMO.map((c) => ({ ...c })))
-          avisar('📓 Cartera de ejemplo cargada — 8 empresas de vuelta en casa.')
+          avisar(`📓 Cartera de ejemplo cargada — ${CARTERA_DEMO.length} empresas de vuelta en casa.`)
         }}
         onVerEmpresa={onVerEmpresa}
         totalValor={totalValor} ganTotal={ganTotal}
@@ -344,7 +357,7 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
 
       {cartera.length > 0 && (
         <>
-          <h2>Comprar más</h2>
+          <h2 data-tour="cd-comprar">Comprar más</h2>
           <Calculadora cartera={cartera} />
 
           <h2 data-tour="cd-flujo">Próximo flujo de efectivo ⭐</h2>
@@ -368,13 +381,13 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
 
       {cartera.length > 0 && (
         <>
-          <h2>Mi historia · el diario del inversionista</h2>
+          <h2 data-tour="cd-diario">Mi historia · el diario del inversionista</h2>
           <Diario filas={filas} hoy={hoy} />
 
-          <h2>Resumen por SAB</h2>
+          <h2 data-tour="cd-sab">Resumen por SAB</h2>
           <PorSAB filas={filas} totalValor={totalValor} />
 
-          <h2>Salud de la cartera</h2>
+          <h2 data-tour="cd-salud">Salud de la cartera</h2>
           <Salud filas={filas} cartera={cartera} totalValor={totalValor} />
 
           <h2 data-tour="cd-torta">Mi torta</h2>
