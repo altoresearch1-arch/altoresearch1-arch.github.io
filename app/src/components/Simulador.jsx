@@ -35,8 +35,14 @@ export default function Simulador({ empresa }) {
 
   const precio = px.precio
   const acciones = monto > 0 ? monto / precio : 0
-  // si la acción casi no se negocia, amortiguar el movimiento (se mueve poco)
-  const damp = px.sinNegociacionReciente ? 0.4 : 1
+  // 🚨 ANTES aquí había un amortiguador (damp 0.4) para las ilíquidas "porque
+  // se mueven poco". Enseñaba lo contrario de la verdad: que una acción que
+  // casi no negocia es más tranquila y por lo tanto más segura. La realidad
+  // es que NO se mueve… hasta que se mueve de golpe (en la propia app hay
+  // casos: FOSSAL 0.76→2.40, Andex 0.18→0.90), y su riesgo de verdad es no
+  // encontrar a quién venderle. Se quitó el amortiguador y en su lugar el
+  // escenario cambia de MENSAJE (error E2 del análisis educativo).
+  const damp = 1
 
   return (
     <div className="sim">
@@ -91,6 +97,16 @@ export default function Simulador({ empresa }) {
           )
         })}
       </div>
+
+      {px.sinNegociacionReciente && (
+        <div className="sim-nota sim-nota-iliquida">
+          ⚠️ Esta acción casi no se negocia, y eso cambia el ejercicio de arriba: aquí el riesgo
+          principal <strong>no es el porcentaje</strong> — es que el día que quieras vender no haya
+          nadie del otro lado, o que tengas que rematarla mucho más barata. Y cuando por fin se
+          mueve, suele hacerlo <strong>de golpe</strong>, no de a pocos. Que no se mueva no significa
+          que sea tranquila: significa que casi nadie la compra.
+        </div>
+      )}
 
       {notaSector && <div className="sim-nota">ℹ️ {notaSector}</div>}
 

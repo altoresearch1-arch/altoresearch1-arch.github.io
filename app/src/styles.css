@@ -6462,3 +6462,255 @@ body.cuaderno-marca .brand-logo {
   .cd-tipos-doc { grid-template-columns: 1fr; }
   .cd-acciones-editar { margin-left: 0; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   🔍 EL LENTE, LA DEUDA Y LA CHARLA DE LA GERENCIA
+   (Sesión 1 del ANALISIS_EDUCATIVO_Y_TOUR_POR_NIVELES.md — mejoras #21,
+   #41, #42, #102, #103). Todo con las variables de siempre: cero deps.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* El lente declarado arriba de los globos: "se lee como minera" */
+.rx-lente {
+  margin: 8px 0 10px;
+  font-size: 12.5px;
+  color: var(--texto-tenue);
+}
+.rx-lente strong {
+  color: var(--oro-suave);
+}
+
+/* 💰 "Vive de:" — el escalón 2 de la escalera, pegado a la tesis */
+.vive-de {
+  margin: -6px 0 18px;
+  padding-left: 14px;
+  border-left: 3px solid color-mix(in srgb, var(--oro) 45%, transparent);
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+.vive-de-k {
+  color: var(--oro);
+  font-weight: 700;
+}
+.vive-de-manda {
+  font-size: 12.5px;
+  margin-top: 3px;
+}
+.vive-de-manda strong {
+  color: var(--texto);
+}
+
+/* 💳 ¿Puede pagar su deuda? — mismo lenguaje visual que "¿Barata o cara?" */
+.deuda {
+  margin-top: 14px;
+  border: 1px solid var(--gris);
+  border-left: 4px solid var(--gris);
+  border-radius: 10px;
+  padding: 13px 15px;
+  background: var(--negro-3);
+}
+.deuda-verde {
+  border-left-color: var(--verde);
+}
+.deuda-ambar {
+  border-left-color: var(--ambar);
+}
+.deuda-rojo {
+  border-left-color: var(--rojo);
+}
+.deuda-noaplica {
+  border-left-color: var(--oro);
+}
+.deuda-tit {
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--texto);
+  margin-bottom: 4px;
+}
+.deuda-estado {
+  font-size: 11px;
+  letter-spacing: 1.4px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 2px 8px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.deuda-verde .deuda-estado {
+  color: var(--verde);
+}
+.deuda-ambar .deuda-estado {
+  color: var(--ambar);
+}
+.deuda-rojo .deuda-estado {
+  color: var(--rojo);
+}
+.deuda-noaplica-badge {
+  color: var(--oro);
+}
+.deuda-lente {
+  font-size: 12.5px;
+  color: var(--texto-tenue);
+  margin-bottom: 8px;
+}
+.deuda-lente strong {
+  color: var(--oro-suave);
+}
+.deuda-txt {
+  font-size: 13.5px;
+  color: var(--texto-tenue);
+  line-height: 1.55;
+  margin: 6px 0;
+}
+.deuda-comose strong {
+  color: var(--texto);
+}
+.deuda-formula {
+  margin: 8px 0;
+  font-size: 13.5px;
+  background: var(--negro-2);
+  border: 1px dashed var(--gris);
+  border-radius: 8px;
+  padding: 8px 10px;
+  overflow-wrap: anywhere;
+}
+.deuda-formula strong {
+  color: var(--oro-suave);
+}
+.deuda-barra {
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: var(--texto-tenue);
+  line-height: 1.5;
+}
+.deuda-sub {
+  margin-top: 8px;
+  font-size: 12.5px;
+  color: var(--oro-suave);
+  font-weight: 700;
+}
+.deuda-lista {
+  margin-top: 4px;
+  font-size: 13px;
+}
+.deuda-aviso {
+  margin-top: 8px;
+  font-size: 12.5px;
+  color: var(--ambar);
+  line-height: 1.5;
+}
+.deuda-error {
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--rojo);
+  line-height: 1.5;
+}
+.deuda-caso {
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: var(--texto-tenue);
+  line-height: 1.5;
+  border-top: 1px dashed var(--gris);
+  padding-top: 6px;
+}
+
+/* 🗣 La charla de la gerencia, subida al nivel 2 */
+.gerencia-tarjeta {
+  margin-top: 16px;
+}
+.gerencia-intro {
+  font-size: 13px;
+  line-height: 1.55;
+  margin: 4px 0 8px;
+}
+.gerencia-frases {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+.gerencia-frases li {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--texto);
+  border-left: 3px solid color-mix(in srgb, var(--oro) 40%, transparent);
+  padding: 2px 0 2px 12px;
+}
+.gerencia-mas {
+  margin-top: 10px;
+  font-size: 12.5px;
+}
+.gerencia-pie {
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* ⚠ El error común al cierre de cada métrica de la guía (#30) */
+.guia-err {
+  display: block;
+  margin-top: 5px;
+  font-size: 12.5px;
+  color: var(--rojo);
+  line-height: 1.45;
+}
+
+/* Honestidad de método en el rango del sector (E13) */
+.val-metodo {
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* El aviso de las ilíquidas en el simulador (E2): su riesgo es la salida */
+.sim-nota-iliquida {
+  margin-top: 10px;
+  color: var(--ambar);
+  line-height: 1.5;
+  border: 1px solid color-mix(in srgb, var(--ambar) 35%, transparent);
+  border-radius: 8px;
+  padding: 9px 11px;
+}
+.sim-nota-iliquida strong {
+  color: var(--texto);
+}
+
+/* La vacuna del perfil dividendero en Resultados (E4) */
+.aviso-perfil {
+  margin: 12px 0 4px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--texto-tenue);
+  border: 1px solid color-mix(in srgb, var(--ambar) 35%, transparent);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.aviso-perfil strong {
+  color: var(--texto);
+}
+
+/* La prueba del fondo del ciclo dentro de la tarjeta de deuda */
+.deuda-estres {
+  margin-top: 8px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--texto-tenue);
+  background: var(--negro-2);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+.deuda-estres strong {
+  color: var(--texto);
+}
+.deuda-incierto {
+  border-left: 3px solid var(--oro);
+  padding-left: 10px;
+}
+.deuda-incierto strong {
+  color: var(--oro-suave);
+}
+.deuda-metodo {
+  margin-top: 8px;
+  font-size: 11.5px;
+  line-height: 1.5;
+}

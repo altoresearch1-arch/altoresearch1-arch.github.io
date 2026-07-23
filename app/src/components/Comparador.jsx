@@ -7,7 +7,27 @@ import familiaData from '../data/mineria_familia.json'
 import Glosado from './Glosado'
 import Disclaimer from './Disclaimer'
 import { peInfo, precioDe, dividendosDe, historicoDe, yieldNumerico, pagaDividendos } from '../lib/finanzas'
+import { lenteDe } from '../lib/lente'
 import { Reveal } from '../lib/anim'
+
+// (#31) El aviso de "sectores distintos" era genérico ("sus números se leen
+// diferente"). Con el lente se puede decir la razón CONCRETA de ESE par:
+// banco vs minera → depósitos no son deuda; cíclica vs regulada → el P/E de
+// una engaña en el pico y el de la otra no.
+function razonDelPar(lA, lB) {
+  if (!lA || !lB) return null
+  const noAplica = [lA, lB].filter((l) => l.deudaAplica === false)
+  const aplica = [lA, lB].filter((l) => l.deudaAplica !== false)
+  if (noAplica.length === 1) {
+    return `Lo más importante: la fila de deuda no se puede comparar. En ${noAplica[0].nombre.toLowerCase()} el pasivo ES la materia prima del negocio, mientras que en ${aplica[0].nombre.toLowerCase()} sí es plata que hay que devolver.`
+  }
+  const ciclico = [lA, lB].filter((l) => l.flujo === 'ciclico')
+  const estable = [lA, lB].filter((l) => l.flujo === 'estable')
+  if (ciclico.length === 1 && estable.length === 1) {
+    return `Lo más importante: ${ciclico[0].nombre.toLowerCase()} depende de ${ciclico[0].motor} (sube y baja), así que su P/E se ve bajísimo justo en el pico; ${estable[0].nombre.toLowerCase()} tiene un ingreso predecible y aguanta bastante más deuda sin despeinarse. Un mismo número significa cosas distintas en cada columna.`
+  }
+  return `Lo más importante: en ${lA.nombre.toLowerCase()} manda ${lA.motor} y en ${lB.nombre.toLowerCase()}, ${lB.motor}. Compara cada fila preguntándote si ese número significa lo mismo en los dos negocios.`
+}
 
 // Comparador "frente a frente": 2 empresas cara a cara, solo HECHOS de
 // nuestras fuentes (SMV, BVL, stockanalysis, MINEM). Sin veredicto: cuál
@@ -547,7 +567,9 @@ export default function Comparador({ tickers, onVolver, onVerEmpresa }) {
     </select>
   )
 
-  const mismoSector = A.e.sector === B.e.sector
+  const lA = lenteDe(A.e)
+  const lB = lenteDe(B.e)
+  const mismoLente = lA?.clave === lB?.clave
 
   return (
     <div>
@@ -579,11 +601,10 @@ export default function Comparador({ tickers, onVolver, onVerEmpresa }) {
           </div>
         </div>
 
-        {!mismoSector && (
+        {!mismoLente && lA && lB && (
           <p className="comp-sector-aviso">
-            ⚠ Son de sectores distintos ({A.sector} vs {B.sector}): sus números se leen
-            diferente — compara con cuidado (una deuda "alta" en eléctricas puede ser normal;
-            en una minera, un problema).
+            ⚠ No se leen con el mismo lente: {lA.icono} <strong>{tA}</strong> vive de {lA.viveDe} y{' '}
+            {lB.icono} <strong>{tB}</strong>, de {lB.viveDe}. {razonDelPar(lA, lB)}
           </p>
         )}
 

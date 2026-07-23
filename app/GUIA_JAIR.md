@@ -40,6 +40,34 @@ Todo está en `src/data/`. Son archivos de texto (JSON). Reglas:
   `fuentes`: opcionales; mira la ficha de NEXAPEC1 como ejemplo completo.
 - En `riesgos`, cada uno tiene `tipo`: `"documentado"` o `"rumor"` (no mezclar).
 
+### `lentes.json` — CON QUÉ OJO se lee cada empresa (nuevo, 22-jul)
+El lente decide el veredicto de la deuda, qué guía se muestra, la línea
+"💰 Vive de:" y los avisos del Comparador. Tres partes:
+- `porSector`: qué lente le toca por defecto a cada sector.
+- `porTicker`: las excepciones (AUNA → salud, Petroperú → combustibles,
+  Casa Grande → agro…). **Aquí es donde corriges si una empresa está mal
+  leída: agrega su ticker y el lente que le corresponde.**
+- `lentes`: el contenido de cada lente (`viveDe`, `motor` = la versión corta
+  para los globos, `queManda`, `deudaComoSeLee`, `errorTipico`, `caso`).
+  `flujo` (ciclico/intermedio/estable) elige los umbrales de deuda; con
+  `deudaAplica: false` la app dice "no se mide así" y muestra
+  `queMirarEnSuLugar` (bancos, seguros, AFP y fondos).
+- `deudaManual`: para las que no presentan estados a la SMV (AUNA). La cifra
+  va SIEMPRE con `fecha` y `fuente` — nunca un número suelto que envejezca.
+
+### `guias.json` — cómo se leen los números, POR LENTE
+Una entrada por lente (la clave debe coincidir con el lente). Cada métrica
+tiene `k` (título), `v` (explicación), `metrica` (opcional: `eps`, `fcf`,
+`capex`, `deuda`, `margen` — le dice a la app qué dato real inyectar) y
+`err` (el "⚠ error común", una línea). La métrica llamada "Lo que más manda"
+se muestra PRIMERO, aunque la escribas al final.
+
+### `tips.json` — los 5-7 tips de cada empresa
+Regla que nació de la auditoría del 22-jul: **nunca escribas una cifra que la
+app calcula sola** (P/E, yield, FCF del trimestre). En 6 meses el tip diría
+9.6 y la ficha 14, y el usuario deja de creerle a las dos. Si necesitas dar
+un número, ponle la fecha ("al cierre de 2025").
+
 ### `quiz.json` — preguntas y perfiles
 Las 4 preguntas, sus opciones y a qué perfil/sector suma cada una. La pregunta
 de sector tiene `"tipo": "sector"`.

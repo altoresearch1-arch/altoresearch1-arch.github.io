@@ -2,7 +2,43 @@
 
 > **Documento maestro vivo.** Captura TODO lo construido para que nada se pierda, sin
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
-> herramienta), lee esto primero. Última actualización: **21 jul 2026**. Estado: **EN VIVO (beta pública)**.
+> herramienta), lee esto primero. Última actualización: **22 jul 2026**. Estado: **EN VIVO (beta pública)**.
+
+## 🔍 22-jul: SESIÓN 1 DEL PLAN EDUCATIVO — EL LENTE Y LA DEUDA (implementada)
+Primera sesión de código del `ANALISIS_EDUCATIVO_Y_TOUR_POR_NIVELES.md` (§9). Responde el
+ejemplo ácido de Jair: la MISMA deuda es peligro en una minera, normal en una eléctrica,
+manejable en salud y un ERROR DE CATEGORÍA en un banco.
+- **`lentes.json` + `lib/lente.js` (#21):** 19 lentes con `viveDe`, `motor`, `queManda`,
+  cómo se lee su deuda, error típico y caso peruano. El lente HEREDA del sector y lo refina
+  por ticker — el sector NO se toca (Explorar, quiz y escenarios siguen igual). Con eso
+  "diversas" deja de ser cajón ciego: seguros (6), salud (AUNA), concesiones (4), telecom,
+  inmobiliaria (4), agro/azúcar (7), combustibles (Petroperú) e industria salen del saco;
+  Shougang pasa a leerse como minera, Aenza como construcción, IFS como banco.
+- **`PuedePagarDeuda.jsx` (#41/#42):** deuda neta ÷ ganancia operativa anual = AÑOS de caja,
+  con umbrales POR LENTE (cíclico <2 · intermedio <3 · estable <4) y **globo nuevo "¿Debe
+  mucho?"** en la radiografía que ven TODOS. En banco/seguro/AFP/fondo el veredicto es "NO SE
+  MIDE ASÍ" + qué mirar en su lugar. Honestidad: sin la D&A (58 empresas la presentan
+  resumida) el número es un **TECHO**, así que solo se afirma cuando el techo ya es cómodo —
+  si no, "no se puede afirmar" (15 casos). Para cíclicas, **la prueba del ciclo**: qué pasa
+  con la misma deuda si la ganancia se parte a la mitad.
+- **7 guías nuevas por lente (#22-#28)** en guias.json (seguros, salud, concesiones, telecom,
+  inmobiliaria, agro, combustibles + industria) y **"⚠ Error común" en TODAS las métricas de
+  TODAS las guías** (#30, 71 líneas nuevas). "Lo que más manda" ahora ABRE la guía (#29).
+- **Escalera de aprendizaje:** línea **"💰 Vive de:"** junto a la tesis (#102) y tarjeta
+  **"🗣 ¿Por qué le fue así este trimestre?"** con las frases textuales de gerencia.json, que
+  vivían enterradas en N4 y ahora entran en N2 (#103, el mejor valor/esfuerzo del plan).
+- **Fixes de honestidad (errores ACTIVOS del catálogo §14):** E1/#113 las advertencias ya no
+  se esconden por nivel (el "P/E referencial" y el "poco negociada" se ven en N1-2 aunque el
+  anzuelo tape el resto); **#44 asterisco de ciclo en el globo "Barata"**; E2 fuera el damp
+  0.4 del simulador — en ilíquidas el riesgo no es el % sino no encontrar comprador; E4 el
+  quiz ya no enseña "cero sustos → dividendos" (+ vacuna en Resultados); E5/#114 auditados
+  **176 tips** con cifras congeladas (P/E, yield y FCF que envejecían y contradecían al
+  cálculo vivo) y E6/#24 el tip de deuda con lente minero en 10 bancos; E7 frecuencias en
+  inglés traducidas; E12/E13 el rango del sector dice de dónde sale y admite que el de
+  "diversas" es el veredicto más flojo de la app; #31 el aviso del Comparador ahora da la
+  razón CONCRETA del par (banco vs minera: depósitos ≠ deuda).
+- Cero dependencias nuevas, cero backend, sin tocar los robots. `deuda` y `gerencia` entran
+  como secciones de nivel 2 en `NIVEL_SECCION`.
 
 ## 🧭 21-jul: EL PLAN EDUCATIVO MAESTRO (sesión de ANÁLISIS, sin código — pedido de Jair)
 Sesión completa de análisis antes de la renovación de Fable (Jair tiene US$100 de la oferta).

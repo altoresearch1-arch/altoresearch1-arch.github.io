@@ -73,6 +73,19 @@ export default function Resultados({ respuestas, onVerEmpresa, onReiniciar }) {
         </h1>
         <p className="lead anim-sube" style={{ animationDelay: '120ms' }}>{infoPerfil?.descripcion}</p>
 
+        {/* La vacuna del error #1 del inversionista de ingresos (E4 del
+            análisis educativo): dividendo ≠ ausencia de riesgo. Buenaventura
+            paga dividendos Y se mueve con el oro; Quimpac rinde 26% y casi no
+            se negocia. Se dice justo aquí, en el momento del resultado. */}
+        {perfil === 'dividendos' && (
+          <div className="aviso-perfil">
+            ⚠️ Ojo con la trampa más común de este perfil: <strong>cobrar dividendos no significa
+            que la acción no se mueva.</strong> Varias de las que mejor pagan son mineras que suben
+            y bajan con el metal, o acciones que casi no se negocian y donde un yield altísimo suele
+            ser un pago extraordinario o un precio viejo. El dividendo es un ingreso, no un seguro.
+          </div>
+        )}
+
         {mostradas.map(({ empresa, coincidencia }, i) => (
           <div
             key={empresa.ticker}

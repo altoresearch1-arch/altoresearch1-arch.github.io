@@ -79,6 +79,13 @@ export const NIVEL_SECCION = {
   tips: 2,
   guiaSector: 2,
   fundamentos: 2,
+  // 💳 "¿Puede pagar su deuda?" y 🗣 "¿por qué le fue así este trimestre?"
+  // entran en el nivel 2: son los escalones 2 y 3 de la escalera de
+  // aprendizaje (qué hace → cómo gana → por qué este año), y llegan ANTES
+  // que el veredicto de precio, que vive en el 3. El VEREDICTO de deuda, en
+  // cambio, lo ven todos: está en la radiografía de 10 segundos.
+  deuda: 2,
+  gerencia: 2,
   valoracion: 3,
   bpaHistorico: 3,
   termometro: 3,

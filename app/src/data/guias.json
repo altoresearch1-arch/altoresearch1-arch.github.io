@@ -6,36 +6,43 @@
       "metricas": [
         {
           "k": "P/E (precio ÷ ganancia)",
-          "v": "Cuántas veces la ganancia anual estás pagando por la acción. Un P/E de 10 = pagas 10 soles por cada sol que gana al año. En mineras ENGAÑA: con el metal caro la ganancia se infla y el P/E se ve bajísimo (parece barata cuando en realidad podría estar cara, porque esa ganancia no dura). Nunca lo uses solo en una minera."
+          "v": "Cuántas veces la ganancia anual estás pagando por la acción. Un P/E de 10 = pagas 10 soles por cada sol que gana al año. En mineras ENGAÑA: con el metal caro la ganancia se infla y el P/E se ve bajísimo (parece barata cuando en realidad podría estar cara, porque esa ganancia no dura). Nunca lo uses solo en una minera.",
+          "err": "leer un P/E bajo en el pico del metal como si fuera una ganga: esa ganancia no dura."
         },
         {
           "k": "BPA / EPS (ganancia por acción)",
           "metrica": "eps",
-          "v": "Es la ganancia que le toca a UNA acción: la utilidad total ÷ el número de acciones. Te dice cuánto 'produce' cada acción que tienes. Por sí solo dice poco; cobra sentido al compararlo con el precio (eso es el P/E) o al verlo en el tiempo. En minería sube y baja con el metal: un trimestre bueno no se repite siempre, así que míralo en serie, no uno suelto."
+          "v": "Es la ganancia que le toca a UNA acción: la utilidad total ÷ el número de acciones. Te dice cuánto 'produce' cada acción que tienes. Por sí solo dice poco; cobra sentido al compararlo con el precio (eso es el P/E) o al verlo en el tiempo. En minería sube y baja con el metal: un trimestre bueno no se repite siempre, así que míralo en serie, no uno suelto.",
+          "err": "quedarse con el BPA de un trimestre bueno; en minería hay que verlo en serie de años."
         },
         {
           "k": "Dividendos",
-          "v": "Es la parte de la ganancia que la empresa te paga por ser dueño (en efectivo o en acciones). Mira el 'yield' (dividendo ÷ precio, en %) para saber cuánto te rinde, y el 'payout' (qué % de la ganancia reparte). En mineras casi siempre se paga en dólares y es variable: grande cuando el metal está caro, chico o nulo cuando no. No cuentes con que el de este año se repita."
+          "v": "Es la parte de la ganancia que la empresa te paga por ser dueño (en efectivo o en acciones). Mira el 'yield' (dividendo ÷ precio, en %) para saber cuánto te rinde, y el 'payout' (qué % de la ganancia reparte). En mineras casi siempre se paga en dólares y es variable: grande cuando el metal está caro, chico o nulo cuando no. No cuentes con que el de este año se repita.",
+          "err": "contar con el dividendo grande de un año de metal caro como si fuera fijo."
         },
         {
           "k": "FCF (flujo de caja libre)",
           "metrica": "fcf",
-          "v": "Es la caja que DE VERDAD le sobra tras operar e invertir en mantenerse (capex). Es más honesto que la 'utilidad', porque la utilidad incluye cosas que no son dinero real. En mineras pesa mucho el capex, así que el FCF puede ser negativo en años de inversión aunque la empresa gane plata. FCF positivo y constante = se autofinancia."
+          "v": "Es la caja que DE VERDAD le sobra tras operar e invertir en mantenerse (capex). Es más honesto que la 'utilidad', porque la utilidad incluye cosas que no son dinero real. En mineras pesa mucho el capex, así que el FCF puede ser negativo en años de inversión aunque la empresa gane plata. FCF positivo y constante = se autofinancia.",
+          "err": "leer un FCF negativo por construir una mina nueva como si la empresa estuviera enferma."
         },
         {
           "k": "Capex (inversión)",
           "metrica": "capex",
-          "v": "Cuánto invierte en activos de largo plazo (mina, maquinaria, plantas). Hay dos tipos: el de MANTENIMIENTO (lo mínimo para seguir produciendo) y el de EXPANSIÓN (para crecer o abrir nueva mina). El de expansión baja el FCF hoy a cambio de más producción mañana. Capex alto no siempre es malo: puede ser una mina construyendo su futuro."
+          "v": "Cuánto invierte en activos de largo plazo (mina, maquinaria, plantas). Hay dos tipos: el de MANTENIMIENTO (lo mínimo para seguir produciendo) y el de EXPANSIÓN (para crecer o abrir nueva mina). El de expansión baja el FCF hoy a cambio de más producción mañana. Capex alto no siempre es malo: puede ser una mina construyendo su futuro.",
+          "err": "confundir el capex de mantenimiento (obligatorio) con el de expansión (una apuesta)."
         },
         {
           "k": "Deuda",
           "metrica": "deuda",
-          "v": "Lo que la empresa debe con intereses. En minería no la mires sola: mírala contra la caja que genera EN EL CICLO. Aguantan deuda cómoda cuando el metal acompaña, pero la misma deuda se vuelve peligrosa en el fondo del ciclo, cuando el metal cae y la caja se seca."
+          "v": "Lo que la empresa debe con intereses. En minería no la mires sola: mírala contra la caja que genera EN EL CICLO. Aguantan deuda cómoda cuando el metal acompaña, pero la misma deuda se vuelve peligrosa en el fondo del ciclo, cuando el metal cae y la caja se seca.",
+          "err": "juzgar la deuda con la caja del PICO del ciclo; se juzga imaginando el metal barato."
         },
         {
           "k": "Margen",
           "metrica": "margen",
-          "v": "Qué porción de las ventas se convierte en ganancia (margen neto = después de todo; bruto = solo ventas menos costo de producir). En mineras el margen se infla con el metal caro y se aplasta cuando cae, porque el costo de producir (cash cost) es más o menos fijo."
+          "v": "Qué porción de las ventas se convierte en ganancia (margen neto = después de todo; bruto = solo ventas menos costo de producir). En mineras el margen se infla con el metal caro y se aplasta cuando cae, porque el costo de producir (cash cost) es más o menos fijo.",
+          "err": "atribuirle a la gestión un margen récord que en realidad puso el precio del metal."
         },
         {
           "k": "Lo que más manda",
@@ -48,25 +55,30 @@
       "metricas": [
         {
           "k": "P/E y P/B",
-          "v": "El P/E (precio ÷ ganancia) se usa, pero en bancos pesa más el P/B: precio ÷ valor en libros (el patrimonio contable). Un P/B de 1 significa que pagas justo lo que valen sus libros; más de 1, que el mercado le ve valor extra. En bancos el P/B se compara con el ROE: más rentable (ROE alto) justifica un P/B más alto."
+          "v": "El P/E (precio ÷ ganancia) se usa, pero en bancos pesa más el P/B: precio ÷ valor en libros (el patrimonio contable). Un P/B de 1 significa que pagas justo lo que valen sus libros; más de 1, que el mercado le ve valor extra. En bancos el P/B se compara con el ROE: más rentable (ROE alto) justifica un P/B más alto.",
+          "err": "compararlo contra el P/E de una industrial: un banco se valora por P/B y ROE."
         },
         {
           "k": "BPA / EPS (ganancia por acción)",
           "metrica": "eps",
-          "v": "La ganancia que le toca a cada acción (utilidad ÷ número de acciones). Sí aplica en bancos y lo reportan. Es útil para comparar trimestres y para calcular el P/E. Ojo: si el banco emite muchas acciones nuevas (capitalización), el BPA se 'diluye' aunque la ganancia total no baje."
+          "v": "La ganancia que le toca a cada acción (utilidad ÷ número de acciones). Sí aplica en bancos y lo reportan. Es útil para comparar trimestres y para calcular el P/E. Ojo: si el banco emite muchas acciones nuevas (capitalización), el BPA se 'diluye' aunque la ganancia total no baje.",
+          "err": "mirar el BPA sin la morosidad al lado: la ganancia de hoy puede ser el crédito malo de mañana."
         },
         {
           "k": "Dividendos",
-          "v": "La parte de la ganancia que reparte. OJO con los bancos: muchos pagan en ACCIONES, no en efectivo (una 'capitalización': te dan más acciones en vez de plata). Revisa si es efectivo o acciones antes de asumir un 'yield', porque no es lo mismo recibir dinero que más papelitos."
+          "v": "La parte de la ganancia que reparte. OJO con los bancos: muchos pagan en ACCIONES, no en efectivo (una 'capitalización': te dan más acciones en vez de plata). Revisa si es efectivo o acciones antes de asumir un 'yield', porque no es lo mismo recibir dinero que más papelitos.",
+          "err": "no fijarse si el pago fue en efectivo o en ACCIONES (varios bancos peruanos capitalizan)."
         },
         {
           "k": "FCF y Capex",
-          "v": "Casi no aplican como en una fábrica: un banco no 'invierte en máquinas' ni genera 'flujo de caja libre' en el sentido normal. Su materia prima es el dinero. No lo midas por FCF/capex; míralo por su capital (cuánto colchón tiene para aguantar pérdidas) y su rentabilidad (ROE)."
+          "v": "Casi no aplican como en una fábrica: un banco no 'invierte en máquinas' ni genera 'flujo de caja libre' en el sentido normal. Su materia prima es el dinero. No lo midas por FCF/capex; míralo por su capital (cuánto colchón tiene para aguantar pérdidas) y su rentabilidad (ROE).",
+          "err": "buscarle flujo de caja libre a un banco: esa métrica no encaja con su negocio."
         },
         {
           "k": "Deuda / depósitos",
           "metrica": "deuda",
-          "v": "Aquí está la trampa más común: los 'pasivos' enormes de un banco son los DEPÓSITOS del público, y eso NO es deuda peligrosa — es su materia prima para prestar. No le apliques el '¿debe mucho?' de una minera. El monto que mostramos son los 'adeudos' (préstamos que el banco mismo tomó), distintos de los depósitos."
+          "v": "Aquí está la trampa más común: los 'pasivos' enormes de un banco son los DEPÓSITOS del público, y eso NO es deuda peligrosa — es su materia prima para prestar. No le apliques el '¿debe mucho?' de una minera. El monto que mostramos son los 'adeudos' (préstamos que el banco mismo tomó), distintos de los depósitos.",
+          "err": "sumar los depósitos como si fueran deuda y concluir \"es el más endeudado de la bolsa\"."
         },
         {
           "k": "Lo que más manda",
@@ -79,36 +91,43 @@
       "metricas": [
         {
           "k": "P/E (precio ÷ ganancia)",
-          "v": "Cuántas veces la ganancia anual pagas por la acción. En consumo es más confiable que en minería, porque la ganancia es estable y no depende de un metal. Un P/E alto puede significar que el mercado espera crecimiento; uno bajo, que lo ve estancado."
+          "v": "Cuántas veces la ganancia anual pagas por la acción. En consumo es más confiable que en minería, porque la ganancia es estable y no depende de un metal. Un P/E alto puede significar que el mercado espera crecimiento; uno bajo, que lo ve estancado.",
+          "err": "esperar múltiplos de minera: acá se paga por estabilidad, no por ciclo."
         },
         {
           "k": "BPA / EPS (ganancia por acción)",
           "metrica": "eps",
-          "v": "La ganancia por cada acción (utilidad ÷ acciones). En consumo es útil y comparable trimestre a trimestre, porque el negocio es regular. Verlo crecer de forma sostenida es buena señal: significa que la empresa gana más por cada acción que tienes."
+          "v": "La ganancia por cada acción (utilidad ÷ acciones). En consumo es útil y comparable trimestre a trimestre, porque el negocio es regular. Verlo crecer de forma sostenida es buena señal: significa que la empresa gana más por cada acción que tienes.",
+          "err": "ignorar que un año con una venta extraordinaria infla el BPA y desinfla el P/E."
         },
         {
           "k": "Dividendos",
-          "v": "La parte de la ganancia que reparte. Las de consumo suelen pagar dividendos REGULARES gracias a su caja estable — por eso gustan a quien busca ingresos. Mira el 'payout' (qué % de la ganancia reparten): un payout muy alto (cerca del 100%) deja poco para reinvertir y puede ser insostenible."
+          "v": "La parte de la ganancia que reparte. Las de consumo suelen pagar dividendos REGULARES gracias a su caja estable — por eso gustan a quien busca ingresos. Mira el 'payout' (qué % de la ganancia reparten): un payout muy alto (cerca del 100%) deja poco para reinvertir y puede ser insostenible.",
+          "err": "olvidar que el dividendo sale de la utilidad: si el insumo sube, el reparto se aprieta."
         },
         {
           "k": "FCF (flujo de caja libre)",
           "metrica": "fcf",
-          "v": "La caja real que sobra tras operar e invertir. En consumo es muy revelador: con ventas estables, un buen FCF year tras año es señal de un negocio sano que se paga sus dividendos sin endeudarse. Es más confiable que la 'utilidad' contable."
+          "v": "La caja real que sobra tras operar e invertir. En consumo es muy revelador: con ventas estables, un buen FCF year tras año es señal de un negocio sano que se paga sus dividendos sin endeudarse. Es más confiable que la 'utilidad' contable.",
+          "err": "no mirar el capital de trabajo: inventarios y cuentas por cobrar se comen la caja."
         },
         {
           "k": "Capex (inversión)",
           "metrica": "capex",
-          "v": "Lo que invierte en plantas, líneas de producción y distribución. En consumo suele ser moderado y predecible. Ojo si de pronto crece mucho: puede ser una expansión grande (que baja el FCF hoy) o que necesita renovar equipos viejos."
+          "v": "Lo que invierte en plantas, líneas de producción y distribución. En consumo suele ser moderado y predecible. Ojo si de pronto crece mucho: puede ser una expansión grande (que baja el FCF hoy) o que necesita renovar equipos viejos.",
+          "err": "leer una planta nueva como gasto y no como capacidad futura."
         },
         {
           "k": "Deuda",
           "metrica": "deuda",
-          "v": "Lo que debe con intereses. Aquí va una lección clave: las de consumo AGUANTAN deuda alta sin ser frágiles, porque su caja es predecible (la gente no deja de comer). No mires el monto solo; mira la deuda contra su capacidad de generar caja (deuda/EBITDA)."
+          "v": "Lo que debe con intereses. Aquí va una lección clave: las de consumo AGUANTAN deuda alta sin ser frágiles, porque su caja es predecible (la gente no deja de comer). No mires el monto solo; mira la deuda contra su capacidad de generar caja (deuda/EBITDA).",
+          "err": "olvidar que el margen es fino: los intereses se lo comen rápido si sube la tasa."
         },
         {
           "k": "Margen",
           "metrica": "margen",
-          "v": "Qué porción de las ventas se vuelve ganancia. En consumo masivo los márgenes son FINOS pero ESTABLES (venden mucho, ganan poquito por unidad). Compáralos en el tiempo: si el margen se aprieta, suele ser por materias primas (aceite, trigo) o tipo de cambio."
+          "v": "Qué porción de las ventas se vuelve ganancia. En consumo masivo los márgenes son FINOS pero ESTABLES (venden mucho, ganan poquito por unidad). Compáralos en el tiempo: si el margen se aprieta, suele ser por materias primas (aceite, trigo) o tipo de cambio.",
+          "err": "creer que margen chico = mala empresa; en consumo masivo el margen fino ES el negocio."
         },
         {
           "k": "Lo que más manda",
@@ -121,36 +140,43 @@
       "metricas": [
         {
           "k": "P/E (precio ÷ ganancia)",
-          "v": "Cuántas veces la ganancia anual pagas por la acción. En textil es POCO confiable solo: las ganancias son irregulares y, si la empresa pierde plata, el P/E ni siquiera existe (no se puede dividir por una ganancia negativa). Úsalo solo si la empresa gana de forma estable."
+          "v": "Cuántas veces la ganancia anual pagas por la acción. En textil es POCO confiable solo: las ganancias son irregulares y, si la empresa pierde plata, el P/E ni siquiera existe (no se puede dividir por una ganancia negativa). Úsalo solo si la empresa gana de forma estable.",
+          "err": "calcularlo con un precio de hace semanas: casi ninguna textil negocia todos los días."
         },
         {
           "k": "BPA / EPS (ganancia por acción)",
           "metrica": "eps",
-          "v": "La ganancia por cada acción. En textil PUEDE SER NEGATIVO en trimestres flojos (pérdida por acción). No lo juzgues por un trimestre suelto: míralo en serie de varios trimestres o del año, porque el negocio sube y baja con la demanda externa."
+          "v": "La ganancia por cada acción. En textil PUEDE SER NEGATIVO en trimestres flojos (pérdida por acción). No lo juzgues por un trimestre suelto: míralo en serie de varios trimestres o del año, porque el negocio sube y baja con la demanda externa.",
+          "err": "anualizar un trimestre de temporada alta de exportación."
         },
         {
           "k": "Dividendos",
-          "v": "La parte de la ganancia que reparte. En textil suelen ser irregulares o nulos: cuando el ciclo está flojo priorizan reinvertir o simplemente aguantar, no repartir. No cuentes con un dividendo fijo aquí."
+          "v": "La parte de la ganancia que reparte. En textil suelen ser irregulares o nulos: cuando el ciclo está flojo priorizan reinvertir o simplemente aguantar, no repartir. No cuentes con un dividendo fijo aquí.",
+          "err": "esperar regularidad de una empresa cuyo cliente está en otro continente."
         },
         {
           "k": "FCF (flujo de caja libre)",
           "metrica": "fcf",
-          "v": "La caja real que sobra. En textil es una señal de alerta clave: si la empresa quema caja (FCF negativo) varios periodos seguidos, está consumiendo recursos para sostenerse, y eso no es sano. Vigílalo de cerca."
+          "v": "La caja real que sobra. En textil es una señal de alerta clave: si la empresa quema caja (FCF negativo) varios periodos seguidos, está consumiendo recursos para sostenerse, y eso no es sano. Vigílalo de cerca.",
+          "err": "ignorar que el inventario de fibra es plata dormida por meses."
         },
         {
           "k": "Capex (inversión)",
           "metrica": "capex",
-          "v": "Lo que invierte en maquinaria textil. Pesa en las que modernizan plantas para competir. Como los márgenes son finos, un capex grande puede apretar mucho la caja: revisa que tenga con qué financiarlo."
+          "v": "Lo que invierte en maquinaria textil. Pesa en las que modernizan plantas para competir. Como los márgenes son finos, un capex grande puede apretar mucho la caja: revisa que tenga con qué financiarlo.",
+          "err": "olvidar que la maquinaria textil se renueva poco: un capex alto aquí es una decisión grande, no rutina."
         },
         {
           "k": "Deuda",
           "metrica": "deuda",
-          "v": "Lo que debe con intereses. En textil es más riesgosa que en consumo, porque el negocio NO genera caja estable: en un mal año la deuda pesa fuerte. Revisa si la empresa genera caja suficiente para cubrir los intereses."
+          "v": "Lo que debe con intereses. En textil es más riesgosa que en consumo, porque el negocio NO genera caja estable: en un mal año la deuda pesa fuerte. Revisa si la empresa genera caja suficiente para cubrir los intereses.",
+          "err": "suponerle a una textil la misma capacidad de aguantar deuda que a una utility."
         },
         {
           "k": "Margen",
           "metrica": "margen",
-          "v": "Qué porción de las ventas se vuelve ganancia. En textil los márgenes son finos y volátiles: en un mal trimestre se vuelven NEGATIVOS (pierde plata). Por eso aquí el margen es el termómetro más rápido de cómo va el negocio."
+          "v": "Qué porción de las ventas se vuelve ganancia. En textil los márgenes son finos y volátiles: en un mal trimestre se vuelven NEGATIVOS (pierde plata). Por eso aquí el margen es el termómetro más rápido de cómo va el negocio.",
+          "err": "creer que el margen fino es un defecto: en textil de nicho es lo normal."
         },
         {
           "k": "Lo que más manda",
@@ -163,36 +189,43 @@
       "metricas": [
         {
           "k": "P/E (precio ÷ ganancia)",
-          "v": "Cuántas veces la ganancia anual pagas por la acción. Igual que en minería, es CÍCLICO y engaña: bajo en el pico (acero caro, ganancia inflada) y alto o negativo en el valle. No lo uses solo; mira en qué parte del ciclo está la construcción."
+          "v": "Cuántas veces la ganancia anual pagas por la acción. Igual que en minería, es CÍCLICO y engaña: bajo en el pico (acero caro, ganancia inflada) y alto o negativo en el valle. No lo uses solo; mira en qué parte del ciclo está la construcción.",
+          "err": "comprar en el pico de la obra pública, cuando todos los números se ven perfectos."
         },
         {
           "k": "BPA / EPS (ganancia por acción)",
           "metrica": "eps",
-          "v": "La ganancia por cada acción. Sube y baja con el ciclo del acero, así que un trimestre no representa el año. Míralo a lo largo de varios periodos para ver la tendencia real, no la foto de un momento bueno o malo."
+          "v": "La ganancia por cada acción. Sube y baja con el ciclo del acero, así que un trimestre no representa el año. Míralo a lo largo de varios periodos para ver la tendencia real, no la foto de un momento bueno o malo.",
+          "err": "proyectar el BPA del año de más construcción."
         },
         {
           "k": "Dividendos",
-          "v": "La parte de la ganancia que reparte. En acereras son variables: mejores cuando la construcción acompaña y la empresa gana bien; flacos o nulos en años flojos. Dependen del ciclo, no son una renta fija."
+          "v": "La parte de la ganancia que reparte. En acereras son variables: mejores cuando la construcción acompaña y la empresa gana bien; flacos o nulos en años flojos. Dependen del ciclo, no son una renta fija.",
+          "err": "anualizar un reparto hecho en un año récord de despachos."
         },
         {
           "k": "FCF (flujo de caja libre)",
           "metrica": "fcf",
-          "v": "La caja real que sobra tras invertir. En siderúrgicas el capex es alto (hornos, plantas), así que puede comerse la caja en años de inversión. FCF negativo puntual por expansión no es alarma; FCF negativo crónico sí."
+          "v": "La caja real que sobra tras invertir. En siderúrgicas el capex es alto (hornos, plantas), así que puede comerse la caja en años de inversión. FCF negativo puntual por expansión no es alarma; FCF negativo crónico sí.",
+          "err": "no separar la inversión en capacidad del gasto de mantener los hornos."
         },
         {
           "k": "Capex (inversión)",
           "metrica": "capex",
-          "v": "Lo que invierte en activos pesados: hornos, laminadoras, plantas. Es ELEVADO por naturaleza del negocio. Separa el de mantenimiento (sostener la planta) del de expansión (más capacidad); el de expansión apuesta al crecimiento futuro de la construcción."
+          "v": "Lo que invierte en activos pesados: hornos, laminadoras, plantas. Es ELEVADO por naturaleza del negocio. Separa el de mantenimiento (sostener la planta) del de expansión (más capacidad); el de expansión apuesta al crecimiento futuro de la construcción.",
+          "err": "no separar el mantenimiento de un horno (obligatorio) de la ampliación de capacidad (una apuesta al ciclo)."
         },
         {
           "k": "Deuda",
           "metrica": "deuda",
-          "v": "Lo que debe con intereses. Mírala contra el ciclo: en años de construcción fuerte la caja la cubre fácil, pero en años flojos (poca obra) la misma deuda pesa mucho. Negocio cíclico = deuda que hay que vigilar."
+          "v": "Lo que debe con intereses. Mírala contra el ciclo: en años de construcción fuerte la caja la cubre fácil, pero en años flojos (poca obra) la misma deuda pesa mucho. Negocio cíclico = deuda que hay que vigilar.",
+          "err": "olvidar que su caja es cíclica: se juzga con el acero barato."
         },
         {
           "k": "Margen",
           "metrica": "margen",
-          "v": "Qué porción de las ventas se vuelve ganancia. En acereras se aprieta cuando sube el costo del acero/chatarra o de la energía (consumen mucha). Un margen que cae suele avisar antes que la utilidad."
+          "v": "Qué porción de las ventas se vuelve ganancia. En acereras se aprieta cuando sube el costo del acero/chatarra o de la energía (consumen mucha). Un margen que cae suele avisar antes que la utilidad.",
+          "err": "no ver que el margen depende del precio de la chatarra y del acero importado."
         },
         {
           "k": "Lo que más manda",
@@ -205,36 +238,43 @@
       "metricas": [
         {
           "k": "P/E (precio ÷ ganancia)",
-          "v": "Cuántas veces la ganancia anual pagas por la acción. En pesqueras engaña por la estacionalidad: un trimestre con pesca infla la ganancia y otro de veda la borra. Solo tiene sentido con la ganancia ANUAL (el año completo), nunca con un trimestre suelto."
+          "v": "Cuántas veces la ganancia anual pagas por la acción. En pesqueras engaña por la estacionalidad: un trimestre con pesca infla la ganancia y otro de veda la borra. Solo tiene sentido con la ganancia ANUAL (el año completo), nunca con un trimestre suelto.",
+          "err": "calcularlo con un trimestre de temporada como si fuera el año entero."
         },
         {
           "k": "BPA / EPS (ganancia por acción)",
           "metrica": "eps",
-          "v": "La ganancia por cada acción. Es MUY variable trimestre a trimestre por las vedas: puede ser alto en temporada y negativo fuera de ella. Para juzgarlo de verdad, mira el del año entero (anualizado), no el del trimestre."
+          "v": "La ganancia por cada acción. Es MUY variable trimestre a trimestre por las vedas: puede ser alto en temporada y negativo fuera de ella. Para juzgarlo de verdad, mira el del año entero (anualizado), no el del trimestre.",
+          "err": "asustarse con un trimestre de veda (o entusiasmarse con uno de plena pesca)."
         },
         {
           "k": "Dividendos",
-          "v": "La parte de la ganancia que reparte. En pesqueras son irregulares: dependen de cómo fue la temporada y del precio internacional de la harina de pescado. Un buen año puede pagar bien; uno malo, nada."
+          "v": "La parte de la ganancia que reparte. En pesqueras son irregulares: dependen de cómo fue la temporada y del precio internacional de la harina de pescado. Un buen año puede pagar bien; uno malo, nada.",
+          "err": "esperar pago fijo en un negocio que depende de la biomasa y del clima."
         },
         {
           "k": "FCF (flujo de caja libre)",
           "metrica": "fcf",
-          "v": "La caja real que sobra. En pesqueras es CLAVE porque necesitan caja para aguantar los meses de veda sin ingresos. Una pesquera con buen FCF puede pasar la temporada baja sin angustias; una sin caja, se endeuda para sobrevivir."
+          "v": "La caja real que sobra. En pesqueras es CLAVE porque necesitan caja para aguantar los meses de veda sin ingresos. Una pesquera con buen FCF puede pasar la temporada baja sin angustias; una sin caja, se endeuda para sobrevivir.",
+          "err": "no considerar que se financia ENTRE temporadas para poder operar."
         },
         {
           "k": "Capex (inversión)",
           "metrica": "capex",
-          "v": "Lo que invierte en flota (barcos) y plantas de harina/aceite. Va de moderado a alto. Como los ingresos son estacionales, un capex grande en mal momento puede dejarla corta de caja justo en la veda."
+          "v": "Lo que invierte en flota (barcos) y plantas de harina/aceite. Va de moderado a alto. Como los ingresos son estacionales, un capex grande en mal momento puede dejarla corta de caja justo en la veda.",
+          "err": "leer la inversión en flota o planta como gasto, cuando define su cuota efectiva de los próximos años."
         },
         {
           "k": "Deuda",
           "metrica": "deuda",
-          "v": "Lo que debe con intereses. OJO: varias pesqueras se endeudan para operar entre vedas (comprar combustible, pagar sueldos sin ingresos). Revisa cómo manejan esa deuda entre temporadas: ahí está su mayor riesgo."
+          "v": "Lo que debe con intereses. OJO: varias pesqueras se endeudan para operar entre vedas (comprar combustible, pagar sueldos sin ingresos). Revisa cómo manejan esa deuda entre temporadas: ahí está su mayor riesgo.",
+          "err": "no mirar los vencimientos: una veda larga y una cuota cerca es la combinación peligrosa."
         },
         {
           "k": "Margen",
           "metrica": "margen",
-          "v": "Qué porción de las ventas se vuelve ganancia. En pesqueras SALTA con la temporada: alto cuando hay pesca y los precios acompañan, bajo o negativo en veda. No compares un trimestre de temporada con uno de veda — no es justo."
+          "v": "Qué porción de las ventas se vuelve ganancia. En pesqueras SALTA con la temporada: alto cuando hay pesca y los precios acompañan, bajo o negativo en veda. No compares un trimestre de temporada con uno de veda — no es justo.",
+          "err": "comparar el margen de un trimestre de pesca con uno de veda."
         },
         {
           "k": "Lo que más manda",
@@ -247,36 +287,43 @@
       "metricas": [
         {
           "k": "P/E (precio ÷ ganancia)",
-          "v": "Cuántas veces la ganancia anual pagas por la acción. En eléctricas es bastante confiable, porque la ganancia es estable y regulada. Un P/E algo alto puede reflejar que el mercado paga por la SEGURIDAD del dividendo, no por crecimiento. Engaña poco, a diferencia de minería."
+          "v": "Cuántas veces la ganancia anual pagas por la acción. En eléctricas es bastante confiable, porque la ganancia es estable y regulada. Un P/E algo alto puede reflejar que el mercado paga por la SEGURIDAD del dividendo, no por crecimiento. Engaña poco, a diferencia de minería.",
+          "err": "esperar que crezca como una tecnológica: acá se paga por el dividendo y la estabilidad."
         },
         {
           "k": "BPA / EPS (ganancia por acción)",
           "metrica": "eps",
-          "v": "La ganancia que le toca a cada acción (utilidad ÷ acciones). En eléctricas es estable y predecible, salvo golpes puntuales (una sequía que encarece la generación hidro, o un cargo regulatorio). Un trimestre malo aislado suele ser un evento puntual, no un cambio del negocio: míralo en serie."
+          "v": "La ganancia que le toca a cada acción (utilidad ÷ acciones). En eléctricas es estable y predecible, salvo golpes puntuales (una sequía que encarece la generación hidro, o un cargo regulatorio). Un trimestre malo aislado suele ser un evento puntual, no un cambio del negocio: míralo en serie.",
+          "err": "no mirar si el año tuvo mala hidrología (a las hidros les cambia el resultado)."
         },
         {
           "k": "Dividendos",
-          "v": "Aquí está el corazón de invertir en eléctricas: son de las que pagan dividendos MÁS regulares y jugosos, porque su caja es predecible. Mira el yield (cuánto rinde) y el payout (qué % reparten): un payout alto es normal en utilities, pero revisa que el dividendo no se esté financiando con deuda."
+          "v": "Aquí está el corazón de invertir en eléctricas: son de las que pagan dividendos MÁS regulares y jugosos, porque su caja es predecible. Mira el yield (cuánto rinde) y el payout (qué % reparten): un payout alto es normal en utilities, pero revisa que el dividendo no se esté financiando con deuda.",
+          "err": "olvidar que un reparto alto y estable depende de que el regulador no recorte la tarifa."
         },
         {
           "k": "FCF (flujo de caja libre)",
           "metrica": "fcf",
-          "v": "La caja real que sobra tras invertir. En eléctricas el capex es pesado y constante (mantener plantas y redes), así que el FCF puede ser ajustado. Lo clave es que alcance para cubrir el dividendo sin endeudarse más cada año."
+          "v": "La caja real que sobra tras invertir. En eléctricas el capex es pesado y constante (mantener plantas y redes), así que el FCF puede ser ajustado. Lo clave es que alcance para cubrir el dividendo sin endeudarse más cada año.",
+          "err": "leer el FCF negativo de un año de obra de red como un problema."
         },
         {
           "k": "Capex (inversión)",
           "metrica": "capex",
-          "v": "Inversión en plantas de generación, líneas de transmisión y redes. Es ALTO y permanente. Separa el de mantenimiento (sostener la red) del de expansión (nuevos proyectos): el de expansión baja el FCF hoy a cambio de más capacidad regulada —y más ingreso— mañana."
+          "v": "Inversión en plantas de generación, líneas de transmisión y redes. Es ALTO y permanente. Separa el de mantenimiento (sostener la red) del de expansión (nuevos proyectos): el de expansión baja el FCF hoy a cambio de más capacidad regulada —y más ingreso— mañana.",
+          "err": "no distinguir la inversión obligatoria de red del proyecto de crecimiento."
         },
         {
           "k": "Deuda",
           "metrica": "deuda",
-          "v": "Lo que debe con intereses. Las eléctricas cargan DEUDA ALTA y suele ser normal: su ingreso es tan estable y regulado que se endeudan barato. No te asustes por el monto solo; mírala contra su caja (deuda/EBITDA). El riesgo aparece si suben fuerte las tasas de interés o cae el ingreso regulado."
+          "v": "Lo que debe con intereses. Las eléctricas cargan DEUDA ALTA y suele ser normal: su ingreso es tan estable y regulado que se endeudan barato. No te asustes por el monto solo; mírala contra su caja (deuda/EBITDA). El riesgo aparece si suben fuerte las tasas de interés o cae el ingreso regulado.",
+          "err": "asustarse por el monto: en un negocio regulado la deuda alta y larga es el estado NORMAL."
         },
         {
           "k": "Margen",
           "metrica": "margen",
-          "v": "Qué porción de las ventas se vuelve ganancia. En eléctricas los márgenes son decentes y estables. La generación hidro rinde márgenes altos cuando hay agua; en sequía suben los costos (compran energía o queman gas) y el margen se aprieta."
+          "v": "Qué porción de las ventas se vuelve ganancia. En eléctricas los márgenes son decentes y estables. La generación hidro rinde márgenes altos cuando hay agua; en sequía suben los costos (compran energía o queman gas) y el margen se aprieta.",
+          "err": "compararlo con el de una minera: son negocios de naturaleza distinta."
         },
         {
           "k": "Lo que más manda",
@@ -289,36 +336,43 @@
       "metricas": [
         {
           "k": "P/E (precio ÷ ganancia)",
-          "v": "Cuántas veces la ganancia anual pagas por la acción. Es CÍCLICO: la ganancia sube en el auge de construcción y baja en el valle, así que el P/E engaña (bajo en el pico, alto en el fondo). Pacasmayo suele cotizar a un P/E más alto por su posición dominante en el norte. Míralo junto al ciclo de la obra."
+          "v": "Cuántas veces la ganancia anual pagas por la acción. Es CÍCLICO: la ganancia sube en el auge de construcción y baja en el valle, así que el P/E engaña (bajo en el pico, alto en el fondo). Pacasmayo suele cotizar a un P/E más alto por su posición dominante en el norte. Míralo junto al ciclo de la obra.",
+          "err": "extrapolar el año de auge de obra como si fuera el nuevo normal."
         },
         {
           "k": "BPA / EPS (ganancia por acción)",
           "metrica": "eps",
-          "v": "La ganancia por cada acción. Sigue el ritmo de los despachos de cemento; un trimestre fuerte suele coincidir con temporada de obra. Míralo en serie para ver la tendencia del ciclo, no la foto de un trimestre."
+          "v": "La ganancia por cada acción. Sigue el ritmo de los despachos de cemento; un trimestre fuerte suele coincidir con temporada de obra. Míralo en serie para ver la tendencia del ciclo, no la foto de un trimestre.",
+          "err": "proyectar el BPA de un año electoral con mucha obra pública."
         },
         {
           "k": "Dividendos",
-          "v": "La parte de la ganancia que reparten. Las cementeras maduras (Pacasmayo, UNACEM) suelen pagar dividendos relativamente estables, y Ferreycorp también es buen pagador. En el valle del ciclo pueden recortarlos."
+          "v": "La parte de la ganancia que reparten. Las cementeras maduras (Pacasmayo, UNACEM) suelen pagar dividendos relativamente estables, y Ferreycorp también es buen pagador. En el valle del ciclo pueden recortarlos.",
+          "err": "esperar que el reparto del año bueno se repita en el freno del ciclo."
         },
         {
           "k": "FCF (flujo de caja libre)",
           "metrica": "fcf",
-          "v": "La caja real que sobra tras invertir. En cemento el capex es pesado (hornos, canteras), así que en años de expansión el FCF se aprieta. Un FCF sano que cubre el dividendo es buena señal de un negocio maduro."
+          "v": "La caja real que sobra tras invertir. En cemento el capex es pesado (hornos, canteras), así que en años de expansión el FCF se aprieta. Un FCF sano que cubre el dividendo es buena señal de un negocio maduro.",
+          "err": "confundir la construcción de una planta nueva con un mal año."
         },
         {
           "k": "Capex (inversión)",
           "metrica": "capex",
-          "v": "Inversión en hornos, canteras y plantas de cemento (o en flota de maquinaria, en Ferreycorp). Es elevado. El de expansión (una nueva planta) apuesta a más construcción futura; vigila que no dispare la deuda."
+          "v": "Inversión en hornos, canteras y plantas de cemento (o en flota de maquinaria, en Ferreycorp). Es elevado. El de expansión (una nueva planta) apuesta a más construcción futura; vigila que no dispare la deuda.",
+          "err": "no ver que una planta de cemento se paga en décadas, no en trimestres."
         },
         {
           "k": "Deuda",
           "metrica": "deuda",
-          "v": "Lo que debe con intereses. En cemento es relevante por lo intensivo del negocio. Mírala contra la caja del ciclo: cómoda en auge de obra, pesada si la construcción se frena por inestabilidad política o recesión."
+          "v": "Lo que debe con intereses. En cemento es relevante por lo intensivo del negocio. Mírala contra la caja del ciclo: cómoda en auge de obra, pesada si la construcción se frena por inestabilidad política o recesión.",
+          "err": "juzgarla en pleno auge de obra en vez de imaginar la obra frenada."
         },
         {
           "k": "Margen",
           "metrica": "margen",
-          "v": "Qué porción de las ventas se vuelve ganancia. En cemento los márgenes son decentes (negocio local con poca competencia), pero los aprietan el costo de energía y del clinker. OJO en las HOLDINGS del grupo (UNACEM Corp, Ferreycorp): su margen individual NO refleja el negocio operativo —ver la nota de la empresa."
+          "v": "Qué porción de las ventas se vuelve ganancia. En cemento los márgenes son decentes (negocio local con poca competencia), pero los aprietan el costo de energía y del clinker. OJO en las HOLDINGS del grupo (UNACEM Corp, Ferreycorp): su margen individual NO refleja el negocio operativo —ver la nota de la empresa.",
+          "err": "no mirar el costo de la energía, que es la mitad de la historia del margen."
         },
         {
           "k": "Lo que más manda",
@@ -331,36 +385,43 @@
       "metricas": [
         {
           "k": "P/E (precio ÷ ganancia)",
-          "v": "Cuántas veces la ganancia anual pagas por la acción. En las de consumo (InRetail) es bastante confiable porque la ganancia es estable. En holdings (IFS) tiene sentido sobre la ganancia CONSOLIDADA del grupo, no la individual."
+          "v": "Cuántas veces la ganancia anual pagas por la acción. En las de consumo (InRetail) es bastante confiable porque la ganancia es estable. En holdings (IFS) tiene sentido sobre la ganancia CONSOLIDADA del grupo, no la individual.",
+          "err": "pagarlo alto por crecimiento que viene solo de abrir tiendas nuevas."
         },
         {
           "k": "BPA / EPS (ganancia por acción)",
           "metrica": "eps",
-          "v": "La ganancia por cada acción. En InRetail (consumo), verlo crecer sostenido es buena señal. En holdings refleja lo que le llega de sus subsidiarias: útil, pero recuerda que detrás hay varios negocios distintos."
+          "v": "La ganancia por cada acción. En InRetail (consumo), verlo crecer sostenido es buena señal. En holdings refleja lo que le llega de sus subsidiarias: útil, pero recuerda que detrás hay varios negocios distintos.",
+          "err": "no ajustar por las ventas de tiendas comparables (mismas tiendas, año contra año)."
         },
         {
           "k": "Dividendos",
-          "v": "La parte de la ganancia que reparten. InRetail e IFS suelen pagar dividendos crecientes; Aenza, en reestructuración, prácticamente no paga. Mira el yield y si el pago es sostenible."
+          "v": "La parte de la ganancia que reparten. InRetail e IFS suelen pagar dividendos crecientes; Aenza, en reestructuración, prácticamente no paga. Mira el yield y si el pago es sostenible.",
+          "err": "esperar dividendo grande de una cadena que está en plena expansión."
         },
         {
           "k": "FCF (flujo de caja libre)",
           "metrica": "fcf",
-          "v": "La caja real que sobra. En consumo (InRetail) un buen FCF financia su expansión de tiendas sin endeudarse de más. En holdings el FCF individual dice poco (es flujo de dividendos): hay que mirar el del grupo consolidado."
+          "v": "La caja real que sobra. En consumo (InRetail) un buen FCF financia su expansión de tiendas sin endeudarse de más. En holdings el FCF individual dice poco (es flujo de dividendos): hay que mirar el del grupo consolidado.",
+          "err": "ignorar el inventario: en retail la caja vive atrapada en las góndolas."
         },
         {
           "k": "Capex (inversión)",
           "metrica": "capex",
-          "v": "Inversión en activos. InRetail invierte fuerte en nuevas tiendas, farmacias y centros comerciales (crecimiento). Aenza, en proyectos de construcción. En una holding pura (IFS) el capex propio es mínimo."
+          "v": "Inversión en activos. InRetail invierte fuerte en nuevas tiendas, farmacias y centros comerciales (crecimiento). Aenza, en proyectos de construcción. En una holding pura (IFS) el capex propio es mínimo.",
+          "err": "leer la apertura de tiendas como gasto y no como la apuesta que define su futuro."
         },
         {
           "k": "Deuda",
           "metrica": "deuda",
-          "v": "Lo que debe con intereses. InRetail carga deuda por su expansión (normal si la caja la cubre). Aenza arrastra deuda de su reestructuración (más riesgosa). En holdings, mira la deuda del GRUPO, no solo la de la matriz."
+          "v": "Lo que debe con intereses. InRetail carga deuda por su expansión (normal si la caja la cubre). Aenza arrastra deuda de su reestructuración (más riesgosa). En holdings, mira la deuda del GRUPO, no solo la de la matriz.",
+          "err": "mirar la deuda sin el capital de trabajo al lado."
         },
         {
           "k": "Margen",
           "metrica": "margen",
-          "v": "Qué porción de las ventas se vuelve ganancia. CUIDADO: en holdings (InRetail, IFS) el margen individual sale DISTORSIONADO (cerca de 100%) porque sus 'ingresos' son dividendos de subsidiarias, no ventas reales. Para el margen del negocio hay que ir al consolidado del grupo."
+          "v": "Qué porción de las ventas se vuelve ganancia. CUIDADO: en holdings (InRetail, IFS) el margen individual sale DISTORSIONADO (cerca de 100%) porque sus 'ingresos' son dividendos de subsidiarias, no ventas reales. Para el margen del negocio hay que ir al consolidado del grupo.",
+          "err": "comparar el margen de un supermercado con el de una farmacia: no juegan el mismo juego."
         },
         {
           "k": "Lo que más manda",
@@ -369,7 +430,7 @@
       ]
     },
     "diversas": {
-      "intro": "Cajón de empresas de rubros MUY distintos (salud, seguros, puerto, medios, holding, forestal). NO comparten economía, así que aquí los promedios del sector valen poco: léelas UNA POR UNA, mirando qué hace cada negocio. Además varias se negocian poco, así que su precio en pantalla puede estar viejo.",
+      "intro": "Grupo heredado: hoy cada empresa de este cajón se lee con su LENTE propio (seguros, salud, concesiones, telecom, inmobiliaria, combustibles o industria). Si ves esta guía, avísanos: significa que a esa empresa le falta lente.",
       "metricas": [
         {
           "k": "P/E (precio ÷ ganancia)",
@@ -415,23 +476,28 @@
       "metricas": [
         {
           "k": "¿Qué hay dentro?",
-          "v": "Lo primero SIEMPRE: mira la lista de acciones, bonos o inmuebles que componen el fondo. Compras eso, no el nombre del fondo."
+          "v": "Lo primero SIEMPRE: mira la lista de acciones, bonos o inmuebles que componen el fondo. Compras eso, no el nombre del fondo.",
+          "err": "comprar el nombre sin abrir la canasta para ver qué contiene."
         },
         {
           "k": "Comisión (TER)",
-          "v": "Lo que cobra el administrador cada año, salga bien o mal. En fondos pasivos, mientras más baja, mejor."
+          "v": "Lo que cobra el administrador cada año, salga bien o mal. En fondos pasivos, mientras más baja, mejor.",
+          "err": "ignorar la comisión anual: se cobra todos los años, gane o pierda."
         },
         {
           "k": "Dividendo / renta",
-          "v": "La FIBRA está obligada a repartir la mayor parte de su utilidad (rentas de alquiler). El ETF reparte lo que paguen las acciones o bonos de su canasta."
+          "v": "La FIBRA está obligada a repartir la mayor parte de su utilidad (rentas de alquiler). El ETF reparte lo que paguen las acciones o bonos de su canasta.",
+          "err": "leer la renta pasada como si estuviera garantizada hacia adelante."
         },
         {
           "k": "Tasas de interés",
-          "v": "El enemigo silencioso: si las tasas suben, los bonos y los inmuebles valen menos — y el fondo también."
+          "v": "El enemigo silencioso: si las tasas suben, los bonos y los inmuebles valen menos — y el fondo también.",
+          "err": "olvidar que cuando el BCR sube tasas, la renta del fondo vale menos frente a un depósito."
         },
         {
           "k": "Liquidez del fondo",
-          "v": "Un fondo que casi no negocia en la BVL puede ser difícil de vender al precio que ves en pantalla."
+          "v": "Un fondo que casi no negocia en la BVL puede ser difícil de vender al precio que ves en pantalla.",
+          "err": "suponer que podrás salir el día que quieras al precio que ves."
         }
       ]
     },
@@ -440,23 +506,354 @@
       "metricas": [
         {
           "k": "¿De qué vive?",
-          "v": "La AFP gana una COMISIÓN sobre los aportes/el fondo que administra. No presta ni vende: vive de ese porcentaje."
+          "v": "La AFP gana una COMISIÓN sobre los aportes/el fondo que administra. No presta ni vende: vive de ese porcentaje.",
+          "err": "creer que la AFP gana más si tu fondo rinde más: cobra por administrar, no por acertar."
         },
         {
           "k": "Fondo administrado",
-          "v": "Cuánta plata maneja en total (de todos los afiliados). Mientras más grande, más comisión cobra."
+          "v": "Cuánta plata maneja en total (de todos los afiliados). Mientras más grande, más comisión cobra.",
+          "err": "confundir el tamaño del fondo con el patrimonio de la empresa."
         },
         {
           "k": "Afiliados que aportan",
-          "v": "Cuántos trabajadores le aportan cada mes. Más afiliados con empleo = ingresos más estables."
+          "v": "Cuántos trabajadores le aportan cada mes. Más afiliados con empleo = ingresos más estables.",
+          "err": "contar los inscritos en vez de los que de verdad aportan."
         },
         {
           "k": "Dividendos",
-          "v": "Las AFPs reparten buena parte de su utilidad: es un negocio que genera mucha caja y poco necesita reinvertir."
+          "v": "Las AFPs reparten buena parte de su utilidad: es un negocio que genera mucha caja y poco necesita reinvertir.",
+          "err": "proyectar los dividendos sin considerar que una ley puede cambiar el negocio entero."
         },
         {
           "k": "Riesgo regulatorio",
-          "v": "El más importante: la SBS y el Congreso pueden bajar las comisiones o permitir retiros de fondos, y eso las golpea directo."
+          "v": "El más importante: la SBS y el Congreso pueden bajar las comisiones o permitir retiros de fondos, y eso las golpea directo.",
+          "err": "tratarlo como un riesgo lejano: en el Perú ya cambió el negocio varias veces."
+        }
+      ]
+    },
+    "seguros": {
+      "intro": "Una aseguradora no vende cosas: vende PROMESAS. Cobra primas hoy por siniestros que quizá pague mañana, y mientras tanto invierte esa plata. Por eso sus estados financieros no se parecen a los de una fábrica: aquí no hay \"ventas\" ni \"flujo de caja libre\" en el sentido normal, y su pasivo más grande no es deuda sino la plata que tiene guardada por obligación.",
+      "metricas": [
+        {
+          "k": "Primas (no las llames \"ventas\")",
+          "v": "Es lo que le pagan sus asegurados por estar cubiertos. Suena a \"ventas\", pero no lo es: parte de esa plata no es suya todavía — la tiene que guardar por si el siniestro ocurre. Mira si crecen y en qué ramo crecen: no es lo mismo crecer en seguros vehiculares (siniestros frecuentes y chicos) que en rentas vitalicias (compromisos a 30 años).",
+          "err": "leer el crecimiento de primas como si fuera crecimiento de utilidades: se puede crecer vendiendo seguros que después salen carísimos."
+        },
+        {
+          "k": "Siniestralidad",
+          "v": "De cada 100 soles de prima, cuántos se van en pagar siniestros. Es EL número del negocio: una aseguradora con siniestralidad alta puede estar creciendo mucho y perdiendo plata en cada póliza. Un año de terremoto, El Niño o una pandemia se lleva puesto el resultado de varios años buenos.",
+          "err": "mirar la utilidad de un año tranquilo y proyectarla: en seguros los años malos no avisan."
+        },
+        {
+          "k": "Resultado técnico vs resultado de inversiones",
+          "v": "El técnico dice si el NEGOCIO DE ASEGURAR gana solo (primas − siniestros − gastos). El de inversiones dice cuánto rinde la plata guardada. Una aseguradora sana gana con los dos; una que pierde en lo técnico y se salva con la bolsa está apostando, no asegurando.",
+          "err": "ver una utilidad grande y no preguntar de cuál de los dos vino."
+        },
+        {
+          "k": "Reservas técnicas (su \"deuda\" que no es deuda)",
+          "metrica": "deuda",
+          "v": "El pasivo gigante de una aseguradora son las reservas: la plata separada por obligación legal para pagar los siniestros que vendrán. No es que deba — es que está guardando. Por eso el \"¿debe mucho?\" de una minera aquí no significa nada; lo que sí importa es que las reservas alcancen (eso lo vigila la SBS).",
+          "err": "sumar las reservas como deuda y concluir que \"es la más endeudada de la bolsa\"."
+        },
+        {
+          "k": "P/E",
+          "v": "Sirve, pero con cuidado: la utilidad de un año puede estar inflada por un buen año de inversiones o hundida por una temporada de siniestros. Míralo junto a la siniestralidad y contra otra aseguradora, nunca contra una industrial.",
+          "err": "comparar su P/E contra el de una empresa de otro rubro."
+        },
+        {
+          "k": "Dividendos",
+          "v": "Suelen pagar bien: es un negocio maduro y muy regulado que no necesita construir fábricas. Pero el dividendo depende del resultado del año, y en seguros el resultado brinca con los siniestros.",
+          "err": "anualizar el dividendo de un año sin siniestros grandes."
+        },
+        {
+          "k": "FCF y capex",
+          "v": "Casi no aplican. Una aseguradora no compra maquinaria: su \"inversión\" es la cartera financiera donde coloca las primas. Si ves FCF raro o vacío en una aseguradora, no es un error de la app: es que la métrica no encaja con el negocio.",
+          "err": "descartarla porque \"no genera flujo de caja libre\" — está mirando la métrica equivocada."
+        },
+        {
+          "k": "Lo que más manda",
+          "v": "La SINIESTRALIDAD y el resultado técnico. Todo lo demás (primas, inversiones, dividendo) se entiende después de saber si el negocio de asegurar gana solo."
+        }
+      ]
+    },
+    "salud": {
+      "intro": "Un grupo de salud vive de camas ocupadas, consultas y tratamientos. Su gracia es que la demanda casi no depende de la economía: la gente no deja de enfermarse en una recesión. Ese flujo estable es lo que le permite sostener más deuda que una empresa cíclica — y es exactamente lo que hay que verificar antes de asustarse con el monto que debe.",
+      "metricas": [
+        {
+          "k": "Ocupación y volumen de atenciones",
+          "v": "Cuántas camas están llenas, cuántas consultas y cuántos tratamientos hace. Es su \"ventas\" real: un hospital con camas vacías tiene los mismos costos fijos y ningún ingreso. Cuando compran clínicas, mira si las nuevas alcanzan la ocupación de las viejas.",
+          "err": "mirar solo el crecimiento de ingresos cuando viene de comprar clínicas, no de llenarlas."
+        },
+        {
+          "k": "Deuda y apalancamiento",
+          "metrica": "deuda",
+          "v": "Aquí está la lección más importante del sector: la deuda de un hospital NO se lee como la de una minera. Su caja es predecible, así que deber 3 o 4 años de su ganancia anual es una hipoteca con sueldo fijo, no una bomba. Lo que se vigila es que el plan de bajarla se cumpla y que las tasas no se disparen.",
+          "err": "aplicarle el susto minero (\"debe 3.6 veces, es peligrosísima\") sin mirar que su flujo no depende de ningún precio internacional."
+        },
+        {
+          "k": "Margen EBITDA",
+          "metrica": "margen",
+          "v": "Cuánto le queda de cada 100 que factura antes de intereses e impuestos. En salud es alto y estable cuando el hospital está lleno, y se desploma cuando no. Compara el margen POR PAÍS: un grupo puede tener Perú funcionando y otro país arrastrándolo.",
+          "err": "promediar países: la foto consolidada esconde al que pierde."
+        },
+        {
+          "k": "FCF (flujo de caja libre)",
+          "metrica": "fcf",
+          "v": "La caja que sobra después de mantener los equipos. En salud el capex de mantenimiento es real (los equipos médicos se renuevan), pero es predecible. FCF positivo y creciente es la señal de que la deuda se puede pagar sin vender nada.",
+          "err": "confundir el capex de EXPANSIÓN (una torre nueva) con el de mantenimiento: el primero se elige, el segundo no."
+        },
+        {
+          "k": "P/E",
+          "v": "Suele ser más alto que en la industria peruana promedio: el mercado paga más por flujos estables y por crecimiento. Un P/E alto en salud no significa automáticamente \"cara\" — significa que se le exige crecer.",
+          "err": "compararlo contra el rango de una minera o una azucarera."
+        },
+        {
+          "k": "Dividendos",
+          "v": "Un grupo de salud en expansión normalmente NO reparte: usa la caja para comprar clínicas y bajar deuda. Que no pague dividendo no es mala señal aquí — sería mala señal en una eléctrica madura.",
+          "err": "descartarla por \"no paga dividendos\" sin ver en qué está usando la plata."
+        },
+        {
+          "k": "Lo que más manda",
+          "v": "La OCUPACIÓN (que sostiene el flujo) y el camino de la DEUDA. Si las camas se llenan y el apalancamiento baja como prometió, la tesis funciona; si alguno de los dos falla, el otro no la salva."
+        }
+      ]
+    },
+    "concesiones": {
+      "intro": "Una concesión no es dueña del activo: se lo prestaron. El Estado le entrega una carretera, un puerto o una vía férrea para que la opere y cobre por ella durante un PLAZO — y cuando el plazo se acaba, lo devuelve. Por eso aquí hay un número que no existe en ningún otro sector: los años que le quedan.",
+      "metricas": [
+        {
+          "k": "Tráfico (autos, contenedores, pasajeros)",
+          "v": "Es el motor: cuánta gente o carga pasa. Casi todo lo demás se deduce de ahí. El tráfico suele crecer despacito y de forma muy predecible… hasta que un shock externo lo corta de golpe (una pandemia, un bloqueo, una vía alterna nueva).",
+          "err": "proyectar el tráfico de un año bueno como si fuera una línea recta hacia arriba."
+        },
+        {
+          "k": "Plazo de la concesión",
+          "v": "Los años que le quedan de derecho a cobrar. Una concesión con 30 años por delante y otra con 8 valen cosas muy distintas aunque hoy ganen igual. Búscalo en sus documentos y en los hechos de importancia: las prórrogas y adendas son la noticia más importante que puede dar esta empresa.",
+          "err": "valorarla como si el negocio fuera para siempre."
+        },
+        {
+          "k": "Tarifa / peaje",
+          "v": "Cuánto cobra por paso, y sobre todo QUIÉN decide ese precio: casi siempre está regulado o indexado a la inflación en el contrato. Eso hace el ingreso muy predecible, pero también le pone techo.",
+          "err": "esperar que suba precios como una empresa normal: no puede, tiene contrato."
+        },
+        {
+          "k": "Deuda",
+          "metrica": "deuda",
+          "v": "Es deuda de PROYECTO: se construyó la obra con plata prestada y se paga con los años de tráfico. Verla alta al inicio es normal. Lo que hay que revisar es que los vencimientos quepan dentro del plazo de la concesión y que el tráfico alcance para las cuotas.",
+          "err": "asustarse por el monto sin mirar el calendario: importa cuándo vence, no cuánto es."
+        },
+        {
+          "k": "FCF y capex",
+          "metrica": "fcf",
+          "v": "Al inicio el capex se come todo (se está construyendo) y el FCF es negativo — eso es inversión, no enfermedad. Ya en operación, la caja se vuelve muy estable. Un puerto o una carretera en rampa de arranque se juzga con paciencia.",
+          "err": "leer el FCF negativo de una obra en construcción como si la empresa estuviera quebrando."
+        },
+        {
+          "k": "Dividendos",
+          "v": "Cuando la obra está pagada, estas empresas reparten bien: el activo ya está construido y la caja entra sola. Pero recuerda que el reparto tiene fecha de caducidad — el día que termine la concesión, se acabó.",
+          "err": "comprarla solo por el dividendo sin preguntar cuántos años le quedan de contrato."
+        },
+        {
+          "k": "Lo que más manda",
+          "v": "El TRÁFICO y los AÑOS QUE LE QUEDAN. Un buen tráfico con la concesión venciendo pronto es una buena empresa con fecha de vencimiento."
+        }
+      ]
+    },
+    "telecom": {
+      "intro": "Una telecom cobra todos los meses a millones de abonados — un ingreso envidiable — pero para lograrlo tiene que invertir en su red para siempre: fibra, antenas, tecnología nueva cada pocos años. El negocio es una carrera entre lo que cobra y lo que la red le exige.",
+      "metricas": [
+        {
+          "k": "Abonados y lo que paga cada uno",
+          "v": "Los dos números que mandan: cuántos clientes tiene y cuánto factura por cada uno al mes. Si los dos caen a la vez, no hay recorte de costos que la salve. Una guerra de precios puede sumar abonados y hundir el ingreso total.",
+          "err": "celebrar el crecimiento de abonados sin ver a qué precio los consiguió."
+        },
+        {
+          "k": "Capex (la inversión que nunca termina)",
+          "metrica": "capex",
+          "v": "A diferencia de una fábrica, aquí la inversión no se acaba nunca: cada generación de tecnología obliga a gastar de nuevo. Por eso una telecom con ingresos estables puede igual quedarse sin caja.",
+          "err": "creer que el capex alto de un año fue \"por única vez\"."
+        },
+        {
+          "k": "Deuda y patrimonio",
+          "metrica": "deuda",
+          "v": "La deuda alta es normal si los abonados pagan puntualmente todos los meses. La alerta seria es otra: cuando el PATRIMONIO se vuelve NEGATIVO, es decir cuando debe más de lo que tiene. Ahí la marca conocida ya no es garantía de nada.",
+          "err": "pensar \"es una empresa enorme y de toda la vida, no le va a pasar nada\"."
+        },
+        {
+          "k": "Margen",
+          "metrica": "margen",
+          "v": "Se aprieta cuando hay guerra de precios y se recupera cuando el mercado se ordena. Míralo en serie: el margen avisa antes que la utilidad.",
+          "err": "mirar un solo trimestre en un sector que se mueve por ciclos de competencia de años."
+        },
+        {
+          "k": "P/E",
+          "v": "Puede no existir: si la empresa está en pérdida, no hay P/E. Eso no la hace incomprensible — se mira por deuda, abonados y caja operativa.",
+          "err": "concluir \"sin P/E, no se puede analizar\"."
+        },
+        {
+          "k": "Lo que más manda",
+          "v": "La combinación ABONADOS × TARIFA contra el CAPEX que la red exige. Si el ingreso no cubre la inversión obligatoria, la deuda crece sola."
+        }
+      ]
+    },
+    "inmobiliaria": {
+      "intro": "Dentro de una inmobiliaria suele haber dos negocios muy distintos: VENDER (departamentos y lotes, plata que entra una vez) y ALQUILAR (renta que entra todos los meses). El segundo es mucho más estable que el primero, y casi ninguna ficha lo separa. Además, todo el sector depende de algo que no controla: las tasas hipotecarias.",
+      "metricas": [
+        {
+          "k": "Preventas y ventas",
+          "v": "Las preventas son lo que ya vendió de un edificio que todavía construye: son el mejor adelanto de sus ingresos futuros. Si las preventas se frenan, los ingresos caerán dentro de un año — antes de que aparezca en cualquier otro número.",
+          "err": "mirar las ventas de hoy, que corresponden a proyectos vendidos hace dos años."
+        },
+        {
+          "k": "Tasas hipotecarias",
+          "v": "No están en sus estados financieros pero mandan sobre ellos: cuando el crédito se encarece, la cuota mensual sube y las familias postergan la compra. Es el interruptor de todo el sector.",
+          "err": "analizar la empresa sin mirar qué está haciendo el BCR con las tasas."
+        },
+        {
+          "k": "Deuda",
+          "metrica": "deuda",
+          "v": "Este es un negocio que se hace con plata prestada: se endeuda para construir y paga cuando entrega. Lo importante es si esa deuda está calzada con proyectos que ya se están vendiendo o con terrenos parados esperando comprador.",
+          "err": "confundir \"tiene muchos activos\" con \"tiene caja\": un terreno no paga la cuota del banco."
+        },
+        {
+          "k": "Inventario (departamentos sin vender)",
+          "v": "El stock terminado y sin vender es plata dormida que además cuesta mantener. Un inventario que crece mientras las ventas no, es la señal temprana de un problema.",
+          "err": "leer el inventario alto como \"tiene mucho para vender\" en vez de \"no le están comprando\"."
+        },
+        {
+          "k": "FCF (flujo de caja libre)",
+          "metrica": "fcf",
+          "v": "Va y viene por naturaleza: negativo mientras construye, positivo cuando entrega. Míralo por ciclo de proyecto, no por trimestre.",
+          "err": "asustarse con un FCF negativo en plena construcción."
+        },
+        {
+          "k": "Dividendos",
+          "v": "La parte de renta (alquileres) es la que puede sostener un dividendo estable. Si la empresa vive de vender, el dividendo dependerá de si este año entregó proyectos o no.",
+          "err": "esperar un dividendo parejo de una empresa que vive de vender por proyectos."
+        },
+        {
+          "k": "Lo que más manda",
+          "v": "Las PREVENTAS (lo que viene) y las TASAS (lo que decide si el cliente puede comprar). Todo lo demás llega después."
+        }
+      ]
+    },
+    "agro": {
+      "intro": "La agroindustria vive de dos cosas que no controla: el clima y el precio internacional de lo que produce. Un año de sequía, lluvias o plaga cambia el resultado entero, y en el caso de las azucareras del norte hay un tercer factor que pesa tanto como los otros dos: décadas de conflictos societarios que ninguna cosecha buena arregla.",
+      "metricas": [
+        {
+          "k": "Zafra y rendimiento del campo",
+          "v": "Cuánto produjo la campaña y cuánto rinde cada hectárea. Es su producción: si el campo rinde menos, no hay eficiencia administrativa que lo compense. La zafra manda sobre el calendario contable: comparar un trimestre contra el anterior puede no tener sentido.",
+          "err": "comparar trimestres seguidos en un negocio que se mide por campaña."
+        },
+        {
+          "k": "Precio del azúcar / etanol / fruta",
+          "v": "El otro motor. Cuando el precio internacional sube, todas las azucareras se ven espectaculares al mismo tiempo (y al revés). Igual que en minería: los números buenos pueden ser del precio, no de la empresa.",
+          "err": "atribuirle a la gestión lo que hizo el precio del commodity."
+        },
+        {
+          "k": "Deuda",
+          "metrica": "deuda",
+          "v": "Se juzga contra la campaña, no contra un año promedio: un año de mal clima puede dejarla sin caja justo cuando vence una cuota. Y mucha de la deuda de las azucareras es arrastre viejo de crisis societarias, no plata invertida en el campo.",
+          "err": "suponer que la deuda se pagará con un año normal, cuando en agro los años normales son la excepción."
+        },
+        {
+          "k": "Margen",
+          "metrica": "margen",
+          "v": "Salta muchísimo de un año a otro. Un margen récord en plena subida del azúcar no dice que la empresa mejoró: dice que el azúcar está caro.",
+          "err": "proyectar el margen del mejor año."
+        },
+        {
+          "k": "P/E",
+          "v": "Es de los más engañosos de la bolsa peruana: con el commodity caro la ganancia se infla y el P/E se ve bajísimo, justo en el peor momento para entrar. Y en varias de estas empresas el papel está barato desde hace años por razones que no son el precio del azúcar.",
+          "err": "leer un P/E bajo sostenido en el tiempo como oportunidad: casi siempre es el mercado descontando un problema societario."
+        },
+        {
+          "k": "Gobierno corporativo (el riesgo invisible)",
+          "v": "Aquí no es un tecnicismo: quién controla la empresa, si hay procesos judiciales por la propiedad y si los accionistas minoritarios cobran alguna vez. Es la razón por la que varias azucareras cotizan baratas década tras década.",
+          "err": "ignorarlo porque no aparece como una línea en los estados financieros."
+        },
+        {
+          "k": "Lo que más manda",
+          "v": "El CLIMA y el PRECIO del commodity para el resultado del año — y el GOBIERNO CORPORATIVO para saber si ese resultado le llega alguna vez al accionista."
+        }
+      ]
+    },
+    "hidrocarburos": {
+      "intro": "Refinar y vender combustible es un negocio de volumen gigante y margen chico: mueve miles de millones para quedarse con un porcentaje pequeño entre el crudo que compra y el combustible que vende. Cuando ese margen se mueve un punto, el resultado del año cambia por completo.",
+      "metricas": [
+        {
+          "k": "Margen de refino",
+          "metrica": "margen",
+          "v": "La diferencia entre lo que le cuesta el crudo y lo que cobra por el combustible. Es EL número: los ingresos pueden ser enormes y el negocio perder plata igual. Además, cuando el crudo baja de golpe, el inventario comprado caro se devalúa y castiga el resultado.",
+          "err": "impresionarse con los ingresos sin mirar con cuánto se queda."
+        },
+        {
+          "k": "Deuda",
+          "metrica": "deuda",
+          "v": "Es lo primero que hay que mirar aquí, con dos preguntas extra: ¿en qué MONEDA debe? (deber en dólares y cobrar en soles esconde un riesgo cambiario que no aparece en el monto) y ¿quién respalda si no alcanza? Una obra que costó más de lo previsto y se financió con deuda deja huella por años.",
+          "err": "mirar el monto y no la moneda ni el calendario de vencimientos."
+        },
+        {
+          "k": "FCF (flujo de caja libre)",
+          "metrica": "fcf",
+          "v": "Muy volátil: depende del margen y del capital de trabajo (el combustible en tanques es plata inmovilizada). Míralo en serie larga; un trimestre no dice nada.",
+          "err": "sacar conclusiones de un solo trimestre."
+        },
+        {
+          "k": "P/E",
+          "v": "Poco útil aquí: la utilidad brinca con el margen de refino y los efectos de inventario, y puede desaparecer en pérdida. La deuda y el margen mandan sobre cualquier múltiplo.",
+          "err": "usar el P/E como veredicto en un negocio de margen tan variable."
+        },
+        {
+          "k": "Lo que más manda",
+          "v": "El MARGEN DE REFINO y la DEUDA (con su moneda). En este negocio la estructura financiera pesa más que la operación."
+        }
+      ]
+    },
+    "industrial": {
+      "intro": "Aquí conviven empresas que fabrican cosas (cables, baterías, químicos, bombas) y otras que prestan servicios a empresas y al público. No comparten un motor único, así que la regla es simple: antes de juzgarla, pregúntate A QUIÉN LE VENDE. Si su cliente principal es la minería o la construcción, hereda ese ciclo aunque no sea minera ni constructora. Muchas además son familiares y su acción casi no se negocia.",
+      "metricas": [
+        {
+          "k": "A quién le vende",
+          "v": "El dato que ordena todo lo demás. Un fabricante de cables que le vende a mineras se lee con lente cíclico; uno que le vende al consumidor final, no. Búscalo en su tesis y en sus documentos: define con qué ojo se lee cada número de abajo.",
+          "err": "analizarla \"en general\" sin identificar de qué industria depende su cliente."
+        },
+        {
+          "k": "Margen",
+          "metrica": "margen",
+          "v": "De cada 100 que vende, cuánto le queda. En industria suele ser fino y bastante estable; lo que avisa es el CAMBIO: un margen que se aprieta dos o tres trimestres seguidos anticipa la caída de la utilidad.",
+          "err": "mirar el nivel del margen y no su tendencia."
+        },
+        {
+          "k": "Deuda",
+          "metrica": "deuda",
+          "v": "Nivel medio: entre 2 y 3 años de su ganancia se considera cómodo. Si su cliente es cíclico, exígele menos deuda — porque su caja también será cíclica.",
+          "err": "aplicar el mismo umbral de deuda a una que le vende al Estado y a otra que le vende a las mineras."
+        },
+        {
+          "k": "FCF (flujo de caja libre)",
+          "metrica": "fcf",
+          "v": "La caja que de verdad sobra. En industria pesa el capital de trabajo: inventarios grandes y clientes que pagan a 90 días pueden dejar sin caja a una empresa que \"gana\" en el papel.",
+          "err": "confundir utilidad con caja: son dos cosas distintas y aquí se separan mucho."
+        },
+        {
+          "k": "P/E",
+          "v": "Úsalo contra empresas parecidas y con cuidado: muchas de estas acciones casi no se negocian, así que el precio en pantalla puede tener semanas o meses. Un P/E calculado con un precio viejo es un número viejo.",
+          "err": "comparar el P/E de una acción que no negocia hace meses con el de una líquida."
+        },
+        {
+          "k": "Liquidez de la acción",
+          "v": "En este grupo es un riesgo real: puedes comprar y después no encontrar a quién venderle, o venderla mucho más barato. Que se mueva poco no significa que sea segura — significa que casi nadie la compra.",
+          "err": "confundir \"no se mueve\" con \"es tranquila y segura\"."
+        },
+        {
+          "k": "Dividendos",
+          "v": "Varias son empresas familiares maduras que reparten bien y con regularidad. Revisa la historia de pagos: aquí la constancia dice más que el porcentaje de un año.",
+          "err": "anualizar un pago extraordinario de una empresa que reparte poco seguido."
+        },
+        {
+          "k": "Lo que más manda",
+          "v": "SABER A QUIÉN LE VENDE. Ese dato decide si la lees como cíclica o como estable — y con eso cambia el veredicto de todos los demás números."
         }
       ]
     }

@@ -639,10 +639,18 @@ Sentinel (con documento de ejemplo precargado, patrón cartera-demo del Cuaderno
 
 Orden sugerido de implementación, máximo aprendizaje por sol invertido:
 
-1. **Sesión 1 — El lente y la deuda (mejoras 21-24, 41-44):** campo `lente`, guías de seguros y
-   salud, el indicador "¿puede pagar su deuda?" con su globo, el asterisco cíclico en el globo de
-   valoración, y la auditoría de tips contradictorios. Es la respuesta directa a tu ejemplo
-   AUNA/minera/banco y arregla el riesgo educativo más grande.
+1. ~~**Sesión 1 — El lente y la deuda (mejoras 21-24, 41-44)**~~ ✅ **HECHA el 22-jul-2026.**
+   Entregado: `lentes.json` + `lib/lente.js` con 19 lentes (#21) · guías propias de seguros,
+   salud, concesiones, telecom, inmobiliaria, agro y combustibles (#22-#28) · "⚠ error común" en
+   todas las métricas de todas las guías (#30) y "lo que más manda" abriendo la guía (#29) ·
+   `PuedePagarDeuda.jsx` con años de caja y umbrales por lente (#41) + globo "¿Debe mucho?"
+   (#42) · asterisco de ciclo en el globo "Barata" (#44) · auditoría de 176 tips (#24, E5, E6,
+   E7) · "💰 Vive de:" (#102) · "🗣 ¿Por qué le fue así este trimestre?" con gerencia.json en
+   N2 (#103) · fixes de honestidad E1/#113, E2, E4/#115, E12, E13 y #31 (razón concreta del par
+   en el Comparador). Detalle en ESTADO_DEL_PROYECTO.md.
+   **Lo que quedó fuera a propósito:** #32 (rangos de P/E por lente — cambia veredictos de ~20
+   empresas y merece calibrarse con datos, no a ojo), #43/#47/#50 (son la Sesión 3) y #23 en su
+   versión completa para más grupos de salud (hoy solo AUNA existe en la app).
 2. **Sesión 2 — El tour por niveles (mejoras 1-5):** pasos por nivel + tour de desbloqueo + guiones
    con datos reales + tours de Comparador y Resultados. El TourGuia actual ya lo soporta casi todo.
 3. **Sesión 3 — Los combos (mejoras 43, 47, 50):** "Lectura de analista" con los combos de §5,

@@ -22,9 +22,12 @@ import DocumentosOficiales from './DocumentosOficiales'
 import NoticiasExtranjero from './NoticiasExtranjero'
 import ProduccionMinera from './ProduccionMinera'
 import GraficaBPA from './GraficaBPA'
+import PuedePagarDeuda from './PuedePagarDeuda'
+import PorQueEsteTrimestre from './PorQueEsteTrimestre'
 import { CountUp, Reveal } from '../lib/anim'
 import { useFavoritos, alternarFavorito } from '../lib/favoritos'
 import { peInfo } from '../lib/finanzas'
+import { claveLente, lenteDe } from '../lib/lente'
 import { useNivel, verSeccion, NIVELES } from '../lib/nivel'
 import { useState } from 'react'
 
@@ -39,6 +42,15 @@ function calcularPE(ticker) {
     return `P/E ≈ ${info.pe.toFixed(1)} ⚠ referencial: su último precio es del ${fechaCorta(info.fechaPrecio)} (negocia poco)`
   }
   return `P/E ≈ ${info.pe.toFixed(1)} (precio de hoy ÷ BPA anual 2025)`
+}
+
+// (#29) "Lo que más manda" ABRE la guía en vez de cerrarla: si el usuario
+// solo lee una línea, que sea la que le dice cuál de las 7 métricas manda
+// en este lente. El resto conserva su orden original.
+function ordenarGuia(metricas = []) {
+  const manda = metricas.filter((m) => /lo que m[áa]s manda/i.test(m.k))
+  if (!manda.length) return metricas
+  return [...manda, ...metricas.filter((m) => !manda.includes(m))]
 }
 
 // Formatea "2026-06-22" -> "22/06/2026"
@@ -135,6 +147,10 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
   }
 
   const nombreSector = quiz.sectores[e.sector] || e.sector
+  // 🔍 El LENTE con el que se leen sus números (lib/lente.js). Hereda del
+  // sector y lo refina: por eso AUNA ya no se lee con la guía de "diversas".
+  const lente = lenteDe(e)
+  const guia = guiasData.guias?.[claveLente(e)] || guiasData.guias?.[e.sector]
   const f = e.fundamentos
   // Precio de cierre de la BVL (del día anterior)
   const px = preciosData.precios?.[e.ticker]
@@ -216,6 +232,25 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
           </div>
         )}
 
+        {/* 💰 "Vive de:" — el escalón 2 de la escalera de aprendizaje (#102).
+            Una sola palabra (metal, comisión, peaje, prima, tarifa) instala el
+            LENTE desde el segundo cero: todo lo de abajo se juzga con ese ojo. */}
+        {lente && (
+          <div className="vive-de">
+            <span className="vive-de-k">💰 Vive de:</span>{' '}
+            <strong>{lente.viveDeLargo}</strong>
+            <div className="muted vive-de-manda">
+              {lente.icono} Se lee como <strong>{lente.nombre.toLowerCase()}</strong> · lo que más
+              manda aquí: {lente.queManda}.
+            </div>
+          </div>
+        )}
+
+        {/* 🗣 ¿Por qué le fue así este trimestre? — el escalón 3, con las
+            palabras de la propia gerencia (dato ya digerido en gerencia.json
+            que hasta hoy solo se veía en el nivel 4). */}
+        {ver('gerencia') && <Reveal><PorQueEsteTrimestre empresa={e} /></Reveal>}
+
         {/* Gráfico de precio (cierres reales BVL) + termómetro de volatilidad
             (los id sec-* son las anclas de la radiografía de arriba).
             El medidor y la valoración con fórmula son nivel 3+: en 1-2 solo se
@@ -233,6 +268,12 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
         {/* 📈 BPA año por año (SMV anual): ¿gana más por acción que antes? Va
             pegado a "¿Barata o cara?" porque es el MISMO BPA que alimenta el P/E. */}
         {ver('bpaHistorico') && <Reveal><GraficaBPA ticker={e.ticker} empresa={e} /></Reveal>}
+        {/* 💳 ¿Puede pagar su deuda? — el indicador que faltaba (#41): la deuda
+            deja de ser un monto suelto y pasa a ser AÑOS de caja, con el
+            veredicto de SU lente (en un banco, la lección es que no se mide así). */}
+        {ver('deuda') && (
+          <div id="sec-deuda" className="sec-ancla"><Reveal><PuedePagarDeuda empresa={e} /></Reveal></div>
+        )}
         <Reveal>
           {pagaDividendos ? (
             <div className="sim-par">
@@ -283,15 +324,15 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
         )}
 
         {/* Cómo leer estos números, según el sector (siempre abierto) */}
-        {ver('guiaSector') && guiasData.guias?.[e.sector] && (
+        {ver('guiaSector') && guia && (
           <Reveal>
           <div className="guia-sector">
             <div className="guia-cabecera">
-              📖 Cómo leer estos números (en {nombreSector})
+              📖 Cómo leer estos números ({lente ? `con lente de ${lente.nombre.toLowerCase()}` : `en ${nombreSector}`})
             </div>
             <div className="guia-cuerpo">
-              <p className="guia-intro"><Glosado text={guiasData.guias[e.sector].intro} /></p>
-              {guiasData.guias[e.sector].metricas.map((m, i) => {
+              <p className="guia-intro"><Glosado text={guia.intro} /></p>
+              {ordenarGuia(guia.metricas).map((m, i) => {
                 const esDividendo = m.k.toLowerCase().startsWith('dividendo')
                 const esPE = m.k.toUpperCase().startsWith('P/E')
                 const dv = esDividendo ? dividendosData.empresas?.[e.ticker] : null
@@ -315,6 +356,8 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
                     {esDividendo && !datoDiv && (
                       <span className="guia-sindato">No reparte dividendo de forma regular</span>
                     )}
+                    {/* (#30) cada métrica cierra con su error típico */}
+                    {m.err && <span className="guia-err">⚠ Error común: <Glosado text={m.err} /></span>}
                   </div>
                 )
               })}

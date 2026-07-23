@@ -2,6 +2,7 @@ import preciosData from '../data/precios.json'
 import epsAnualData from '../data/eps_anual.json'
 import escenariosData from '../data/escenarios.json'
 import Glosado from './Glosado'
+import { esCiclico, lenteDe } from '../lib/lente'
 
 // ¿La acción está barata, en rango o cara? Método: P/E actual vs el rango justo del
 // sector. P/E = precio (BVL) ÷ ganancia anual por acción (SMV). Educativo y con la fórmula.
@@ -167,6 +168,18 @@ export default function Valoracion({ empresa }) {
                 {estado === 'EN RANGO' && `${pe.toFixed(1)} cae DENTRO → precio normal para el sector`}
               </span>
             </div>
+            {/* Honestidad de MÉTODO, no solo de dato (error E13 del análisis
+                educativo): ese rango sale de un puñado de emisores locales. */}
+            <div className="val-metodo muted">
+              De dónde sale ese rango: es una <strong>referencia</strong> calibrada con las empresas
+              del sector que cotizan en la BVL y con pares de la región — en sectores con dos o tres
+              emisores es una guía, no una ley.
+              {empresa.sector === 'diversas' && (
+                <> Y aquí va con una advertencia extra: el rango de «diversas» mezcla rubros que no
+                se parecen entre sí (seguros, salud, puertos, medios), así que este veredicto es el
+                más flojo de la app. Léelo junto a la guía del lente, más abajo.</>
+              )}
+            </div>
           </>
         )}
 
@@ -175,10 +188,16 @@ export default function Valoracion({ empresa }) {
             ⚠️ Ojo: el precio es de un cierre antiguo (la acción casi no se negocia), así que este P/E puede no ser fiable.
           </div>
         )}
-        {!tienePerdida && rango.ciclico && (
+        {/* El aviso de ciclo ahora lo dispara el LENTE, no solo el sector: las
+            azucareras viven en el sector "alimentos" y son tan cíclicas como
+            una minera (mejora #21 del análisis educativo). */}
+        {!tienePerdida && (rango.ciclico || esCiclico(empresa)) && (
           <div className="val-aviso">
-            ⚠️ Cuidado: en este sector el P/E ENGAÑA. Con el ciclo alto (metal/acero/pesca caros)
-            la ganancia se infla y la acción parece barata justo cuando podría estar cara.
+            ⚠️ Cuidado: con este lente el P/E ENGAÑA. {lenteDe(empresa)
+              ? `Aquí manda ${lenteDe(empresa).queManda}: cuando está caro, la ganancia se infla`
+              : 'Con el ciclo alto la ganancia se infla'} y la acción parece barata
+            justo cuando podría estar cara. El P/E de una cíclica se juzga imaginando su producto
+            BARATO, no al precio de hoy.
           </div>
         )}
       </div>
