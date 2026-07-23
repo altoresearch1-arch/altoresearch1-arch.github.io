@@ -215,6 +215,14 @@ def una_empresa(e):
     if fy is None:
         return None, "el anual no trae el flujo completo"
 
+    # ⚠️ Regla de Jair («si ves 0 revisa de nuevo»): hay emisoras que taguean el
+    # flujo de efectivo en 0.000 en TODOS los periodos (IPCHBC1, un holding, lo
+    # hace en los tres). Un cero tagueado NO es un flujo de cero: es un campo
+    # sin llenar. Publicarlo haría que la app dijera "paga sin flujo libre"
+    # sobre un dato que no existe → no sale, y cae al método viejo (Regla #1).
+    if fy == 0 and ytd_previo == 0 and ytd_hoy == 0:
+        return None, "el XBRL trae el flujo en 0.000 en los tres periodos (campo sin llenar)"
+
     ttm = fy - ytd_previo + ytd_hoy
     return {
         "fcf": ttm,
