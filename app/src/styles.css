@@ -1574,6 +1574,13 @@ a.link {
   gap: 4px;
   padding: 2px 4px 4px;
 }
+.colores-nota {
+  font-size: 12px;
+  line-height: 1.45;
+  border-top: 1px solid var(--gris);
+  padding-top: 10px;
+  margin: 2px 0 10px;
+}
 .colores-pie {
   display: flex;
   gap: 8px;
@@ -6509,6 +6516,22 @@ a.link {
   border: 2px solid transparent; box-shadow: 0 0 0 1px var(--gris);
 }
 .cd-cua-color.on { border-color: var(--texto); box-shadow: 0 0 0 2px var(--texto); }
+/* 🎨 «Igual que la app»: se pinta con el color VIVO de la app (--tono, puesto
+   en línea) para que el chip enseñe el resultado antes de tocarlo. */
+.cd-cua-color-app {
+  background: var(--tono);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  line-height: 1;
+  filter: saturate(1.1);
+}
+.cd-cua-colores-nota {
+  font-size: 11.5px;
+  line-height: 1.4;
+  margin-top: 6px;
+}
 .cd-cua-borrar { justify-self: start; }
 
 .cd-saludo { margin: 8px 0 0; font-style: italic; color: var(--texto-tenue); }

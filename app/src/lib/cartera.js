@@ -45,6 +45,13 @@ export const COLOR_DEFECTO = '#d4af37'
 // misma técnica que el tema por nivel (grayscale→sepia→hue-rotate→saturate):
 // así el logo de ALTO sigue el color del cuaderno activo, no el del nivel
 // (pedido de Jair). Dorado = color nativo del logo → sin filtro.
+// 🎨 Tapa que SIGUE al color de la app (pedido de Jair 25-jul: «que coincida
+// con mi cuaderno también»). No es un color guardado sino un encargo: se
+// resuelve al vuelo con el tinte del nivel activo (ver lib/nivel.js), así que
+// si mañana cambias la app a morado, el cuaderno se va con ella. Se guarda
+// este texto en vez de un hex justamente para que NO quede congelado.
+export const COLOR_APP = 'app'
+
 export const COLORES_CUADERNO = [
   { nombre: 'Dorado', hex: '#d4af37', filtro: 'none' },
   { nombre: 'Esmeralda', hex: '#4f9d6b', filtro: 'grayscale(1) sepia(1) saturate(2.4) hue-rotate(96deg) brightness(1.02)' },

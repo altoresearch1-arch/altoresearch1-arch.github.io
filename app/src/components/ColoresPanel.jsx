@@ -84,6 +84,12 @@ export default function ColoresPanel({ onCerrar }) {
           )
         })}
 
+        <p className="muted colores-nota">
+          📓 Tu Cuaderno puede venirse con estos colores: entra a Mi Cuaderno →
+          ⚙️ y elige la tapa <strong>🎨</strong> (la primera). Desde ahí sigue
+          siempre al color de la app.
+        </p>
+
         <div className="colores-pie">
           {algoCambiado && (
             <button

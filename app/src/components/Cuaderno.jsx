@@ -7,12 +7,13 @@ import {
   leerCartera, guardarCartera, leerNotas, guardarNotas,
   leerRecordatorios, guardarRecordatorios, leerVisitaAnterior, marcarVisita,
   leerCuadernos, guardarCuadernos, leerActivo, guardarActivo, borrarDatosCuaderno,
-  COLORES_CUADERNO, COLOR_DEFECTO, MAX_CUADERNOS,
+  COLORES_CUADERNO, COLOR_DEFECTO, COLOR_APP, MAX_CUADERNOS,
   TC, esUSD, enSoles, fmtS, fmtP, fmtPrecioExacto, fmtSyD, fmtUSD, nombreCorto, MESES, MESES_C, fechaCorta, haceDias,
   empresaDe, filasDe, divUlt12PorAccion, proyecciones, recibidosRecientes,
   catBonita, tipoPunto, acuerdoDividendo, normTicker, SABS, CARTERA_DEMO,
   marcarDemo, cuadernosConDemo,
 } from '../lib/cartera'
+import { useTinte, leerNivel } from '../lib/nivel'
 
 // ─────────────────────────────────────────────────────────────────────────
 // 📓 MI CUADERNO — la cartera del usuario, viva con los datos de los robots.
@@ -65,8 +66,16 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
   const [activo, setActivo] = useState(leerActivo)
   const [configAbierta, setConfigAbierta] = useState(false)
   const cuadernoActual = cuadernos.find((c) => c.id === activo) || cuadernos[0]
-  const acento = cuadernoActual?.color || COLOR_DEFECTO
-  const filtroMarca = (COLORES_CUADERNO.find((c) => c.hex === acento) || {}).filtro || 'none'
+  // 🎨 La tapa «igual que la app» no guarda un color: guarda el encargo de
+  // seguir al de la app. Se resuelve aquí, cada render, con el tinte vivo del
+  // nivel — por eso cambiarlo en el ☰ repinta el cuaderno sin tocar nada más.
+  const tinteApp = useTinte(leerNivel())
+  const siguiendoApp = cuadernoActual?.color === COLOR_APP
+  const colorDe = (c) => (c?.color === COLOR_APP ? tinteApp.color : c?.color || COLOR_DEFECTO)
+  const acento = colorDe(cuadernoActual)
+  const filtroMarca = siguiendoApp
+    ? tinteApp.logo
+    : (COLORES_CUADERNO.find((c) => c.hex === acento) || {}).filtro || 'none'
 
   const [cartera, setCartera] = useState(() => leerCartera(activo))
   const [notas, setNotas] = useState(() => leerNotas(activo))
@@ -233,7 +242,7 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
             <button key={c.id}
               className={'cd-cua-pill' + (c.id === activo ? ' on' : '')}
               onClick={() => setActivo(c.id)}>
-              <span className="punto" style={{ background: c.color }} />
+              <span className="punto" style={{ background: colorDe(c) }} />
               {c.nombre}
             </button>
           ))}
@@ -253,12 +262,28 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
           </label>
           <div className="cd-cua-colores-lbl">🎨 Color de este cuaderno</div>
           <div className="cd-cua-colores">
+            {/* La primera no es un color: es «que coincida con la app». Va
+                primera porque es la que la mayoría quiere, y se pinta con el
+                color vivo de la app para que se vea qué va a pasar. */}
+            <button
+              title="Igual que la app — sigue el color que elegiste en el menú ☰"
+              className={'cd-cua-color cd-cua-color-app' + (siguiendoApp ? ' on' : '')}
+              style={{ '--tono': tinteApp.color }}
+              onClick={() => colorCuaderno(COLOR_APP)}
+            >
+              <span aria-hidden="true">🎨</span>
+            </button>
             {COLORES_CUADERNO.map((col) => (
               <button key={col.hex} title={col.nombre}
                 className={'cd-cua-color' + (cuadernoActual.color === col.hex ? ' on' : '')}
                 style={{ background: col.hex }}
                 onClick={() => colorCuaderno(col.hex)} />
             ))}
+          </div>
+          <div className="cd-cua-colores-nota muted">
+            {siguiendoApp
+              ? `Sigue a la app: ahora está en ${tinteApp.nombre.toLowerCase()}. Cámbiala en ☰ → 🎨 Colores y el cuaderno se va con ella.`
+              : 'La 🎨 hace que la tapa siga al color de la app; las otras la dejan fija en ese color.'}
           </div>
           {cuadernos.length > 1 && (
             <button className="btn cd-btn-mini cd-btn-rojo cd-cua-borrar" onClick={borrarCuaderno}>
