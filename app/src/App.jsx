@@ -36,6 +36,7 @@ import BuscadorInicio from './components/BuscadorInicio'
 import CintaBVL from './components/CintaBVL'
 import GanchoDatos from './components/GanchoDatos'
 import SeccionInicio from './components/SeccionInicio'
+import ColoresPanel from './components/ColoresPanel'
 import TourGuia, { PASOS_INICIO, PASOS_EXPLORAR, PASOS_COMPARADOR, PASOS_RESULTADOS } from './components/TourGuia'
 import MentorALTO from './components/MentorALTO'
 import OfertaDesbloqueo from './components/OfertaDesbloqueo'
@@ -147,6 +148,8 @@ export default function App() {
   const [origenEmpresa, setOrigenEmpresa] = useState('inicio')
   const [compararTickers, setCompararTickers] = useState(null)
   const [apoyoAbierto, setApoyoAbierto] = useState(false)
+  // 🎨 El panel de colores (☰ → «Colores de la app»)
+  const [coloresAbierto, setColoresAbierto] = useState(false)
   // Panel de Actualizaciones: plegable, y GUARDADO (colapsado) por defecto
   // (pedido de Jair). Recuerda la elección del usuario entre visitas.
   const [actualizAbiertas, setActualizAbiertas] = useState(() => {
@@ -384,6 +387,7 @@ export default function App() {
             // quedaba pegado y el menú le devolvía el cierre en vez de
             // preguntas nuevas.
             onEnganche={() => { setEngancheVerPlan(false); setEngancheAbierto(true) }}
+            onColores={() => setColoresAbierto(true)}
             onCerrar={() => setMenuAbierto(false)}
           />
         )}
@@ -671,6 +675,9 @@ export default function App() {
       </button>
 
       {apoyoAbierto && <ApoyoModal onCerrar={() => setApoyoAbierto(false)} />}
+
+      {/* 🎨 Los colores de los 4 niveles, a la vista desde el ☰ */}
+      {coloresAbierto && <ColoresPanel onCerrar={() => setColoresAbierto(false)} />}
 
       {/* 🐣 Lección exprés reabierta desde el ☰ (el nivel ya está elegido: aquí
           solo se lee y se cierra, no se toca nada). */}

@@ -32,14 +32,49 @@ const EVENTO_TINTE = 'alto-tinte-cambio'
 // ese matiz) porque la atmósfera del fondo debe seguir al color, no al número
 // de nivel. Todos son tintes CLAROS a propósito: el texto de los botones
 // dorados es negro (#1a1405) y tiene que seguir leyéndose encima.
+// `logo` es la receta que recolorea la IMAGEN del logo (la moneda del hero, el
+// logo de la barra y el de la puerta). No basta con hue-rotate: sobre un
+// dorado tan saturado apenas se nota (reclamo de Jair del 16-jul). La receta
+// buena es grayscale→sepia→hue-rotate→saturate: el sepia deja todo en un
+// naranja de ~40°, y desde ahí el hue-rotate lleva la imagen a CUALQUIER
+// color. Por eso los grados son (tono deseado − 40).
 export const PALETA = [
-  { id: 'cuerda', nombre: 'Verde', emoji: '🧵', color: '#35da85', aurora: 'hue-rotate(105deg) saturate(1.15)' },
-  { id: 'solar', nombre: 'Naranja', emoji: '🔥', color: '#f2721b', aurora: 'hue-rotate(-18deg) saturate(1.4)' },
-  { id: 'stasis', nombre: 'Celeste', emoji: '❄️', color: '#6fb7f0', aurora: 'hue-rotate(162deg) saturate(1.05) brightness(1.05)' },
-  { id: 'oro', nombre: 'Oro', emoji: '👑', color: '#d4af37', aurora: 'none' },
-  { id: 'blanco', nombre: 'Blanco', emoji: '🤍', color: '#e9edf3', aurora: 'saturate(0.14) brightness(1.22)' },
-  { id: 'morado', nombre: 'Morado', emoji: '🔮', color: '#a884ff', aurora: 'hue-rotate(218deg) saturate(1.3)' },
-  { id: 'rosa', nombre: 'Rosa', emoji: '🌸', color: '#ff8ac4', aurora: 'hue-rotate(288deg) saturate(1.2) brightness(1.05)' },
+  {
+    id: 'cuerda', nombre: 'Verde', emoji: '🧵', color: '#35da85',
+    aurora: 'hue-rotate(105deg) saturate(1.15)',
+    logo: 'grayscale(1) sepia(1) saturate(2.6) hue-rotate(100deg) brightness(1.04)',
+  },
+  {
+    id: 'solar', nombre: 'Naranja', emoji: '🔥', color: '#f2721b',
+    aurora: 'hue-rotate(-18deg) saturate(1.4)',
+    logo: 'grayscale(1) sepia(1) saturate(3.1) hue-rotate(-16deg) brightness(1.03)',
+  },
+  {
+    id: 'stasis', nombre: 'Celeste', emoji: '❄️', color: '#6fb7f0',
+    aurora: 'hue-rotate(162deg) saturate(1.05) brightness(1.05)',
+    logo: 'grayscale(1) sepia(1) saturate(1.9) hue-rotate(168deg) brightness(1.12)',
+  },
+  {
+    id: 'oro', nombre: 'Oro', emoji: '👑', color: '#d4af37',
+    aurora: 'none',
+    logo: 'none', // el logo NACE dorado: la corona no se toca
+  },
+  {
+    id: 'blanco', nombre: 'Blanco', emoji: '🤍', color: '#e9edf3',
+    aurora: 'saturate(0.14) brightness(1.22)',
+    // sin tono al que girar: se le quita el color y se sube la luz (plata)
+    logo: 'grayscale(1) brightness(1.42) contrast(1.06)',
+  },
+  {
+    id: 'morado', nombre: 'Morado', emoji: '🔮', color: '#a884ff',
+    aurora: 'hue-rotate(218deg) saturate(1.3)',
+    logo: 'grayscale(1) sepia(1) saturate(2.4) hue-rotate(222deg) brightness(1.1)',
+  },
+  {
+    id: 'rosa', nombre: 'Rosa', emoji: '🌸', color: '#ff8ac4',
+    aurora: 'hue-rotate(288deg) saturate(1.2) brightness(1.05)',
+    logo: 'grayscale(1) sepia(1) saturate(2.2) hue-rotate(290deg) brightness(1.14)',
+  },
 ]
 
 export const NIVELES = [
@@ -230,7 +265,7 @@ export function aplicarTemaNivel(nivel) {
   if (!n) {
     delete raiz.dataset.nivel
     delete raiz.dataset.tinte
-    for (const v of ['--nivel-color', '--oro', '--oro-suave', '--oro-tenue', '--aurora-filtro']) {
+    for (const v of ['--nivel-color', '--oro', '--oro-suave', '--oro-tenue', '--aurora-filtro', '--logo-filtro']) {
       raiz.style.removeProperty(v)
     }
     return
@@ -243,6 +278,7 @@ export function aplicarTemaNivel(nivel) {
   raiz.style.setProperty('--oro-suave', `color-mix(in srgb, ${t.color} 66%, #fff)`)
   raiz.style.setProperty('--oro-tenue', `color-mix(in srgb, ${t.color} 12%, transparent)`)
   raiz.style.setProperty('--aurora-filtro', t.aurora)
+  raiz.style.setProperty('--logo-filtro', t.logo)
 }
 
 export function leerNivel() {

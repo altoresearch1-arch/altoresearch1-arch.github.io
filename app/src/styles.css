@@ -1499,6 +1499,89 @@ a.link {
   text-align: center;
 }
 
+/* ---------- 🎨 Panel de colores (ColoresPanel.jsx, desde el ☰) ----------
+   Los cuatro niveles, cada uno con sus siete colores. Reusa .paleta/.paleta-tono
+   del menú del badge para que el mismo gesto se vea igual en los dos sitios. */
+.modal-colores {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  max-height: 92vh;
+  overflow-y: auto;
+  background: linear-gradient(180deg, var(--negro-2), var(--negro));
+  border: 1px solid var(--oro);
+  border-radius: 18px;
+  padding: 22px 18px 18px;
+  box-shadow: var(--sombra);
+}
+.colores-cab {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.colores-icono {
+  font-size: 24px;
+  line-height: 1;
+}
+.colores-titulo {
+  margin: 0;
+  font-size: 20px;
+  color: var(--oro);
+}
+.colores-intro {
+  margin: 6px 0 14px;
+  font-size: 13px;
+}
+.colores-nivel {
+  border: 1px solid var(--gris);
+  border-radius: 12px;
+  padding: 8px 6px 4px;
+  margin-bottom: 10px;
+}
+.colores-nivel.activo {
+  border-color: color-mix(in srgb, var(--oro) 55%, transparent);
+  background: var(--oro-tenue);
+}
+.colores-nivel-cab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 6px 2px;
+}
+.colores-nivel-icono {
+  font-size: 15px;
+  line-height: 1;
+}
+.colores-nivel-nombre {
+  font-weight: 700;
+  font-size: 13px;
+}
+.colores-nivel-aqui {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--oro);
+  border: 1px solid color-mix(in srgb, var(--oro) 45%, transparent);
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+.colores-nivel-reset {
+  margin-left: auto;
+}
+/* dentro del panel la rejilla respira un poco más que en el menú del badge */
+.colores-paleta {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  padding: 2px 4px 4px;
+}
+.colores-pie {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
 .modal-cerrar {
   position: absolute;
   top: 10px;
@@ -5273,16 +5356,31 @@ a.link {
 }
 /* nivel 4: el logo es oro de nacimiento — la corona no se toca */
 
+/* 🎨 …y si hay TINTE elegido a mano, la moneda lo sigue a él. Mismo truco que
+   con la aurora: se escribe DESPUÉS de las tres de arriba y con la misma
+   especificidad, así gana por orden. aplicarTemaNivel() pone --logo-filtro
+   (la receta vive en PALETA[].logo). Como filter afecta todo el render, el
+   borde y el aura que respira alrededor de la moneda cambian gratis. */
+:root[data-tinte] .brand-logo,
+:root[data-tinte] .hero-logo,
+:root[data-tinte] .nivel-gate-logo {
+  filter: var(--logo-filtro, none);
+}
+
 /* ---------- 📓 El logo sigue el color del CUADERNO activo ----------
    Mientras estás en el Cuaderno, Cuaderno.jsx pone body.cuaderno-marca y
    expone --cd-marca (color) y --cd-marca-filtro (receta de recoloreo de la
    imagen). Así el logo toma el color del cuaderno en vez del nivel; al salir
    se quitan la clase y las variables y vuelve el tema del nivel (pedido de
-   Jair). Mayor especificidad que las reglas por nivel de arriba, así que gana. */
-body.cuaderno-marca .brand .mark {
+   Jair). Mayor especificidad que las reglas por nivel de arriba, así que gana.
+   ⚠ El `:root` de adelante NO es adorno: la regla del tinte 🎨 es
+   `:root[data-tinte] .brand-logo` (0,3,0) y le ganaría a un simple
+   `body.cuaderno-marca .brand-logo` (0,2,1) — la especificidad manda sobre el
+   orden. Con `:root` esta sube a (0,3,1) y el cuaderno vuelve a mandar. */
+:root body.cuaderno-marca .brand .mark {
   color: var(--cd-marca);
 }
-body.cuaderno-marca .brand-logo {
+:root body.cuaderno-marca .brand-logo {
   filter: var(--cd-marca-filtro);
   border-color: var(--cd-marca);
 }

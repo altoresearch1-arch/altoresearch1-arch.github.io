@@ -18,7 +18,7 @@ const ITEMS = [
 
 const MS_CIERRE = 180 // espejo de .menu-nav-fondo.cerrando en styles.css
 
-export default function MenuNav({ vista, onIr, onApoyar, onTour, onLeccion, onEnganche, onCerrar }) {
+export default function MenuNav({ vista, onIr, onApoyar, onTour, onLeccion, onEnganche, onColores, onCerrar }) {
   const [cerrando, setCerrando] = useState(false)
 
   // Cierre con animación de salida (más corta que la entrada, como debe ser)
@@ -106,9 +106,25 @@ export default function MenuNav({ vista, onIr, onApoyar, onTour, onLeccion, onEn
             Plan para nuevo inversor
           </button>
         )}
+        {/* 🎨 Los colores. Existían solo al pie del desplegable del badge de
+            nivel, y ahí no los encontró nadie: ese menú se abre para cambiar
+            de nivel, no para pintar. Acá se ven. */}
+        {onColores && (
+          <button
+            className="menu-nav-item"
+            style={{ '--i': ITEMS.length + 3 }}
+            onClick={() => {
+              onColores()
+              cerrar()
+            }}
+          >
+            <span className="menu-nav-icono" aria-hidden="true">🎨</span>
+            Colores de la app
+          </button>
+        )}
         <button
           className="menu-nav-item menu-nav-apoyo"
-          style={{ '--i': ITEMS.length + 3 }}
+          style={{ '--i': ITEMS.length + 4 }}
           onClick={() => {
             onApoyar()
             cerrar()
