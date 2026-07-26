@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import empresasData from '../data/empresas.json'
-import { NIVELES } from '../lib/nivel'
+import { NIVELES, colorNivel } from '../lib/nivel'
 import { pasosDesbloqueo, cuentaVisibles } from '../lib/guiontour'
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -32,7 +32,7 @@ export default function OfertaDesbloqueo({ ticker, nivel, onAceptar, onCerrar })
   if (!cuantas || !info) return null
 
   return (
-    <div className="desbloqueo" style={{ '--nivel-color': info.color }} role="dialog" aria-label="Secciones desbloqueadas">
+    <div className="desbloqueo" style={{ '--nivel-color': colorNivel(info.id) }} role="dialog" aria-label="Secciones desbloqueadas">
       <button className="desbloqueo-x" onClick={onCerrar} aria-label="Ahora no">✕</button>
       <div className="desbloqueo-cab">
         <span className="desbloqueo-icono" aria-hidden="true">{info.elemento}</span>

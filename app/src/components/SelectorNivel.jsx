@@ -1,4 +1,4 @@
-import { NIVELES } from '../lib/nivel'
+import { NIVELES, colorNivel } from '../lib/nivel'
 
 // Puerta de entrada obligatoria: se muestra UNA sola vez (hasta que elija),
 // antes de dejar ver el resto de la app. Pedido de Jair.
@@ -27,7 +27,7 @@ export default function SelectorNivel({ onElegir, onVolver }) {
             <button
               key={n.id}
               className="nivel-card"
-              style={{ '--nivel-color': n.color, '--i': i }}
+              style={{ '--nivel-color': colorNivel(n.id), '--i': i }}
               onClick={() => onElegir(n.id)}
             >
               <span className="nivel-card-cab">

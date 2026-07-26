@@ -32,7 +32,7 @@ import { CountUp, Reveal } from '../lib/anim'
 import { useFavoritos, alternarFavorito } from '../lib/favoritos'
 import { peInfo } from '../lib/finanzas'
 import { claveLente, lenteDe } from '../lib/lente'
-import { useNivel, verSeccion, NIVELES } from '../lib/nivel'
+import { useNivel, verSeccion, NIVELES, colorNivel } from '../lib/nivel'
 import { useState } from 'react'
 
 // P/E = precio ÷ BPA anual (SMV), vía peInfo de lib/finanzas. Si el precio es
@@ -514,7 +514,7 @@ export default function Empresa({ ticker, onVolver, volverTexto = '← Volver a 
         {nivel != null && nivel < 4 && (() => {
           const siguiente = NIVELES.find((n) => n.id === nivel + 1)
           return (
-            <div className="nivel-cta" style={{ '--nivel-color': siguiente.color }}>
+            <div className="nivel-cta" style={{ '--nivel-color': colorNivel(siguiente.id) }}>
               <div className="nivel-cta-texto">
                 <strong>{siguiente.icono} ¿Subimos el nivel?</strong>
                 <div className="muted">{siguiente.detalle}</div>

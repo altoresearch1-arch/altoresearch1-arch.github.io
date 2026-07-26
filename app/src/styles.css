@@ -222,6 +222,82 @@ h1 {
   background: transparent;
 }
 
+/* ---------- 🗂 Secciones plegables del inicio (SeccionInicio.jsx) ----------
+   Agrupan los bloques del inicio por PARA QUÉ sirven. La cabecera es una
+   línea fina, no una tarjeta: tiene que ordenar la página, no competir con
+   lo que ordena. Cerrada, deja a la vista su resumen ("cómo cerró la BVL y
+   la empresa del día") para que plegar no sea esconder. */
+.sec-inicio {
+  margin: 18px 0 0;
+}
+.sec-inicio-cab {
+  appearance: none;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--gris);
+  color: var(--texto);
+  text-align: left;
+  padding: 6px 2px 7px;
+  font-size: 13px;
+  transition: border-color 0.18s ease, color 0.18s ease;
+}
+.sec-inicio-icono {
+  font-size: 15px;
+  line-height: 1;
+}
+.sec-inicio-tit {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 11.5px;
+  color: var(--oro);
+  white-space: nowrap;
+}
+.sec-inicio-resumen {
+  color: var(--texto-tenue);
+  font-size: 12px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sec-inicio-flecha {
+  margin-left: auto;
+  color: var(--texto-tenue);
+  font-size: 11px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .sec-inicio-cab:hover {
+    border-bottom-color: var(--oro);
+  }
+  .sec-inicio-cab:hover .sec-inicio-flecha {
+    color: var(--oro);
+  }
+}
+.sec-inicio-cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 12px;
+  animation: secAbre 0.26s var(--ease-salida);
+}
+@keyframes secAbre {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+/* las tarjetas de adentro ya no cargan su propio margen: lo pone el gap */
+.sec-inicio-cuerpo > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 /* ---------- Mensaje del día ---------- */
 .mensaje-dia {
   border: 1px solid var(--oro);
@@ -4510,6 +4586,89 @@ a.link {
   font-weight: 700;
 }
 
+/* ---------- 🎨 LA PALETA del nivel (25-jul) ----------
+   Rejilla de tonos al pie del menú de niveles. Los siete entran en dos
+   renglones sin scroll; cada uno lleva su punto de color y su nombre, porque
+   un mosaico de puntos mudos obliga a adivinar y probar. */
+.nivel-badge-sep {
+  height: 1px;
+  margin: 6px 4px 2px;
+  background: linear-gradient(90deg, transparent, var(--gris), transparent);
+}
+.paleta-tit {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.paleta-reset {
+  appearance: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  color: var(--nivel-color);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.paleta {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+  padding: 4px 6px 6px;
+}
+.paleta-tono {
+  appearance: none;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  color: var(--texto-tenue);
+  /* 44px de alto mínimo: es un blanco de pulgar, no un pixel de escritorio */
+  padding: 9px 2px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.15s ease, border-color 0.15s ease,
+    transform 0.16s var(--ease-salida);
+}
+.paleta-punto {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, #fff3 0 26%, transparent 60%),
+    var(--tono);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14) inset,
+    0 2px 6px color-mix(in srgb, var(--tono) 40%, transparent);
+}
+.paleta-nombre {
+  font-size: 9.5px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+@media (hover: hover) and (pointer: fine) {
+  .paleta-tono:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: color-mix(in srgb, var(--tono) 45%, transparent);
+  }
+}
+.paleta-tono:active {
+  transform: scale(0.94);
+}
+.paleta-tono.activo {
+  border-color: var(--tono);
+  background: color-mix(in srgb, var(--tono) 14%, transparent);
+  color: var(--texto);
+}
+.paleta-tono.activo .paleta-punto {
+  box-shadow: 0 0 0 2px var(--negro-2), 0 0 0 3px var(--tono),
+    0 0 12px color-mix(in srgb, var(--tono) 55%, transparent);
+}
+
 /* ---------- CTA "¿Subimos el nivel?" (al fondo de la ficha) ---------- */
 .nivel-cta {
   display: flex;
@@ -4798,6 +4957,13 @@ a.link {
   filter: hue-rotate(162deg) saturate(1.05) brightness(1.05); /* oro → celeste Stasis */
 }
 /* nivel 4: la aurora ES oro de fábrica — la corona no necesita filtro */
+/* 🎨 …y si hay TINTE elegido a mano manda él, no el número del nivel.
+   Misma especificidad que las cuatro de arriba (0,3,0) pero escrito después:
+   gana por orden, sin necesidad de !important. aplicarTemaNivel() pone
+   --aurora-filtro; el `none` del oro deja la aurora tal cual nació. */
+:root[data-tinte] .aurora {
+  filter: var(--aurora-filtro, none);
+}
 
 /* ---------- Firma de movimiento: cómo entra el contenido ----------
    💸 flota y crece (suave) · 🟡 llega desde la izquierda (como se lee) ·

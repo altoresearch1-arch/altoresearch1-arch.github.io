@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { NIVELES } from '../lib/nivel'
+import { NIVELES, colorNivel } from '../lib/nivel'
 import { prefiereQuieto } from '../lib/anim'
 
 // Pantalla de transición al elegir o cambiar de nivel: tapa el re-armado de
@@ -71,7 +71,7 @@ export default function NivelTransicion({ nivelId, onFin }) {
   return (
     <div
       className={'nivel-trans' + (saliendo ? ' saliendo' : '')}
-      style={{ '--nivel-color': n.color, '--trans-total': `${msVisible}ms` }}
+      style={{ '--nivel-color': colorNivel(n.id), '--trans-total': `${msVisible}ms` }}
       onPointerDown={saltar}
       role="status"
       aria-label={`Preparando el nivel ${n.nombre}`}

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { prefiereQuieto } from '../lib/anim'
-import { NIVELES, leerNivel } from '../lib/nivel'
+import { colorNivel, leerNivel } from '../lib/nivel'
 
 // Fondo vivo: "polvo dorado" flotando en canvas + luz que sigue el cursor.
 // Sobrio (partículas tenues, deriva lenta) e interactivo: se apartan suave
@@ -44,8 +44,8 @@ export default function FondoVivo() {
     let polvo = ORO
     let polvoClaro = aclarar(ORO)
     const aplicarColorNivel = () => {
-      const n = NIVELES.find((x) => x.id === leerNivel())
-      polvo = n ? hexARgb(n.color) : ORO
+      const id = leerNivel()
+      polvo = id ? hexARgb(colorNivel(id)) : ORO
       polvoClaro = aclarar(polvo)
     }
     aplicarColorNivel()
@@ -259,6 +259,8 @@ export default function FondoVivo() {
     document.addEventListener('visibilitychange', alVisibilidad)
     // al cambiar de nivel, el polvo se re-tiñe (mismo evento que usa useNivel)
     window.addEventListener('alto-nivel-cambio', aplicarColorNivel)
+    // …y al elegir otro color para el mismo nivel, también (🎨 la paleta)
+    window.addEventListener('alto-tinte-cambio', aplicarColorNivel)
     window.addEventListener('storage', aplicarColorNivel)
 
     return () => {
@@ -268,6 +270,7 @@ export default function FondoVivo() {
       window.removeEventListener('resize', alRedimensionar)
       document.removeEventListener('visibilitychange', alVisibilidad)
       window.removeEventListener('alto-nivel-cambio', aplicarColorNivel)
+      window.removeEventListener('alto-tinte-cambio', aplicarColorNivel)
       window.removeEventListener('storage', aplicarColorNivel)
     }
   }, [])

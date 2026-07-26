@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { historicoDe, cambio6M, veredictoPE, dividendosDe, pagaDividendos } from '../lib/finanzas'
 import { deudaInfo, esCiclico, lenteDe, aniosTexto, PALABRA_DEUDA } from '../lib/lente'
-import { NIVELES } from '../lib/nivel'
+import { NIVELES, colorNivel } from '../lib/nivel'
 
 // 🩻 Radiografía exprés: la empresa en 10 segundos — SIEMPRE los datos, en
 // todos los niveles (pedido de Jair 15-jul: "deja esos globos").
@@ -183,7 +183,7 @@ export default function RadiografiaExpres({ empresa, nivel = 4, onSubirNivel }) 
         )}
       </div>
       {nInvita && (
-        <div className="rx-invita" style={{ '--nivel-color': nInvita.color }}>
+        <div className="rx-invita" style={{ '--nivel-color': colorNivel(nInvita.id) }}>
           <div className="rx-invita-texto">
             <strong>{nInvita.icono} {invita === 2
               ? 'El porqué de la deuda vive en el nivel 2'

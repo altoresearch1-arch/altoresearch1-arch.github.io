@@ -35,6 +35,7 @@ import MenuNav from './components/MenuNav'
 import BuscadorInicio from './components/BuscadorInicio'
 import CintaBVL from './components/CintaBVL'
 import GanchoDatos from './components/GanchoDatos'
+import SeccionInicio from './components/SeccionInicio'
 import TourGuia, { PASOS_INICIO, PASOS_EXPLORAR, PASOS_COMPARADOR, PASOS_RESULTADOS } from './components/TourGuia'
 import MentorALTO from './components/MentorALTO'
 import OfertaDesbloqueo from './components/OfertaDesbloqueo'
@@ -439,13 +440,15 @@ export default function App() {
                 </h1>
                 <p className="lead">
                   Responde 4 preguntas y te mostramos empresas de la Bolsa de
-                  Valores de Lima que encajan con tu perfil — para que las
-                  analices tú mismo. Gratis y educativo.
+                  Valores de Lima que encajan contigo — para que las analices tú
+                  mismo. Gratis y educativo.
                 </p>
                 {/* 🎣 Gancho de curiosidad con datos REALES (niveles 1-2): una
                     prueba viva de lo que hay adentro, antes de pedir el quiz */}
                 {nivel <= 2 && <GanchoDatos onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />}
-                {/* Un solo protagonista (el quiz); el resto son atajos discretos */}
+                {/* Un solo protagonista (el quiz); el resto son atajos discretos.
+                    Atlas salió de aquí: ya está en la barra de arriba Y en el ☰,
+                    y repetir un destino tres veces no lo hace más visible. */}
                 <div className="hero-actions">
                   <button className="btn btn-oro" onClick={() => irA('#/quiz')}>
                     🎯 Empezar el quiz
@@ -455,24 +458,67 @@ export default function App() {
                   <button onClick={() => irA('#/explorar')}>
                     🔎 Explorar las {empresasData.empresas.length}
                   </button>
-                  <button onClick={() => irA('#/glosario')}>📖 Glosario</button>
-                  <button onClick={() => irA('#/ia')}>
-                    🧠 Atlas <span className="nav-beta">beta</span>
-                  </button>
                   <button onClick={empresaAleatoria}>🎲 Una al azar</button>
+                  <button onClick={() => irA('#/glosario')}>📖 Glosario</button>
                 </div>
               </div>
             )
 
-            const bloqueMercado = (
-              <>
-                <BuscadorInicio onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
-                {/* 📓 La puerta del Cuaderno: el inicio saluda con TUS números */}
+            // 🎓 APRENDER: el plan y la lección, juntos. Antes estaban en las
+            // dos puntas de la página (el plan arriba del hero, la lección al
+            // final) y eran lo mismo — el camino del que recién llega — pero
+            // separados por toda la pantalla. Solo para niveles 1-2: del 3 en
+            // adelante siguen en el ☰, sin meterle ruido al que ya analiza.
+            const bloqueAprender = nivel <= 2 && (
+              <SeccionInicio
+                id="aprender"
+                icono="🎓"
+                titulo="Empieza por aquí"
+                resumen="tu plan y la lección exprés"
+              >
+                <PlanInversor
+                  onAbrir={() => { setEngancheVerPlan(false); setEngancheAbierto(true) }}
+                  onVerPlan={() => { setEngancheVerPlan(true); setEngancheAbierto(true) }}
+                />
+                <RepasoLeccion onAbrir={() => setLeccionAbierta(true)} />
+              </SeccionInicio>
+            )
+
+            // 📓 LO TUYO: tu cuaderno y tu lista con ★. Es lo único de esta
+            // pantalla que habla de TI, así que va junto y va arriba del mercado.
+            const bloqueTuyo = (
+              <SeccionInicio
+                id="tuyo"
+                icono="📓"
+                titulo="Lo tuyo"
+                resumen="tu cuaderno y tu lista para estudiar"
+              >
                 <CuadernoPortada onAbrir={() => irA('#/cuaderno')} />
                 <MiLista onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
+              </SeccionInicio>
+            )
+
+            // 📊 EL MERCADO HOY: el cierre de la BVL y la empresa del día.
+            // Arranca CERRADO en los niveles 1-2 — el que recién llega no sabe
+            // aún qué hacer con «subieron 12, bajaron 9», y ese cuadro entre él
+            // y la lección es ruido. Del 3 en adelante arranca abierto: eso es
+            // justamente lo que venía a mirar.
+            const bloqueMercado = (
+              <SeccionInicio
+                // key con el nivel: si sube al 3 sin recargar, esta sección
+                // vuelve a preguntarse si le toca estar abierta. Lo que el
+                // usuario haya decidido a mano sigue mandando (vive en
+                // localStorage, no en el estado que el key resetea).
+                key={`mercado-${nivel}`}
+                id="mercado"
+                icono="📊"
+                titulo="El mercado hoy"
+                resumen="cómo cerró la BVL y la empresa del día"
+                abiertaPorDefecto={nivel >= 3}
+              >
                 <HoyBVL onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
                 <EmpresaDelDia onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
-              </>
+              </SeccionInicio>
             )
 
             // Orden según el público: niveles 1-2 entran a APRENDER (hero al
@@ -483,34 +529,26 @@ export default function App() {
                 {/* 📟 La cinta bursátil: el mercado late apenas entras (todos los niveles) */}
                 <CintaBVL onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
                 {bloquePuerta}
-                {bloqueActualizaciones}
-                {/* 📋 El plan para nuevo inversor. Va ARRIBA, antes del hero:
-                    salió del ☰ justamente porque ahí no lo veía nadie, y
-                    ponerlo al final de la página habría sido mudarlo de un
-                    escondite a otro. Niveles 1-2 (su público); del 3 en
-                    adelante sigue disponible en el menú. */}
-                {nivel <= 2 && (
-                  <PlanInversor
-                    onAbrir={() => { setEngancheVerPlan(false); setEngancheAbierto(true) }}
-                    onVerPlan={() => { setEngancheVerPlan(true); setEngancheAbierto(true) }}
-                  />
-                )}
                 {nivel >= 3 ? (
                   <>
+                    <BuscadorInicio onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
+                    {bloqueTuyo}
                     {bloqueMercado}
                     {bloqueHero}
                   </>
                 ) : (
                   <>
                     {bloqueHero}
+                    {bloqueAprender}
+                    <BuscadorInicio onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
+                    {bloqueTuyo}
                     {bloqueMercado}
                   </>
                 )}
-                {/* 🐣 La puerta de vuelta a la Lección Exprés: «¿eres nuevo?
-                    ¿no entendiste algo? míralo de nuevo». Vive en los niveles
-                    1-2 (el público que la necesita); del 3 en adelante sigue
-                    disponible en el ☰, para no meterle ruido al que analiza. */}
-                {nivel <= 2 && <RepasoLeccion onAbrir={() => setLeccionAbierta(true)} />}
+                {/* 🆕 Las novedades de la app bajan al pie: son sobre ALTO, no
+                    sobre la bolsa — interesan cuando ya viste lo que viniste a
+                    ver, no antes. */}
+                {bloqueActualizaciones}
                 <Pildora />
                 <div className="space" />
                 <Disclaimer />

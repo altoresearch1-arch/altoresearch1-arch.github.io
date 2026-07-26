@@ -7,6 +7,11 @@ import { useEffect, useState } from 'react'
 
 const CLAVE = 'alto-nivel'
 const EVENTO = 'alto-nivel-cambio'
+// 🎨 El color elegido a mano para cada nivel: { "1": "morado", "3": "rosa" }.
+// Vive aparte del nivel porque son dos decisiones distintas — qué ves (nivel)
+// y de qué color lo ves (tinte) — y perder una no debe borrar la otra.
+const CLAVE_TINTE = 'alto-tinte-nivel'
+const EVENTO_TINTE = 'alto-tinte-cambio'
 
 // Cada nivel es una EXPERIENCIA, no solo un filtro de secciones:
 // - corto/color/elemento: identidad visible (badge, selector, transición,
@@ -18,6 +23,25 @@ const EVENTO = 'alto-nivel-cambio'
 //   1 🧵 Cuerda (Strand) verde esmeralda · 2 🔥 Solar fuego ·
 //   3 ❄️ Stasis azul celeste · 4 👑 el ORO de ALTO corona el nivel máximo.
 // El dorado de la marca no se negocia: botones/títulos siguen siendo oro.
+// 🎨 LA PALETA (pedido de Jair 25-jul). Antes el color era el destino: naciste
+// en el nivel 1 y eras verde, punto. Ahora el nivel decide QUÉ ves y el tinte
+// decide de qué color — y son siete, no cuatro: a los cuatro elementales se
+// suman blanco, morado y rosa, que no representan a ningún nivel y por eso
+// mismo son de quien los elija.
+// Cada entrada trae su `aurora` (el filtro que gira el oro de fábrica hasta
+// ese matiz) porque la atmósfera del fondo debe seguir al color, no al número
+// de nivel. Todos son tintes CLAROS a propósito: el texto de los botones
+// dorados es negro (#1a1405) y tiene que seguir leyéndose encima.
+export const PALETA = [
+  { id: 'cuerda', nombre: 'Verde', emoji: '🧵', color: '#35da85', aurora: 'hue-rotate(105deg) saturate(1.15)' },
+  { id: 'solar', nombre: 'Naranja', emoji: '🔥', color: '#f2721b', aurora: 'hue-rotate(-18deg) saturate(1.4)' },
+  { id: 'stasis', nombre: 'Celeste', emoji: '❄️', color: '#6fb7f0', aurora: 'hue-rotate(162deg) saturate(1.05) brightness(1.05)' },
+  { id: 'oro', nombre: 'Oro', emoji: '👑', color: '#d4af37', aurora: 'none' },
+  { id: 'blanco', nombre: 'Blanco', emoji: '🤍', color: '#e9edf3', aurora: 'saturate(0.14) brightness(1.22)' },
+  { id: 'morado', nombre: 'Morado', emoji: '🔮', color: '#a884ff', aurora: 'hue-rotate(218deg) saturate(1.3)' },
+  { id: 'rosa', nombre: 'Rosa', emoji: '🌸', color: '#ff8ac4', aurora: 'hue-rotate(288deg) saturate(1.2) brightness(1.05)' },
+]
+
 export const NIVELES = [
   {
     id: 1,
@@ -125,20 +149,100 @@ export function verSeccion(nivel, clave) {
   return nivel >= (NIVEL_SECCION[clave] || 1)
 }
 
-// Tema visual del nivel: marca <html data-nivel="N"> y expone su color de
-// acento como --nivel-color. Con eso el CSS ajusta densidad, radio de bordes
-// y velocidad de animaciones por nivel (ver "EXPERIENCIAS POR NIVEL" en
+// ── 🎨 TINTE POR NIVEL ─────────────────────────────────────────────────────
+// El tinte de fábrica de cada nivel es el elemental que ya tenía (su `color`);
+// lo que el usuario elija a mano lo pisa, y solo para ESE nivel.
+function tinteDeFabrica(n) {
+  return PALETA.find((p) => p.color === n?.color) || PALETA[3] /* oro */
+}
+
+function leerMapaTintes() {
+  try {
+    const crudo = JSON.parse(localStorage.getItem(CLAVE_TINTE) || '{}')
+    return crudo && typeof crudo === 'object' ? crudo : {}
+  } catch {
+    return {}
+  }
+}
+
+// Tinte efectivo de un nivel: el elegido a mano, o el de fábrica.
+export function tinteNivel(nivelId) {
+  const n = NIVELES.find((x) => x.id === nivelId)
+  if (!n) return PALETA[3]
+  const elegido = PALETA.find((p) => p.id === leerMapaTintes()[String(nivelId)])
+  return elegido || tinteDeFabrica(n)
+}
+
+// Color efectivo (hex) de un nivel. Úsalo en vez de `NIVELES[].color` en todo
+// lo que se pinte: ese campo es solo el valor de fábrica.
+export function colorNivel(nivelId) {
+  return tinteNivel(nivelId).color
+}
+
+export function esTinteDeFabrica(nivelId) {
+  const n = NIVELES.find((x) => x.id === nivelId)
+  return tinteNivel(nivelId).id === tinteDeFabrica(n).id
+}
+
+// Guarda (o borra, con tinteId = null) el color de UN nivel y repinta al toque:
+// el tinte no cambia qué secciones ves, así que no pasa por la pantalla de
+// transición — se ve el cambio en el mismo gesto de elegirlo.
+export function guardarTinte(nivelId, tinteId) {
+  const mapa = leerMapaTintes()
+  if (tinteId) mapa[String(nivelId)] = tinteId
+  else delete mapa[String(nivelId)]
+  try {
+    localStorage.setItem(CLAVE_TINTE, JSON.stringify(mapa))
+  } catch {
+    /* modo incógnito: el color vale solo para esta sesión */
+  }
+  aplicarTemaNivel(nivelId)
+  window.dispatchEvent(new CustomEvent(EVENTO_TINTE))
+}
+
+// Hook: el tinte vigente del nivel dado, re-leído cuando alguien lo cambia.
+export function useTinte(nivelId) {
+  const [tinte, setTinte] = useState(() => tinteNivel(nivelId))
+  useEffect(() => {
+    const al = () => setTinte(tinteNivel(nivelId))
+    al()
+    window.addEventListener(EVENTO_TINTE, al)
+    window.addEventListener('storage', al) // otra pestaña
+    return () => {
+      window.removeEventListener(EVENTO_TINTE, al)
+      window.removeEventListener('storage', al)
+    }
+  }, [nivelId])
+  return tinte
+}
+
+// Tema visual del nivel: marca <html data-nivel="N" data-tinte="X"> y expone el
+// color elegido como --nivel-color. Con eso el CSS ajusta densidad, radio de
+// bordes y velocidad de animaciones por nivel (ver "EXPERIENCIAS POR NIVEL" en
 // styles.css). Sin nivel elegido (puerta de entrada) no hay atributo.
+// 👑 Además redefine --oro/--oro-suave/--oro-tenue EN LÍNEA: el bloque "EL
+// ELEMENTO REINA" del CSS los fija por [data-nivel], y un estilo inline es lo
+// único que gana a esa regla sin usar !important. Así un tinte a mano tiñe de
+// un golpe TODO lo que ya era dorado, igual que hacían los cuatro elementales.
 export function aplicarTemaNivel(nivel) {
   const raiz = document.documentElement
   const n = NIVELES.find((x) => x.id === nivel)
   if (!n) {
     delete raiz.dataset.nivel
-    raiz.style.removeProperty('--nivel-color')
+    delete raiz.dataset.tinte
+    for (const v of ['--nivel-color', '--oro', '--oro-suave', '--oro-tenue', '--aurora-filtro']) {
+      raiz.style.removeProperty(v)
+    }
     return
   }
+  const t = tinteNivel(n.id)
   raiz.dataset.nivel = String(n.id)
-  raiz.style.setProperty('--nivel-color', n.color)
+  raiz.dataset.tinte = t.id
+  raiz.style.setProperty('--nivel-color', t.color)
+  raiz.style.setProperty('--oro', t.color)
+  raiz.style.setProperty('--oro-suave', `color-mix(in srgb, ${t.color} 66%, #fff)`)
+  raiz.style.setProperty('--oro-tenue', `color-mix(in srgb, ${t.color} 12%, transparent)`)
+  raiz.style.setProperty('--aurora-filtro', t.aurora)
 }
 
 export function leerNivel() {

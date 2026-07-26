@@ -8,7 +8,7 @@ import {
   TEMAS_POR_RONDA, TOTAL_BANCO, PLAN, CIERRES, GRADUACION,
 } from '../lib/enganche'
 import { cling, tunk } from '../lib/sonido'
-import { NIVELES } from '../lib/nivel'
+import { NIVELES, colorNivel } from '../lib/nivel'
 
 // ─────────────────────────────────────────────────────────────────────────
 // 🗣️ LA CONVERSACIÓN DE ENTRADA (pedido de Jair, 24-jul · rediseñada 25-jul)
@@ -960,7 +960,7 @@ export default function Enganche({ onFin, onSalir, repaso = false, total = TEMAS
                 <button
                   key={n.id}
                   className={'eng-nivel' + (nivelElegido === n.id ? ' elegido' : '')}
-                  style={{ '--nv': n.color, '--i': n.id }}
+                  style={{ '--nv': colorNivel(n.id), '--i': n.id }}
                   onClick={() => setNivelElegido(n.id)}
                   aria-pressed={nivelElegido === n.id}
                 >
