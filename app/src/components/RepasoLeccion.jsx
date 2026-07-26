@@ -22,7 +22,7 @@ export default function RepasoLeccion({ onAbrir }) {
 
   const cuerpo = vista ? (
     <>
-      Vuelve a las cinco tarjetas cuando quieras. Nadie entiende todo la primera vez, y
+      Vuelve a las {TOTAL_TARJETAS} tarjetas cuando quieras. Nadie entiende todo la primera vez, y
       releer no es retroceder: es como se aprende esto.
     </>
   ) : paso > 0 ? (
@@ -32,8 +32,8 @@ export default function RepasoLeccion({ onAbrir }) {
     </>
   ) : (
     <>
-      Cinco tarjetas de 15 segundos: qué es una acción, a dónde va tu plata, las dos formas
-      de ganar y por qué aquí no se compra.
+      {TOTAL_TARJETAS} tarjetas de 15 segundos: qué es invertir, qué es una acción, qué es un
+      dividendo, en qué se diferencia de tradear y por qué aquí no se compra.
     </>
   )
 

@@ -12,6 +12,7 @@ import {
   alcanzables,
   examinables,
   EVENTO_MENTOR,
+  CLAVE_TOCAR_PENDIENTE,
 } from '../lib/mentor'
 import { cling } from '../lib/sonido'
 import { conNegritas } from '../lib/negritas'
@@ -124,6 +125,35 @@ export default function MentorALTO({ vista, nivel = 2, empresa = null, onTour, o
   // Al cambiar de pantalla, el Mentor vuelve a reposo: su contexto ya no vale.
   useEffect(() => { setModo(null); setSeccion(null) }, [vista, empresa?.ticker])
 
+  // 👆 …salvo que alguien lo haya dejado ENCARGADO antes de navegar. El
+  // graduado del plan llega a su primera ficha con el «Explícamelo» ya
+  // encendido, y encenderlo desde afuera no funciona: el efecto de arriba lo
+  // apagaría en el mismo commit del cambio de pantalla. Por eso la orden viaja
+  // en sessionStorage (la pantalla destino) y se recoge ACÁ, después del
+  // reposo — mismas deps, orden garantizado.
+  // ⚠️ El encargo se pasa a un ref y NO se apaga al leerlo: en dev, StrictMode
+  // monta y desmonta los efectos dos veces, así que la segunda pasada volvía a
+  // poner el modo en reposo cuando el pedido ya se había consumido de
+  // sessionStorage. El ref sobrevive a esa doble pasada; se apaga recién
+  // cuando el modo tocar está de verdad encendido.
+  const encargoTocar = useRef(false)
+  useEffect(() => {
+    let encargo = null
+    try { encargo = sessionStorage.getItem(CLAVE_TOCAR_PENDIENTE) } catch { /* incógnito */ }
+    if (encargo === vista) encargoTocar.current = true
+    if (encargoTocar.current) setModo('tocar')
+  }, [vista, empresa?.ticker])
+
+  // El encargo se borra cuando el usuario HACE algo con él (toca una parte o
+  // se sale del modo), no cuando se enciende. Motivo medido: entre el pedido y
+  // la llegada pasan un cambio de hash y una transición de nivel que desmontan
+  // el Mentor; si se borraba al encenderlo, esa instancia efímera se lo comía
+  // y a la ficha de verdad no llegaba nada encendido.
+  const cumplirEncargo = () => {
+    encargoTocar.current = false
+    try { sessionStorage.removeItem(CLAVE_TOCAR_PENDIENTE) } catch { /* incógnito */ }
+  }
+
   // ── Modo 👆 tocar: se marca el <html> y el CSS enciende los bordes de
   // TODO lo que tenga data-mentor con algo escrito para este nivel.
   useEffect(() => {
@@ -143,6 +173,7 @@ export default function MentorALTO({ vista, nivel = 2, empresa = null, onTour, o
       if (!el) return
       ev.preventDefault()
       ev.stopPropagation()
+      cumplirEncargo()
       abrirTarjeta(el.dataset.mentor)
     }
     document.addEventListener('click', alTocar, true)
@@ -323,7 +354,7 @@ export default function MentorALTO({ vista, nivel = 2, empresa = null, onTour, o
       {modo === 'tocar' && (
         <div className="mentor-hint">
           👆 Toca cualquier parte con borde dorado
-          <button className="mentor-hint-x" onClick={() => setModo('panel')}>salir</button>
+          <button className="mentor-hint-x" onClick={() => { cumplirEncargo(); setModo('panel') }}>salir</button>
         </div>
       )}
 

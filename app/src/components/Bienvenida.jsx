@@ -18,25 +18,45 @@ export default function Bienvenida({ onNovato, onYaSe, onMirar }) {
   return (
     <div className="nivel-gate">
       <div className="nivel-gate-inner bienvenida">
-        <img
-          className="nivel-gate-logo"
-          src={`${import.meta.env.BASE_URL}logo-alto.jpg`}
-          alt="ALTO Research"
-        />
+        {/* El logo respira con el mismo aura dorada del inicio (auraLogo). La
+            puerta de entrada tenía una moneda apagada de 56 px mientras el
+            fondo se movía detrás: se veía como una pantalla de sistema, no
+            como la portada de ALTO. */}
+        <div className="bienvenida-moneda">
+          <img
+            className="nivel-gate-logo"
+            src={`${import.meta.env.BASE_URL}logo-alto.jpg`}
+            alt="ALTO Research"
+          />
+        </div>
         <div className="kicker">ALTO Research</div>
-        <h1>Aquí se aprende a estudiar empresas de la Bolsa de Lima</h1>
+        <h1>
+          Aquí se aprende a estudiar <span className="oro">empresas de la Bolsa de Lima</span>
+        </h1>
         <p className="lead bienvenida-lead">
-          No se compra, no se recomienda, no cuesta. Son 115 empresas peruanas con sus números
-          oficiales, explicados en criollo.
+          Acá no se compra nada ni se recomienda nada, y no cuesta. Son 115 empresas peruanas con
+          sus números oficiales, explicados en criollo.
         </p>
 
+        {/* La pregunta en voz alta (pedido de Jair, 24-jul). Antes las dos
+            puertas estaban ahí sueltas y había que deducir que eran una
+            pregunta; decirla convierte el par de botones en una respuesta.
+            Y desde el 25-jul son TRES, porque «primera vez: sí o no» dejaba
+            fuera a la mayoría real: el que ha leído del tema, escuchó mil
+            veces la palabra y nunca entendió bien. Ese no es un novato ni un
+            experto, y mandarlo a cualquiera de los dos lados se siente mal.
+            Las tres puertas llevan a sitios distintos: la conversación desde
+            cero, la conversación arrancando un escalón más arriba, o los
+            niveles de una vez. */}
+        <p className="bienvenida-pregunta">¿Has invertido alguna vez?</p>
+
         <div className="bienvenida-puertas">
-          <button className="bienvenida-puerta principal" onClick={onNovato}>
+          <button className="bienvenida-puerta principal" onClick={() => onNovato('cero')}>
             <span className="bienvenida-icono" aria-hidden="true">🐣</span>
             <span className="bienvenida-nombre">
               {paso > 0
                 ? 'Sigue donde te quedaste'
-                : 'Nunca he invertido — empieza aquí'}
+                : 'No, nunca — y por eso estoy aquí'}
             </span>
             <span className="bienvenida-frase">
               {paso > 0 ? (
@@ -46,18 +66,24 @@ export default function Bienvenida({ onNovato, onYaSe, onMirar }) {
                 </>
               ) : (
                 <>
-                  Cinco tarjetas de 15 segundos y entras. Qué es una acción, a dónde va tu plata y
-                  por qué aquí no se compra.
+                  Hablamos de cosas que ya escuchaste: el dólar, el cobre, Bitcoin. Si algo no lo
+                  conoces, te lo cuento y seguimos.
                 </>
               )}
             </span>
           </button>
+          <button className="bienvenida-puerta" onClick={() => onNovato('medias')}>
+            <span className="bienvenida-icono" aria-hidden="true">🌗</span>
+            <span className="bienvenida-nombre">Más o menos, pero nunca lo entendí bien</span>
+            <span className="bienvenida-frase">
+              La misma conversación, saltándose lo obvio: empieza donde se te traba.
+            </span>
+          </button>
           <button className="bienvenida-puerta" onClick={onYaSe}>
             <span className="bienvenida-icono" aria-hidden="true">🎚️</span>
-            <span className="bienvenida-nombre">Ya sé algo de esto</span>
+            <span className="bienvenida-nombre">Sí, ya invierto</span>
             <span className="bienvenida-frase">
-              Elige tu nivel y la app entera se acomoda: de «cuánto podría ganar» hasta
-              documentos de la SMV.
+              Eliges nivel y la app entera se acomoda, hasta los documentos de la SMV.
             </span>
           </button>
         </div>

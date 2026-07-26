@@ -6,6 +6,17 @@ import Disclaimer from './Disclaimer'
 // Pool de tips para mostrar mientras se resuelve el quiz (principios educativos).
 const POOL_TIPS = [...pildorasData.pildoras, ...Object.values(quiz.sectorTips || {})]
 
+// 🗣️ Lo que dice ALTO antes de cada pregunta (25-jul). Antes decía «Pregunta 1
+// de 4», que es el encabezado de un examen: numerar lo que falta convierte una
+// conversación en un trámite. Estas frases dicen POR QUÉ se pregunta, que es lo
+// único que justifica preguntar.
+const ENTRADAS = [
+  'Cuéntame qué buscas y te muestro empresas que encajen. Nada de esto queda guardado.',
+  'Ya sé qué buscas. Ahora lo otro: qué tan tranquilo quieres dormir.',
+  'Con eso ya tengo tu perfil. Elige por dónde quieres empezar a mirar.',
+  'Última. Esta cambia bastante la lista: no es lo mismo semanas que años.',
+]
+
 // Quiz de 4 preguntas. Al terminar, llama onTerminar(respuestas).
 export default function Quiz({ onTerminar, onAleatoria }) {
   const preguntas = quiz.preguntas
@@ -53,7 +64,7 @@ export default function Quiz({ onTerminar, onAleatoria }) {
       {/* key={paso}: remonta la pregunta al avanzar -> entra con fade suave */}
       <div key={paso} className="anim-sube">
         <div className="pregunta-num">
-          Pregunta {paso + 1} de {preguntas.length}
+          {ENTRADAS[paso] ?? ENTRADAS[ENTRADAS.length - 1]}
         </div>
         <h2 style={{ marginTop: 6 }}>{preg.texto}</h2>
 
@@ -65,13 +76,28 @@ export default function Quiz({ onTerminar, onAleatoria }) {
               onClick={() => elegir(idx)}
             >
               <span className="bolita" />
-              <span>
-                {op.texto}
-                {op.nota && <em className="opcion-nota"> — "{op.nota}"</em>}
-              </span>
+              <span>{op.texto}</span>
             </button>
           ))}
         </div>
+
+        {/* La nota de la opción ya existía, pero colgaba de las cuatro a la
+            vez: eso es un formulario con letra chica. Ahora aparece SOLO la de
+            la que elegiste, después de elegirla — así la pantalla responde a lo
+            que dijiste en vez de explicarte tus opciones antes de tiempo. */}
+        {elegido != null && preg.opciones[elegido].nota && (
+          <p className="quiz-eco">
+            <span className="quiz-eco-marca" aria-hidden="true">↳</span>
+            {/* Las notas están escritas en minúscula y sin punto (eran letra
+                chica colgando de la opción). Ahora son la voz de ALTO
+                repitiéndote lo que entendió, así que se dicen como frase. */}
+            <span>
+              {preg.opciones[elegido].nota.charAt(0).toUpperCase()}
+              {preg.opciones[elegido].nota.slice(1)}
+              {/\.$/.test(preg.opciones[elegido].nota) ? '' : '.'}
+            </span>
+          </p>
+        )}
       </div>
 
       {tipActual && (
@@ -90,7 +116,7 @@ export default function Quiz({ onTerminar, onAleatoria }) {
           ← Atrás
         </button>
         <button className="btn btn-oro" onClick={siguiente} disabled={elegido == null}>
-          {esUltima ? 'Ver resultado' : 'Siguiente →'}
+          {esUltima ? 'Muéstrame las empresas →' : 'Sigamos →'}
         </button>
       </div>
 

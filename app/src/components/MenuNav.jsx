@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { TOTAL_TARJETAS } from './LeccionExpres'
 
 // Menú de navegación (☰): descongestiona la topbar (antes: 8 elementos en un
 // renglón). En celular es una HOJA INFERIOR (al alcance del pulgar, como app
@@ -17,7 +18,7 @@ const ITEMS = [
 
 const MS_CIERRE = 180 // espejo de .menu-nav-fondo.cerrando en styles.css
 
-export default function MenuNav({ vista, onIr, onApoyar, onTour, onLeccion, onCerrar }) {
+export default function MenuNav({ vista, onIr, onApoyar, onTour, onLeccion, onEnganche, onCerrar }) {
   const [cerrando, setCerrando] = useState(false)
 
   // Cierre con animación de salida (más corta que la entrada, como debe ser)
@@ -86,11 +87,28 @@ export default function MenuNav({ vista, onIr, onApoyar, onTour, onLeccion, onCe
           }}
         >
           <span className="menu-nav-icono" aria-hidden="true">🐣</span>
-          Lección exprés (5 tarjetas)
+          Lección exprés ({TOTAL_TARJETAS} tarjetas)
         </button>
+        {/* 📋 El plan NO es de un solo uso: el banco tiene 162 preguntas y una
+            ronda usa 8. Volver es encontrar cosas nuevas, no repetir. Su sitio
+            principal es el inicio (ver PlanInversor.jsx); acá queda el atajo
+            para el que ya sabe lo que busca. */}
+        {onEnganche && (
+          <button
+            className="menu-nav-item"
+            style={{ '--i': ITEMS.length + 2 }}
+            onClick={() => {
+              onEnganche()
+              cerrar()
+            }}
+          >
+            <span className="menu-nav-icono" aria-hidden="true">📋</span>
+            Plan para nuevo inversor
+          </button>
+        )}
         <button
           className="menu-nav-item menu-nav-apoyo"
-          style={{ '--i': ITEMS.length + 2 }}
+          style={{ '--i': ITEMS.length + 3 }}
           onClick={() => {
             onApoyar()
             cerrar()

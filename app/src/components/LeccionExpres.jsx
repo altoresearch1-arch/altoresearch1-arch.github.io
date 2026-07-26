@@ -4,16 +4,22 @@ import { useEffect, useState } from 'react'
 // 🐣 LA LECCIÓN EXPRÉS (mejora #135 del plan educativo, Parte IV §29)
 // El momento de abandono #1 de toda la app era la puerta de niveles: le
 // preguntaba al usuario cero "¿qué tan metido estás en esto?" sobre algo que
-// todavía no sabe qué es. Esta es la otra puerta: cinco tarjetas de quince
-// segundos que responden las cuatro preguntas invisibles que NADIE hace en
-// voz alta y que, sin responder, hacen que se vaya en el minuto uno:
-//   1. ¿qué es una acción?          (invisible #1)
-//   2. ¿a dónde va mi plata?        (invisible #2 — la de MECANISMO)
-//   3. ¿ganar es lo mismo que cobrar dividendo?  (invisible #6)
-//   4. ¿dónde compro?               (agujero #139: la respuesta es "en una SAB")
-//   5. ¿esto es apostar?            (invisible #13 — la identidad de ALTO)
+// todavía no sabe qué es. Esta es la otra puerta: siete tarjetas de quince
+// segundos que responden las preguntas invisibles que NADIE hace en voz alta
+// y que, sin responder, hacen que se vaya en el minuto uno:
+//   1. ¿qué es invertir, en criollo?  (pedido de Jair, 24-jul: la lección
+//      arrancaba en "¿qué es una acción?" y se saltaba el verbo. El que nunca
+//      invirtió no sabe todavía en qué se diferencia de ahorrar.)
+//   2. ¿qué es una acción?          (invisible #1)
+//   3. ¿a dónde va mi plata?        (invisible #2 — la de MECANISMO)
+//   4. ¿qué es un dividendo?        (invisible #6: ganar ≠ cobrar dividendo)
+//   5. ¿esto es tradear?            (pedido de Jair, 24-jul: la palabra que el
+//      usuario cero ya escuchó en TikTok y que NO era ALTO en ningún lado;
+//      el plan la marca como riesgo: "educamos ciclos, no trading", §1323.)
+//   6. ¿dónde compro?               (agujero #139: la respuesta es "en una SAB")
+//   7. ¿esto es apostar?            (invisible #13 — la identidad de ALTO)
 // Regla de la casa: no se promete, no se recomienda, no se esconde el riesgo.
-// La quinta tarjeta dice "puedes perder" en letra grande a propósito.
+// La última tarjeta dice "puedes perder" en letra grande a propósito.
 // ─────────────────────────────────────────────────────────────────────────
 
 export const CLAVE_LECCION = 'alto-leccion-expres'
@@ -49,6 +55,20 @@ function guardarPaso(n) {
 
 const TARJETAS = [
   {
+    icono: '🌱',
+    titulo: '¿Qué es invertir?',
+    cuerpo: (
+      <>
+        Es <strong>poner tu plata a trabajar en un negocio</strong> en vez de tenerla quieta.
+        Mil soles guardados en el cajón siguen siendo mil soles el próximo año, pero compran
+        menos, porque todo subió de precio. Invertir es entregarlos a una empresa que produce y
+        vende, para quedarte con una parte de lo que gane. La diferencia con ahorrar es una sola:
+        aquí <strong>no hay nada garantizado</strong>.
+      </>
+    ),
+    pie: 'Ahorrar cuida lo que ya tienes. Invertir arriesga una parte para que crezca. Se necesitan las dos.',
+  },
+  {
     icono: '🧩',
     titulo: '¿Qué es una acción?',
     cuerpo: (
@@ -75,17 +95,32 @@ const TARJETAS = [
   },
   {
     icono: '🎁',
-    titulo: 'Hay dos formas de ganar — y no son iguales',
+    titulo: '¿Qué es un dividendo? (y las dos formas de ganar)',
     cuerpo: (
       <>
         <strong>Que suba el precio:</strong> ganas en papel; recién es plata cuando vendes.{' '}
-        <strong>El dividendo:</strong> la empresa reparte parte de su ganancia y te llega a la
-        cuenta, sin vender nada. Ojo con esto: el dividendo{' '}
+        <strong>El dividendo:</strong> la empresa reparte entre sus dueños parte de la ganancia
+        del año y te llega a la cuenta, sin vender nada — es tu pedacito de lo que ganó. Ojo con
+        esto: el dividendo{' '}
         <strong>no es una tasa fija como un plazo fijo del banco</strong> — la empresa decide
         cada año cuánto reparte, y puede repartir menos, o nada.
       </>
     ),
     pie: 'Cuando veas «rinde 4% al año» en ALTO, es lo que pagó, no lo que promete pagar.',
+  },
+  {
+    icono: '⏱️',
+    titulo: 'Invertir no es tradear',
+    cuerpo: (
+      <>
+        <strong>Tradear</strong> (o «hacer trading») es comprar y vender rápido —en días, horas o
+        minutos— apostando a que el precio se mueva a tu favor. Al que tradea no le importa qué
+        hace la empresa: le importa el gráfico. <strong>Invertir</strong> es comprarte un pedazo
+        de un negocio y quedarte años mientras ese negocio crece y reparte. Se ven igual en la
+        pantalla y no se parecen en nada: uno estudia el precio, el otro estudia la empresa.
+      </>
+    ),
+    pie: 'ALTO es para lo segundo. Aquí no hay velas, ni señales, ni «entra ahora»: hay balances.',
   },
   {
     icono: '🏦',
@@ -149,7 +184,7 @@ export default function LeccionExpres({ onFin, onSaltar, onCerrar, onAtras, reto
     <div className="leccion">
       <div className="leccion-inner">
         <div className="leccion-cab">
-          <span className="kicker">Lección exprés · 5 tarjetas de 15 segundos</span>
+          <span className="kicker">Lección exprés · {TARJETAS.length} tarjetas de 15 segundos</span>
           <div className="leccion-cab-acciones">
             {/* "Saltar" = no la quiero leer, entro ya. La ✕ = me salgo, pero
                 lo leído queda guardado. Son dos intenciones distintas. */}

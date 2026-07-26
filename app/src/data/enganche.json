@@ -1,0 +1,2995 @@
+{
+  "_comment": "🎣 EL BANCO DEL ENGANCHE — la conversación de entrada de ALTO (no es un examen). Cada pregunta es un «tira y afloja»: primero el GANCHO (algo que la persona pudo haber visto en TikTok, en las noticias o escuchado en su casa) y su «¿te suena?» — eso mide RECONOCIMIENTO; después la PREGUNTA con opciones en criollo — eso mide COMPRENSIÓN; y al final la EXPLICACIÓN como para alguien de 12 años + el PUENTE (la línea que hace decir «ah, entonces esto tiene que ver con invertir»). Editable y ampliable por Jair: agregar una pregunta es agregar un objeto a la lista, nada más. REGLAS DE ESCRITURA: (1) el gancho es un titular de la vida real, no un enunciado de clase; (2) cero jerga en las opciones (nada de PER, EBITDA, ROE: eso no se reconoce, se aprende después); (3) siempre hay «No sé» y NUNCA se castiga — es la respuesta más honesta y la app la trata igual de bien; (4) la explicación usa una comparación de la vida diaria (la bodega, el pan, el cebiche, la combi); (5) el puente conecta con una empresa o un dato que ALTO SÍ tiene. CAMPOS: tipo = vida (se ve en la calle) | puente (conecta la noticia con tu plata) | concepto (ya es una idea de inversión, dicha sin jerga) — lo usa lib/enganche.js para subir o bajar el escalón según cómo va respondiendo. eco = de dónde suele venir (tiktok/noticias/calle/familia), solo para el matiz del «¿te suena?».",
+
+  "categorias": [
+    { "id": "mundo", "titulo": "Wall Street y las bolsas grandes", "icono": "🗽", "chip": "Wall Street" },
+    { "id": "gigantes", "titulo": "Las empresas que ya conoces", "icono": "📱", "chip": "Nvidia, Apple, Tesla" },
+    { "id": "cripto", "titulo": "Bitcoin y lo de TikTok", "icono": "₿", "chip": "Bitcoin" },
+    { "id": "bolsillo", "titulo": "Inflación, dólar y tasas", "icono": "🛒", "chip": "El dólar y los precios" },
+    { "id": "metales", "titulo": "Cobre, oro y China", "icono": "⛏️", "chip": "Los metales" },
+    { "id": "mineras", "titulo": "Las mineras peruanas", "icono": "🇵🇪", "chip": "Mineras del Perú" },
+    { "id": "industria", "titulo": "Acero, aranceles y antidumping", "icono": "🏗️", "chip": "Industria y aranceles" },
+    { "id": "mar", "titulo": "Pesca, agro y exportaciones", "icono": "🐟", "chip": "Mar y campo" },
+    { "id": "lios", "titulo": "Multas, juicios y escándalos", "icono": "⚖️", "chip": "Líos de empresas" },
+    { "id": "dividendos", "titulo": "Dividendos", "icono": "🎁", "chip": "Dividendos" },
+    { "id": "trading", "titulo": "Trading, influencers y apostar", "icono": "🎰", "chip": "Trading vs invertir" },
+    { "id": "bolsa", "titulo": "Bolsa, acciones y cómo se compra", "icono": "🏛️", "chip": "La bolsa" },
+    { "id": "empresas", "titulo": "Cosas raras que hacen las empresas", "icono": "🔍", "chip": "Rarezas de empresas" },
+    { "id": "enlaces", "titulo": "De TikTok a la mina: todo está conectado", "icono": "🔗", "chip": "Lo global ↔ Perú" },
+    { "id": "geo", "titulo": "Mapas que mueven precios", "icono": "🌍", "chip": "Geopolítica" },
+    { "id": "varas", "titulo": "Cada empresa, su propia vara", "icono": "📏", "chip": "Cada una con su vara" }
+  ],
+
+  "_comment_plan": "📋 EL PLAN BÁSICO PARA ENTENDER UNA EMPRESA (pedido de Jair, 24-jul). Las preguntas no son sueltas: cada una entrena UNO de estos ocho pasos (campo `paso` de cada pregunta). Al final de la conversación se le muestra el plan completo con lo que ya tocó marcado, y se le ofrece otra ronda SOLO de los pasos que le faltan. Esa es la promesa: no salir con 8 datos sueltos, sino con un método. `insignia` es el elogio corto que se gana al acertar algo de ese paso; `elogio` es la frase larga del cierre — y ninguno se regala: se gana acertando, no leyendo.",
+  "plan": [
+    {
+      "id": "cancha",
+      "icono": "🏟️",
+      "titulo": "La cancha: qué es esto y dónde se juega",
+      "frase": "Qué es una acción, qué es la bolsa, a quién le compras y por dónde.",
+      "insignia": "Sabes dónde estás parado",
+      "elogio": "Ya nadie te vende humo con lo básico: sabes qué es una acción, quién te la vende y qué NO es la bolsa."
+    },
+    {
+      "id": "negocio",
+      "icono": "🏭",
+      "titulo": "¿Qué vende y a quién?",
+      "frase": "Antes que cualquier número: de qué vive esta empresa.",
+      "insignia": "Miras el negocio, no el logo",
+      "elogio": "Empiezas por donde hay que empezar: qué produce y quién se lo compra. Suena obvio y casi nadie lo hace."
+    },
+    {
+      "id": "motor",
+      "icono": "⚙️",
+      "titulo": "¿De qué depende que gane?",
+      "frase": "El precio del metal, China, el dólar, la Fed, el clima, los aranceles.",
+      "insignia": "Entiendes el macro",
+      "elogio": "Lees las noticias como analista: sabes que China, el dólar o la Fed terminan cayendo en la caja de una empresa peruana."
+    },
+    {
+      "id": "plata",
+      "icono": "💵",
+      "titulo": "¿Gana plata de verdad?",
+      "frase": "Ganar en el papel no es tener la plata en la cuenta.",
+      "insignia": "No te engaña un titular",
+      "elogio": "Distingues la utilidad del efectivo. Con eso ya no te impresiona un titular de «ganancias récord»."
+    },
+    {
+      "id": "deuda",
+      "icono": "🏦",
+      "titulo": "¿Cuánto debe y puede pagarlo?",
+      "frase": "La deuda no se mira sola: se mira al lado de la caja que genera.",
+      "insignia": "Sabes pesar una deuda",
+      "elogio": "No te asusta el número grande ni te tranquiliza el chico: comparas la deuda con lo que la empresa genera."
+    },
+    {
+      "id": "riesgos",
+      "icono": "⚠️",
+      "titulo": "¿Qué le puede salir mal?",
+      "frase": "Clima, juicios, bloqueos, el dueño, el mar, la política.",
+      "insignia": "Ves venir el problema",
+      "elogio": "Piensas en lo que puede salir mal ANTES de que salga. Eso es exactamente lo que separa invertir de apostar."
+    },
+    {
+      "id": "precio",
+      "icono": "🏷️",
+      "titulo": "¿A qué precio la compras y qué te devuelve?",
+      "frase": "Precio no es valor. Y el dividendo no es un plazo fijo.",
+      "insignia": "Distingues precio de valor",
+      "elogio": "Sabes que el precio es lo que pagas y el valor es lo que recibes — y que un dividendo alto no siempre es buena noticia."
+    },
+    {
+      "id": "vara",
+      "icono": "📏",
+      "titulo": "¿Con qué vara se mide ESTA empresa?",
+      "frase": "Una mina no se mide como un banco, ni un banco como una clínica.",
+      "insignia": "Cada empresa, su vara",
+      "elogio": "Ya no comparas peras con manzanas: sabes que a una mina se le miran reservas, a un banco la mora y a una clínica sus camas."
+    }
+  ],
+
+  "_comment_conversacion": "🗣️ EL TONO (pedido de Jair, 25-jul: «que se sienta conversación, no cuestionario»). Diez reglas mandan sobre todo lo de abajo: (1) ninguna pregunta se hace por curiosidad de la app — la respuesta CAMBIA lo que pasa después; (2) si dice que no conoce algo, no se le pregunta más: se le ofrece la explicación o seguir de largo; (3) si sabe a medias, se hace UNA sola pregunta —qué parte no le cuadró— y la explicación se arma con esa respuesta; (4) si ya lo domina, no se le repite lo básico: se sube de profundidad o se cambia de tema; (5) nunca dos preguntas seguidas sin haberle dado algo en el medio; (6) las opciones hablan como una persona («No, ¿qué es?», no «Primera vez que lo escucho»); (7) lo que sigue lo decide su nivel, no una lista fija; (8) siempre existe «lo vemos después» y NO se penaliza; (9) esto es un mentor guiando, no una app evaluando; (10) cada pantalla tiene que quitar una duda, despertar curiosidad o dar sensación de avance. `voces` = cómo se pregunta el «¿te suena?» según de dónde viene la frase (un titular no se pregunta igual que algo de TikTok). `ecos` = las tres respuestas humanas. `angulos` = las tres formas de no entender algo; cada una arma una explicación DISTINTA (no es un adorno: cambia qué se muestra primero).",
+  "voces": {
+    "tiktok": "¿Te ha salido algo así en el feed?",
+    "noticias": "¿Lo has escuchado en las noticias?",
+    "familia": "¿Se habla de esto en tu casa?",
+    "calle": "¿Lo has escuchado por ahí?"
+  },
+  "ecos": [
+    { "id": "vi", "txt": "Sí, ya lo conozco" },
+    { "id": "vago", "txt": "Más o menos, pero nunca lo entendí bien" },
+    { "id": "nunca", "txt": "No, ¿qué es?" }
+  ],
+  "angulos": [
+    {
+      "id": "palabra",
+      "txt": "La palabra en sí — nunca supe qué significaba",
+      "cabecera": "Va la palabra, en una línea:"
+    },
+    {
+      "id": "mecanismo",
+      "txt": "Sé más o menos qué es, pero no por qué mueve plata",
+      "cabecera": "El mecanismo, que es lo que casi nunca cuentan:"
+    },
+    {
+      "id": "yo",
+      "txt": "Lo entiendo allá afuera, pero no qué tiene que ver conmigo",
+      "cabecera": "Dónde te toca a ti:"
+    }
+  ],
+
+  "preguntas": [
+    {
+      "id": "sp500-maximos",
+      "cat": "mundo",
+      "paso": "cancha",
+      "tipo": "vida",
+      "eco": "noticias",
+      "gancho": "El S&P 500 rompió máximos históricos",
+      "pregunta": "¿Qué significa de verdad que «el S&P 500 subió»?",
+      "opciones": [
+        { "t": "Que 500 empresas grandes de EE.UU. valen más que antes", "ok": true },
+        { "t": "Que todas las empresas del mundo subieron" },
+        { "t": "Que el dólar desapareció" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El S&P 500 no es una empresa: es una LISTA de las 500 empresas más grandes de Estados Unidos (Apple, Coca-Cola, Ford…). Alguien saca el promedio de cuánto valen todas juntas, y a ese promedio le pone un número. Si el número sube, es que en promedio esas 500 valen más hoy que ayer. Es como el promedio de notas de un salón: puede subir aunque tres alumnos hayan jalado.",
+      "puente": "En el Perú tenemos el nuestro: se llama S&P/BVL Perú General y promedia a las empresas de la Bolsa de Lima. Cuando en la tele dicen «la bolsa peruana subió», hablan de ese promedio."
+    },
+    {
+      "id": "wall-street-que-es",
+      "cat": "mundo",
+      "paso": "cancha",
+      "tipo": "vida",
+      "eco": "noticias",
+      "gancho": "«Wall Street cerró en rojo»",
+      "pregunta": "¿Qué es Wall Street?",
+      "opciones": [
+        { "t": "Una calle de Nueva York donde está la bolsa más grande del mundo", "ok": true },
+        { "t": "Un banco gigante que presta a todos los países" },
+        { "t": "Una app para comprar acciones" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Wall Street es una calle de verdad, en Nueva York, donde está la Bolsa de Valores de Nueva York. De tanto nombrarla, «Wall Street» terminó significando «el mundo de la bolsa gringa». Cuando dicen que cerró en rojo, quieren decir que ese día la mayoría de acciones terminó valiendo menos que en la mañana.",
+      "puente": "Lima tiene su propia calle: la Bolsa de Valores de Lima está en el centro, y ahí se negocian las acciones de 115 empresas peruanas — las mismas que vas a ver en ALTO."
+    },
+    {
+      "id": "bolsa-cayo-5",
+      "cat": "mundo",
+      "paso": "precio",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«La bolsa cayó 5% hoy»",
+      "pregunta": "¿Se perdió todo ese dinero? ¿A dónde se fue?",
+      "opciones": [
+        { "t": "No se fue a ningún lado: cambió el PRECIO que la gente está dispuesta a pagar", "ok": true },
+        { "t": "Se lo llevaron los dueños de la bolsa" },
+        { "t": "El gobierno lo confiscó" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Imagina que tu casa vale 200 mil y mañana un vecino vende la suya barata: ahora dicen que la tuya vale 190 mil. ¿Alguien te robó 10 mil? No. Cambió lo que la gente está dispuesta a pagar hoy. Con las acciones pasa igual: la caída es de PRECIO. Recién pierdes plata de verdad si vendes a ese precio bajo.",
+      "puente": "Por eso ALTO te muestra primero qué hace la empresa y cuánto gana: eso se mueve mucho más lento que el precio del día."
+    },
+    {
+      "id": "nasdaq-vs-sp",
+      "cat": "mundo",
+      "paso": "cancha",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "«El Nasdaq subió más que el S&P 500»",
+      "pregunta": "¿Por qué dan dos números distintos el mismo día?",
+      "opciones": [
+        { "t": "Porque cada uno mide un grupo distinto de empresas", "ok": true },
+        { "t": "Porque uno es de la mañana y otro de la tarde" },
+        { "t": "Porque uno está en dólares y el otro en soles" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Son dos listas diferentes. El Nasdaq está lleno de empresas de tecnología; el S&P 500 mezcla de todo: bancos, comida, petróleo, tecnología. Es como comparar el promedio del salón de cómputo con el promedio de todo el colegio: el mismo día pueden dar resultados distintos.",
+      "puente": "En Lima pasa lo mismo: hay un índice general y otros por sector. Cuando sube el «minero» y baja el «financiero», te está diciendo dónde estuvo el movimiento."
+    },
+    {
+      "id": "bolsa-gringa-afecta-peru",
+      "cat": "mundo",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "«Wall Street se desploma y arrastra a las bolsas de la región»",
+      "pregunta": "¿Por qué le importa a la Bolsa de Lima lo que pasa en Nueva York?",
+      "opciones": [
+        { "t": "Porque muchos de los que invierten en Lima son los mismos fondos grandes de afuera", "ok": true },
+        { "t": "Porque la Bolsa de Lima es una sucursal de la de Nueva York" },
+        { "t": "Porque en Perú se cotiza en dólares" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Los fondos gigantes de afuera invierten en muchos países a la vez. Cuando se asustan, venden en todos lados al mismo tiempo para tener efectivo — incluso donde no pasó nada malo. Es como cuando un rumor vacía el mercado entero aunque tu puesto siga vendiendo bien.",
+      "puente": "Eso explica algo raro que vas a ver: una minera peruana puede caer un día en que le fue bien. El negocio y el precio del día no siempre van del brazo."
+    },
+    {
+      "id": "burbuja",
+      "cat": "mundo",
+      "paso": "precio",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Los analistas advierten que puede ser una burbuja»",
+      "pregunta": "¿Qué es una burbuja en la bolsa?",
+      "opciones": [
+        { "t": "Cuando el precio se despega tanto del negocio real que un día se cae solo", "ok": true },
+        { "t": "Cuando una empresa quiebra por deudas" },
+        { "t": "Cuando el gobierno imprime billetes" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Imagina unas zapatillas de edición limitada: la gente las revende a 3,000 soles, no porque abriguen más, sino porque todos creen que mañana alguien pagará 4,000. Un día nadie paga y el precio se desinfla de golpe. La zapatilla siempre fue la misma; lo que estaba inflado era la expectativa.",
+      "puente": "En la Bolsa de Lima también hay «cascarones»: empresas casi sin negocio cuyo precio vive solo de una promesa. ALTO te avisa cuándo estás mirando una."
+    },
+    {
+      "id": "recesion",
+      "cat": "mundo",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "«Temen una recesión en Estados Unidos»",
+      "pregunta": "¿Por qué eso llegaría hasta el bolsillo de alguien en Lima?",
+      "opciones": [
+        { "t": "Si allá compran menos, el mundo consume menos metales y a Perú le pagan menos por lo que vende", "ok": true },
+        { "t": "Porque el Perú usa el dólar como moneda oficial" },
+        { "t": "No llega: son economías separadas" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Recesión significa que una economía se frena: la gente compra menos, las fábricas producen menos. Y las fábricas del mundo usan cobre, zinc y estaño… que salen en buena parte de acá. Menos fábricas trabajando = menos demanda de nuestros metales = menos plata entrando al Perú.",
+      "puente": "En ALTO puedes ver cuánto depende cada minera peruana del precio de su metal. Ahí esa noticia deja de ser lejana."
+    },
+    {
+      "id": "cierre-en-verde",
+      "cat": "mundo",
+      "paso": "precio",
+      "tipo": "vida",
+      "eco": "noticias",
+      "gancho": "«Las bolsas cerraron en verde»",
+      "pregunta": "¿Qué quiere decir «en verde»?",
+      "opciones": [
+        { "t": "Que ese día la mayoría de acciones terminó valiendo más que al abrir", "ok": true },
+        { "t": "Que abrieron nuevas empresas ecológicas" },
+        { "t": "Que se repartieron ganancias entre todos" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Verde = subió, rojo = bajó. Es solo un código de colores de las pantallas, igual que el semáforo. No dice si a la empresa le fue bien en el año: dice qué pasó con el precio en ESE día.",
+      "puente": "Un día verde no vuelve buena a una empresa mala, ni al revés. Por eso aquí miramos años, no días."
+    },
+
+    {
+      "id": "nvidia-chips",
+      "cat": "gigantes",
+      "paso": "negocio",
+      "tipo": "vida",
+      "eco": "tiktok",
+      "gancho": "«Nvidia es la empresa más valiosa del mundo»",
+      "pregunta": "¿Qué vende Nvidia?",
+      "opciones": [
+        { "t": "Chips: el «cerebro» que hace funcionar a la inteligencia artificial", "ok": true },
+        { "t": "Una red social" },
+        { "t": "Autos eléctricos" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Nvidia fabrica los chips que necesitan las inteligencias artificiales para pensar rápido. Como todas las empresas del mundo quieren IA, todas hacen cola por sus chips. Es como si en plena fiebre del oro tú fueras el único que vende palas.",
+      "puente": "Todo eso es una empresa con ventas, costos y utilidades — igual que Alicorp o Backus, solo que más grande. Y se estudia con las mismas preguntas."
+    },
+    {
+      "id": "apple-vender-parte",
+      "cat": "gigantes",
+      "paso": "cancha",
+      "tipo": "concepto",
+      "eco": "tiktok",
+      "gancho": "«Tengo acciones de Apple»",
+      "pregunta": "Si alguien tiene acciones de Apple, ¿qué tiene exactamente?",
+      "opciones": [
+        { "t": "Un pedacito de la empresa: le pertenece una parte chiquita de todo lo que Apple tiene y gana", "ok": true },
+        { "t": "Un iPhone gratis al año" },
+        { "t": "Un préstamo que Apple le tiene que devolver" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Una acción es un pedacito de propiedad. Si Apple fuera una pizza cortada en mil millones de tajadas, tú tienes unas cuantas tajadas. No manejas la empresa ni te regalan productos: te toca una parte de lo que gane y de lo que valga.",
+      "puente": "Exactamente lo mismo con una empresa peruana: comprar una acción de Cerro Verde es tener una tajadita de esa mina."
+    },
+    {
+      "id": "tesla-precio-vs-autos",
+      "cat": "gigantes",
+      "paso": "precio",
+      "tipo": "concepto",
+      "eco": "tiktok",
+      "gancho": "«Tesla vale más que Toyota, Ford y GM juntas»",
+      "pregunta": "¿Cómo puede valer más si vende muchos menos autos?",
+      "opciones": [
+        { "t": "Porque el precio no paga lo que vendió ayer, sino lo que la gente CREE que venderá mañana", "ok": true },
+        { "t": "Porque sus autos son más caros" },
+        { "t": "Porque tiene más fábricas" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El precio de una acción es una apuesta sobre el futuro. Es como una promesa de fútbol de 17 años: cuesta más que un jugador de 33 que hoy juega mejor, porque le compran los años que vienen. A veces la promesa se cumple; a veces no, y el precio se desinfla.",
+      "puente": "Esa diferencia entre «lo que gana hoy» y «lo que se espera de él» es el corazón de todo. En ALTO ves las dos cosas por separado, para que no te vendan solo la promesa."
+    },
+    {
+      "id": "microsoft-aburrida",
+      "cat": "gigantes",
+      "paso": "negocio",
+      "tipo": "puente",
+      "eco": "calle",
+      "gancho": "«Microsoft no está de moda, pero no para de ganar plata»",
+      "pregunta": "¿Puede una empresa aburrida ser mejor inversión que una emocionante?",
+      "opciones": [
+        { "t": "Sí: lo que importa es cuánta plata gana de verdad y si la reparte, no si es emocionante", "ok": true },
+        { "t": "No: si no está de moda, nadie la compra" },
+        { "t": "Solo si sale en la tele" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Un puesto de menú a 12 soles en una esquina con cola todos los días puede dejar más plata al año que un restaurante de moda que abre y cierra en seis meses. Aburrido y rentable es una combinación muy buena, aunque no dé para historias.",
+      "puente": "En Lima hay varias así: agua, luz, cemento, seguros. No salen en TikTok, y algunas llevan años repartiendo dividendos."
+    },
+    {
+      "id": "empresa-mas-valiosa",
+      "cat": "gigantes",
+      "paso": "precio",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«X es ahora la empresa más valiosa del mundo»",
+      "pregunta": "¿Cómo se calcula cuánto «vale» una empresa en bolsa?",
+      "opciones": [
+        { "t": "Se multiplica el precio de una acción por la cantidad de acciones que existen", "ok": true },
+        { "t": "Se suma todo el dinero que tiene en el banco" },
+        { "t": "Lo decide el gobierno de su país" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Si un salón tiene 30 alumnos y cada uno tiene una lámina que se vende a 5 soles, el álbum completo «vale» 150. Igual con las empresas: precio de una acción × número de acciones. Ojo, ese valor cambia todos los días, aunque la fábrica siga siendo la misma.",
+      "puente": "Ese número tiene nombre y en ALTO lo verás escrito en criollo. Sirve para comparar empresas de tamaños muy distintos."
+    },
+    {
+      "id": "netflix-suscriptores",
+      "cat": "gigantes",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "tiktok",
+      "gancho": "«Netflix perdió suscriptores y su acción se desplomó»",
+      "pregunta": "¿Por qué un dato así mueve tanto el precio?",
+      "opciones": [
+        { "t": "Porque si su forma de ganar plata se frena, todo el futuro que le imaginaban se achica", "ok": true },
+        { "t": "Porque los suscriptores son dueños de la empresa" },
+        { "t": "Porque tiene que devolver el dinero de las suscripciones" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Netflix gana con suscriptores: es su motor. Si el motor se frena, la gente recalcula cuánto puede ganar en los próximos años y paga menos por la acción hoy. Es como una cevichería a la que se le van los clientes: no quebró, pero ya nadie pagaría lo mismo por el negocio.",
+      "puente": "Cada empresa tiene su motor: para una minera es el precio del metal; para un banco, los créditos. ALTO te muestra el motor de cada una."
+    },
+    {
+      "id": "acciones-gringas-desde-peru",
+      "cat": "gigantes",
+      "paso": "cancha",
+      "tipo": "vida",
+      "eco": "tiktok",
+      "gancho": "«Desde el celular puedes comprar acciones de Estados Unidos»",
+      "pregunta": "¿Y las empresas peruanas dónde se compran?",
+      "opciones": [
+        { "t": "En la Bolsa de Lima, a través de una SAB (una casa de bolsa autorizada)", "ok": true },
+        { "t": "En la misma app gringa, en la pestaña Perú" },
+        { "t": "Directamente en la puerta de la empresa" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Para acciones peruanas necesitas una SAB: una Sociedad Agente de Bolsa. Abres cuenta, transfieres tu plata, das la orden y ella la ejecuta en la Bolsa de Lima cobrando una comisión. Es como el agente de una aerolínea: no es el avión, es quien te sube a él.",
+      "puente": "ALTO no es una SAB y no vende nada: aquí se estudia y se decide; allá se ejecuta."
+    },
+    {
+      "id": "ia-todo-sube",
+      "cat": "gigantes",
+      "paso": "negocio",
+      "tipo": "concepto",
+      "eco": "tiktok",
+      "gancho": "«Todo lo que diga IA está subiendo»",
+      "pregunta": "Si una empresa anuncia que ahora «usa inteligencia artificial», ¿ya es mejor negocio?",
+      "opciones": [
+        { "t": "No necesariamente: lo que cuenta es si eso le hace ganar más plata o gastar menos", "ok": true },
+        { "t": "Sí, la IA garantiza más ganancias" },
+        { "t": "Sí, porque el gobierno da beneficios a esas empresas" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Que una bodega ponga un letrero de neón no significa que venda más gaseosas. La palabra de moda atrae miradas; lo que decide es si al final del mes entró más plata a la caja. Muchas empresas anuncian modas justo cuando su negocio va flojo.",
+      "puente": "Truco que usarás en ALTO: cuando escuches un anuncio bonito, anda a ver las ventas y la caja. Ahí se ve si fue humo."
+    },
+
+    {
+      "id": "bitcoin-que-es",
+      "cat": "cripto",
+      "paso": "cancha",
+      "tipo": "vida",
+      "eco": "tiktok",
+      "gancho": "«El Bitcoin llegó a un nuevo récord»",
+      "pregunta": "¿Qué es un bitcoin?",
+      "opciones": [
+        { "t": "Una moneda digital sin banco ni país detrás; vale lo que la gente esté dispuesta a pagar", "ok": true },
+        { "t": "Una acción de una empresa de tecnología" },
+        { "t": "Un depósito de oro guardado en Suiza" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El bitcoin es un archivo digital que la gente acordó tratar como valioso, sin que ningún país lo respalde. No es una empresa: no tiene ventas, ni empleados, ni utilidades. Su precio es puro acuerdo entre compradores y vendedores.",
+      "puente": "Esa es la diferencia grande con una acción: detrás de una acción hay una fábrica, un supermercado o una mina que produce y factura. Eso se puede estudiar."
+    },
+    {
+      "id": "bitcoin-vs-accion",
+      "cat": "cripto",
+      "paso": "negocio",
+      "tipo": "concepto",
+      "eco": "tiktok",
+      "gancho": "«Mejor mete tu plata en cripto que en acciones»",
+      "pregunta": "¿En qué se diferencian de raíz?",
+      "opciones": [
+        { "t": "La acción es un pedazo de un negocio que produce; la cripto no produce nada por sí sola", "ok": true },
+        { "t": "En nada: las dos son inversiones iguales" },
+        { "t": "La cripto paga dividendos y la acción no" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Si compras una tajada de una panadería, esa panadería hornea y vende pan todos los días: tu tajada produce. Si compras una figurita de colección, no produce nada — solo puede valer más si otro paga más. Ninguna es «mala»: son juegos distintos, y conviene saber en cuál estás.",
+      "puente": "ALTO trabaja con lo primero: empresas que producen. Por eso puede mostrarte ventas, deudas y dividendos — cosas que a una cripto no le puedes pedir."
+    },
+    {
+      "id": "cripto-influencer",
+      "cat": "cripto",
+      "paso": "riesgos",
+      "tipo": "concepto",
+      "eco": "tiktok",
+      "gancho": "«Este token va a explotar, es la próxima oportunidad»",
+      "pregunta": "¿Por qué alguien te avisaría de una oportunidad así, gratis, a miles de personas?",
+      "opciones": [
+        { "t": "Porque si muchos compran, sube el precio de lo que él ya tiene — y ahí vende", "ok": true },
+        { "t": "Porque quiere ayudar a la gente" },
+        { "t": "Porque le pagan por dar buenas noticias" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Piensa en alguien que compró 10,000 láminas de un álbum y luego sale a decir en todos lados que esas láminas son lo máximo. Si te convence a ti y a mil más, el precio sube y él vende las suyas caro. No siempre es así, pero la pregunta «¿qué gana el que me lo cuenta?» te ahorra muchos problemas.",
+      "puente": "Regla de la casa: ALTO no gana nada con lo que decidas. No vende acciones, no cobra comisión, no recomienda comprar."
+    },
+    {
+      "id": "cripto-volatilidad",
+      "cat": "cripto",
+      "paso": "precio",
+      "tipo": "puente",
+      "eco": "tiktok",
+      "gancho": "«El bitcoin cayó 20% en un fin de semana»",
+      "pregunta": "¿Qué te dice un movimiento tan violento?",
+      "opciones": [
+        { "t": "Que su precio depende sobre todo del ánimo de la gente, y el ánimo cambia rápido", "ok": true },
+        { "t": "Que alguien lo apagó" },
+        { "t": "Que se acabaron los bitcoins" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Cuando algo no tiene ventas ni utilidades que lo aterricen, el precio queda colgado del humor del momento. Sube fuerte y baja fuerte. A eso se le llama volatilidad, y significa una cosa muy práctica: la plata que metas ahí puede valer bastante menos justo cuando la necesites.",
+      "puente": "Las acciones también se mueven, pero puedes mirar cuánto gana la empresa para ubicarte. Ese piso es lo que ALTO te enseña a leer."
+    },
+    {
+      "id": "cripto-perdi-todo",
+      "cat": "cripto",
+      "paso": "riesgos",
+      "tipo": "vida",
+      "eco": "calle",
+      "gancho": "«Un amigo perdió toda su plata en cripto»",
+      "pregunta": "¿Cuál suele ser el error más común detrás de esas historias?",
+      "opciones": [
+        { "t": "Meter plata que sí necesitaba, en algo que no entendía, porque otros lo hacían", "ok": true },
+        { "t": "No haber comprado suficiente" },
+        { "t": "Haber usado el celular en vez de la computadora" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Casi nunca el problema es «la cripto»: es haber puesto la plata del alquiler en algo que no se entendía, apurado por no quedarse afuera. La misma historia existe con acciones, con negocios de primos y con pirámides. El apuro es el ingrediente que se repite.",
+      "puente": "ALTO va a contramano de eso: aquí nadie te apura. Puedes pasar semanas aprendiendo sin invertir un sol."
+    },
+    {
+      "id": "cripto-blockchain",
+      "cat": "cripto",
+      "paso": "cancha",
+      "tipo": "vida",
+      "eco": "tiktok",
+      "gancho": "«Todo esto funciona con blockchain»",
+      "pregunta": "En simple, ¿qué es una blockchain?",
+      "opciones": [
+        { "t": "Un cuaderno de cuentas copiado en miles de computadoras, para que nadie lo pueda borrar", "ok": true },
+        { "t": "Un banco digital del gobierno" },
+        { "t": "Un antivirus" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Imagina el cuaderno donde la bodeguera anota los fiados, pero copiado igualito en miles de casas del barrio al mismo tiempo. Si alguien intenta borrar su deuda en su copia, las otras miles lo desmienten. Eso es, en criollo, una blockchain.",
+      "puente": "Es tecnología, no una promesa de ganancia. Entender la diferencia entre «esto es ingenioso» y «esto me hará ganar plata» es media carrera ganada."
+    },
+    {
+      "id": "cripto-vs-plazo-fijo",
+      "cat": "cripto",
+      "paso": "precio",
+      "tipo": "concepto",
+      "eco": "familia",
+      "gancho": "«Deja el banco, ahí no ganas nada»",
+      "pregunta": "¿Qué te da un plazo fijo del banco que una cripto no?",
+      "opciones": [
+        { "t": "Un rendimiento pactado por escrito y protección del seguro de depósitos hasta cierto monto", "ok": true },
+        { "t": "Más ganancia siempre" },
+        { "t": "Nada, es exactamente igual" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El plazo fijo te dice de antemano cuánto te va a pagar y está protegido hasta cierto monto por el Fondo de Seguro de Depósitos. Gana poco, pero es predecible. Lo otro puede ganar mucho más… o mucho menos. No es «mejor o peor»: es cuánta sorpresa aguantas.",
+      "puente": "Ojo con un error clásico: creer que el dividendo de una acción funciona como un plazo fijo. No lo es, y en ALTO verás por qué."
+    },
+    {
+      "id": "cripto-fomo",
+      "cat": "cripto",
+      "paso": "precio",
+      "tipo": "concepto",
+      "eco": "tiktok",
+      "gancho": "«Todo el mundo está ganando menos tú»",
+      "pregunta": "¿Qué suele pasar cuando compras algo justo porque todos hablan de eso?",
+      "opciones": [
+        { "t": "Que llegas cuando el precio ya subió, y el que vende barato es el que entró antes", "ok": true },
+        { "t": "Que ganas más rápido" },
+        { "t": "Que el precio se congela" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Cuando algo llega a la conversación de todos, el precio ya recorrió buena parte del camino. Es como llegar a la fiesta a las 4 de la mañana: pagas la entrada completa por la última hora. No siempre sale mal, pero el apuro se paga.",
+      "puente": "Este es justo el bicho que ALTO intenta matar: aquí nada dice «compra ya». La app está hecha para que decidas sin apuro."
+    },
+
+    {
+      "id": "inflacion-que-es",
+      "cat": "bolsillo",
+      "paso": "motor",
+      "tipo": "vida",
+      "eco": "noticias",
+      "gancho": "«La inflación fue de 3% este año»",
+      "pregunta": "¿Qué significa eso para tu bolsillo?",
+      "opciones": [
+        { "t": "Que con los mismos 100 soles compras menos cosas que el año pasado", "ok": true },
+        { "t": "Que los sueldos suben 3%" },
+        { "t": "Que el banco te cobra 3% más" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Inflación es que las cosas suben de precio. Si el menú costaba 10 soles y ahora cuesta 10.30, tu billete de 10 ya no alcanza. Tu plata no desapareció: compra menos. Por eso guardar todo debajo del colchón también tiene un costo, aunque no lo veas.",
+      "puente": "Ese es el motivo por el que existe invertir: intentar que tu plata crezca al menos al ritmo de los precios."
+    },
+    {
+      "id": "dolar-sube",
+      "cat": "bolsillo",
+      "paso": "motor",
+      "tipo": "vida",
+      "eco": "noticias",
+      "gancho": "«El dólar subió a S/ 3.80»",
+      "pregunta": "¿Qué significa que el dólar suba?",
+      "opciones": [
+        { "t": "Que necesitas más soles para comprar el mismo dólar", "ok": true },
+        { "t": "Que Estados Unidos imprimió más billetes" },
+        { "t": "Que hay menos dólares en el mundo" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El tipo de cambio es un precio, como el del pollo. Si el dólar «sube», el sol se abarata: hay que dar más soles por el mismo dólar. A quien le pagan en dólares le conviene; a quien compra cosas importadas (celulares, gasolina, trigo) le duele.",
+      "puente": "Muchas empresas peruanas venden en dólares y gastan en soles, o al revés. Ese detalle cambia sus ganancias, y en ALTO está a la vista."
+    },
+    {
+      "id": "empresa-deuda-dolares",
+      "cat": "bolsillo",
+      "paso": "deuda",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«El alza del dólar golpeó a las empresas endeudadas en dólares»",
+      "pregunta": "¿Por qué les duele si su deuda es la misma?",
+      "opciones": [
+        { "t": "Porque ganan en soles y ahora necesitan más soles para pagar los mismos dólares", "ok": true },
+        { "t": "Porque el banco les sube el interés automáticamente" },
+        { "t": "Porque tienen que cambiar de banco" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Imagina que debes 100 dólares y ganas en soles. Cuando el dólar estaba 3.50, debías 350 soles. A 3.80, debes 380. La deuda en dólares no cambió, pero para juntarla tienes que trabajar más. A las empresas les pasa igual, con muchos ceros más.",
+      "puente": "En ALTO cada empresa muestra en qué moneda debe y en cuál vende. Es de las primeras cosas que mira alguien con experiencia."
+    },
+    {
+      "id": "fed-tasas",
+      "cat": "bolsillo",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "«La Reserva Federal subió las tasas de interés»",
+      "pregunta": "¿Qué es la Reserva Federal y por qué su decisión sale en todos lados?",
+      "opciones": [
+        { "t": "Es el banco central de EE.UU.: fija cuánto cuesta prestar dólares, y eso mueve al mundo entero", "ok": true },
+        { "t": "Es un banco privado que presta a las empresas" },
+        { "t": "Es la bolsa de Nueva York" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "La Reserva Federal decide cuánto cuesta pedir dólares prestados. Si sube esa tasa, prestar sale caro en todo el planeta: las empresas piden menos, invierten menos, y los que tienen plata prefieren guardarla en el banco cobrando ese interés en vez de arriesgarla en acciones.",
+      "puente": "El Perú tiene su propio banco central, el BCRP, que hace algo parecido con los soles. Cuando cambia esa tasa, se mueven los créditos y también la bolsa."
+    },
+    {
+      "id": "tasas-y-acciones",
+      "cat": "bolsillo",
+      "paso": "precio",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Con tasas altas, las bolsas sufren»",
+      "pregunta": "¿Por qué una tasa alta hace bajar el precio de las acciones?",
+      "opciones": [
+        { "t": "Porque si el banco te paga bien sin riesgo, la acción tiene que ofrecer más para convencerte", "ok": true },
+        { "t": "Porque las empresas dejan de vender" },
+        { "t": "Porque el gobierno prohíbe comprar acciones" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Si un depósito seguro te da 7% al año, ¿por qué arriesgarías tu plata en una empresa que quizás te dé 8%? Muchos prefieren lo seguro, venden acciones y el precio baja. Cuando el banco paga poco, pasa lo contrario: la gente sale a buscar rendimiento.",
+      "puente": "Es una de las razones por las que una acción puede bajar sin que a la empresa le haya pasado nada malo."
+    },
+    {
+      "id": "bcrp-que-hace",
+      "cat": "bolsillo",
+      "paso": "motor",
+      "tipo": "vida",
+      "eco": "noticias",
+      "gancho": "«El BCRP mantuvo su tasa de referencia»",
+      "pregunta": "¿Qué hace el Banco Central de Reserva del Perú?",
+      "opciones": [
+        { "t": "Cuida que los precios no se disparen y ordena cuánto cuesta el dinero en soles", "ok": true },
+        { "t": "Presta plata a las personas para comprar casa" },
+        { "t": "Cobra los impuestos" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El BCRP no atiende personas: es el banco de los bancos. Su trabajo principal es que la inflación no se descontrole. Cuando los precios suben mucho, encarece el dinero para enfriar el consumo; cuando la economía está lenta, lo abarata.",
+      "puente": "Los datos del BCRP también alimentan a ALTO: de ahí sale, por ejemplo, el precio internacional de los metales que verás en las fichas."
+    },
+    {
+      "id": "sueldo-vs-inflacion",
+      "cat": "bolsillo",
+      "paso": "motor",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "«Mi sueldo es el mismo pero ya no me alcanza»",
+      "pregunta": "Si tu sueldo no sube y los precios sí, ¿qué pasó realmente?",
+      "opciones": [
+        { "t": "Te bajaron el sueldo sin decírtelo: compras menos con lo mismo", "ok": true },
+        { "t": "Nada, es la misma plata" },
+        { "t": "Ganaste más porque el número no cambió" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Lo que importa no es el número del sueldo, sino cuántas cosas puedes comprar con él. Si todo sube 5% y tu sueldo no se mueve, es como si te hubieran recortado 5%. Nadie te lo anuncia, pero se siente en el mercado cada sábado.",
+      "puente": "Esa es la carrera invisible que todos corremos. Invertir es intentar correrla con algo más que el sueldo."
+    },
+    {
+      "id": "ahorrar-vs-invertir",
+      "cat": "bolsillo",
+      "paso": "cancha",
+      "tipo": "concepto",
+      "eco": "familia",
+      "gancho": "«Mejor ahorra, no te metas en esas cosas»",
+      "pregunta": "¿Cuál es la diferencia entre ahorrar e invertir?",
+      "opciones": [
+        { "t": "Ahorrar es guardar lo que tienes; invertir es ponerlo a trabajar aceptando que puede salir mal", "ok": true },
+        { "t": "Son lo mismo con distinto nombre" },
+        { "t": "Invertir es solo para ricos" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Ahorrar es como guardar semillas en un frasco: siempre están ahí, pero no crecen. Invertir es sembrarlas: pueden dar cosecha… o no germinar. Las dos cosas se necesitan, y en distinto orden: primero el frasco para las emergencias, después la siembra.",
+      "puente": "Nadie en ALTO te va a decir que dejes de ahorrar. Lo que aprenderás es a decidir con criterio qué siembras."
+    },
+    {
+      "id": "gasolina-precio",
+      "cat": "bolsillo",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "calle",
+      "gancho": "«Subió la gasolina otra vez»",
+      "pregunta": "¿Qué tiene que ver el precio del petróleo con la bolsa peruana?",
+      "opciones": [
+        { "t": "Sube el costo de transportar TODO, y eso muerde las ganancias de casi cualquier empresa", "ok": true },
+        { "t": "Nada, son mundos aparte" },
+        { "t": "Solo afecta a los grifos" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Todo lo que compras viajó en un camión: el arroz, el cemento, el pan. Si el combustible sube, ese viaje cuesta más y la empresa gana menos por cada producto… o te lo cobra a ti. Por eso una noticia de petróleo termina apareciendo en los resultados de una fábrica.",
+      "puente": "En ALTO puedes ver cuánto se le va a una empresa en costos y qué pasa con su ganancia cuando esos costos suben."
+    },
+    {
+      "id": "afp-retiro",
+      "cat": "bolsillo",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "«Aprueban un nuevo retiro de AFP»",
+      "pregunta": "¿Por qué eso puede hacer caer la Bolsa de Lima?",
+      "opciones": [
+        { "t": "Porque las AFP tienen que vender acciones y bonos para juntar el efectivo que van a entregar", "ok": true },
+        { "t": "Porque la gente deja de comprar en las tiendas" },
+        { "t": "Porque cierra la bolsa esos días" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Tu fondo de AFP no es un montón de billetes guardados: está invertido en acciones y bonos. Si millones de personas piden su plata a la vez, la AFP tiene que vender esas inversiones rápido para pagar. Vender apurado y en cantidad empuja los precios hacia abajo.",
+      "puente": "Sorpresa: si estás en una AFP, ya eres dueño indirecto de acciones peruanas. Aprender a leerlas deja de ser un tema ajeno."
+    },
+
+    {
+      "id": "china-menos-cobre",
+      "cat": "metales",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "«China se desacelera y compra menos cobre»",
+      "pregunta": "Perú le vende cobre a China. Si China compra menos, ¿por qué debería importarte a ti, que nunca invertiste?",
+      "opciones": [
+        { "t": "Porque entra menos plata al país: menos impuestos, menos obras, menos empleo en varias regiones", "ok": true },
+        { "t": "Porque subiría el precio del pan al día siguiente" },
+        { "t": "No debería importarme: es cosa de las mineras" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "China es el comprador más grande de cobre del planeta y usa el nuestro para cables, casas y autos. Si construye menos, necesita menos cobre, el precio baja y las mineras peruanas venden lo mismo por menos plata. Menos plata para ellas es menos impuestos para el Estado y menos trabajo alrededor de la mina.",
+      "puente": "Cerro Verde, Southern y Nexa venden justamente eso. En ALTO puedes ver cuánto pesa el precio del metal en sus resultados."
+    },
+    {
+      "id": "cobre-para-que",
+      "cat": "metales",
+      "paso": "negocio",
+      "tipo": "vida",
+      "eco": "noticias",
+      "gancho": "«El cobre es el metal de la transición energética»",
+      "pregunta": "¿Para qué se usa tanto cobre?",
+      "opciones": [
+        { "t": "Para todo lo que lleve cable o electricidad: casas, autos eléctricos, paneles, redes", "ok": true },
+        { "t": "Para hacer monedas solamente" },
+        { "t": "Para fabricar plástico" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El cobre conduce la electricidad como pocos metales, así que está detrás de cada enchufe, cada cargador y cada torre eléctrica. Un auto eléctrico lleva varias veces más cobre que uno a gasolina. Por eso, mientras más se electrifique el mundo, más cobre hará falta.",
+      "puente": "Perú es de los mayores productores del mundo. Eso significa que hay empresas peruanas listadas que viven de esa historia."
+    },
+    {
+      "id": "oro-refugio",
+      "cat": "metales",
+      "paso": "motor",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«El oro se dispara ante el miedo global»",
+      "pregunta": "¿Por qué el oro sube justo cuando hay crisis o guerra?",
+      "opciones": [
+        { "t": "Porque mucha gente corre a guardar su plata en algo que no depende de ningún gobierno", "ok": true },
+        { "t": "Porque se fabrican más joyas en las crisis" },
+        { "t": "Porque las minas dejan de producir" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Cuando la gente desconfía de los billetes o de los bancos, busca algo que haya valido siempre y que no pueda imprimirse. El oro cumple ese papel desde hace siglos. No produce nada —no paga intereses ni dividendos—, pero tranquiliza, y esa tranquilidad se paga.",
+      "puente": "Buenaventura produce oro y plata. Cuando veas ese titular, ya sabes a qué empresa peruana ir a mirar."
+    },
+    {
+      "id": "precio-metal-manda",
+      "cat": "metales",
+      "paso": "motor",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«La minera reportó menos ganancias pese a producir igual»",
+      "pregunta": "¿Cómo produce lo mismo y gana menos?",
+      "opciones": [
+        { "t": "Porque el precio del metal lo pone el mundo, no la empresa: si baja, cobra menos por lo mismo", "ok": true },
+        { "t": "Porque le subieron los impuestos ese día" },
+        { "t": "Porque vendió menos toneladas" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Una minera es como un agricultor de papa: puede cosechar los mismos sacos todos los años, pero si el precio de la papa en el mercado cae, se lleva menos plata a casa. Ni la mejor gestión del mundo cambia el precio internacional del cobre.",
+      "puente": "Esta es LA idea para entender a las mineras peruanas: se estudian mirando dos cosas, cuánto producen y a qué precio les pagan."
+    },
+    {
+      "id": "zinc-estano",
+      "cat": "metales",
+      "paso": "negocio",
+      "tipo": "vida",
+      "eco": "noticias",
+      "gancho": "«Perú es top mundial en zinc, plata y estaño»",
+      "pregunta": "¿Para qué sirve el zinc, ese que casi nadie ve?",
+      "opciones": [
+        { "t": "Para que el fierro no se oxide: se le pone una capa de zinc (galvanizado)", "ok": true },
+        { "t": "Para endulzar bebidas" },
+        { "t": "Para hacer vidrio" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Los techos de calamina, los tornillos y las estructuras metálicas duran años porque llevan una capa de zinc que se sacrifica y evita la oxidación. Nadie lo ve, pero está en media construcción del país.",
+      "puente": "Volcan y Nexa producen zinc; Minsur, estaño. Detrás de cada metal hay una empresa listada en la Bolsa de Lima."
+    },
+    {
+      "id": "onza-tonelada",
+      "cat": "metales",
+      "paso": "motor",
+      "tipo": "vida",
+      "eco": "noticias",
+      "gancho": "«El oro cerró en X dólares la onza y el cobre en Y la libra»",
+      "pregunta": "¿Por qué se miden en unidades tan raras?",
+      "opciones": [
+        { "t": "Porque son precios internacionales y el mundo entero usa la misma medida para poder comparar", "ok": true },
+        { "t": "Porque en Perú se pesa distinto" },
+        { "t": "Porque así lo decide cada mina" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El oro se cotiza en onzas y el cobre en libras porque así se acordó en los mercados donde se compran y venden. La ventaja: todos hablan el mismo idioma y una mina en Perú, otra en Chile y otra en Congo cobran con la misma referencia.",
+      "puente": "ALTO trae esos precios del BCRP y te los muestra al lado de la empresa que los produce."
+    },
+    {
+      "id": "conflicto-social",
+      "cat": "metales",
+      "paso": "riesgos",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "«Bloquean el corredor minero del sur»",
+      "pregunta": "¿Por qué un bloqueo de carretera afecta el resultado de una minera?",
+      "opciones": [
+        { "t": "Porque si no puede sacar el mineral, no lo vende — y los costos siguen corriendo igual", "ok": true },
+        { "t": "Porque el mineral se malogra" },
+        { "t": "Porque el Estado le quita la concesión" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El mineral vale cuando llega al puerto y se embarca. Si los camiones no pasan, la mina se queda con el producto adentro mientras sigue pagando sueldos, luz y maquinaria. Es como una panadería que hornea todo el día pero no puede abrir la puerta.",
+      "puente": "A eso se le llama riesgo social, y para las mineras peruanas es tan importante como el precio del metal. En ALTO aparece entre sus riesgos."
+    },
+    {
+      "id": "canon-minero",
+      "cat": "metales",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "«La región recibió menos canon minero este año»",
+      "pregunta": "¿De dónde sale el canon?",
+      "opciones": [
+        { "t": "De los impuestos que paga la minera: si gana menos, la región recibe menos", "ok": true },
+        { "t": "De un fondo internacional" },
+        { "t": "De un descuento en el recibo de luz" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El canon es la parte del impuesto a la renta minera que vuelve a la región donde está la mina, para obras. Si el precio del metal cae y la empresa gana menos, paga menos impuestos y llega menos canon. Por eso una noticia de China puede terminar en una obra que no se hizo en Moquegua.",
+      "puente": "Entender las utilidades de una empresa deja de ser abstracto cuando ves que de ahí salen colegios y pistas."
+    },
+    {
+      "id": "mineral-ley",
+      "cat": "metales",
+      "paso": "vara",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«La mina reportó una caída en la ley del mineral»",
+      "pregunta": "¿Qué es la «ley» de un mineral?",
+      "opciones": [
+        { "t": "Qué tan concentrado está el metal en la roca que sacan", "ok": true },
+        { "t": "Una norma del Congreso sobre minería" },
+        { "t": "El permiso ambiental" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es como el jugo en una naranja: si cada naranja tiene menos jugo, necesitas exprimir más naranjas para llenar el mismo vaso. Si la roca trae menos metal por tonelada, hay que mover más tierra —y gastar más— para producir lo mismo.",
+      "puente": "Es una de las pocas palabras técnicas que sí vale la pena aprender temprano, porque explica por qué a una mina le sube el costo sin que nadie haya hecho nada mal."
+    },
+
+    {
+      "id": "cerro-verde-quien",
+      "cat": "mineras",
+      "paso": "cancha",
+      "tipo": "vida",
+      "eco": "noticias",
+      "gancho": "«Cerro Verde, una de las mayores minas de cobre del Perú»",
+      "pregunta": "¿Sabías que puedes ser dueño de un pedacito de Cerro Verde?",
+      "opciones": [
+        { "t": "Sí: cotiza en la Bolsa de Lima, cualquiera puede comprar acciones suyas", "ok": true },
+        { "t": "No, es del Estado" },
+        { "t": "Solo pueden los trabajadores de la mina" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Muchas empresas grandes del Perú tienen sus acciones listadas en la Bolsa de Lima, y eso significa que cualquier persona con una cuenta en una SAB puede comprar una parte. No hace falta ser millonario ni tener contactos.",
+      "puente": "Cerro Verde está en ALTO con sus números oficiales: cuánto vende, cuánto gana, cuánto reparte."
+    },
+    {
+      "id": "buenaventura-oro",
+      "cat": "mineras",
+      "paso": "cancha",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "«Buenaventura sube en Nueva York»",
+      "pregunta": "¿Una empresa peruana cotizando en Nueva York? ¿Cómo es eso?",
+      "opciones": [
+        { "t": "Una empresa puede listar sus acciones en varias bolsas a la vez para llegar a más inversionistas", "ok": true },
+        { "t": "Es una empresa gringa con nombre peruano" },
+        { "t": "Se mudó de país" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es como vender el mismo producto en dos mercados: en el de Lima y en el de Nueva York. La empresa es la misma —minas en Perú, trabajadores peruanos—, pero sus acciones se pueden comprar en ambos sitios. Eso le da acceso a inversionistas mucho más grandes.",
+      "puente": "Buenaventura produce oro, plata y cobre, y además tiene una parte de Cerro Verde. En ALTO ves ese detalle explicado."
+    },
+    {
+      "id": "volcan-deuda",
+      "cat": "mineras",
+      "paso": "deuda",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Volcan negocia con sus bancos para reperfilar su deuda»",
+      "pregunta": "¿Qué significa que una empresa «reperfile» su deuda?",
+      "opciones": [
+        { "t": "Que acuerda pagarla más tarde o de otra forma: gana aire, pero la deuda sigue ahí", "ok": true },
+        { "t": "Que le perdonan toda la deuda" },
+        { "t": "Que deja de deber porque cambia de dueño" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es como pedirle a la casera que te deje pagar el mes que viene: no te regaló el almuerzo, solo te movió la fecha. Sirve cuando el problema es de momento; no sirve si el negocio no da para pagar nunca.",
+      "puente": "Por eso en ALTO la deuda no se mira sola: se compara con la caja que genera la empresa. Deber mucho no es lo mismo que deber demasiado."
+    },
+    {
+      "id": "minsur-estano",
+      "cat": "mineras",
+      "paso": "negocio",
+      "tipo": "vida",
+      "eco": "noticias",
+      "gancho": "«Perú es el segundo productor mundial de estaño»",
+      "pregunta": "¿Dónde está el estaño en tu vida diaria?",
+      "opciones": [
+        { "t": "En las soldaduras de casi todos los aparatos electrónicos que usas", "ok": true },
+        { "t": "En la ropa deportiva" },
+        { "t": "En los envases de gaseosa" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Cada celular, laptop y televisor tiene decenas de puntos de soldadura, y esa soldadura lleva estaño. No lo ves nunca, pero sin él nada se conecta. Perú es uno de los mayores proveedores del mundo.",
+      "puente": "Minsur es la empresa peruana detrás de eso, y cotiza en la Bolsa de Lima. La cadena que va de tu celular a una acción es más corta de lo que parece."
+    },
+    {
+      "id": "nexa-brasilena",
+      "cat": "mineras",
+      "paso": "riesgos",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Nexa, del grupo brasileño Votorantim»",
+      "pregunta": "Si el dueño principal es extranjero, ¿qué significa para el que compra una acción acá?",
+      "opciones": [
+        { "t": "Que hay un accionista grande que manda; el pequeño gana con la empresa, pero no decide", "ok": true },
+        { "t": "Que las acciones peruanas no valen" },
+        { "t": "Que las ganancias no se pueden repartir" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "En casi toda empresa hay un dueño grande que controla las decisiones y muchos dueños chiquitos que van de acompañantes. No es malo: lo importante es que ese dueño grande cuide el negocio y reparta bien. Es como entrar de socio menor a un negocio familiar que ya funciona.",
+      "puente": "En ALTO puedes ver quién controla cada empresa peruana. Saber quién manda explica muchas decisiones."
+    },
+    {
+      "id": "southern-cobre",
+      "cat": "mineras",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "«Southern evalúa destrabar el proyecto Tía María»",
+      "pregunta": "¿Por qué un proyecto que aún no existe mueve el precio de la acción?",
+      "opciones": [
+        { "t": "Porque el precio incorpora el futuro: un proyecto nuevo son ventas que hoy no existen", "ok": true },
+        { "t": "Porque ya empezó a vender cobre" },
+        { "t": "Porque el Estado le paga por anunciarlo" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es como enterarte de que van a construir una avenida al lado de tu terreno: nada ha cambiado hoy en el terreno, pero ya vale distinto porque cambió lo que se espera de él. Con las mineras pasa igual: un proyecto aprobado promete producción futura.",
+      "puente": "Y al revés también: si el proyecto se cae, ese futuro se borra del precio. En ALTO esas noticias aparecen como catalizadores."
+    },
+    {
+      "id": "mineras-dividendo",
+      "cat": "mineras",
+      "paso": "precio",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "«Las mineras peruanas reparten fuertes dividendos»",
+      "pregunta": "Si una minera reparte mucho un año, ¿repartirá lo mismo el siguiente?",
+      "opciones": [
+        { "t": "No necesariamente: depende del precio del metal y de cuánta caja le sobre ese año", "ok": true },
+        { "t": "Sí, el dividendo es fijo por ley" },
+        { "t": "Sí, siempre reparten más cada año" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Cuando el metal está caro, entra mucha plata y sobra para repartir. Cuando cae, primero se paga a los trabajadores, a los proveedores y al banco; el dividendo es lo último de la fila. Por eso una minera puede repartir muchísimo un año y casi nada al siguiente.",
+      "puente": "Esta es una de las trampas más caras del mercado peruano: mirar el dividendo del año pasado y creer que es una tasa asegurada."
+    },
+    {
+      "id": "mina-vida-util",
+      "cat": "mineras",
+      "paso": "vara",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«A la mina le quedan 12 años de reservas»",
+      "pregunta": "¿Por qué eso es información importante para un dueño de acciones?",
+      "opciones": [
+        { "t": "Porque una mina se agota: cuando se acaba el mineral, se acaba el negocio si no encuentran más", "ok": true },
+        { "t": "Porque después de 12 años la empresa cambia de nombre" },
+        { "t": "Porque el Estado la cierra a los 12 años" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Una fábrica de fideos puede producir para siempre si compra trigo; una mina, no: saca de un depósito que se termina. Por eso las mineras gastan tanto en explorar. Es como una despensa: puedes cocinar rico, pero alguien tiene que reponer.",
+      "puente": "Reservas y producción son dos números que en ALTO están juntos, mina por mina, sacados de sus reportes oficiales."
+    },
+    {
+      "id": "junior-exploracion",
+      "cat": "mineras",
+      "paso": "vara",
+      "tipo": "concepto",
+      "eco": "tiktok",
+      "gancho": "«Esta minera junior puede multiplicarse por 10»",
+      "pregunta": "¿Qué es una minera «junior»?",
+      "opciones": [
+        { "t": "Una que todavía no produce: solo explora. Puede volar o no valer nada", "ok": true },
+        { "t": "Una minera con trabajadores jóvenes" },
+        { "t": "Una minera pequeña pero que ya vende" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Una junior es como alguien que compró un terreno donde CREE que hay agua y está perforando. Si encuentra, vale muchísimo; si no encuentra, vale casi nada. No tiene ventas, vive de levantar plata. No es inversión ni estafa: es una apuesta, y conviene llamarla por su nombre.",
+      "puente": "En la Bolsa de Lima hay varias. ALTO te las marca con una advertencia grande, porque no se estudian como una empresa que ya gana."
+    },
+
+    {
+      "id": "aceros-fierro",
+      "cat": "industria",
+      "paso": "motor",
+      "tipo": "vida",
+      "eco": "calle",
+      "gancho": "«Aceros Arequipa, el fierro de la construcción»",
+      "pregunta": "¿De qué depende que a una empresa así le vaya bien?",
+      "opciones": [
+        { "t": "De cuánto se construya en el país: casas, edificios, obras públicas", "ok": true },
+        { "t": "Del precio del petróleo únicamente" },
+        { "t": "De cuántos autos se vendan" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Cada casa que se levanta lleva fierro corrugado en sus columnas. Si el país construye, la empresa vende; si la construcción se frena, se le llena el almacén. En el Perú buena parte de eso es autoconstrucción: familias que levantan su casa piso por piso.",
+      "puente": "Por eso, cuando escuchas «la construcción cayó», ya sabes a qué empresa peruana afecta. Eso es leer una noticia como inversionista."
+    },
+    {
+      "id": "antidumping-que-es",
+      "cat": "industria",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "«Indecopi aplica derechos antidumping al acero importado»",
+      "pregunta": "¿Qué es el antidumping?",
+      "opciones": [
+        { "t": "Un recargo a productos importados que entran demasiado baratos, para que no revienten a la industria local", "ok": true },
+        { "t": "Una prohibición total de importar" },
+        { "t": "Un impuesto que pagan los consumidores por comprar local" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Imagina que en tu barrio alguien vende el pan a mitad de precio, a pérdida, solo hasta que las otras panaderías cierren. Cuando se queda solo, sube el precio. El antidumping es el Estado poniéndole un recargo a ese pan barato para que la competencia sea pareja.",
+      "puente": "Para una empresa como Aceros Arequipa, esa decisión puede valer más que un trimestre bueno. Es una noticia que se lee en los resultados."
+    },
+    {
+      "id": "aranceles-peru",
+      "cat": "industria",
+      "paso": "motor",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«El Perú sube aranceles a ciertas importaciones»",
+      "pregunta": "¿Qué es un arancel?",
+      "opciones": [
+        { "t": "Un impuesto que se cobra a un producto por entrar al país", "ok": true },
+        { "t": "Un permiso para exportar" },
+        { "t": "El precio del transporte marítimo" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es un peaje de frontera: el producto extranjero paga por entrar, y así llega más caro a la tienda. Protege al que fabrica acá, pero encarece lo que compras. Casi siempre hay un ganador y un perdedor, y conviene saber cuál de los dos está en tu lista.",
+      "puente": "Una misma noticia puede ser buena para una empresa listada y mala para otra. Aprender a ver ambos lados es parte del oficio."
+    },
+    {
+      "id": "aranceles-eeuu",
+      "cat": "industria",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "«Estados Unidos impone aranceles y el mundo responde»",
+      "pregunta": "¿Cómo llega una guerra de aranceles hasta el Perú?",
+      "opciones": [
+        { "t": "Si el comercio mundial se frena, se consumen menos metales y cae lo que nos pagan por ellos", "ok": true },
+        { "t": "No llega: solo afecta a los países que pelean" },
+        { "t": "Nos beneficia siempre" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Cuando dos gigantes se ponen peajes mutuos, ambos producen y compran menos. Y todo lo que se produce en el mundo lleva metal adentro. Perú no está en la pelea, pero vende los ingredientes: si la cocina se apaga, se venden menos ingredientes.",
+      "puente": "Esa cadena —noticia lejana → precio del metal → resultados de una minera peruana— es exactamente lo que ALTO te enseña a seguir."
+    },
+    {
+      "id": "exportaciones-record",
+      "cat": "industria",
+      "paso": "negocio",
+      "tipo": "vida",
+      "eco": "noticias",
+      "gancho": "«Las exportaciones peruanas alcanzan un récord»",
+      "pregunta": "¿Qué exporta principalmente el Perú?",
+      "opciones": [
+        { "t": "Sobre todo minerales (cobre, oro, zinc), y además harina de pescado, uvas, arándanos y café", "ok": true },
+        { "t": "Autos y electrodomésticos" },
+        { "t": "Software y videojuegos" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El Perú vende al mundo cosas que salen de su suelo y su mar. Eso tiene una consecuencia directa: cuando los precios internacionales están altos, entra mucha plata; cuando caen, el país entero lo siente. Somos, en buena parte, una economía de materias primas.",
+      "puente": "Y casi todas esas exportaciones tienen una empresa listada detrás. Esa es la lista que vas a explorar en ALTO."
+    },
+    {
+      "id": "cemento-obras",
+      "cat": "industria",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "calle",
+      "gancho": "«Se reactivan las obras públicas en el norte»",
+      "pregunta": "¿A qué tipo de empresa peruana le cambia el año una noticia así?",
+      "opciones": [
+        { "t": "A las cementeras y a las de fierro: si se construye, ellas venden", "ok": true },
+        { "t": "A los bancos únicamente" },
+        { "t": "A las pesqueras" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El cemento no viaja lejos: es pesado y caro de transportar, así que cada cementera manda en su zona. Cuando hay obras en el norte, la del norte vende. Esa lógica de territorio explica por qué a dos empresas del mismo rubro les puede ir muy distinto.",
+      "puente": "Cementos Pacasmayo es la del norte y está en ALTO. Ver a quién le toca cada obra es análisis de verdad, sin fórmulas."
+    },
+    {
+      "id": "importado-mas-barato",
+      "cat": "industria",
+      "paso": "plata",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "«Lo chino llega más barato que lo hecho acá»",
+      "pregunta": "Para una fábrica peruana, ¿qué es lo más peligroso de eso?",
+      "opciones": [
+        { "t": "Que tenga que bajar sus precios para competir, y ahí se le achica la ganancia por cada venta", "ok": true },
+        { "t": "Que le suban los impuestos" },
+        { "t": "Nada, siempre puede vender igual" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Puedes seguir vendiendo la misma cantidad y aun así ganar menos, porque cada unidad te deja menos. Es como el sanguchero que baja el precio cuando ponen otro carrito al lado: vende igual, pero se lleva menos a casa cada noche.",
+      "puente": "Ese «cuánto me queda por cada venta» tiene nombre técnico, pero primero se entiende así. En ALTO lo verás explicado con las cifras de cada empresa."
+    },
+    {
+      "id": "cadena-suministro",
+      "cat": "industria",
+      "paso": "plata",
+      "tipo": "vida",
+      "eco": "noticias",
+      "gancho": "«Se disparan los fletes marítimos»",
+      "pregunta": "¿Por qué eso aparece en los resultados de una empresa?",
+      "opciones": [
+        { "t": "Porque traer o llevar la mercadería cuesta más, y ese costo sale de su ganancia o de tu bolsillo", "ok": true },
+        { "t": "Porque los barcos dejan de existir" },
+        { "t": "Porque cambia el precio del dólar" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Todo lo importado llega en barco. Si el viaje se encarece, la empresa paga más por el mismo producto. Solo tiene dos salidas: comerse el costo (gana menos) o subirte el precio (vendes menos). Ninguna es gratis.",
+      "puente": "Cuando entiendes de dónde sale cada sol que gasta una empresa, las noticias dejan de ser ruido y se vuelven pistas."
+    },
+    {
+      "id": "empleo-formal",
+      "cat": "industria",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "«La industria peruana recorta turnos»",
+      "pregunta": "¿Qué suele significar eso para el negocio?",
+      "opciones": [
+        { "t": "Que la demanda cayó: producen menos porque están vendiendo menos", "ok": true },
+        { "t": "Que están ganando más y quieren descansar" },
+        { "t": "Que van a repartir más dividendos" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Nadie apaga una máquina que está dando plata. Cuando una fábrica recorta turnos, casi siempre es porque el almacén está lleno y las ventas no acompañan. Es una señal temprana, mucho antes de que salgan los números oficiales.",
+      "puente": "Aprender a leer estas señales antes del reporte trimestral es una de las cosas que separa a quien estudia de quien adivina."
+    },
+
+    {
+      "id": "anchoveta-cuota",
+      "cat": "mar",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "«El Ministerio fija la cuota de pesca de anchoveta»",
+      "pregunta": "¿Por qué el Estado le pone un tope a cuánto se puede pescar?",
+      "opciones": [
+        { "t": "Para que no se acabe la especie: si se pesca todo hoy, no hay nada el próximo año", "ok": true },
+        { "t": "Para cobrar más impuestos" },
+        { "t": "Para que suba el precio del pescado" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "La anchoveta se reproduce a su ritmo. Si se saca más de lo que alcanza a recuperarse, un año buenísimo se paga con varios años malos. Es como comerse las gallinas en vez de los huevos: rico hoy, hambre después.",
+      "puente": "Para una pesquera listada como Exalmar o Austral, esa cuota es literalmente cuánto puede vender ese año. Se lee antes que cualquier otro número."
+    },
+    {
+      "id": "harina-pescado",
+      "cat": "mar",
+      "paso": "negocio",
+      "tipo": "vida",
+      "eco": "calle",
+      "gancho": "«Perú es el mayor exportador de harina de pescado del mundo»",
+      "pregunta": "¿Para qué se usa la harina de pescado?",
+      "opciones": [
+        { "t": "Para alimentar animales de criadero, sobre todo peces y chanchos, en Asia y Europa", "ok": true },
+        { "t": "Para hacer pan" },
+        { "t": "Para fabricar fertilizantes de flores" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "La anchoveta que sale de nuestro mar se convierte en alimento para los salmones que después se comen en otros países. Es un negocio silencioso y enorme: casi nadie en Perú la ve, pero es una de nuestras exportaciones más importantes.",
+      "puente": "Detrás de eso hay empresas peruanas listadas en bolsa. Sus resultados suben y bajan con la temporada de pesca."
+    },
+    {
+      "id": "fenomeno-nino",
+      "cat": "mar",
+      "paso": "riesgos",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "«Alerta por el Fenómeno del Niño»",
+      "pregunta": "¿Cómo puede el clima cambiar los resultados de una empresa?",
+      "opciones": [
+        { "t": "Calienta el mar y ahuyenta a la anchoveta: menos pesca, menos ventas, y de paso lluvias que frenan obras", "ok": true },
+        { "t": "Solo afecta al turismo" },
+        { "t": "No afecta a las empresas, solo a las casas" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El Niño calienta el agua y los cardúmenes se van a lo profundo o al sur: los barcos salen y vuelven casi vacíos. Al mismo tiempo, las lluvias paralizan construcción y malogran carreteras. Un mismo fenómeno golpea a pesqueras, cementeras y agroexportadoras a la vez.",
+      "puente": "En ALTO estos eventos aparecen como riesgos concretos de cada empresa, no como una advertencia genérica."
+    },
+    {
+      "id": "depredacion",
+      "cat": "mar",
+      "paso": "riesgos",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Denuncian pesca ilegal y depredación en el litoral»",
+      "pregunta": "Para el que tiene acciones de una pesquera formal, ¿qué significa esto?",
+      "opciones": [
+        { "t": "Riesgo: si el recurso se agota o cae una sanción al sector, el negocio de todos se achica", "ok": true },
+        { "t": "Ganancia: hay menos competencia" },
+        { "t": "Nada, es un tema solo ambiental" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El mar es la despensa compartida de todas las pesqueras. Si alguien la vacía por su cuenta, mañana no hay para nadie —y el Estado suele responder recortando cuotas a todo el sector. Lo ambiental y lo financiero terminan siendo la misma conversación.",
+      "puente": "Por eso el análisis serio mira también cómo trata una empresa a su recurso. No es romanticismo: es cuánto durará el negocio."
+    },
+    {
+      "id": "uvas-arandanos",
+      "cat": "mar",
+      "paso": "negocio",
+      "tipo": "vida",
+      "eco": "noticias",
+      "gancho": "«Perú es líder mundial exportando arándanos y uvas»",
+      "pregunta": "¿Por qué el mundo nos compra fruta justo a nosotros?",
+      "opciones": [
+        { "t": "Porque cosechamos cuando en el hemisferio norte es invierno y allá no hay producción", "ok": true },
+        { "t": "Porque es más barata que en cualquier lado" },
+        { "t": "Porque el Estado paga por exportarla" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Cuando en Estados Unidos y Europa hace frío y no crece nada, en la costa peruana sí. Vender fruta fresca justo cuando el otro no la tiene es una ventaja enorme, y explica el boom agroexportador de las últimas décadas.",
+      "puente": "Ese es el tipo de ventaja que un inversionista busca: algo que la empresa tenga y que el resto no pueda copiar fácil."
+    },
+    {
+      "id": "puerto-chancay",
+      "cat": "mar",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "«El puerto de Chancay acorta la ruta a Asia»",
+      "pregunta": "¿Por qué un puerto nuevo puede cambiarle la vida a varias empresas?",
+      "opciones": [
+        { "t": "Porque si sacar la mercadería sale más barato y rápido, todo lo que exportamos compite mejor", "ok": true },
+        { "t": "Porque los puertos pagan dividendos" },
+        { "t": "Porque obliga a las empresas a exportar" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Exportar es mover cosas pesadas muy lejos. Cada día y cada dólar que ahorras en ese viaje se queda en el bolsillo del que produce. Una obra así no cambia lo que la empresa fabrica, cambia cuánto le cuesta llegar al cliente.",
+      "puente": "Las noticias de infraestructura son de las pocas que mueven a MUCHAS empresas a la vez. Vale la pena aprender a leerlas."
+    },
+    {
+      "id": "estacionalidad-pesca",
+      "cat": "mar",
+      "paso": "vara",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«La pesquera reportó pérdidas en el trimestre»",
+      "pregunta": "¿Un trimestre malo significa que la empresa va mal?",
+      "opciones": [
+        { "t": "No siempre: hay negocios con temporada, y fuera de temporada casi no venden", "ok": true },
+        { "t": "Sí, un trimestre malo condena a la empresa" },
+        { "t": "Sí, porque los dividendos se pagan por trimestre" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Una pesquera sin temporada de pesca es como una heladería en pleno invierno: sigue pagando alquiler y sueldos, pero casi no vende. Por eso se comparan trimestres iguales entre años (este verano contra el verano pasado), no un trimestre contra el anterior.",
+      "puente": "ALTO te avisa cuando una empresa es estacional, para que no leas mal su peor trimestre."
+    },
+    {
+      "id": "agua-riego",
+      "cat": "mar",
+      "paso": "riesgos",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "«La sequía amenaza los cultivos de exportación»",
+      "pregunta": "¿Qué relación tiene la lluvia con la Bolsa de Lima?",
+      "opciones": [
+        { "t": "Mucha: sin agua no hay cosecha ni energía barata en las hidroeléctricas", "ok": true },
+        { "t": "Ninguna: la bolsa es un tema financiero" },
+        { "t": "Solo afecta al precio del agua potable" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Buena parte de la electricidad peruana viene de represas: si no llueve, hay que generar con gas o diésel, que cuesta más. Y sin agua de riego, la fruta no crece. El clima entra directo en los estados financieros de varias empresas listadas.",
+      "puente": "En ALTO, a las eléctricas les verás mencionada la hidrología. Ahora ya sabes por qué está ahí."
+    },
+
+    {
+      "id": "multa-ambiental",
+      "cat": "lios",
+      "paso": "riesgos",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Multan a una empresa por daño ambiental»",
+      "pregunta": "¿Cómo afecta una multa al que tiene acciones de esa empresa?",
+      "opciones": [
+        { "t": "Sale plata que era de todos los dueños: menos utilidad para repartir y, a veces, menos confianza", "ok": true },
+        { "t": "La paga el gerente de su bolsillo" },
+        { "t": "No afecta, la paga el seguro siempre" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Las multas salen de la caja de la empresa, y esa caja es de sus dueños: los accionistas. Es como si en un negocio familiar el hermano encargado tuviera que pagar una papeleta grande: paga el negocio, y a fin de año hay menos para repartir entre todos.",
+      "puente": "Por eso los líos legales no son un tema de moral solamente: son un número que en ALTO aparece entre los riesgos."
+    },
+    {
+      "id": "juicio-sunat",
+      "cat": "lios",
+      "paso": "riesgos",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«La empresa mantiene una controversia tributaria con la SUNAT»",
+      "pregunta": "¿Qué es eso, en criollo?",
+      "opciones": [
+        { "t": "La SUNAT dice que debe más impuestos y la empresa no está de acuerdo: se pelea en tribunales por años", "ok": true },
+        { "t": "Que la empresa no paga impuestos nunca" },
+        { "t": "Que la SUNAT le devolvió plata" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es un desacuerdo grande sobre cuánto le toca pagar. Puede durar años, y si la empresa pierde, tiene que pagar de golpe con multas e intereses. Lo importante es si guardó plata por si acaso: a eso se le llama provisionar. Si no la guardó, el golpe llega entero.",
+      "puente": "Es de las primeras cosas que un analista busca en los documentos oficiales. En ALTO están enlazados los reportes de la SMV."
+    },
+    {
+      "id": "escandalo-corrupcion",
+      "cat": "lios",
+      "paso": "riesgos",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "«La constructora sigue arrastrando el caso de corrupción»",
+      "pregunta": "¿Por qué un escándalo viejo sigue pesando años después?",
+      "opciones": [
+        { "t": "Porque le cuesta conseguir contratos y crédito: los bancos y el Estado desconfían", "ok": true },
+        { "t": "Porque tiene que cambiar de nombre cada año" },
+        { "t": "Porque los accionistas van presos" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "La reputación es parte del activo de una empresa, aunque no aparezca en la lista de sus máquinas. Si nadie quiere firmar contigo ni prestarte, tu negocio se achica aunque tengas la mejor maquinaria del país. Recuperar confianza toma años.",
+      "puente": "En ALTO verás casos así descritos sin adornos, porque explican por qué una acción está barata: a veces lo barato es una advertencia."
+    },
+    {
+      "id": "indecopi-multa",
+      "cat": "lios",
+      "paso": "riesgos",
+      "tipo": "vida",
+      "eco": "noticias",
+      "gancho": "«Indecopi sanciona por concertación de precios»",
+      "pregunta": "¿Qué es concertar precios?",
+      "opciones": [
+        { "t": "Que empresas que deberían competir se pongan de acuerdo para cobrarte más caro", "ok": true },
+        { "t": "Que suban precios porque subió el dólar" },
+        { "t": "Que rematen productos" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Si las tres panaderías del barrio quedan en no bajar el pan de 50 céntimos, tú pagas de más y no tienes a dónde ir. Eso es ilegal justamente porque te quita la opción de elegir. Cuando se descubre, las multas son enormes.",
+      "puente": "Y esa multa la termina pagando la empresa —es decir, sus dueños—. Todo escándalo tiene una consecuencia financiera."
+    },
+    {
+      "id": "gerente-renuncia",
+      "cat": "lios",
+      "paso": "riesgos",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Renuncia sorpresivamente el gerente general»",
+      "pregunta": "¿Por qué el mercado se pone nervioso con eso?",
+      "opciones": [
+        { "t": "Porque no sabe si se va por algo que él vio adentro y nosotros todavía no", "ok": true },
+        { "t": "Porque la empresa se queda sin poder operar" },
+        { "t": "Porque hay que elegir nuevo dueño" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Una salida repentina, sin reemplazo listo, huele raro: los que están adentro siempre saben antes. No siempre significa algo malo, pero la incertidumbre por sí sola hace que la gente pague menos hasta entender qué pasó.",
+      "puente": "Estas cosas se anuncian en documentos oficiales llamados «hechos de importancia». En ALTO los ves el mismo día, empresa por empresa."
+    },
+    {
+      "id": "auditor-duda",
+      "cat": "lios",
+      "paso": "riesgos",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Los auditores incluyeron una advertencia en el informe»",
+      "pregunta": "¿Quién es el auditor y por qué su opinión pesa tanto?",
+      "opciones": [
+        { "t": "Un tercero independiente que revisa las cuentas: si él duda, hay que prestar mucha atención", "ok": true },
+        { "t": "Un trabajador de la empresa que hace los números" },
+        { "t": "Un inspector municipal" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es como el árbitro del partido: no juega para ninguno de los dos equipos. Cuando el árbitro escribe en el acta que algo no le cuadra, es la señal más seria que puede recibir un inversionista, mucho más que cualquier titular.",
+      "puente": "En ALTO puedes abrir esos informes oficiales. Saber que existen ya te pone por delante de la mayoría."
+    },
+    {
+      "id": "empresa-quiebra",
+      "cat": "lios",
+      "paso": "deuda",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "«¿Y si la empresa quiebra? ¿Pierdo todo?»",
+      "pregunta": "Si una empresa quiebra, ¿qué pasa con sus accionistas?",
+      "opciones": [
+        { "t": "Cobran al final de la fila —después de trabajadores, Estado y bancos— y normalmente no queda nada", "ok": true },
+        { "t": "Cobran primero, porque son los dueños" },
+        { "t": "El Estado les devuelve su dinero" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Ser dueño significa cobrar lo que sobra, y en una quiebra casi nunca sobra. Esa es la parte incómoda que muchos no cuentan: el accionista gana más cuando va bien porque también es el primero en perder cuando va mal.",
+      "puente": "Por eso ALTO insiste en mirar la deuda. No es pesimismo: es saber en qué lugar de la fila te estás sentando."
+    },
+    {
+      "id": "acciones-suspendidas",
+      "cat": "lios",
+      "paso": "cancha",
+      "tipo": "vida",
+      "eco": "noticias",
+      "gancho": "«Suspenden la negociación de la acción»",
+      "pregunta": "¿Qué significa que suspendan una acción en la bolsa?",
+      "opciones": [
+        { "t": "Que nadie puede comprarla ni venderla por un rato, casi siempre porque falta información importante", "ok": true },
+        { "t": "Que la empresa cerró" },
+        { "t": "Que bajó mucho de precio ese día" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es una pausa del partido. Si va a salir una noticia gorda y unos ya la saben y otros no, se detiene todo para que nadie juegue con ventaja. Suele ser mala señal de corto plazo, pero existe para protegerte.",
+      "puente": "Ese es el sentido de que la bolsa esté regulada: reglas parejas. Muy distinto a comprarle a un desconocido por WhatsApp."
+    },
+
+    {
+      "id": "dividendo-regalo",
+      "cat": "dividendos",
+      "paso": "precio",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "«Esa empresa paga dividendos»",
+      "pregunta": "¿Significa que te está regalando dinero?",
+      "opciones": [
+        { "t": "No: es tu parte de la ganancia que ya era tuya por ser dueño de un pedacito", "ok": true },
+        { "t": "Sí, es un premio por comprar sus acciones" },
+        { "t": "Sí, es un descuento en sus productos" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Si tienes una tajada de una panadería y a fin de año reparten las ganancias, lo que te llega no es un regalo: es tu parte. La empresa decide cuánto reparte y cuánto se queda para crecer. Nada de eso es caridad; es propiedad.",
+      "puente": "En ALTO puedes ver, año por año, cuánto repartió cada empresa peruana de verdad. No promesas: lo que ya pagó."
+    },
+    {
+      "id": "dividendo-no-es-tasa",
+      "cat": "dividendos",
+      "paso": "precio",
+      "tipo": "concepto",
+      "eco": "familia",
+      "gancho": "«Esa acción rinde 8% al año en dividendos»",
+      "pregunta": "¿Es como un plazo fijo que paga 8%?",
+      "opciones": [
+        { "t": "No: es lo que pagó el año pasado, y el próximo puede pagar menos o nada", "ok": true },
+        { "t": "Sí, está garantizado por ley" },
+        { "t": "Sí, el banco lo respalda" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Ese porcentaje es una foto del pasado, no un contrato. La empresa reparte si ganó y si le sobra caja; si el año viene flojo, reparte menos. Confundir eso con un plazo fijo es el error más caro y más común entre los que recién empiezan.",
+      "puente": "Es tan importante que ALTO lo dice en la ficha: «es lo que pagó, no lo que promete pagar»."
+    },
+    {
+      "id": "dividendo-precio-baja",
+      "cat": "dividendos",
+      "paso": "precio",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«El día que pagan el dividendo, la acción baja»",
+      "pregunta": "¿Por qué baja justo ese día?",
+      "opciones": [
+        { "t": "Porque esa plata salió de la empresa y se fue a los bolsillos: la empresa vale un poquito menos", "ok": true },
+        { "t": "Porque todos venden ese día" },
+        { "t": "Porque la bolsa cobra una comisión" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Imagina una billetera con 100 soles adentro que vendes por 100. Si sacas 10 y luego la vendes, te pagarán 90 — más los 10 que ya tienes en la mano. No perdiste: cambiaste de bolsillo. En la acción pasa exactamente eso.",
+      "puente": "Este detalle desarma el mito de «compro justo antes del dividendo y gano gratis». No es gratis: es tu propia plata cambiando de sitio."
+    },
+    {
+      "id": "payout",
+      "cat": "dividendos",
+      "paso": "plata",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«La empresa repartió el 90% de sus ganancias»",
+      "pregunta": "Repartir casi todo, ¿es bueno o malo?",
+      "opciones": [
+        { "t": "Depende: si necesita invertir para crecer y reparte todo, se queda sin combustible", "ok": true },
+        { "t": "Siempre es bueno: mientras más reparta, mejor" },
+        { "t": "Siempre es malo: repartir es perder plata" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es como una familia que se gasta todo el sueldo cada mes: se disfruta, pero no se compra la moto para trabajar más. Una empresa madura puede repartir casi todo sin problema; una que necesita crecer, no. La misma cifra puede ser buena o mala según el caso.",
+      "puente": "En ALTO ves cuánto reparte y cuánta caja le queda. Con esas dos cosas juntas ya puedes opinar en serio."
+    },
+    {
+      "id": "dividendo-de-donde",
+      "cat": "dividendos",
+      "paso": "plata",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "«Reparte dividendos aunque tuvo pérdidas»",
+      "pregunta": "¿Se puede repartir sin haber ganado?",
+      "opciones": [
+        { "t": "Sí, sacándolo de ahorros de años anteriores o endeudándose — y eso no se puede repetir siempre", "ok": true },
+        { "t": "No, es imposible" },
+        { "t": "Sí, el Estado se lo cubre" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es como pagar la fiesta con los ahorros del cajón. Se puede una vez, y hasta puede tener sentido. Pero si se vuelve costumbre, la empresa se está vaciando para verse generosa. Un dividendo alto no siempre es una buena noticia.",
+      "puente": "Este es el tipo de trampa que ALTO te enseña a detectar: mirar de dónde salió la plata, no solo cuánta fue."
+    },
+    {
+      "id": "dividendo-extraordinario",
+      "cat": "dividendos",
+      "paso": "precio",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Dividendo extraordinario tras la venta de un activo»",
+      "pregunta": "¿Qué tiene de especial un dividendo «extraordinario»?",
+      "opciones": [
+        { "t": "Que viene de algo que pasó una sola vez y no se va a repetir el próximo año", "ok": true },
+        { "t": "Que es más grande y por eso mejor" },
+        { "t": "Que se paga en dólares" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es como cuando en tu casa entra plata porque vendieron el carro viejo: ese mes alcanza para todo, pero nadie debería planear el año suponiendo que cada mes se vende un carro. Si lo tomas como sueldo, te vas a decepcionar.",
+      "puente": "ALTO distingue el dividendo ordinario del extraordinario, justo para que no proyectes hacia adelante lo que fue un evento único."
+    },
+    {
+      "id": "dividendo-impuesto",
+      "cat": "dividendos",
+      "paso": "precio",
+      "tipo": "vida",
+      "eco": "calle",
+      "gancho": "«Me llegó menos dividendo del que calculé»",
+      "pregunta": "¿Por qué llega menos de lo anunciado?",
+      "opciones": [
+        { "t": "Porque al dividendo se le descuenta un impuesto antes de llegar a tu cuenta", "ok": true },
+        { "t": "Porque la SAB se queda con la mitad" },
+        { "t": "Porque el anuncio siempre está inflado" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Como con el sueldo: te anuncian el bruto y te llega el neto. Al dividendo de una persona natural se le retiene un impuesto antes de depositarlo. No es un robo ni un error: es cómo funciona, y conviene contarlo al hacer cuentas.",
+      "puente": "Detalles así son los que nadie te dice hasta que te pasa. ALTO prefiere decírtelos antes."
+    },
+    {
+      "id": "vivir-de-dividendos",
+      "cat": "dividendos",
+      "paso": "precio",
+      "tipo": "puente",
+      "eco": "tiktok",
+      "gancho": "«Vive de sus dividendos sin trabajar»",
+      "pregunta": "¿Qué hace falta para que los dividendos alcancen para vivir?",
+      "opciones": [
+        { "t": "Un capital muy grande: si rinde 5% al año, se necesitan cientos de miles para un sueldo modesto", "ok": true },
+        { "t": "Comprar la acción correcta en el momento correcto" },
+        { "t": "Tener una cuenta en el extranjero" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Haz la cuenta simple: si algo te paga 5% al año y quieres 1,000 soles al mes (12,000 al año), necesitas unos 240,000 invertidos. Por eso los videos que lo pintan fácil casi nunca muestran el monto inicial. La matemática no es mágica.",
+      "puente": "ALTO no vende ese sueño. Lo que sí puede darte es criterio para que, cuando tengas plata, sepas dónde la pones."
+    },
+
+    {
+      "id": "influencer-compre-accion",
+      "cat": "trading",
+      "paso": "cancha",
+      "tipo": "concepto",
+      "eco": "tiktok",
+      "gancho": "«Compré una acción y ahora gano dinero mientras duermo»",
+      "pregunta": "¿Qué compró realmente esa persona?",
+      "opciones": [
+        { "t": "Un pedacito de una empresa: si a la empresa le va bien, a su pedacito también", "ok": true },
+        { "t": "Un préstamo que le devuelven con intereses" },
+        { "t": "Una suscripción a una app" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "«Ganar mientras duermes» suena mágico, pero lo que pasa es simple: alguien más está trabajando en esa empresa —vendiendo, produciendo— y a ti te toca una parte porque eres dueño de un pedacito. También te toca la parte mala si el negocio se cae.",
+      "puente": "La pregunta que casi nadie hace en esos videos: ¿de qué empresa? ¿qué vende? ¿cuánto gana? Eso es todo lo que ALTO te enseña a preguntar."
+    },
+    {
+      "id": "trading-vs-invertir",
+      "cat": "trading",
+      "paso": "cancha",
+      "tipo": "concepto",
+      "eco": "tiktok",
+      "gancho": "«Hago trading, no inversión»",
+      "pregunta": "¿Cuál es la diferencia de fondo?",
+      "opciones": [
+        { "t": "El que tradea apuesta al movimiento del precio en días u horas; el que invierte compra el negocio para años", "ok": true },
+        { "t": "El trading es legal y la inversión no" },
+        { "t": "Son la misma cosa con otro nombre" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Uno mira el gráfico; el otro mira la empresa. Uno necesita que el precio se mueva rápido para ganar; el otro necesita que el negocio crezca. Son dos oficios distintos, con herramientas distintas — como cocinar y hacer delivery: ambos con comida, pero no es lo mismo.",
+      "puente": "ALTO está hecho para el segundo. Aquí no hay velas ni señales: hay balances, deudas y dividendos."
+    },
+    {
+      "id": "invertir-vs-apostar",
+      "cat": "trading",
+      "paso": "cancha",
+      "tipo": "concepto",
+      "eco": "familia",
+      "gancho": "«La bolsa es un casino»",
+      "pregunta": "¿Qué convierte una compra en apuesta y no en inversión?",
+      "opciones": [
+        { "t": "Comprar sin saber qué hace la empresa, solo porque alguien dijo que iba a subir", "ok": true },
+        { "t": "Comprar poca cantidad" },
+        { "t": "Comprar sin usar una app" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "En un casino, ni siquiera el mejor jugador puede estudiar la ruleta: no hay nada que entender. Una empresa sí se puede estudiar: cuánto vende, cuánto debe, si gana. Si compras sin mirar nada de eso, convertiste en casino algo que no lo era.",
+      "puente": "Esa es la frase que resume ALTO: no cambiamos el riesgo, cambiamos en qué te basas para decidir."
+    },
+    {
+      "id": "senal-grupo-whatsapp",
+      "cat": "trading",
+      "paso": "riesgos",
+      "tipo": "concepto",
+      "eco": "tiktok",
+      "gancho": "«Únete a mi grupo VIP de señales»",
+      "pregunta": "¿Por qué desconfiar de un grupo de señales pagado?",
+      "opciones": [
+        { "t": "Porque si tuviera un método infalible ganaría más usándolo que vendiéndote la suscripción", "ok": true },
+        { "t": "Porque los grupos de WhatsApp son ilegales" },
+        { "t": "Porque las señales solo funcionan en dólares" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Pregunta de oro: ¿por qué me lo vende en vez de usarlo? Si alguien de verdad supiera qué va a subir mañana, no necesitaría cobrarte 50 soles al mes. El negocio de muchos «gurús» no es acertar: es tener suscriptores.",
+      "puente": "ALTO es gratis y no cobra comisión por lo que decidas. Eso no lo hace mejor por sí solo, pero elimina el conflicto de interés."
+    },
+    {
+      "id": "apalancamiento-x100",
+      "cat": "trading",
+      "paso": "riesgos",
+      "tipo": "concepto",
+      "eco": "tiktok",
+      "gancho": "«Opera con apalancamiento x100»",
+      "pregunta": "¿Qué significa operar apalancado?",
+      "opciones": [
+        { "t": "Jugar con plata prestada: multiplicas la ganancia, pero también la pérdida — puedes quedar debiendo", "ok": true },
+        { "t": "Que te dan 100 acciones gratis" },
+        { "t": "Que la ganancia está garantizada 100 veces" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es como manejar a 200 km/h: llegas más rápido si todo sale bien, y el choque también es 100 veces peor. Con x100, un movimiento del 1% en contra basta para borrar todo tu dinero. Por eso la mayoría de cuentas apalancadas termina en cero.",
+      "puente": "Nada de lo que verás en ALTO usa apalancamiento. Aquí la velocidad no es la meta."
+    },
+    {
+      "id": "grafico-velas",
+      "cat": "trading",
+      "paso": "precio",
+      "tipo": "vida",
+      "eco": "tiktok",
+      "gancho": "«Mira este gráfico de velas japonesas»",
+      "pregunta": "¿Qué muestra un gráfico de velas?",
+      "opciones": [
+        { "t": "Cómo se movió el precio en el tiempo: nada sobre si la empresa gana o pierde plata", "ok": true },
+        { "t": "Las ganancias de la empresa mes a mes" },
+        { "t": "Cuántos empleados tiene" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El gráfico es el historial del precio, como la temperatura de un paciente hora por hora. Te dice cómo se sintió el mercado, no si el paciente está sano. Para eso hay que abrir los análisis: las ventas, la deuda, la caja.",
+      "puente": "ALTO no tiene gráficos de velas a propósito. Prefiere mostrarte lo que la vela no dice."
+    },
+    {
+      "id": "gane-rapido",
+      "cat": "trading",
+      "paso": "riesgos",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "«Un conocido duplicó su plata en un mes»",
+      "pregunta": "¿Qué falta casi siempre en esas historias?",
+      "opciones": [
+        { "t": "Las veces que perdió, y cuánta plata puso en riesgo para lograrlo", "ok": true },
+        { "t": "El nombre de la app que usó" },
+        { "t": "El horario en que operó" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Nadie cuenta las tres veces que perdió antes ni que arriesgó el dinero del alquiler. Es como escuchar solo a los que ganaron la lotería: parece fácil ganar porque los que perdieron no salen a contarlo. Se llama sesgo del sobreviviente.",
+      "puente": "Por eso ALTO no muestra casos de éxito ni rankings de ganadores. Muestra empresas y sus números, que es lo único comprobable."
+    },
+    {
+      "id": "timing-mercado",
+      "cat": "trading",
+      "paso": "precio",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "«Voy a esperar a que baje para entrar»",
+      "pregunta": "¿Por qué adivinar el momento exacto es tan difícil?",
+      "opciones": [
+        { "t": "Porque el precio de mañana depende de noticias que todavía no existen", "ok": true },
+        { "t": "Porque las bolsas cambian de horario" },
+        { "t": "Porque hay que pagar una comisión más alta" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Para acertar el momento tendrías que saber qué va a pasar antes de que pase: un terremoto, una elección, un anuncio de China. Ni los profesionales lo logran con constancia. Por eso la mayoría prefiere decidir por el negocio, no por el calendario.",
+      "puente": "Es liberador: no necesitas adivinar el futuro para invertir bien. Necesitas entender qué compraste."
+    },
+    {
+      "id": "perder-es-normal",
+      "cat": "trading",
+      "paso": "riesgos",
+      "tipo": "puente",
+      "eco": "calle",
+      "gancho": "«Si estudias, ya no pierdes»",
+      "pregunta": "Estudiando bien una empresa, ¿se acaba el riesgo de perder?",
+      "opciones": [
+        { "t": "No: estudiar mejora tus decisiones, pero perder sigue siendo posible", "ok": true },
+        { "t": "Sí, con análisis se gana siempre" },
+        { "t": "Sí, si compras empresas grandes" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Un buen médico no gana todas las batallas, pero acierta muchísimo más que quien adivina. Estudiar no elimina la mala suerte: elimina los errores tontos, que son la mayoría. Cualquiera que te prometa lo contrario te está vendiendo algo.",
+      "puente": "ALTO lo dice de frente en su primera pantalla: puedes perder. Por eso se estudia."
+    },
+
+    {
+      "id": "que-es-bolsa",
+      "cat": "bolsa",
+      "paso": "cancha",
+      "tipo": "vida",
+      "eco": "noticias",
+      "gancho": "«La Bolsa de Valores de Lima»",
+      "pregunta": "¿Qué es exactamente una bolsa de valores?",
+      "opciones": [
+        { "t": "Un mercado vigilado donde la gente compra y vende pedacitos de empresas", "ok": true },
+        { "t": "Un banco donde guardas plata" },
+        { "t": "Una oficina del gobierno que reparte utilidades" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es un mercado, como el de frutas, pero de pedacitos de empresas — y con reglas y vigilancia para que nadie te pase gato por liebre. Ahí se juntan los que quieren vender su parte y los que quieren comprarla.",
+      "puente": "En Lima se negocian las acciones de unas 115 empresas peruanas. Esa lista es, literalmente, el catálogo de ALTO."
+    },
+    {
+      "id": "a-quien-le-compro",
+      "cat": "bolsa",
+      "paso": "cancha",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "«Compré acciones de una empresa»",
+      "pregunta": "¿A quién le llega esa plata?",
+      "opciones": [
+        { "t": "A otra persona que tenía la acción y la vendió, no a la empresa", "ok": true },
+        { "t": "A la empresa, que la usa para crecer" },
+        { "t": "Al Estado como impuesto" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es como comprar un auto de segunda mano: la plata va al dueño anterior, no a la fábrica. La empresa solo recibe dinero cuando emite acciones nuevas, algo que pasa cada varios años. Entenderlo cambia cómo lees la palabra «invertir».",
+      "puente": "De ahí sale la definición correcta de precio: lo que alguien está dispuesto a pagar hoy. Ni más, ni menos."
+    },
+    {
+      "id": "cuanto-necesito",
+      "cat": "bolsa",
+      "paso": "cancha",
+      "tipo": "vida",
+      "eco": "calle",
+      "gancho": "«Eso es solo para ricos»",
+      "pregunta": "¿Cuánta plata hace falta para comprar una acción peruana?",
+      "opciones": [
+        { "t": "Depende del precio de la acción; muchas cuestan pocos soles, pero hay comisiones que pesan si el monto es chico", "ok": true },
+        { "t": "Mínimo 50,000 soles" },
+        { "t": "Solo se puede en lotes de 1,000 acciones" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Una acción puede costar 2 soles o 50. Lo que sí importa es la comisión: si te cobran un mínimo por operación, comprar 30 soles de acciones es como pedir delivery de un caramelo. No es que no puedas: es que conviene juntar un poco más.",
+      "puente": "En ALTO ves los precios reales de las 115 empresas. Con eso puedes hacer tus cuentas antes de abrir cuenta en ningún lado."
+    },
+    {
+      "id": "sab-que-es",
+      "cat": "bolsa",
+      "paso": "cancha",
+      "tipo": "vida",
+      "eco": "calle",
+      "gancho": "«¿Y dónde se compra?»",
+      "pregunta": "¿Cómo se compra una acción peruana?",
+      "opciones": [
+        { "t": "Abriendo cuenta en una SAB (casa de bolsa autorizada) y dándole la orden", "ok": true },
+        { "t": "Yendo a la oficina de la empresa" },
+        { "t": "En el banco, como un plazo fijo" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "La SAB es el intermediario autorizado: recibe tu plata, ejecuta la orden en la bolsa y te cobra una comisión. Está regulada, así que no es un desconocido de internet. Sin SAB no hay compra: nadie te vende acciones peruanas por la puerta.",
+      "puente": "ALTO no es una SAB y no gana nada con lo que compres. Aquí se decide; allá se ejecuta."
+    },
+    {
+      "id": "liquidez",
+      "cat": "bolsa",
+      "paso": "riesgos",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Esa acción casi no se negocia»",
+      "pregunta": "¿Por qué es un problema que una acción se negocie poco?",
+      "opciones": [
+        { "t": "Porque cuando quieras vender puede no haber a quién, o solo a un precio muy malo", "ok": true },
+        { "t": "Porque la empresa es más pequeña" },
+        { "t": "Porque no paga dividendos" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es como tener una casa en un pueblo donde no vive casi nadie: en el papel vale, pero venderla puede tomarte meses y rematarla. En la Bolsa de Lima hay varias acciones así, y es una de las cosas que más sorprende al que recién entra.",
+      "puente": "ALTO te avisa cuáles casi no se mueven. Que algo esté listado no significa que puedas salir cuando quieras."
+    },
+    {
+      "id": "accion-vs-bono",
+      "cat": "bolsa",
+      "paso": "cancha",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«La empresa colocó bonos por 200 millones»",
+      "pregunta": "¿Qué diferencia hay entre comprar una acción y comprar un bono de esa empresa?",
+      "opciones": [
+        { "t": "Con la acción eres dueño; con el bono eres prestamista y te deben devolver con intereses", "ok": true },
+        { "t": "Ninguna: los dos son acciones" },
+        { "t": "El bono te hace dueño de la fábrica" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Si le prestas 100 soles a tu primo para su carrito de comida, él te devuelve 110 aunque venda como loco: tú eres acreedor. Si en cambio le entras de socio, ganas mucho más si explota… y pierdes si fracasa. Bono = préstamo. Acción = sociedad.",
+      "puente": "Cuando ALTO habla de deuda de una empresa, está hablando de gente que le prestó y quiere su plata de vuelta antes que los dueños."
+    },
+    {
+      "id": "por-que-listarse",
+      "cat": "bolsa",
+      "paso": "cancha",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«La empresa saldrá a bolsa»",
+      "pregunta": "¿Para qué una empresa vende pedacitos de sí misma al público?",
+      "opciones": [
+        { "t": "Para conseguir plata sin pedir préstamo, a cambio de aceptar socios y transparentar sus números", "ok": true },
+        { "t": "Porque está quebrando" },
+        { "t": "Porque el Estado la obliga" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Necesita plata para crecer y tiene dos caminos: pedir prestado (y devolver con intereses) o vender una parte del negocio. Si vende, no devuelve nada, pero ahora tiene socios y debe publicar sus cuentas cada trimestre.",
+      "puente": "Esa obligación de publicar es la razón por la que ALTO existe: los números están ahí, en la SMV, esperando que alguien los traduzca."
+    },
+    {
+      "id": "smv-supervisa",
+      "cat": "bolsa",
+      "paso": "cancha",
+      "tipo": "vida",
+      "eco": "noticias",
+      "gancho": "«Según lo reportado a la SMV…»",
+      "pregunta": "¿Qué es la SMV?",
+      "opciones": [
+        { "t": "La entidad del Estado que vigila el mercado de valores y obliga a las empresas a publicar sus cifras", "ok": true },
+        { "t": "Una empresa privada de rankings" },
+        { "t": "Un banco de inversión" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "La Superintendencia del Mercado de Valores es el árbitro. Obliga a cada empresa listada a publicar sus estados financieros y a avisar cualquier hecho importante. Gracias a eso, cualquier persona puede ver los mismos números que ve un fondo gigante.",
+      "puente": "Todo lo que ALTO muestra sale de ahí. No hay dato secreto: hay datos públicos que casi nadie lee."
+    },
+    {
+      "id": "accion-inversion",
+      "cat": "bolsa",
+      "paso": "cancha",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Acciones de inversión» y «acciones comunes»",
+      "pregunta": "En la BVL verás las dos. ¿Cuál es la diferencia?",
+      "opciones": [
+        { "t": "La de inversión no vota en las decisiones, pero sí cobra dividendo", "ok": true },
+        { "t": "La de inversión es de los trabajadores y no se puede comprar" },
+        { "t": "Son idénticas, solo cambia el nombre" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es como ser socio con voz o socio silencioso: los dos cobran su parte de las ganancias, pero solo uno levanta la mano en la junta. En la Bolsa de Lima, muchas veces la acción de inversión es la que más se negocia.",
+      "puente": "Detalle práctico: son dos precios distintos para la misma empresa. En ALTO están separadas para que no te confundas."
+    },
+    {
+      "id": "horario-bolsa",
+      "cat": "bolsa",
+      "paso": "cancha",
+      "tipo": "vida",
+      "eco": "calle",
+      "gancho": "«El precio no se movió en toda la tarde»",
+      "pregunta": "¿La bolsa está abierta las 24 horas?",
+      "opciones": [
+        { "t": "No: tiene horario, y fuera de él los precios simplemente no cambian", "ok": true },
+        { "t": "Sí, funciona todo el día como las cripto" },
+        { "t": "Solo abre los lunes" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "La Bolsa de Lima abre en horario de oficina, de lunes a viernes. Si miras un sábado, verás el último precio del viernes: no está congelado por error, es que nadie está negociando. Las cripto sí funcionan 24/7, y esa es otra diferencia entre ambos mundos.",
+      "puente": "Por eso los datos de ALTO se actualizan al ritmo del mercado, y la app te dice a qué hora se tomó cada cifra."
+    },
+
+    {
+      "id": "ganancias-record-cae",
+      "cat": "empresas",
+      "paso": "precio",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Ganancias récord… y la acción baja»",
+      "pregunta": "¿Cómo puede pasar eso?",
+      "opciones": [
+        { "t": "Porque el mercado esperaba todavía más: se compara con la expectativa, no con el año pasado", "ok": true },
+        { "t": "Porque las ganancias eran falsas" },
+        { "t": "Porque los dueños vendieron la empresa" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es como sacar 17 cuando todos daban por hecho que sacarías 19: es una gran nota y aun así hay caras largas. El precio de hoy ya tenía adentro la buena noticia; lo que mueve la aguja es la diferencia con lo que se esperaba.",
+      "puente": "Esta sola idea explica la mitad de los movimientos «raros» que verás. En ALTO la vas a reconocer una y otra vez."
+    },
+    {
+      "id": "utilidad-vs-caja",
+      "cat": "empresas",
+      "paso": "plata",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Ganó millones pero no tiene con qué pagar»",
+      "pregunta": "¿Se puede ganar plata en el papel y estar sin efectivo?",
+      "opciones": [
+        { "t": "Sí: si vendió al crédito y aún no le pagan, la ganancia existe pero la plata no llegó", "ok": true },
+        { "t": "No, si ganó tiene la plata" },
+        { "t": "Solo si la robaron" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Imagina que vendes 100 panetones a una tienda que te paga en marzo. En tu cuaderno ya ganaste, pero en diciembre no tienes con qué comprar harina. A las empresas les pasa igual, y es una de las razones más comunes por las que una empresa rentable quiebra.",
+      "puente": "Por eso ALTO mira la CAJA, no solo la utilidad. Son dos cosas distintas y la caja es la que paga los sueldos."
+    },
+    {
+      "id": "despidos-sube",
+      "cat": "empresas",
+      "paso": "precio",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Anuncia despidos masivos y su acción sube»",
+      "pregunta": "¿Por qué el mercado reacciona así ante una mala noticia para la gente?",
+      "opciones": [
+        { "t": "Porque menos sueldos significa menos gastos, y a corto plazo eso se ve como más ganancia", "ok": true },
+        { "t": "Porque la empresa cerró y se reparte todo" },
+        { "t": "Porque los despedidos compran acciones" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El mercado mira los números, no las personas: menos gasto, más margen. Pero no siempre acierta — a veces despedir gente clave arruina el negocio dos años después. Que el precio suba hoy no significa que la decisión fue buena.",
+      "puente": "Aquí se ve claro que precio y valor no son lo mismo. ALTO te entrena a mirar el segundo."
+    },
+    {
+      "id": "empresa-endeudada",
+      "cat": "empresas",
+      "paso": "deuda",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "«Esa empresa está muy endeudada»",
+      "pregunta": "¿Tener deuda es malo por sí solo?",
+      "opciones": [
+        { "t": "No: depende de si su caja alcanza para pagarla cómodamente", "ok": true },
+        { "t": "Sí, cualquier deuda es mala señal" },
+        { "t": "No, la deuda siempre es buena porque significa que confían en ella" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Una hipoteca de 100 mil es tranquila si ganas 8 mil al mes y asfixiante si ganas 1,200. El número solo no dice nada: hay que ponerlo al lado de lo que entra. Las empresas se leen igual.",
+      "puente": "Por eso ALTO nunca te muestra la deuda sola: siempre al lado de la caja que genera. Es el semáforo más útil de la ficha."
+    },
+    {
+      "id": "empresa-barata",
+      "cat": "empresas",
+      "paso": "precio",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "«Esta acción está baratísima»",
+      "pregunta": "¿Barata comparada con qué?",
+      "opciones": [
+        { "t": "Con lo que gana la empresa: 2 soles puede ser carísimo y 200 puede ser barato", "ok": true },
+        { "t": "Con el precio de otras acciones" },
+        { "t": "Con lo que costaba el año pasado" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Un pan a 1 sol no es «más barato» que una casa a 300 mil: son cosas distintas. Con las acciones igual: el precio suelto no dice nada, hay que compararlo con cuánto gana esa empresa por cada acción. A veces lo barato está barato por algo.",
+      "puente": "Esa comparación tiene nombre técnico y la vas a usar sin darte cuenta. Primero se entiende la idea; el nombre viene después."
+    },
+    {
+      "id": "empresa-crece-sin-ganar",
+      "cat": "empresas",
+      "paso": "plata",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Sus ventas crecen 40% al año pero pierde plata»",
+      "pregunta": "¿Cómo se explica eso?",
+      "opciones": [
+        { "t": "Está gastando más de lo que cobra para crecer rápido; funciona solo si algún día eso se da vuelta", "ok": true },
+        { "t": "Es imposible: si vende, gana" },
+        { "t": "Significa que sus clientes no pagan" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es la estrategia del delivery barato: regalar envíos para llenarse de clientes, perdiendo plata cada pedido. Si al final logran subir precios y quedarse con el mercado, ganan. Si se quedan sin plata antes de lograrlo, cierran. Es una apuesta, no un hecho.",
+      "puente": "En Lima hay pocas empresas así, pero conocer el patrón te sirve para todo lo que veas afuera."
+    },
+    {
+      "id": "recompra-acciones",
+      "cat": "empresas",
+      "paso": "precio",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«La empresa recomprará sus propias acciones»",
+      "pregunta": "¿Para qué haría eso?",
+      "opciones": [
+        { "t": "Al haber menos acciones circulando, a cada dueño que queda le toca una tajada más grande", "ok": true },
+        { "t": "Para cerrar la empresa" },
+        { "t": "Para pagar menos impuestos a la SUNAT" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Si la pizza se corta en 8 y desaparecen 2 tajadas, las 6 que quedan son más grandes. Eso es una recompra: la empresa usa su caja para comprar y retirar acciones. Es una forma de devolverte valor sin pagarte dividendo.",
+      "puente": "Ojo con el reverso: cuando una empresa EMITE acciones nuevas, tu tajada se achica. Eso se llama dilución y también lo verás en ALTO."
+    },
+    {
+      "id": "familia-controla",
+      "cat": "empresas",
+      "paso": "riesgos",
+      "tipo": "puente",
+      "eco": "calle",
+      "gancho": "«Esa empresa es de tal familia»",
+      "pregunta": "¿Le conviene o no al inversionista pequeño que una familia controle la empresa?",
+      "opciones": [
+        { "t": "Depende: si la cuidan a largo plazo, bien; si se benefician a costa del resto, mal", "ok": true },
+        { "t": "Siempre es malo" },
+        { "t": "Siempre es bueno porque son experimentados" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Una familia que tiene su patrimonio ahí suele pensar en décadas, no en el trimestre: eso juega a tu favor. El riesgo aparece cuando hacen negocios con sus propias empresas en condiciones raras, y el socio chico paga la fiesta.",
+      "puente": "En el Perú casi todas las grandes son de grupos familiares. Saber quién controla cada una es parte de estudiarlas."
+    },
+
+    {
+      "id": "nvidia-cobre",
+      "cat": "enlaces",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "tiktok",
+      "gancho": "Nvidia es la empresa más valiosa del mundo por la inteligencia artificial",
+      "pregunta": "¿Qué tiene que ver eso con una mina en Arequipa?",
+      "opciones": [
+        { "t": "Que la IA vive en centros de datos, y esos edificios se construyen con toneladas de cobre", "ok": true },
+        { "t": "Nada: los chips se hacen de plástico" },
+        { "t": "Que Nvidia compra oro para sus tarjetas" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Nvidia diseña el cerebro, pero ese cerebro necesita cuerpo: galpones gigantes llenos de cables, transformadores y refrigeración. Todo eso es cobre. Sin el metal que sale de un cerro en Arequipa, la nube más avanzada del mundo es un edificio vacío.",
+      "puente": "Esa es la cadena completa: un video de IA en TikTok → un centro de datos en Texas → una tonelada de cobre de Cerro Verde. Perú está en el eslabón que nadie ve."
+    },
+    {
+      "id": "datacenter-energia",
+      "cat": "enlaces",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "Un centro de datos consume electricidad como una ciudad pequeña",
+      "pregunta": "¿Qué tipo de empresa gana con esa sed de energía?",
+      "opciones": [
+        { "t": "Las que generan y distribuyen electricidad", "ok": true },
+        { "t": "Las que fabrican celulares" },
+        { "t": "Los bancos" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Cada respuesta de una IA se paga en electricidad. Por eso las tecnológicas del mundo están firmando contratos de energía a 20 años. La cadena es simple: más IA → más consumo → más valor para quien produce la luz.",
+      "puente": "En la Bolsa de Lima hay generadoras y distribuidoras eléctricas. La palabra de moda de afuera aterriza en un negocio muy aburrido de acá."
+    },
+    {
+      "id": "auto-electrico-cobre",
+      "cat": "enlaces",
+      "paso": "motor",
+      "tipo": "vida",
+      "eco": "tiktok",
+      "gancho": "Cada vez se venden más autos eléctricos",
+      "pregunta": "¿Cuánto cobre lleva un auto eléctrico frente a uno a gasolina?",
+      "opciones": [
+        { "t": "Bastante más: motor, batería y cables lo multiplican varias veces", "ok": true },
+        { "t": "Menos, porque no tiene motor" },
+        { "t": "Exactamente el mismo" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Un auto a gasolina lleva cobre sobre todo en cables. Uno eléctrico lo lleva además en el motor, en la batería y en todo el sistema de carga. Por eso, cada vez que el mundo cambia de auto, alguien tiene que sacar más cobre de algún cerro.",
+      "puente": "Perú es uno de los mayores productores del planeta. Cuando veas un video de un Tesla, ya sabes qué empresa peruana está en la historia."
+    },
+    {
+      "id": "iphone-estano",
+      "cat": "enlaces",
+      "paso": "negocio",
+      "tipo": "vida",
+      "eco": "calle",
+      "gancho": "El celular que tienes en la mano",
+      "pregunta": "¿Qué metal peruano tiene adentro, aunque no lo veas?",
+      "opciones": [
+        { "t": "Estaño: sin sus soldaduras, ninguna pieza queda conectada", "ok": true },
+        { "t": "Ninguno, es todo plástico y vidrio" },
+        { "t": "Solo oro, en la carcasa" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Dentro de tu celular hay cientos de puntos de soldadura, y esa soldadura es estaño. Perú es uno de los grandes proveedores mundiales. Literalmente tienes un pedacito de Puno en el bolsillo.",
+      "puente": "Minsur es la empresa peruana detrás de ese estaño, y cotiza en la Bolsa de Lima. La distancia entre tu bolsillo y una acción es más corta de lo que parece."
+    },
+    {
+      "id": "paneles-plata",
+      "cat": "enlaces",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "El mundo instala paneles solares como nunca antes",
+      "pregunta": "¿Qué metal peruano necesita cada panel?",
+      "opciones": [
+        { "t": "Plata: se usa en la pasta que conduce la electricidad que genera el panel", "ok": true },
+        { "t": "Hierro, para el marco solamente" },
+        { "t": "Ninguno: son de silicio puro" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "La plata es el mejor conductor de electricidad que existe, y por eso va en las líneas finitas que recorren cada panel. Cada techo solar del mundo lleva unos gramos… y son millones de techos.",
+      "puente": "Perú es de los mayores productores de plata del planeta. Buenaventura, por ejemplo, la produce — y su ficha está en ALTO."
+    },
+    {
+      "id": "salmon-anchoveta",
+      "cat": "enlaces",
+      "paso": "negocio",
+      "tipo": "puente",
+      "eco": "calle",
+      "gancho": "El salmón que se come en Europa y Japón",
+      "pregunta": "¿Qué tiene que ver con el mar peruano?",
+      "opciones": [
+        { "t": "Que se cría comiendo harina de pescado, y buena parte del mundo la compra acá", "ok": true },
+        { "t": "Que el salmón nada desde Perú hasta Noruega" },
+        { "t": "Nada, son mares distintos" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Los salmones de criadero comen alimento hecho con harina de pescado, y Perú es el mayor exportador del mundo. Es decir: nuestra anchoveta termina, convertida en salmón, en un plato en Oslo o en Tokio.",
+      "puente": "Exalmar y Austral viven de eso. Cuando escuches «bajó la demanda de harina de pescado», ya sabes a quién le pega."
+    },
+    {
+      "id": "chips-taiwan",
+      "cat": "enlaces",
+      "paso": "riesgos",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "Casi todos los chips avanzados del mundo se fabrican en Taiwán",
+      "pregunta": "¿Por qué eso es un riesgo para una empresa como Nvidia?",
+      "opciones": [
+        { "t": "Porque depende de un solo lugar: si ahí pasa algo, no hay quien le fabrique", "ok": true },
+        { "t": "Porque los chips taiwaneses son de mala calidad" },
+        { "t": "No es un riesgo: puede fabricarlos en cualquier lado mañana" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Depender de un solo proveedor es como tener una sola llave de tu casa: funciona perfecto hasta el día que se pierde. Construir otra fábrica de chips toma años y miles de millones, así que no hay plan B rápido.",
+      "puente": "Esa pregunta —«¿de quién depende esta empresa para operar?»— se le hace igualito a una minera peruana: un solo puerto, un solo cliente, una sola carretera."
+    },
+    {
+      "id": "china-construye-zinc",
+      "cat": "enlaces",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "La crisis inmobiliaria china tiene edificios vacíos por miles",
+      "pregunta": "¿Cómo llega eso a una mina de zinc en Pasco?",
+      "opciones": [
+        { "t": "Menos edificios = menos acero galvanizado = menos zinc comprado", "ok": true },
+        { "t": "No llega: el zinc se usa para otra cosa" },
+        { "t": "Sube el zinc, porque hay menos competencia" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El zinc protege al acero de la oxidación, y el acero está en cada edificio. Si China —que construye como ningún otro país— frena, el mundo necesita menos zinc y el precio cae. La mina de Pasco produce igual, pero cobra menos.",
+      "puente": "Volcan y Nexa producen zinc en Perú. Un titular sobre departamentos vacíos en Shanghái termina en sus estados financieros."
+    },
+    {
+      "id": "cafe-starbucks",
+      "cat": "enlaces",
+      "paso": "negocio",
+      "tipo": "vida",
+      "eco": "calle",
+      "gancho": "El café que tomas en una cadena internacional",
+      "pregunta": "¿Puede tener origen peruano?",
+      "opciones": [
+        { "t": "Sí: Perú es uno de los grandes exportadores de café, sobre todo orgánico", "ok": true },
+        { "t": "No, todo el café viene de Colombia y Brasil" },
+        { "t": "Solo el café instantáneo" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El café peruano de altura, muchas veces orgánico, se vende bien afuera. Es un negocio de miles de familias en la selva y la ceja de selva, y su precio lo fija un mercado internacional, igual que con el cobre.",
+      "puente": "Regla que se repite: casi todo lo que Perú vende al mundo tiene su precio puesto AFUERA. Entender eso explica media Bolsa de Lima."
+    },
+    {
+      "id": "bitcoin-energia",
+      "cat": "enlaces",
+      "paso": "motor",
+      "tipo": "concepto",
+      "eco": "tiktok",
+      "gancho": "Minar bitcoin consume electricidad de un país entero",
+      "pregunta": "¿Qué te dice eso sobre en qué se apoya la cripto?",
+      "opciones": [
+        { "t": "Que hasta lo más digital necesita algo físico: energía, cables, metal", "ok": true },
+        { "t": "Que la cripto es gratis de producir" },
+        { "t": "Que la electricidad la regalan" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Nada de lo digital flota en el aire: hay granjas de computadoras, transformadores y kilómetros de cable. Lo mismo con la IA y con internet. Detrás de cada cosa moderna hay una empresa aburrida vendiendo energía o metal.",
+      "puente": "Y esas empresas aburridas sí se pueden estudiar: tienen ventas, costos y dividendos. Ese es el terreno de ALTO."
+    },
+    {
+      "id": "cadena-completa",
+      "cat": "enlaces",
+      "paso": "negocio",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "Dicen que Nvidia es la empresa que más plata genera del mundo",
+      "pregunta": "Si le quitas los materiales con los que se fabrica lo suyo, ¿qué le queda?",
+      "opciones": [
+        { "t": "Un diseño genial que nadie puede construir: sin metal y energía, no hay producto", "ok": true },
+        { "t": "Lo mismo: el diseño ya es el producto" },
+        { "t": "Más ganancia, porque se ahorra el costo" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Toda la economía es una cadena: alguien saca el material, alguien lo transforma, alguien lo diseña y alguien lo vende. La punta brillante de la cadena se lleva la fama; la base se lleva el trabajo pesado. Perú vive en la base, y esa base es indispensable.",
+      "puente": "Por eso ALTO no es «la versión peruana de la bolsa gringa»: es el eslabón sin el cual esa bolsa no funciona."
+    },
+    {
+      "id": "moda-ropa-algodon",
+      "cat": "enlaces",
+      "paso": "negocio",
+      "tipo": "vida",
+      "eco": "calle",
+      "gancho": "Las marcas de ropa gringas venden polos «pima»",
+      "pregunta": "¿De dónde viene el algodón pima?",
+      "opciones": [
+        { "t": "En buena parte del norte del Perú: es un algodón de fibra larga, de los mejores del mundo", "ok": true },
+        { "t": "De China" },
+        { "t": "Es sintético, no es algodón" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El pima peruano es famoso por su fibra larga y suave, y termina en polos que se venden carísimo afuera con otra marca. La empresa que lo cultiva cobra por el algodón; la que le pone el logo cobra por el logo.",
+      "puente": "Ahí hay una lección de negocios entera: quién se queda con el margen. Es una de las preguntas que aprenderás a hacer en ALTO."
+    },
+
+    {
+      "id": "estrecho-ormuz",
+      "cat": "geo",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "Tensión en el Estrecho de Ormuz",
+      "pregunta": "¿Qué es Ormuz y por qué el mundo entero se pone nervioso?",
+      "opciones": [
+        { "t": "Un pasaje de mar angosto por donde sale gran parte del petróleo del planeta", "ok": true },
+        { "t": "Una bolsa de valores del Medio Oriente" },
+        { "t": "Un tipo de contrato petrolero" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Imagina que toda la comida de una ciudad entrara por una sola puerta angosta. Si alguien amenaza con cerrarla, todos corren a comprar antes y el precio se dispara. Ormuz es esa puerta: por ahí pasa una parte enorme del petróleo mundial.",
+      "puente": "Y sube el petróleo → sube el combustible → suben los fletes → a cada empresa peruana le cuesta más mover su producto. Un mapa lejano, tu recibo de compras."
+    },
+    {
+      "id": "canal-panama",
+      "cat": "geo",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "La sequía obliga a reducir el paso de barcos por el Canal de Panamá",
+      "pregunta": "¿Cómo afecta eso a una exportadora peruana?",
+      "opciones": [
+        { "t": "Sus barcos esperan o dan la vuelta: llega más tarde y más caro", "ok": true },
+        { "t": "No afecta: Perú exporta por avión" },
+        { "t": "La favorece, porque hay menos competencia" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El canal funciona con agua de lluvia: cada barco que pasa gasta muchísima. Si no llueve, pasan menos barcos y hay cola. Para una fruta fresca que va a Estados Unidos, esperar días no es un detalle: es la diferencia entre venderla y perderla.",
+      "puente": "Este es el paso 5 del plan que verás al final: qué le puede salir mal a una empresa sin que sea culpa suya."
+    },
+    {
+      "id": "mar-rojo-fletes",
+      "cat": "geo",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "Los barcos evitan el Mar Rojo y dan la vuelta por África",
+      "pregunta": "¿Qué pasa cuando una ruta marítima se vuelve peligrosa?",
+      "opciones": [
+        { "t": "El viaje se alarga semanas y el flete sube para todos, aunque tu carga no pase por ahí", "ok": true },
+        { "t": "Solo se encarece para los países en guerra" },
+        { "t": "Los barcos dejan de existir" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Hay una cantidad limitada de barcos en el mundo. Si todos tardan más en cada viaje, hay menos barcos disponibles al mismo tiempo, y lo escaso sube de precio. Por eso un conflicto en otro continente encarece traer un contenedor al Callao.",
+      "puente": "En ALTO verás empresas que importan insumos: esa línea de costo es justo la que se les mueve con estas noticias."
+    },
+    {
+      "id": "guerra-fertilizantes",
+      "cat": "geo",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "La guerra encarece los fertilizantes y el trigo",
+      "pregunta": "¿Por qué eso llega a tu mesa en Lima?",
+      "opciones": [
+        { "t": "Porque el Perú importa trigo y fertilizantes: pan y comida se encarecen", "ok": true },
+        { "t": "Porque Perú exporta trigo a Europa" },
+        { "t": "No llega: acá se produce todo el trigo que se consume" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El pan de cada mañana se hace con trigo importado, y el arroz y la papa se cultivan con fertilizantes que también vienen de afuera. Cuando esos dos suben por una guerra lejana, primero lo siente el agricultor y después tu bolsillo.",
+      "puente": "Para una empresa de alimentos como Alicorp, el precio del trigo es un ingrediente de su costo. Ahí se ve la noticia convertida en número."
+    },
+    {
+      "id": "opep-petroleo",
+      "cat": "geo",
+      "paso": "motor",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "La OPEP recorta su producción de petróleo",
+      "pregunta": "¿Por qué un grupo de países se pone de acuerdo para producir MENOS?",
+      "opciones": [
+        { "t": "Porque si hay menos petróleo disponible, el precio sube y ganan más por cada barril", "ok": true },
+        { "t": "Porque se les acabó el petróleo" },
+        { "t": "Para cuidar el medio ambiente" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es la ley del mercado de toda la vida: si hay poco de algo, cuesta más. Los países petroleros lo saben y regulan cuánto sacan, como una junta de bodegueros que se pone de acuerdo para no rematar el arroz.",
+      "puente": "El cobre no tiene una OPEP, así que su precio depende de la demanda real del mundo. Por eso las mineras peruanas quedan tan expuestas a China."
+    },
+    {
+      "id": "china-estimulos",
+      "cat": "geo",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "China anuncia un plan de estímulo para su economía",
+      "pregunta": "¿Por qué suelen subir los metales ese mismo día?",
+      "opciones": [
+        { "t": "Porque estimular allá significa construir e industrializar, y eso consume metal peruano", "ok": true },
+        { "t": "Porque China compra oro para su bandera" },
+        { "t": "Porque baja el dólar automáticamente" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Cuando el gobierno chino promete obras, fábricas y créditos, el mundo entero asume que va a necesitar más cobre, zinc y hierro. Y el precio se mueve por esa expectativa, incluso antes de que se ponga el primer ladrillo.",
+      "puente": "Ese mismo día suelen subir las mineras en la Bolsa de Lima. Es la conexión más directa entre una noticia extranjera y tu mercado local."
+    },
+    {
+      "id": "elecciones-ruido",
+      "cat": "geo",
+      "paso": "riesgos",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "Se acercan elecciones y el dólar se mueve",
+      "pregunta": "¿Por qué la política mueve tanto a la bolsa peruana?",
+      "opciones": [
+        { "t": "Porque las reglas (impuestos, permisos, contratos) pueden cambiar, y eso cambia cuánto puede ganar una empresa", "ok": true },
+        { "t": "Porque los políticos compran acciones" },
+        { "t": "Porque la bolsa cierra en elecciones" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Una empresa hace planes a diez años: una mina, una carretera, una planta. Si nadie sabe qué reglas van a regir, se congela todo. La incertidumbre no es que pase algo malo: es no saber, y eso ya tiene precio.",
+      "puente": "En ALTO el riesgo político aparece descrito empresa por empresa, sin color partidario: solo qué depende de qué."
+    },
+    {
+      "id": "aranceles-guerra-comercial",
+      "cat": "geo",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "Estados Unidos y China se ponen aranceles mutuamente",
+      "pregunta": "Perú no está en esa pelea. ¿Le conviene o le perjudica?",
+      "opciones": [
+        { "t": "Depende: puede perder si el mundo consume menos, o ganar si alguien busca otro proveedor", "ok": true },
+        { "t": "Siempre le conviene" },
+        { "t": "Siempre le perjudica" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Cuando dos gigantes pelean, los de al lado pueden quedar salpicados o pueden recoger clientes. Las dos cosas pasan a la vez, en distintos sectores. Por eso la respuesta seria casi nunca es «bueno» o «malo», sino «¿para quién?».",
+      "puente": "Esa pregunta —«¿a quién le conviene esta noticia?»— es la que convierte un titular en una idea de inversión."
+    },
+    {
+      "id": "sanciones-metales",
+      "cat": "geo",
+      "paso": "motor",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "Sancionan a un país que produce metales",
+      "pregunta": "¿Qué suele pasar con los productores del resto del mundo?",
+      "opciones": [
+        { "t": "Sale oferta del mercado y los demás productores pueden vender más caro", "ok": true },
+        { "t": "Baja el precio para todos" },
+        { "t": "No cambia nada" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Si de diez panaderías del barrio cierran dos, las ocho que quedan venden más y pueden subir el precio. En metales pasa igual: cuando sale un productor grande, el resto se beneficia — aunque no haya hecho nada distinto.",
+      "puente": "Es el reverso de la historia del cobre y China: el precio de una minera peruana se mueve por cosas que pasan a 15,000 km."
+    },
+    {
+      "id": "puerto-unico",
+      "cat": "geo",
+      "paso": "riesgos",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "Huelga en el puerto: contenedores varados",
+      "pregunta": "¿Por qué un problema logístico es un riesgo de la EMPRESA y no solo del puerto?",
+      "opciones": [
+        { "t": "Porque si no embarca, no cobra — y sus costos siguen corriendo igual", "ok": true },
+        { "t": "Porque la empresa es dueña del puerto" },
+        { "t": "Porque tiene que pagar la huelga" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Producir no es vender. Una empresa cobra cuando su producto llega al cliente, y si el camino se corta, se queda con el almacén lleno y la caja vacía. Los sueldos, en cambio, no esperan.",
+      "puente": "Cuando en ALTO leas «riesgo logístico» en una ficha, ya sabes que se trata exactamente de esto."
+    },
+
+    {
+      "id": "mina-vs-banco",
+      "cat": "varas",
+      "paso": "vara",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "«Comparé dos acciones y elegí la más barata»",
+      "pregunta": "¿Se pueden comparar con la misma vara una minera y un banco?",
+      "opciones": [
+        { "t": "No: cada tipo de negocio se mide con cosas distintas, y compararlos igual engaña", "ok": true },
+        { "t": "Sí, todas las empresas se miden igual" },
+        { "t": "Sí, si son del mismo país" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es como comparar a un nadador con un pesista usando la misma prueba: alguien va a salir mal parado sin merecerlo. A una mina le miras reservas y costo por tonelada; a un banco, su morosidad y su colchón de capital. Distinta prueba, distinta vara.",
+      "puente": "Este es el último paso del plan de ALTO, y el que más errores evita: preguntar SIEMPRE con qué vara se mide la empresa que tienes al frente."
+    },
+    {
+      "id": "banco-mora",
+      "cat": "varas",
+      "paso": "vara",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Al banco le subió la morosidad»",
+      "pregunta": "¿Qué es lo primero que se mira en un banco?",
+      "opciones": [
+        { "t": "Cuánta gente no le está pagando sus créditos, y si tiene colchón para aguantarlo", "ok": true },
+        { "t": "Cuántas oficinas tiene" },
+        { "t": "Cuánto cobra por mantenimiento de cuenta" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El negocio de un banco es prestar plata que no es suya y que le devuelvan con intereses. Todo su riesgo está en que no le devuelvan. Por eso su número más importante no son las ventas: es cuánta de su cartera está en mora.",
+      "puente": "Un banco endeudado, además, no significa lo mismo que una fábrica endeudada: los depósitos de la gente SON deuda del banco. Otra vara."
+    },
+    {
+      "id": "banco-deuda-normal",
+      "cat": "varas",
+      "paso": "vara",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "«Ese banco debe miles de millones»",
+      "pregunta": "¿Es una alarma como lo sería en una fábrica?",
+      "opciones": [
+        { "t": "No: el dinero que la gente deposita es deuda del banco, y es justo su materia prima", "ok": true },
+        { "t": "Sí, significa que está por quebrar" },
+        { "t": "Sí, un banco no debería deber nada" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Cuando pones plata en tu cuenta, el banco te la debe: es tu dinero. Eso, contablemente, es deuda — y sin ella no podría prestar. En un banco, deber mucho es normal; lo que hay que mirar es si tiene capital propio suficiente por si algo sale mal.",
+      "puente": "Por eso ALTO no le aplica el mismo semáforo de deuda a un banco que a una minera. Sería una lectura falsa."
+    },
+    {
+      "id": "clinica-camas",
+      "cat": "varas",
+      "paso": "vara",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "Una cadena de clínicas cotiza en bolsa",
+      "pregunta": "¿Con qué se mide un negocio de salud?",
+      "opciones": [
+        { "t": "Con cuántas camas y consultorios tiene ocupados, y cuánto deja cada paciente atendido", "ok": true },
+        { "t": "Con las toneladas que produce" },
+        { "t": "Con el precio del cobre" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Una clínica es como un hotel con médicos: gana cuando sus camas están ocupadas y pierde cuando están vacías, porque el edificio y el personal se pagan igual. Su vara es la ocupación y lo que deja cada atención, no las toneladas ni los metales.",
+      "puente": "En ALTO hay empresas de salud junto a mineras y bancos. La ficha te muestra lo que importa en cada caso, no la misma plantilla para todas."
+    },
+    {
+      "id": "electrica-tarifa",
+      "cat": "varas",
+      "paso": "vara",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«La distribuidora eléctrica pidió revisión de tarifas»",
+      "pregunta": "¿De qué depende principalmente una empresa de luz o agua?",
+      "opciones": [
+        { "t": "De la tarifa que le fija el Estado y de cuánta energía consume el país", "ok": true },
+        { "t": "De la publicidad que haga" },
+        { "t": "Del precio del oro" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Estas empresas no ponen su precio: se lo fija un regulador cada cierto tiempo. A cambio, tienen un negocio muy estable: la gente paga la luz aunque la economía esté floja. Ingreso predecible, techo también.",
+      "puente": "Por eso suelen ser de las que reparten dividendos con más regularidad. Otra vara, otro tipo de expectativa."
+    },
+    {
+      "id": "constructora-backlog",
+      "cat": "varas",
+      "paso": "vara",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«La constructora se adjudicó una obra grande»",
+      "pregunta": "¿Qué se le mira a una constructora?",
+      "opciones": [
+        { "t": "Cuánta obra tiene firmada por delante y a qué margen la ejecuta", "ok": true },
+        { "t": "Cuántos camiones tiene" },
+        { "t": "El precio de la acción del día" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Una constructora vive de una cartera de obras por ejecutar: es su despensa. Si está llena, tiene trabajo asegurado por años; si se vacía, va a tener que aceptar obras baratas para no parar. Y ojo: adjudicarse una obra no es ganar plata todavía.",
+      "puente": "Es el mismo cuidado del paso 3 del plan: cobrar no es lo mismo que facturar, y facturar no es lo mismo que firmar."
+    },
+    {
+      "id": "retail-mismas-tiendas",
+      "cat": "varas",
+      "paso": "vara",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "«Abrieron 20 tiendas nuevas este año»",
+      "pregunta": "¿Cómo se sabe si un retail está creciendo de verdad?",
+      "opciones": [
+        { "t": "Mirando si las tiendas que YA existían venden más que el año pasado", "ok": true },
+        { "t": "Contando cuántas tiendas nuevas abrió" },
+        { "t": "Viendo cuánta gente entra al local" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Abrir tiendas siempre sube las ventas totales: es trampa fácil. La pregunta honesta es si la tienda de la esquina, la misma de siempre, está vendiendo más. Si abre veinte locales y los viejos venden menos, algo anda mal.",
+      "puente": "Cada sector tiene un truco así, y cada uno tiene su antídoto. Eso es tener criterio y no solo datos."
+    },
+    {
+      "id": "agro-campana",
+      "cat": "varas",
+      "paso": "vara",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«La agroexportadora tuvo un trimestre flojo»",
+      "pregunta": "¿Qué hay que preguntar antes de asustarse?",
+      "opciones": [
+        { "t": "Si ese trimestre era temporada de cosecha o no: el campo tiene calendario", "ok": true },
+        { "t": "Si el gerente cambió" },
+        { "t": "Si subió el dólar ese mes" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "La uva y el arándano se cosechan en meses concretos. Fuera de campaña, la empresa casi no vende pero sigue pagando. Comparar el trimestre de cosecha con el trimestre muerto es como comparar diciembre con febrero en una juguetería.",
+      "puente": "Regla: en negocios con temporada, se compara siempre contra el MISMO trimestre del año anterior. ALTO te avisa cuáles son."
+    },
+    {
+      "id": "per-entre-sectores",
+      "cat": "varas",
+      "paso": "vara",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "«Esta acción está más barata que aquella»",
+      "pregunta": "¿Contra quién hay que comparar a una empresa?",
+      "opciones": [
+        { "t": "Contra otras del mismo rubro y contra su propia historia", "ok": true },
+        { "t": "Contra cualquier empresa de la bolsa" },
+        { "t": "Contra el bitcoin" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Un banco y una minera viven ciclos distintos, tienen riesgos distintos y el mercado les pide cosas distintas. Comparar sus números entre sí es como decir que un arquero es peor que un delantero porque mete menos goles.",
+      "puente": "Cuando llegues al comparador de ALTO, esta será la regla número uno: compara manzanas con manzanas."
+    },
+    {
+      "id": "vara-final",
+      "cat": "varas",
+      "paso": "vara",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "«Ya sé mirar una empresa»",
+      "pregunta": "Si ya sabes leer una minera, ¿puedes leer cualquier empresa?",
+      "opciones": [
+        { "t": "Casi: el método es el mismo, pero cambian los números clave según el rubro", "ok": true },
+        { "t": "Sí, todas son idénticas" },
+        { "t": "No, hay que aprender de cero cada vez" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Las preguntas grandes no cambian nunca: qué vende, de qué depende, si gana de verdad, cuánto debe, qué puede salir mal, a qué precio la compras. Lo que cambia es el dato que responde cada una. Aprendes el método una vez y luego solo cambias la vara.",
+      "puente": "Ese método es exactamente el plan de ocho pasos que ALTO te arma al final de esta conversación."
+    },
+
+    {
+      "id": "deuda-veces-ganancia",
+      "cat": "empresas",
+      "paso": "deuda",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Su deuda equivale a tres años de lo que genera»",
+      "pregunta": "¿Eso es mucho o poco?",
+      "opciones": [
+        { "t": "Depende del negocio: uno estable aguanta más deuda que uno que sube y baja con el precio de un metal", "ok": true },
+        { "t": "Siempre es poco: tres años se pagan rápido" },
+        { "t": "Siempre es demasiado" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Una empresa de agua, que cobra igual llueva o truene, puede vivir tranquila con una deuda así. Una minera, que un año gana el doble y al siguiente la mitad, con la misma deuda pasa noches en vela. La cifra sola no dice nada sin el negocio al lado.",
+      "puente": "Por eso el semáforo de deuda en ALTO va siempre pegado a la caja que genera la empresa, no suelto."
+    },
+    {
+      "id": "vencimiento-corto",
+      "cat": "empresas",
+      "paso": "deuda",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Le vence una deuda grande el próximo año»",
+      "pregunta": "¿Por qué la FECHA importa tanto como el monto?",
+      "opciones": [
+        { "t": "Porque si vence pronto y no tiene caja, depende de que alguien acepte prestarle de nuevo", "ok": true },
+        { "t": "Porque las deudas viejas no se pagan" },
+        { "t": "Porque cambia el interés cada año" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Deber 100 en diez años es muy distinto a deber 100 el mes que viene. Lo que mata a una empresa casi nunca es la deuda total: es un vencimiento cercano en un momento en que nadie le quiere prestar.",
+      "puente": "En ALTO se separa la deuda que vence dentro de 12 meses de la que vence después. Ahora ya sabes por qué está separada."
+    },
+    {
+      "id": "intereses-comen",
+      "cat": "empresas",
+      "paso": "deuda",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "«Buena parte de lo que gana se le va en intereses»",
+      "pregunta": "¿Para quién está trabajando esa empresa?",
+      "opciones": [
+        { "t": "Para el banco: primero se le paga a él y lo que sobra es para los dueños", "ok": true },
+        { "t": "Para sus accionistas, como siempre" },
+        { "t": "Para el Estado" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es como una familia cuya cuota del préstamo se come casi todo el sueldo: trabaja, sí, pero para el banco. Mientras eso dure, no hay para mejorar la casa ni para ahorrar. En una empresa, tampoco hay para invertir ni para repartir.",
+      "puente": "Es una de las razones más frecuentes por las que una empresa deja de pagar dividendos aunque siga vendiendo bien."
+    },
+    {
+      "id": "deuda-para-crecer",
+      "cat": "empresas",
+      "paso": "deuda",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Se endeudó para comprar otra empresa»",
+      "pregunta": "¿Eso es una mala noticia?",
+      "opciones": [
+        { "t": "No necesariamente: depende de si lo que compró genera más de lo que cuestan los intereses", "ok": true },
+        { "t": "Sí, endeudarse siempre es malo" },
+        { "t": "No, comprar empresas siempre sale bien" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es como pedir un préstamo para comprar un taxi: si el taxi deja más al mes que la cuota, ganaste. Si no, te compraste un problema con intereses. La deuda es una herramienta; lo que decide es qué hiciste con ella.",
+      "puente": "La pregunta que hay que hacerse siempre: ¿esta deuda compró algo que produce, o solo tapó un hueco?"
+    },
+    {
+      "id": "cuentas-por-cobrar",
+      "cat": "empresas",
+      "paso": "plata",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "«Vendió más que nunca… y no tiene efectivo»",
+      "pregunta": "¿Dónde está esa plata?",
+      "opciones": [
+        { "t": "En manos de los clientes que todavía no le pagan", "ok": true },
+        { "t": "En el banco, ganando intereses" },
+        { "t": "Se la robaron" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Vender al crédito es entregar hoy y cobrar en 60 o 90 días. En el papel ya vendiste; en la cuenta todavía no hay nada. Si el cliente demora —o nunca paga—, esa venta récord fue solo un número bonito.",
+      "puente": "Cuando en una ficha veas que las ventas suben pero la caja no, esta es la primera explicación que hay que revisar."
+    },
+    {
+      "id": "almacen-lleno",
+      "cat": "empresas",
+      "paso": "plata",
+      "tipo": "concepto",
+      "eco": "calle",
+      "gancho": "«Tiene el almacén repleto de producto»",
+      "pregunta": "¿Es buena señal tener mucho inventario?",
+      "opciones": [
+        { "t": "Casi nunca: es plata dormida, y si no se vende puede terminar rematándose", "ok": true },
+        { "t": "Sí, significa que produce mucho" },
+        { "t": "Sí, así nunca le falta stock" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Cada producto guardado costó plata que ya salió: materia prima, sueldos, luz. Mientras está en el almacén no le devuelve nada y encima ocupa espacio. Un almacén que crece más rápido que las ventas suele ser el primer aviso de que algo no se está vendiendo.",
+      "puente": "Es de esas señales que aparecen en los números mucho antes que en los titulares."
+    },
+    {
+      "id": "capex-caja",
+      "cat": "empresas",
+      "paso": "plata",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Invirtió todo en una planta nueva»",
+      "pregunta": "¿Por qué ese año puede parecer que le fue peor?",
+      "opciones": [
+        { "t": "Porque gastó caja hoy en algo que recién dará frutos en varios años", "ok": true },
+        { "t": "Porque las plantas nuevas no sirven" },
+        { "t": "Porque tuvo que despedir gente" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Es como comprarte una moto para trabajar: ese mes quedas sin ahorros y parece que te fue mal, pero compraste tu forma de ganar más. Lo importante no es cuánto gastó, sino si lo que construyó va a producir.",
+      "puente": "Distinguir el gasto que construye del que solo tapa huecos es una de las lecturas más finas — y la vas a poder hacer con los datos de ALTO."
+    },
+    {
+      "id": "ganancia-de-papel",
+      "cat": "empresas",
+      "paso": "plata",
+      "tipo": "concepto",
+      "eco": "noticias",
+      "gancho": "«Ganó millones por revaluar sus terrenos»",
+      "pregunta": "¿Esa ganancia entra a la caja?",
+      "opciones": [
+        { "t": "No: es un ajuste contable, no plata que llegó al banco", "ok": true },
+        { "t": "Sí, es dinero disponible" },
+        { "t": "Sí, se puede repartir como dividendo en efectivo" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Si tasan tu casa y dicen que ahora vale 50 mil más, eres «más rico» en el papel, pero no puedes pagar el mercado con eso. A las empresas les pasa igual: hay utilidades que son solo un número actualizado, no plata que entró.",
+      "puente": "Por eso la utilidad y la caja se miran juntas, siempre. Es el paso 3 del plan y el que más titulares desarma."
+    },
+
+    {
+      "_comment": "🔗 LAS CADENAS (pedido de Jair, 24-jul): «que se disfrute la progresión». No son preguntas sueltas: arrancan en algo que la persona TIENE en la mano y bajan eslabón por eslabón hasta una empresa peruana. Cada eslabón se revela al tocar la pregunta que el propio usuario haría («¿y de dónde sale eso?»). El último eslabón es la pregunta de verdad, con opciones. Se reconocen porque tienen `eslabones`; el resto de campos es idéntico a cualquier otra pregunta. Regla: máximo 3 eslabones antes de la pregunta — la progresión se disfruta, no se sufre.",
+      "id": "cadena-celular",
+      "cat": "enlaces",
+      "paso": "negocio",
+      "tipo": "vida",
+      "eco": "calle",
+      "gancho": "El celular que tienes en la mano ahora mismo",
+      "eslabones": [
+        {
+          "txt": "Adentro tiene chips: docenas de piezas diminutas soldadas a una placa. Ahí vive todo lo que hace.",
+          "sigue": "¿Y de qué están hechos esos chips?"
+        },
+        {
+          "txt": "Se ensamblan en Asia, pero no funcionan solos: cada conexión necesita METAL. Estaño en las soldaduras, cobre en los circuitos.",
+          "sigue": "¿Y de dónde sale ese metal?"
+        }
+      ],
+      "pregunta": "¿Qué país crees que está entre los que más cobre le venden al mundo?",
+      "opciones": [
+        { "t": "Perú: está entre los tres mayores productores del planeta", "ok": true },
+        { "t": "Estados Unidos" },
+        { "t": "Japón" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Exacto: Perú. Estamos entre los tres países que más cobre producen en el mundo, y una de las minas más grandes está en Arequipa: Cerro Verde. Es decir, tu celular tiene adentro un pedacito de un cerro peruano — y lo mismo tu laptop, tu tele y el cargador.",
+      "puente": "Y acá viene lo bueno: Cerro Verde cotiza en la Bolsa de Lima. Cualquiera puede ver sus números y ser dueño de una parte chiquita. Esa es toda la cadena: tu bolsillo → un chip → un cerro → una acción."
+    },
+    {
+      "id": "cadena-ia",
+      "cat": "enlaces",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "tiktok",
+      "gancho": "Le preguntas algo a una inteligencia artificial y responde en un segundo",
+      "eslabones": [
+        {
+          "txt": "Esa respuesta no salió de tu celular: salió de un galpón gigante lleno de computadoras, a miles de kilómetros. Un centro de datos.",
+          "sigue": "¿Y qué necesita un galpón así?"
+        },
+        {
+          "txt": "Dos cosas, en cantidades enormes: electricidad —consume como una ciudad pequeña— y cobre, en cada cable, transformador y sistema de enfriamiento.",
+          "sigue": "¿Y eso a quién le conviene?"
+        }
+      ],
+      "pregunta": "Si el mundo entero construye centros de datos, ¿qué pasa con el cobre?",
+      "opciones": [
+        { "t": "Hace falta más, y eso empuja su precio y las ventas de quien lo produce", "ok": true },
+        { "t": "Nada: los chips no llevan metal" },
+        { "t": "Baja, porque la IA es digital" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "La IA parece una nube, pero pesa toneladas. Cada avance de la inteligencia artificial es, en el fondo, más cobre saliendo de algún cerro y más electricidad quemándose. Lo digital siempre se apoya en algo físico.",
+      "puente": "Por eso una noticia de Nvidia puede terminar moviendo a una minera peruana. Estás en el eslabón sin el cual el otro no existe."
+    },
+    {
+      "id": "cadena-pan",
+      "cat": "enlaces",
+      "paso": "motor",
+      "tipo": "vida",
+      "eco": "calle",
+      "gancho": "El pan que compraste esta mañana",
+      "eslabones": [
+        {
+          "txt": "Está hecho de harina, y esa harina sale del trigo. Solo que en el Perú casi no se cultiva trigo: se importa.",
+          "sigue": "¿Y qué pasa si el trigo sube afuera?"
+        },
+        {
+          "txt": "Que llega más caro. Y si además sube el dólar, sube dos veces: por el grano y por la moneda con la que se paga.",
+          "sigue": "¿Y quién absorbe ese golpe?"
+        }
+      ],
+      "pregunta": "Cuando el trigo importado se encarece, ¿qué le pasa a una empresa de alimentos?",
+      "opciones": [
+        { "t": "O gana menos por cada producto, o te sube el precio y arriesga vender menos", "ok": true },
+        { "t": "Nada, porque compra el trigo en soles" },
+        { "t": "Gana más, porque su producto vale más" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "No hay una tercera opción mágica: o se come el costo o te lo pasa. Por eso una guerra en otro continente termina, tres pasos después, en el precio de tu pan y en las ganancias de una empresa peruana.",
+      "puente": "Alicorp es justamente eso: harinas, aceites, fideos. En su ficha puedes ver cómo le fue en los años en que el trigo estuvo caro."
+    },
+    {
+      "id": "cadena-casa",
+      "cat": "enlaces",
+      "paso": "motor",
+      "tipo": "vida",
+      "eco": "calle",
+      "gancho": "Esa casa a medio construir con fierros saliendo del techo",
+      "eslabones": [
+        {
+          "txt": "Esos fierros son acero corrugado: lo que sostiene las columnas. En el Perú la mayoría de casas se levanta así, piso por piso, con plata de la familia.",
+          "sigue": "¿Y quién fabrica ese fierro?"
+        },
+        {
+          "txt": "Empresas peruanas, que compiten contra acero importado que a veces entra mucho más barato de lo que cuesta producirlo.",
+          "sigue": "¿Y qué se hace con eso?"
+        }
+      ],
+      "pregunta": "Cuando entra producto importado a precio de remate, ¿qué puede hacer el Estado?",
+      "opciones": [
+        { "t": "Ponerle un recargo (antidumping) para que la competencia sea pareja", "ok": true },
+        { "t": "Nada, el comercio es libre y no se toca" },
+        { "t": "Comprarle el acero a la empresa local" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Se llama antidumping y no es capricho: si alguien vende a pérdida hasta que el resto cierre, después sube el precio y ya no tienes a quién comprarle. Una resolución así puede valerle a una empresa más que un buen trimestre.",
+      "puente": "Aceros Arequipa vive de eso: casas que se construyen y reglas que la protegen o la exponen. La cadena va de un techo de tu barrio a una decisión de Indecopi."
+    },
+    {
+      "id": "cadena-sushi",
+      "cat": "enlaces",
+      "paso": "negocio",
+      "tipo": "vida",
+      "eco": "calle",
+      "gancho": "El salmón de ese sushi que pediste",
+      "eslabones": [
+        {
+          "txt": "No lo pescaron en el mar abierto: casi todo el salmón del mundo se cría en jaulas, en Chile o Noruega. Y hay que darle de comer.",
+          "sigue": "¿Y qué come un salmón de criadero?"
+        },
+        {
+          "txt": "Alimento hecho con harina de pescado. Y el mayor exportador de harina de pescado del planeta es… Perú, con su anchoveta.",
+          "sigue": "¿Y de qué depende ese negocio?"
+        }
+      ],
+      "pregunta": "¿Qué determina cuánto puede vender una pesquera peruana en el año?",
+      "opciones": [
+        { "t": "La cuota de pesca que fija el Estado y si el mar acompaña", "ok": true },
+        { "t": "Cuántos barcos tenga" },
+        { "t": "El precio del dólar" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El Estado pone un tope para que la anchoveta no se acabe, y el clima decide si los cardúmenes están o se fueron a lo profundo. Puedes tener la mejor flota del mundo: si no hay cuota o no hay pescado, no vendes.",
+      "puente": "Exalmar y Austral están en ALTO con sus números. Ahora ya sabes qué mirarles primero: la cuota, no el tamaño."
+    },
+    {
+      "id": "cadena-luz",
+      "cat": "enlaces",
+      "paso": "motor",
+      "tipo": "vida",
+      "eco": "calle",
+      "gancho": "Prendes la luz de tu cuarto",
+      "eslabones": [
+        {
+          "txt": "Buena parte de esa electricidad viene de represas: agua cayendo con fuerza que mueve turbinas. Es la energía más barata del sistema.",
+          "sigue": "¿Y si no llueve?"
+        },
+        {
+          "txt": "Las represas bajan y hay que generar con gas o diésel, que cuesta bastante más. La misma luz, producida a otro precio.",
+          "sigue": "¿Y quién paga esa diferencia?"
+        }
+      ],
+      "pregunta": "En un año seco, ¿qué le pasa a una empresa eléctrica que genera con agua?",
+      "opciones": [
+        { "t": "Le sube el costo de producir, y eso muerde su ganancia", "ok": true },
+        { "t": "Nada: el agua es gratis siempre" },
+        { "t": "Gana más porque la luz se encarece" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "A eso los reportes le llaman hidrología, que suena a materia de colegio pero significa algo muy simple: cuánto llovió. Es el dato que decide el año de una hidroeléctrica.",
+      "puente": "Cuando en una ficha de ALTO leas «hidrología favorable», ya sabes que están diciendo «llovió bien y produjimos barato»."
+    },
+    {
+      "id": "cadena-techo",
+      "cat": "enlaces",
+      "paso": "negocio",
+      "tipo": "vida",
+      "eco": "calle",
+      "gancho": "Los techos de calamina que ves desde cualquier cerro de Lima",
+      "eslabones": [
+        {
+          "txt": "Son planchas de acero. Y el acero, a la intemperie, se oxida en poco tiempo… salvo que lleve una capa de otro metal encima.",
+          "sigue": "¿Qué metal lo protege?"
+        },
+        {
+          "txt": "Zinc. Se le llama galvanizado: el zinc se sacrifica y el fierro dura años. Está en techos, tornillos y estructuras de media ciudad.",
+          "sigue": "¿Y de dónde sale ese zinc?"
+        }
+      ],
+      "pregunta": "¿Dónde está el Perú en el mapa mundial del zinc?",
+      "opciones": [
+        { "t": "Entre los mayores productores del mundo", "ok": true },
+        { "t": "No produce zinc, lo importa todo" },
+        { "t": "Produce, pero solo para consumo interno" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "El zinc es de esos metales que nadie nombra y están en todos lados. Perú es uno de los grandes proveedores del planeta, y ese zinc termina protegiendo techos acá y edificios en China.",
+      "puente": "Volcan y Nexa lo producen, y las dos cotizan en la Bolsa de Lima. Un techo de calamina y una acción son el mismo negocio visto desde dos puntas."
+    },
+    {
+      "id": "cadena-afp",
+      "cat": "enlaces",
+      "paso": "cancha",
+      "tipo": "puente",
+      "eco": "familia",
+      "gancho": "Ese descuento que te aparece en la boleta todos los meses",
+      "eslabones": [
+        {
+          "txt": "Es tu aporte a la AFP. Esa plata no se queda quieta en una caja fuerte esperando que cumplas 65.",
+          "sigue": "¿Y qué hacen con ella?"
+        },
+        {
+          "txt": "La invierten: bonos, acciones de empresas peruanas y del extranjero. Tu fondo son pedacitos de negocios que trabajan mientras tú trabajas.",
+          "sigue": "¿O sea que ya soy…?"
+        }
+      ],
+      "pregunta": "Si tienes AFP, ¿qué eres ya, aunque nunca hayas comprado una acción?",
+      "opciones": [
+        { "t": "Dueño indirecto de pedacitos de empresas, incluidas varias peruanas", "ok": true },
+        { "t": "Solo un ahorrista: eso no es invertir" },
+        { "t": "Un prestamista del Estado" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "Ya estás adentro: alguien está eligiendo por ti en qué se invierte tu plata. La diferencia entre eso y lo que se aprende acá no es entrar o no entrar — es entender o no entender dónde estás metido.",
+      "puente": "Por eso ALTO no te pide que compres nada. Te enseña a leer lo que ya te está pasando."
+    },
+    {
+      "id": "cadena-panel",
+      "cat": "enlaces",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "noticias",
+      "gancho": "Esos paneles solares que ves en techos y carreteras",
+      "eslabones": [
+        {
+          "txt": "Cada panel tiene unas líneas finitas que recogen la electricidad que genera. Están hechas con una pasta del metal que mejor conduce.",
+          "sigue": "¿Qué metal es?"
+        },
+        {
+          "txt": "Plata. Unos gramos por panel… multiplicados por millones de paneles al año en todo el mundo.",
+          "sigue": "¿Y quién la produce?"
+        }
+      ],
+      "pregunta": "¿Qué papel juega el Perú en la plata del mundo?",
+      "opciones": [
+        { "t": "Es uno de los mayores productores del planeta", "ok": true },
+        { "t": "No produce plata desde hace décadas" },
+        { "t": "Solo produce plata para joyería local" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "La plata no es solo joyas: es industria. Paneles, electrónica, contactos eléctricos. Y el Perú es uno de los grandes productores mundiales, muchas veces como subproducto de minas que buscan otra cosa.",
+      "puente": "Buenaventura produce plata y oro. Cuando escuches «la plata subió», ya sabes en qué ficha se nota."
+    },
+    {
+      "id": "cadena-auto",
+      "cat": "enlaces",
+      "paso": "motor",
+      "tipo": "puente",
+      "eco": "tiktok",
+      "gancho": "Ves pasar un auto eléctrico y no hace ruido",
+      "eslabones": [
+        {
+          "txt": "No tiene motor a explosión: tiene un motor eléctrico y una batería enorme. Y eso cambia por completo su lista de materiales.",
+          "sigue": "¿Qué lleva de más?"
+        },
+        {
+          "txt": "Mucho más cobre: en el motor, en la batería, en el cargador y en toda la instalación que lo alimenta. Varias veces lo de un auto a gasolina.",
+          "sigue": "¿Y eso qué significa para el mundo?"
+        }
+      ],
+      "pregunta": "Si el planeta cambia de autos, ¿qué hace falta?",
+      "opciones": [
+        { "t": "Sacar mucho más cobre del suelo, año tras año", "ok": true },
+        { "t": "Menos minería, porque son limpios" },
+        { "t": "Nada distinto: usan los mismos materiales" },
+        { "t": "No sé", "ns": true }
+      ],
+      "explica": "La paradoja más grande de la energía limpia: para dejar de quemar combustible hay que minar más metal. Autos, cargadores, redes eléctricas, molinos de viento — todos empiezan en un cerro.",
+      "puente": "Ahí es donde el Perú deja de ser espectador de esa historia. Cerro Verde, Southern y Nexa venden justamente eso."
+    }
+  ]
+}

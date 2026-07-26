@@ -23,9 +23,12 @@ import Gracias from './components/Gracias'
 import AvisoNovedades from './components/AvisoNovedades'
 import SelectorNivel from './components/SelectorNivel'
 import Bienvenida from './components/Bienvenida'
-import LeccionExpres, { leccionVista } from './components/LeccionExpres'
+import LeccionExpres, { leccionVista, marcarLeccionVista, pasoLeccion } from './components/LeccionExpres'
+import Enganche from './components/Enganche'
 import PuertaTardia, { tocaPuertaTardia, marcarFichaVista } from './components/PuertaTardia'
 import RepasoLeccion from './components/RepasoLeccion'
+import { pedirModoTocar } from './lib/mentor'
+import PlanInversor from './components/PlanInversor'
 import NivelBadge from './components/NivelBadge'
 import NivelTransicion from './components/NivelTransicion'
 import MenuNav from './components/MenuNav'
@@ -63,14 +66,30 @@ export default function App() {
   const [vista, setVista] = useState('inicio')
   const [menuAbierto, setMenuAbierto] = useState(false)
   // 🚪 En qué paso de la entrada está quien todavía no tiene nivel:
-  // 'bienvenida' (qué es esto) → 'leccion' (las 5 tarjetas del 🐣) o
-  // 'niveles' (el selector de siempre, para el que ya sabe).
+  // 'bienvenida' (qué es esto) → 'enganche' (la conversación que detecta qué
+  // ha escuchado) → 'leccion' (las 7 tarjetas del 🐣) o 'niveles' (el selector
+  // de siempre, para el que ya sabe). El enganche PUEDE saltarse la lección:
+  // a quien reconoce y entiende no se le hace repetir lo que ya sabe.
   const [entrada, setEntrada] = useState('bienvenida')
+  // 🎣 Lo que decidió la conversación: a qué nivel entra y con qué ficha se le
+  // cierra el recorrido. Vive acá porque sobrevive al paso por la lección.
+  const [plan, setPlan] = useState(null)
   // 🎚️ La puerta de niveles del final: se decide UNA vez al montar y cuando
   // se vuelve al inicio, para no mirar localStorage en cada render.
   const [puertaTardia, setPuertaTardia] = useState(false)
   // 🐣 La lección exprés reabierta desde el menú ☰ (ya con nivel elegido).
   const [leccionAbierta, setLeccionAbierta] = useState(false)
+  // 🎣 El enganche reabierto desde el ☰: con 112 preguntas en el banco, volver
+  // trae cosas nuevas. Acá NO cambia el nivel solo: ya lo eligió.
+  const [engancheAbierto, setEngancheAbierto] = useState(false)
+  // 📋 «Ver mi plan»: abre el mismo componente pero directo en el cierre, con
+  // los pasos que ya tiene ganados. No es otra pantalla: es la misma, sin
+  // obligarlo a contestar ocho preguntas para volver a leer lo suyo.
+  const [engancheVerPlan, setEngancheVerPlan] = useState(false)
+  // Desde qué escalón arranca la conversación. Lo dice el propio usuario en la
+  // puerta: el que responde «más o menos, pero nunca lo entendí bien» no
+  // empieza en «¿qué es una acción?» — se le cree y se le sube un escalón.
+  const [escalonEnganche, setEscalonEnganche] = useState(1)
 
   // Transición de nivel: pantalla de carga honesta que tapa el re-armado de la
   // interfaz. Se dispara ante CUALQUIER cambio de nivel (puerta de entrada,
@@ -209,6 +228,34 @@ export default function App() {
     abrirEmpresa(elegida.ticker, 'inicio')
   }
 
+  /**
+   * 🎓 Las salidas del graduado del plan. Las dos que llevan a analizar dejan
+   * el 💡 Explícamelo ENCARGADO (pedirModoTocar): llega a la pantalla con los
+   * bordes dorados encendidos y toca lo que no reconozca. Sin eso, alguien que
+   * acaba de aprender el método aterriza en una ficha llena de números y la
+   * ayuda vuelve a estar escondida detrás de un botón.
+   * Devuelve true si se hizo cargo del destino.
+   */
+  const salidaDelPlan = (res) => {
+    if (res.alAzarConAyuda) {
+      pedirModoTocar('empresa')
+      const lista = empresasData.empresas
+      const elegida = lista[Math.floor(Math.random() * lista.length)]
+      location.hash = `#/empresa/${elegida.ticker}`
+      return true
+    }
+    if (res.explorar) {
+      // El encargo apunta a la FICHA, no al explorador: ahí no hay nada con
+      // borde dorado que tocar (cero `data-mentor`), así que encenderlo sería
+      // un cartel señalando la nada. Queda esperando a que él elija empresa, y
+      // el Explícamelo lo recibe en la ficha que haya escogido.
+      pedirModoTocar('empresa')
+      location.hash = '#/explorar'
+      return true
+    }
+    return false
+  }
+
   // Topbar descongestionada (antes: 8 elementos en un renglón): en escritorio
   // van solo los 4 destinos de uso diario; Comentarios/Gracias/Apóyanos viven
   // en el menú ☰ (MenuNav). En celular, TODO va al menú: queda marca + nivel + ☰.
@@ -229,11 +276,34 @@ export default function App() {
       <>
         <FondoVivo />
         <div className="aurora" aria-hidden="true" />
-        {entrada === 'leccion' ? (
+        {entrada === 'enganche' ? (
+          <Enganche
+            escalon={escalonEnganche}
+            onSalir={() => setEntrada('bienvenida')}
+            onFin={(res) => {
+              setPlan(res)
+              // Las salidas del diploma (una al azar con ayuda / buscarla yo
+              // mismo) mandan el destino; acá solo queda fijar el nivel.
+              if (salidaDelPlan(res)) { marcarLeccionVista(); setNivel(res.nivel); return }
+              // «Mejor mírame esa empresa»: entra al nivel que le tocaba y va
+              // derecho a la ficha del tema que SÍ reconoció. La lección queda
+              // ofrecida en el inicio (cinta 🐣), no impuesta.
+              if (res.verFicha) {
+                marcarLeccionVista()
+                location.hash = `#/empresa/${res.ficha.ticker}`
+                setNivel(res.nivel)
+                return
+              }
+              // Reconoce Y entiende: no se le hace repetir lo básico.
+              if (res.saltaLeccion) { marcarLeccionVista(); setNivel(res.nivel); return }
+              setEntrada('leccion')
+            }}
+          />
+        ) : entrada === 'leccion' ? (
           <LeccionExpres
             retomar
-            onFin={() => setNivel(2)}
-            onSaltar={() => setNivel(2)}
+            onFin={() => setNivel(plan?.nivel ?? 2)}
+            onSaltar={() => setNivel(plan?.nivel ?? 2)}
             // ✕ / Esc: no es lo mismo que saltar. Vuelve a la bienvenida con lo
             // leído guardado, para que asomarse no cueste empezar de nuevo.
             onCerrar={() => setEntrada('bienvenida')}
@@ -243,7 +313,12 @@ export default function App() {
           <SelectorNivel onElegir={setNivel} onVolver={() => setEntrada('bienvenida')} />
         ) : (
           <Bienvenida
-            onNovato={() => setEntrada('leccion')}
+            // El 🐣 abre la conversación… salvo que haya dejado la lección a
+            // medias: a ese no se le cambia el trato, se le devuelve su lugar.
+            onNovato={(modo) => {
+              setEscalonEnganche(modo === 'medias' ? 2 : 1)
+              setEntrada(pasoLeccion() > 0 ? 'leccion' : 'enganche')
+            }}
             onYaSe={() => setEntrada('niveles')}
             onMirar={() => setNivel(2)}
           />
@@ -303,6 +378,11 @@ export default function App() {
             onApoyar={() => setApoyoAbierto(true)}
             onTour={abrirTour}
             onLeccion={() => setLeccionAbierta(true)}
+            // Desde el ☰ siempre abre la conversación, nunca la vista del
+            // plan: si el usuario vio su plan hace un rato, ese `true` se
+            // quedaba pegado y el menú le devolvía el cierre en vez de
+            // preguntas nuevas.
+            onEnganche={() => { setEngancheVerPlan(false); setEngancheAbierto(true) }}
             onCerrar={() => setMenuAbierto(false)}
           />
         )}
@@ -404,6 +484,17 @@ export default function App() {
                 <CintaBVL onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
                 {bloquePuerta}
                 {bloqueActualizaciones}
+                {/* 📋 El plan para nuevo inversor. Va ARRIBA, antes del hero:
+                    salió del ☰ justamente porque ahí no lo veía nadie, y
+                    ponerlo al final de la página habría sido mudarlo de un
+                    escondite a otro. Niveles 1-2 (su público); del 3 en
+                    adelante sigue disponible en el menú. */}
+                {nivel <= 2 && (
+                  <PlanInversor
+                    onAbrir={() => { setEngancheVerPlan(false); setEngancheAbierto(true) }}
+                    onVerPlan={() => { setEngancheVerPlan(true); setEngancheAbierto(true) }}
+                  />
+                )}
                 {nivel >= 3 ? (
                   <>
                     {bloqueMercado}
@@ -553,6 +644,24 @@ export default function App() {
           retomar={!leccionVista()}
           onFin={() => setLeccionAbierta(false)}
           onCerrar={() => setLeccionAbierta(false)}
+        />
+      )}
+
+      {/* 🎣 El enganche reabierto desde el ☰. Diferencia con la entrada: acá el
+          usuario YA eligió nivel, así que su cierre no lo cambia a la fuerza —
+          solo ofrece la ficha del tema que reconoció. Cambiar de nivel sin
+          pedirlo, a alguien que ya está adentro, sería quitarle el volante. */}
+      {engancheAbierto && (
+        <Enganche
+          repaso
+          verPlan={engancheVerPlan}
+          onSalir={() => setEngancheAbierto(false)}
+          onFin={(res) => {
+            setEngancheAbierto(false)
+            if (res.subirNivel && res.nivel) setNivel(res.nivel)
+            if (salidaDelPlan(res)) return
+            if (res.verFicha) { location.hash = `#/empresa/${res.ficha.ticker}`; return }
+          }}
         />
       )}
 

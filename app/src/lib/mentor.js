@@ -209,6 +209,19 @@ export function pedirTarjeta(clave, { ejemplo = false } = {}) {
 
 export const ETIQUETA_REPOSO = '💡 Explícamelo'
 
+// 👆 «Llega con el Explícamelo puesto». Una pantalla puede ENCARGAR que el
+// Mentor arranque en modo tocar en la siguiente vista; el encargo viaja en
+// sessionStorage porque el Mentor vuelve a reposo en cada cambio de pantalla y
+// un evento disparado antes de navegar se perdería. Se consume una sola vez.
+// Se guarda la PANTALLA donde debe encenderse, no un simple '1': entre el
+// pedido y la llegada el Mentor se desmonta (la transición de nivel lo tapa) y
+// se vuelve a montar con otra `key`. Con un '1' pelado, la instancia que
+// pasaba por el inicio se comía el encargo y a la ficha no llegaba nada.
+export const CLAVE_TOCAR_PENDIENTE = 'alto-mentor-tocar'
+export function pedirModoTocar(vista) {
+  try { sessionStorage.setItem(CLAVE_TOCAR_PENDIENTE, String(vista)) } catch { /* incógnito */ }
+}
+
 /** Las dudas de la sección que el usuario está mirando (o las generales). */
 export function dudasDe(seccion, nivel) {
   const s = SECCIONES[seccion]

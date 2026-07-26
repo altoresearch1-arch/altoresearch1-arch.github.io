@@ -2,7 +2,166 @@
 
 > **Documento maestro vivo.** Captura TODO lo construido para que nada se pierda, sin
 > importar la ventana de contexto. Si retomas el proyecto (tú, yo en otra sesión, u otra
-> herramienta), lee esto primero. Última actualización: **23 jul 2026**. Estado: **EN VIVO (beta pública)**.
+> herramienta), lee esto primero. Última actualización: **24 jul 2026**. Estado: **EN VIVO (beta pública)**.
+
+## 🎣 24-jul: EL ENGANCHE — ALTO PREGUNTA POR LO QUE YA ESCUCHASTE (162 preguntas, 10 cadenas + el plan de 8 pasos)
+Pedido de Jair, el mismo día y encima de lo anterior: la primera experiencia no debe ser
+un curso ni un examen, sino una **conversación** que despierte curiosidad y detecte qué ha
+escuchado la persona. El objetivo textual: que lea una pregunta y piense «eso lo vi en
+TikTok», «eso salió en las noticias», «siempre escucho esa palabra y nunca entendí» — y
+que ahí se prenda el bombillo: *ah, entonces esto tiene que ver con invertir*.
+- **El banco: `data/enganche.json`, 162 preguntas (10 de ellas cadenas) en 16 categorías** (Wall Street ·
+  Nvidia/Apple/Tesla · Bitcoin · inflación, dólar y tasas · cobre, oro y China · mineras
+  peruanas · acero, aranceles y antidumping · pesca, agro y exportaciones · multas y
+  juicios · dividendos · trading vs apostar · bolsa y acciones · rarezas de empresas).
+  Cada una trae **gancho** (el titular que pudo haber visto), **pregunta de curiosidad**,
+  **3 opciones en criollo + «No sé»**, **explicación para alguien de 12 años** (siempre con
+  una comparación de la vida diaria: la bodega, el pan, la combi) y **puente** (la línea
+  que la conecta con una empresa peruana o con un dato que ALTO sí tiene). Cero jerga a la
+  entrada: no hay PER ni EBITDA — esas palabras no se reconocen, se aprenden después.
+- **El «tira y afloja» son DOS señales distintas, y ahí está todo el truco.** Primero
+  *«¿te suena?»* → **reconocimiento**, con tres respuestas: «sí, lo he visto» · **«me
+  suena… pero nunca entendí qué significa»** (la más valiosa: es el estado real del
+  usuario peruano promedio) · «nunca lo he escuchado». Después la pregunta →
+  **comprensión**. Reconocerlo todo y no entender nada es un perfil COMPLETO, y sería un
+  error mandarlo al mismo sitio que a quien no reconoce nada.
+- **La lógica de selección (`lib/enganche.js`) es adaptativa, no una lista fija.** Un
+  escalón sube con cada acierto y baja con cada fallo o «no sé»; el escalón elige el tipo
+  de la siguiente (`vida` → `puente` → `concepto`). Además nunca repite categoría seguida y
+  prefiere las que no han salido: en la prueba real, 8 preguntas dieron 8 categorías.
+- **Tres rutas al final**, tal como las pidió Jair:
+  · reconoce poco (≤30%) → **`cero`**: se empieza por bolsa, acción e inversión (Lección
+  Exprés completa) y entra en nivel 2.
+  · reconoce pero no entiende → **`basico`**: «ya escuchaste más de lo que crees», se le
+  traduce lo que ya le llegaba (Lección Exprés) y entra en nivel 2.
+  · reconoce Y entiende (≥70% de aciertos) → **`analisis`**: se **salta** la lección y
+  entra directo en nivel 3, el de catalizadores, riesgos y producción.
+  Las tres cierran devolviéndole **sus** temas como chips y ofreciéndole una ficha peruana
+  ligada a lo que reconoció (cobre → Cerro Verde, oro → Buenaventura, fierro → Aceros
+  Arequipa, pesca → Exalmar, líos → Aenza, precios → Alicorp).
+- **Tono, tres reglas que no se negocian:** «No sé» nunca castiga (responde «Perfecto:
+  para eso estamos» y explica igual); fallar dice «Casi. Mira:», nunca «incorrecto»; y se
+  puede cortar en cualquier momento — «Ya fue, entrar» **también rutea**, con lo respondido
+  hasta ahí, porque irse no puede costar volver a empezar.
+- **Un bug de diseño cazado en la prueba:** la correcta se escribe siempre primera en el
+  JSON (para que Jair edite sin contar posiciones) y así salía en pantalla — «siempre es
+  la A» habría matado la conversación en dos preguntas. Ahora se barajan al vuelo y el
+  «No sé» se queda al final. También se normalizan las «comillas» del gancho, que salían
+  dobles cuando el texto ya venía citado.
+- **No es de un solo uso:** el ☰ tiene «🎣 ¿Qué has escuchado?» y las preguntas ya vistas
+  se guardan (`alto-enganche-vistas`) para no repetirlas mientras quede banco — 112 dan
+  para catorce rondas. Reabierto desde adentro **no cambia el nivel**: el usuario ya eligió
+  y quitarle el volante sería una falta de respeto.
+- **24-jul (segunda vuelta, pedido de Jair): EL PLAN, LOS ELOGIOS Y LA RONDA DE REFUERZO.**
+  Las preguntas ya no son 8 datos sueltos: cada una entrena **uno de los 8 pasos del
+  método** para entender una empresa (campo `paso` + bloque `plan` en el JSON).
+  - **Los 8 pasos:** 1 la cancha (qué es esto y dónde se juega) · 2 qué vende y a quién ·
+    3 de qué depende que gane · 4 gana plata de verdad · 5 cuánto debe · 6 qué puede salir
+    mal · 7 a qué precio la compras y qué te devuelve · 8 **con qué vara se mide ESTA**
+    (una mina no se mide como un banco ni como una clínica — el pedido explícito de Jair).
+  - **La selección ahora cubre pasos, no solo categorías:** medido en el navegador, una
+    ronda de 8 toca **los 8 pasos, uno cada uno**. Por eso el listado del final no es un
+    adorno: es el mapa exacto de lo que la persona acaba de hacer.
+  - **Cada explicación cierra diciendo a qué paso pertenecía** («Esto era el paso 3 de 8:
+    ¿de qué depende que gane?»). Ese hilo es lo que hace que el plan se sienta ganado.
+  - **Elogios que se GANAN:** al acertar algo de un paso se gana su insignia («⚙️ Entiendes
+    el macro», «🏷️ Distingues precio de valor», «📏 Cada empresa, su vara»). El elogio
+    grande de arriba tiene cuatro escalones según los aciertos y **no miente**: con pocos
+    aciertos reconoce lo que SÍ hizo («te sonaron 6 de 8: la información ya te llega, nadie
+    te la tradujo») en vez de inventarle un logro. Un elogio falso quema todo lo demás.
+  - **El plan se muestra con tres estados:** ✅ dominado · 👀 lo viste y se te escapó ·
+    ⬜ no te tocó. Nada se pinta de rojo ni se tacha: es un mapa, no un examen reprobado.
+  - **🔁 «Otra ronda: solo lo que me falta»** arma una conversación nueva limitada a esos
+    pasos. Lo ganado NO se borra entre rondas (`alto-enganche-plan`), así que la segunda
+    vuelta SUMA hasta completar el método — y ahí aparece el 🏅 «tienes el método completo».
+  - **La segunda ronda no puede bajarle la ruta, pero sí subírsela:** si completa los 8
+    pasos viniendo de `basico`, pasa a `analisis` (nivel 3). Sería contradictorio
+    reconocerle el método y mandarlo igual a la clase introductoria. Al de ruta `cero` se
+    le respeta la lección: le falta vocabulario, no razonamiento.
+  - **+40 preguntas nuevas (el banco pasó de 112 a 152) en 3 categorías nuevas:**
+    **🔗 lo global ↔ Perú** (Nvidia y el cobre de los centros de datos · el estaño que hay
+    dentro de tu celular · la plata de los paneles solares · el salmón que come harina
+    peruana · «si a Nvidia le quitas el material, ¿qué le queda?»), **🌍 geopolítica**
+    (**el Estrecho de Ormuz**, el Canal de Panamá seco, el Mar Rojo y los fletes, la guerra
+    y los fertilizantes, la OPEP, los estímulos de China) y **📏 cada empresa su vara**
+    (mina vs banco vs clínica vs eléctrica vs constructora vs retail vs agro; por qué la
+    deuda de un banco no se lee igual). Más 8 de relleno para que los pasos «deuda» y
+    «gana de verdad» tengan banco suficiente para una ronda de refuerzo.
+  - **Celular:** el cierre es largo a propósito (~2000 px de scroll); la botonera queda
+    **pegada abajo** para que la salida esté siempre a un pulgar sin obligar a leer todo.
+- **24-jul (tercera vuelta, pedido de Jair): QUE SE DISFRUTE LA PROGRESIÓN — y que no suene a robot.**
+  - **🔗 LAS CADENAS (progresión VERTICAL).** 10 preguntas nuevas que no arrancan con un
+    titular sino con **algo que la persona tiene en la mano**, y bajan eslabón por eslabón
+    hasta una empresa peruana. La de Jair, tal cual la contó: *el celular → chips → se
+    ensamblan en Asia pero necesitan metal (estaño en las soldaduras, cobre en los
+    circuitos) → ¿de dónde sale? → Perú, entre los tres mayores productores del mundo →
+    Cerro Verde, en Arequipa → y cotiza en la Bolsa de Lima.* Las otras nueve: la IA y los
+    centros de datos · el pan y el trigo importado · la casa a medio construir y el
+    antidumping · el salmón del sushi y la anchoveta · la luz y las represas · los techos
+    de calamina y el zinc · el descuento de la AFP («ya eres dueño de pedacitos de
+    empresas») · los paneles solares y la plata · el auto eléctrico y el cobre.
+  - **El botón no dice «siguiente»: dice la pregunta que el usuario ya se está haciendo**
+    («¿y de dónde sale ese metal?», «¿o sea que ya soy…?»). Por eso avanzar se siente
+    propio. Máximo 3 eslabones antes de la pregunta — regla escrita en el JSON: la
+    progresión se disfruta, no se sufre.
+  - **La conversación ABRE con una cadena.** Si la primera pantalla es «¿te suena este
+    titular?» parece encuesta; si es «el pan que compraste esta mañana…», parece una
+    conversación. Después se mezclan solas.
+  - **⚠️ Corrección de dato:** Jair lo contó como «Cerro Verde es la que más cobre da en el
+    mundo». No lo es (la mayor del planeta es Escondida, en Chile). Quedó escrito honesto y
+    sigue pegando: **Perú entre los tres mayores productores del mundo y Cerro Verde una de
+    las minas más grandes del país.**
+  - **↔️ EL RASTRO (progresión LATERAL).** Los 8 puntos ciegos de arriba ahora son casillas
+    que **se quedan con el ícono del tema por donde pasó**. De un vistazo se ve el terreno
+    cruzado: 🔗 → 🛒 → ⛏️ → 🎁. Una sola línea: más sería un tablero de videojuego.
+  - **Fuera el tono robot.** Las opciones del «¿te suena?» traían un subtítulo explicando
+    cada respuesta («la respuesta más común, en serio» / «perfecto, para eso estamos») —
+    nadie te aclara tu propia respuesta mientras la eliges. Ahora son tres frases secas y
+    humanas: «Sí, eso lo he visto» · «Me suena, pero nunca entendí» · «Primera vez que lo
+    escucho». El calor va después, en la reacción.
+  - **Las cadenas no votan en el reconocimiento** (no preguntan «¿te suena?»): si contaran
+    como «no le sonó» ensuciarían la señal y lo mandarían a la ruta equivocada. El cierre
+    dice «de 7, te sonaron 7» cuando una de las 8 fue cadena.
+- **Verificado en el navegador, las tres rutas de punta a punta:** `cero` (nunca escuché +
+  no sé × 8) → nivel 2 + lección; `basico` (reconoce, falla) → lección → nivel 2;
+  `analisis` (reconoce y acierta × 8) → nivel 3 con la lección marcada como vista, sin
+  pasar por ella. Celular a 360×640: sin desborde horizontal, la tarjeta larga scrollea y
+  **0 botones bajo 44 px**. Cero errores de consola.
+
+## 🌱 24-jul: «¿PRIMERA VEZ AQUÍ?» — EL VERBO QUE FALTABA (invertir, tradear, dividendo)
+Pedido de Jair. La entrada ya preguntaba (bienvenida + dos puertas, #135), pero la
+pregunta estaba **implícita** y la lección arrancaba en «¿qué es una acción?»: se saltaba
+el verbo. Al que nunca invirtió le faltaban dos palabras que sí escuchó en la calle y en
+TikTok — **invertir** y **tradear**.
+- **La pregunta se dice en voz alta:** «¿Primera vez aquí?» encabeza las dos puertas, y
+  las puertas responden con las palabras del usuario: «No sé nada — quiero aprender a
+  invertir» y «Ya sé invertir» (antes: «Nunca he invertido» / «Ya sé algo de esto»).
+- **La Lección Exprés pasa de 5 a 7 tarjetas** (~1:45 en total, sigue saltable y sigue
+  guardando el avance):
+  1. 🌱 **¿Qué es invertir?** (nueva) — plata puesta a trabajar en un negocio; la
+     diferencia con ahorrar es que aquí nada está garantizado.
+  2. 🧩 ¿Qué es una acción? · 3. 💵 ¿A dónde va tu plata?
+  4. 🎁 **¿Qué es un dividendo?** — la tarjeta de «las dos formas de ganar», retitulada
+     con la palabra que el usuario venía a buscar.
+  5. ⏱️ **Invertir no es tradear** (nueva) — el gráfico vs. el negocio, y ALTO diciendo
+     de frente que no hay velas ni señales. El plan ya marcaba el riesgo de legitimar el
+     trading sin nombrarlo (§1323: «educamos ciclos, no trading»).
+  6. 🏦 Aquí no se compra (la SAB) · 7. ⚠️ Puedes perder.
+- **El «5» desapareció de todos lados:** bienvenida, RepasoLeccion del inicio y el ☰ leen
+  `TOTAL_TARJETAS` en vez de tenerlo escrito. Quien dejó la lección a medias antes de hoy
+  retoma una tarjeta más atrás (se corrió el índice) — relee una, no pierde nada.
+- **Glosario: rama nueva «Lo básico (si nunca invertiste, empieza aquí)»** de primera en
+  el árbol, con 7 términos y su ejemplo: invertir, acción, bolsa/BVL, dividendo,
+  tradear vs. invertir, SAB y riesgo. El árbol arrancaba en «Deuda».
+- **Tooltips (terminos.json):** invertir, tradear, trading, especular, especulación,
+  accionista y sab. Medido en la ficha de Alicorp: +1 subrayado, no ensucia.
+- **Celular (medido a 360×600, no a ojo):** las 7 tarjetas caben con el scroll propio de
+  `.leccion`, sin desborde horizontal; la «Saltar» (22 px) y la ✕ (36 px) subieron a 44 px
+  de ÁREA — la misma regla del pulgar que se aplicó al Mentor el 23-jul.
+- **Pre-registro (PTC):** H3 (la pregunta de entrada) y H4 (invertir ≠ tradear) quedaron
+  escritas en `DIARIO_DE_HIPOTESIS.md` **antes** de mostrarlas, cada una con su umbral de
+  muerte. Si la tarjeta 5 expulsa en vez de ubicar (≥3/10 abandonan ahí), se mueve o se
+  reescribe.
 
 ## 🪙 23-jul: LAS 5 PROFUNDIDADES Y EL ✔✔ «DOMINADO» (§6 + mejora #14)
 Las dos deudas que dejó la Sesión 4. Ninguna pantalla nueva: la MISMA tarjeta del Mentor
