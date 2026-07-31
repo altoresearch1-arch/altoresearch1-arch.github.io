@@ -12,8 +12,12 @@ comparativo del año anterior):
    trimestres 2020-2025. El "Q4 intermedio" EXISTE (hallazgo de Jair: la SMV
    lo recibe en enero con la columna oct-dic separada + el año completo) —
    verificado con UNACEM 2023: Q4 0.097 / anual 0.202. Nada se deriva.
- - El trimestre EN CURSO (hoy Q1-2026) se siembra de empresas.json
-   (epsTrimestreRaw, ya bajado por run_batch) sin descargar nada.
+ - El trimestre EN CURSO se siembra de empresas.json (epsTrimestreRaw, ya bajado
+   por run_batch) sin descargar nada, y es el de CADA empresa: no todas presentan
+   el mismo día (al 30-jul-2026, nueve mineras iban en Q2 y el resto en Q1).
+   Los ya sembrados en corridas anteriores se CONSERVAN — si no, al entrar el Q2
+   el Q1 desaparecía, porque ANIOS_TRIM no llega al año en curso y nadie lo
+   volvía a traer.
 
 Caché en cache_bpa/ (un JSON por filing): los periodos viejos NUNCA cambian;
 re-correr solo baja lo que falte. Cuando salga un periodo nuevo (ej. el anual

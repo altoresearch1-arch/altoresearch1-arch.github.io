@@ -25,6 +25,8 @@ simultáneas y fetch_anual_eps ya falló una vez así):
   6b. fetch_produccion   -> produccion.json     (producción/ventas del trimestre del HI de la empresa; parsea el PDF, caché por URL)
   7. fetch_anual_eps     -> eps_anual.json      (ganancia anual + TC, para el P/E)
   8. fix_eps             -> eps_anual.json      (parcha EPS distorsionados; SIEMPRE tras el 7)
+  8b. fetch_bpa_historico -> bpa_historico.json (gráfica BPA anual + trimestral; tras fix_eps
+                            y con empresas.json ya fresco, de donde siembra el trimestre vivo)
   9. auditoria           -> reporte             (falla si hay problemas estructurales)
 
 TRIMESTRAL (cuando salga el Q2 2026, ~ago-set):
@@ -59,6 +61,11 @@ PASOS_RAPIDOS = [
 PASOS_EPS = [
     "fetch_anual_eps.py",
     "fix_eps.py",
+    # 📈 BPA histórico: la gráfica trimestral de la ficha. NO estaba en ninguna lista
+    # (detectado 30-jul-2026): por eso el Q2 de las mineras no apareció solo y hubo
+    # que correrlo a mano. Va DESPUÉS de fix_eps —usa sus TICKERS distorsionados— y
+    # necesita el empresas.json ya actualizado: de ahí siembra el trimestre en curso.
+    "fetch_bpa_historico.py",
     "fetch_gerencia.py",  # 🗣 charla de la gerencia (SMV, trimestral; caché por expediente)
     "fetch_notas.py",     # 📝 notas a los EEFF: actual todas + 2025 minas (SMV, caché)
     "fetch_docs_urls.py", # 📚 links directos a los originales (SMV, caché 2025)
