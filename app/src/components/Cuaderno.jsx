@@ -1096,6 +1096,13 @@ function Pulso({ filas, onVerEmpresa }) {
         const luz = ev.veredicto === 'buena' ? '🟢' : ev.veredicto === 'mala' ? '🔴'
           : ev.veredicto === 'neutra' ? '🟡' : '⚪'
         const c = catBonita(ev.categoria)
+        // 📅 La fecha en que se PUBLICÓ, siempre visible (bug cazado por Jair 31-jul):
+        // el título que manda la BVL trae el periodo del reporte ("…al 30-Jun-2026"),
+        // así que un hecho de HOY se leía como noticia vieja y parecía que el cuaderno
+        // se había quedado atrás. La ficha ya encabeza cada hecho con su fecha; el
+        // pulso solo decía "hoy" en letra chica al costado. Ahora dice ambas.
+        const cuando = haceDias(ev.fecha)
+        const fecha = fechaCorta(ev.fecha)
         return (
           <div key={i} className="cd-pulso-item">
             <span className="cd-pulso-luz">{luz}</span>
@@ -1108,7 +1115,10 @@ function Pulso({ filas, onVerEmpresa }) {
               ) : c.extra ? <span className="razon">{c.extra}</span> : null}
               {ev.pdf && <a href={ev.pdf} target="_blank" rel="noopener noreferrer">documento SMV ↗</a>}
             </span>
-            <span className="cd-pulso-cuando">{haceDias(ev.fecha)}</span>
+            <span className="cd-pulso-cuando">
+              {fecha}
+              {cuando !== fecha && <small>{cuando}</small>}
+            </span>
           </div>
         )
       })}
