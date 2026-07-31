@@ -8,6 +8,10 @@ dist/
 .claude/settings.local.json
 
 # === Python (extractor) ===
+# Los PDF de los acuerdos de dividendos se quedan en la máquina (9 MB y subiendo):
+# al repo solo viaja leidos.json, que es lo que el robot necesita para no
+# re-descargarlos en cada corrida.
+extractor/cache_dividendos/*.pdf
 __pycache__/
 *.py[cod]
 *.egg-info/

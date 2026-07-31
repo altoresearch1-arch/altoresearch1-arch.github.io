@@ -6795,6 +6795,11 @@ a.link {
 .cd-lt-item.recibido .cuando { color: var(--verde); }
 .cd-lt-item .monto { color: var(--oro); font-weight: 700; }
 .cd-lt-item.recibido .monto { color: var(--verde); }
+/* acordado: ya tiene fecha y monto en el papel — se lee más firme que un estimado */
+.cd-lt-item.acordado .cuando { color: var(--verde); font-weight: 700; }
+.cd-lt-item.acordado .que { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; }
+.cd-lt-item.acordado .que small { flex-basis: 100%; }
+.cd-lt-item.acordado .que a { font-size: 12px; color: var(--oro); }
 
 /* ── calendario ── */
 .cd-cal-cab { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 10px; }

@@ -975,6 +975,22 @@ function Flujo({ filas, proys, hoy }) {
           </div>
         ))}
         {proys.slice(0, 5).map((p, i) => {
+          // 📋 ACORDADO ≠ estimado. Si la empresa ya publicó fecha y monto en su
+          // Hecho de Importancia, esto no es "si repite lo del año pasado": es
+          // plata con fecha. Se dice distinto para que no se confundan.
+          if (p.acordado) {
+            return (
+              <div key={'p' + i} className="cd-lt-item acordado">
+                <div className="cuando">{p.fecha.getDate()} {MESES_C[p.fecha.getMonth()].toLowerCase()}</div>
+                <div className="que">
+                  <b>{p.t}</b> · acordado <span className="monto">{fmtS(p.soles)}</span>{' '}
+                  <span className="cd-chip verde">📋 fecha y monto del acuerdo</span>
+                  {p.partes > 1 && <span className="cd-chip">pago {p.parte} de {p.partes}</span>}
+                  {p.pdf && <small><a href={p.pdf} target="_blank" rel="noopener noreferrer">documento SMV ↗</a></small>}
+                </div>
+              </div>
+            )
+          }
           const acuerdo = acuerdoDividendo(p.t)
           return (
             <div key={'p' + i} className="cd-lt-item estimado">
@@ -1002,9 +1018,14 @@ function eventosDelMes(filas, proys, y, m) {
     if (p.fecha.getFullYear() === y && p.fecha.getMonth() === m) {
       mete(p.fecha.getDate(), {
         tipo: 'div', t: p.t,
-        texto: 'Dividendo esperado · ' + fmtS(p.soles) + ' para ti',
-        sub: p.mensual ? 'paga cada mes (promedio de sus pagos)' : 'pagó en esta fecha hace un año',
-        acuerdo: acuerdoDividendo(p.t),
+        texto: (p.acordado ? 'Dividendo acordado · ' : 'Dividendo esperado · ') + fmtS(p.soles) + ' para ti',
+        sub: p.acordado
+          ? (p.partes > 1
+            ? `fecha y monto del acuerdo oficial · pago ${p.parte} de ${p.partes}`
+            : 'fecha y monto del acuerdo oficial')
+          : p.mensual ? 'paga cada mes (promedio de sus pagos)' : 'pagó en esta fecha hace un año',
+        pdf: p.acordado ? p.pdf : undefined,
+        acuerdo: p.acordado ? null : acuerdoDividendo(p.t),
       })
     }
   }

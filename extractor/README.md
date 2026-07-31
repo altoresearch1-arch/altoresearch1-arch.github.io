@@ -50,6 +50,29 @@ Baja la página "Entrega de Derechos" de la BVL (se actualiza al día) y escribe
 Si una empresa no tiene derecho vigente, no aparece (la app muestra "sin dividendo
 vigente ahora"). Vuelve a correrlo para refrescar.
 
+## Cuándo y cuánto se paga cada dividendo (el acuerdo, no el patrón)
+
+```
+python fetch_pagos_dividendos.py
+```
+
+Lee el **PDF del Hecho de Importancia** donde la empresa comunica la distribución
+de utilidades y saca la **fecha de entrega** y el **monto por acción** de cada pago
+→ `../app/src/data/pagos_dividendos.json`.
+
+Existe porque `dividendos.json` (stockanalysis) estampa el dividendo declarado del
+**año entero en la fecha ex**. Cuando la empresa paga **en partes** eso rompe dos
+cosas en el cuaderno: cuenta como recibido lo que todavía no llega, y esconde el
+pago pendiente. Caso real (Nexa, acuerdo del 15-may-2026): US$ 0.0786 por acción
+pero en dos mitades, 16-jun y **27-oct**. Laredo igual: S/ 0.50 el 8-jul y S/ 0.50
+el 5-ago.
+
+Regla de Oro #1: un pago solo existe si el PDF dio **fecha Y monto**. Lo que llega
+suelto se anota en el log como "sin pareja" y se ignora — nunca se completa a ojo.
+
+La caché (`cache_dividendos/leidos.json`) guarda lo ya leído por URL: al repo viajan
+unos KB, no los PDF. Los PDF crudos se quedan en la máquina (ignorados por git).
+
 ## P/E (precio ÷ ganancia anual)
 
 ```

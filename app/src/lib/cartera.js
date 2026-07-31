@@ -5,6 +5,7 @@ import dividendosData from '../data/dividendos.json'
 import hechosData from '../data/hechos.json'
 import lecturasData from '../data/lecturas.json'
 import epsAnualData from '../data/eps_anual.json'
+import pagosData from '../data/pagos_dividendos.json'
 
 // ─────────────────────────────────────────────────────────────────────────
 // 📓 MI CUADERNO — el estado y la matemática de la cartera del usuario.
@@ -256,6 +257,60 @@ export function filasDe(cartera) {
   return { filas, totalValor, totalCosto, ganTotal, cambioDia, suben, bajan }
 }
 
+// ── Pagos ACORDADOS: la fecha y el monto salen del papel, no de un patrón ──
+// (pagos_dividendos.json — extractor/fetch_pagos_dividendos.py lee el PDF del
+// Hecho de Importancia.) Existen porque el historial de dividendos estampa el
+// dividendo declarado del AÑO ENTERO en la fecha ex; cuando la empresa paga en
+// partes —Nexa: mitad el 16-jun, mitad el 27-oct— eso contaba de más lo ya
+// recibido y escondía el pago que falta.
+export const pagosAcordados = (t) => pagosData.empresas?.[t] || []
+
+// Los acuerdos que se pagan EN PARTES, agrupados por el hecho que los anunció.
+function acuerdosEnPartes(t) {
+  const porHecho = {}
+  for (const p of pagosAcordados(t)) {
+    if (p.partes > 1) (porHecho[p.hecho] = porHecho[p.hecho] || []).push(p)
+  }
+  return Object.values(porHecho)
+}
+
+// Lo que YA se declaró pero todavía NO se entrega, y que el historial ya contó
+// como recibido. Es lo que hay que restarle a los "dividendos de los últimos
+// 12 meses" para que digan lo que de verdad entró a la cuenta.
+export function noEntregadoPorAccion(e) {
+  const cero = { soles: 0, nativo: 0 }
+  if (!e?.t || !e.historial?.length) return cero
+  const ahora = Date.now()
+  const res = { soles: 0, nativo: 0 }
+  for (const tramos of acuerdosEnPartes(e.t)) {
+    const total = tramos[0].total || tramos.reduce((a, p) => a + p.monto, 0)
+    const totalS = enSoles(total, tramos[0].moneda)
+    const ultimo = tramos.reduce((a, p) => (p.fecha > a ? p.fecha : a), tramos[0].fecha)
+    // Ventana en la que puede caer la fecha ex del historial: nunca antes del
+    // acuerdo (con un mes de aire por si el anuncio llegó tarde a la BVL) y
+    // nunca después del último pago. Laredo acordó el 26-mar, la fecha ex fue
+    // el 17-abr y el segundo pago cae el 5-ago: 82 días entre la ex y el primer
+    // tramo — anclarse al tramo dejaba fuera casos así.
+    const desde = new Date(tramos[0].hecho + 'T12:00:00').getTime() - 30 * 86400000
+    const hasta = new Date(ultimo + 'T12:00:00').getTime() + 15 * 86400000
+    // ¿el historial trae el acuerdo COMPLETO en un solo apunte? Solo entonces
+    // hay algo que descontar (si ya viniera partido, la cuenta estaría bien).
+    const contadoEntero = e.historial.some((h) => {
+      const cuando = new Date(h.fecha).getTime()
+      return Math.abs(enSoles(h.monto, h.moneda) - totalS) <= totalS * 0.02 &&
+        cuando >= desde && cuando <= hasta
+    })
+    if (!contadoEntero) continue
+    for (const p of tramos) {
+      if (new Date(p.fecha + 'T12:00:00').getTime() > ahora) {
+        res.soles += enSoles(p.monto, p.moneda)
+        res.nativo += p.monto
+      }
+    }
+  }
+  return res
+}
+
 // Dividendos de los últimos 12 meses POR ACCIÓN, en soles (historial real BVL)
 export function divUlt12PorAccion(e) {
   if (!e?.historial?.length) return 0
@@ -266,7 +321,7 @@ export function divUlt12PorAccion(e) {
     const f = new Date(h.fecha)
     if (f > hace12 && f <= hoy) s += enSoles(h.monto, h.moneda)
   }
-  return s
+  return Math.max(0, s - noEntregadoPorAccion(e).soles)
 }
 export const divUlt12 = (t) => divUlt12PorAccion(empresaDe(t))
 
@@ -282,7 +337,7 @@ export function divUlt12NativoPorAccion(e) {
     const f = new Date(h.fecha)
     if (f > hace12 && f <= hoy) s += h.monto // en su moneda original (e.divMoneda)
   }
-  return s
+  return Math.max(0, s - noEntregadoPorAccion(e).nativo)
 }
 
 // ── Proyección del flujo: "si repite lo del año pasado" ──────────────────
@@ -293,6 +348,29 @@ export function proyecciones(filas) {
   const hoy = new Date()
   const hace12 = new Date(hoy); hace12.setFullYear(hace12.getFullYear() - 1)
   const porClave = {}
+
+  // 1) Lo ACORDADO manda: pagos con fecha y monto sacados del Hecho de
+  // Importancia. No son un "si repite lo del año pasado" — ya están firmados y
+  // comunicados al regulador, así que entran al flujo con nombre propio.
+  const anunciadas = {}
+  for (const c of filas) {
+    if (c.e?.sinDatos) continue
+    for (const p of pagosAcordados(c.t)) {
+      const f = new Date(p.fecha + 'T12:00:00')
+      if (f < hoy) continue
+      ;(anunciadas[c.t] = anunciadas[c.t] || []).push(f)
+      porClave['acordado|' + c.t + '|' + p.fecha] = {
+        t: c.t, fecha: f, soles: enSoles(p.monto, p.moneda) * c.cant,
+        nativo: p.monto * c.cant, moneda: p.moneda,
+        acordado: true, parte: p.parte, partes: p.partes, pdf: p.pdf,
+      }
+    }
+  }
+  // Un pago ya acordado no se vuelve a proyectar por patrón (sería el mismo
+  // dinero contado dos veces).
+  const yaAcordado = (t, fecha) =>
+    (anunciadas[t] || []).some((f) => Math.abs(f - fecha) < 20 * 86400000)
+
   for (const c of filas) {
     const e = c.e
     if (!e || e.sinDatos || !e.historial.length) continue
@@ -312,7 +390,7 @@ export function proyecciones(filas) {
       const dia = Math.round(e.historial.reduce((a, h) => a + new Date(h.fecha).getDate(), 0) / e.historial.length)
       for (let i = 0; i < 7; i++) {
         const f = new Date(hoy.getFullYear(), hoy.getMonth() + i, dia)
-        if (f >= hoy) porClave[c.t + '|' + i] = { t: c.t, fecha: f, soles: prom * c.cant, nativo: promNat * c.cant, moneda: monedaEmp, mensual: true }
+        if (f >= hoy && !yaAcordado(c.t, f)) porClave[c.t + '|' + i] = { t: c.t, fecha: f, soles: prom * c.cant, nativo: promNat * c.cant, moneda: monedaEmp, mensual: true }
       }
       continue
     }
@@ -320,6 +398,7 @@ export function proyecciones(filas) {
       const f = new Date(h.fecha)
       if (f <= hace12 || f > hoy) continue
       const fut = new Date(f); fut.setFullYear(fut.getFullYear() + 1)
+      if (yaAcordado(c.t, fut)) continue
       const clave = c.t + '|' + fut.toISOString().slice(0, 10)
       if (!porClave[clave]) porClave[clave] = { t: c.t, fecha: fut, soles: 0, nativo: 0, moneda: monedaEmp }
       porClave[clave].soles += enSoles(h.monto, h.moneda) * c.cant

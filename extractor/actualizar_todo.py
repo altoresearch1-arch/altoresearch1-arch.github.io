@@ -23,6 +23,7 @@ simultáneas y fetch_anual_eps ya falló una vez así):
   6. fetch_bem           -> mineria.json        (producción minera mensual MINEM; solo baja ediciones nuevas)
   6c. fetch_cotizaciones -> cotizaciones.json   (precio del metal/petróleo/harina/azúcar; BCRP, series mensuales)
   6b. fetch_produccion   -> produccion.json     (producción/ventas del trimestre del HI de la empresa; parsea el PDF, caché por URL)
+  6d. fetch_pagos_dividendos -> pagos_dividendos.json (fecha y monto de cada pago, del acuerdo oficial; el que paga EN PARTES ya no descuadra)
   7. fetch_anual_eps     -> eps_anual.json      (ganancia anual + TC, para el P/E)
   8. fix_eps             -> eps_anual.json      (parcha EPS distorsionados; SIEMPRE tras el 7)
   8b. fetch_bpa_historico -> bpa_historico.json (gráfica BPA anual + trimestral; tras fix_eps
@@ -53,6 +54,11 @@ PASOS_RAPIDOS = [
     "fetch_bem.py",       # producción minera MINEM (mensual; con caché, solo baja lo nuevo)
     "fetch_cotizaciones.py",  # 🥇 precio del metal/petróleo/harina/azúcar (BCRP, mensual y rápido)
     "fetch_produccion.py", # 📣 producción/ventas del trimestre del HI de la empresa (parsea el PDF; caché por URL)
+    # 💰 CUÁNDO y CUÁNTO paga cada dividendo, del acuerdo oficial. Va DESPUÉS de
+    # fetch_hechos (de ahí saca los PDF). Sin esto, una empresa que paga en partes
+    # —Nexa: mitad en junio, mitad en octubre— contaba como recibido el total y el
+    # pago pendiente no aparecía en el flujo del cuaderno.
+    "fetch_pagos_dividendos.py",
 ]
 
 # EPS anual (SMV, ~ESTÁTICO: el 2025 ya cerró) + su corrección. El SMV es LENTO y flaky
@@ -75,7 +81,8 @@ PASOS_DIARIO = PASOS_RAPIDOS + PASOS_EPS
 
 # Modos INTRADÍA del robot (livianos, corren varias veces al día en horario de
 # mercado; el BEM es MENSUAL pero fetch_bem tiene caché y no commitea ruido):
-PASOS_HECHOS = ["fetch_hechos.py", "gen_lecturas.py", "fetch_bem.py", "fetch_produccion.py"]
+PASOS_HECHOS = ["fetch_hechos.py", "gen_lecturas.py", "fetch_bem.py", "fetch_produccion.py",
+                "fetch_pagos_dividendos.py"]
 PASOS_PRECIOS = ["fetch_precios.py", "fetch_historicos.py"]
 
 
