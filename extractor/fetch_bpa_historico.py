@@ -221,7 +221,7 @@ def filing_cacheado(s, c, anio, trimestre=4, periodo="A"):
     return None
 
 
-def curar_trimestres(serie, trimestres):
+def curar_trimestres(serie, trimestres, ya_sueltos=()):
     """El XBRL trimestral tiene calidad de tagueo DISPAREJA (hallazgo 21-jul):
     UNACEM taggea el trimestre suelto; Gloria taggea ACUMULADOS en las columnas
     de trimestre (su 'oct-dic' = el año entero, exacto). Cura en tres pasos:
@@ -263,14 +263,21 @@ def curar_trimestres(serie, trimestres):
         for a in sorted({k[:4] for k in t}):
             prev = 0.0  # acumulado del eslabón anterior; None = cadena rota
             for i in (1, 2, 3, 4):
-                v = t.get(f"{a}-Q{i}")
+                clave = f"{a}-Q{i}"
+                # ya_sueltos: los del año en curso vienen de empresas.json, y ahí el
+                # BPA se extrae del contexto de 3 MESES del XBRL — ya es el trimestre
+                # solo. Destejerlos restaría dos cifras que no son acumuladas (Q2−Q1)
+                # y saldría una pérdida que nunca existió.
+                if clave in ya_sueltos:
+                    continue
+                v = t.get(clave)
                 if v is None:
                     prev = None
                     continue
                 if prev is None:
-                    t.pop(f"{a}-Q{i}")  # sin el eslabón previo no se puede restar
+                    t.pop(clave)  # sin el eslabón previo no se puede restar
                 else:
-                    t[f"{a}-Q{i}"] = round(v - prev, 4)
+                    t[clave] = round(v - prev, 4)
                 prev = v
     descartados = []
     for a, anual in serie.items():
@@ -455,11 +462,27 @@ def main():
         # de verdad se extrajo para ESTA empresa (no el global)
         q_vivo = q_vivo_de(c)
         e_app = EMPRESAS.get(tk) or {}
-        if (tipo_visto == "xbrl" and e_app.get("epsTrimestreRaw") is not None
-                and q_vivo not in trimestres):
-            trimestres[q_vivo] = e_app["epsTrimestreRaw"]
 
-        trimestres, nota_q = curar_trimestres(serie, trimestres)
+        # Los trimestres del año EN CURSO no se le piden a la SMV: ANIOS_TRIM llega
+        # hasta 2025, así que el único de 2026 que entra es el sembrado aquí. Por eso
+        # hay que CONSERVAR los que se sembraron en corridas anteriores: cuando la
+        # empresa pasó del Q1 al Q2, su Q1 se perdía y nadie volvía a traerlo — la
+        # gráfica se quedaba con un solo punto del año en vez de dos.
+        anio_vivo = q_vivo.split("-")[0] + "-"
+        previos = ((salida.get("empresas", {}).get(tk) or {}).get("trimestres")) or {}
+        ya_sueltos = set()
+        for k, v in previos.items():
+            # q_vivo NO se hereda: ese siempre lo manda empresas.json, que es el
+            # dato recién extraído (si se corrigió una cifra, debe pisar a la vieja).
+            if k.startswith(anio_vivo) and k != q_vivo and k not in trimestres:
+                trimestres[k] = v
+                ya_sueltos.add(k)
+
+        if (tipo_visto == "xbrl" and e_app.get("epsTrimestreRaw") is not None):
+            trimestres[q_vivo] = e_app["epsTrimestreRaw"]
+            ya_sueltos.add(q_vivo)
+
+        trimestres, nota_q = curar_trimestres(serie, trimestres, ya_sueltos)
         serie, trimestres, nota_cero = quitar_ceros_falsos(serie, trimestres)
         if not serie and not trimestres:
             salida["excluidas"][tk] = MOTIVO_SIN_EPS
