@@ -15,6 +15,22 @@ APP_DATA = os.path.normpath(os.path.join(AQUI, "..", "app", "src", "data"))
 
 SIMBOLO = {"USD": "US$", "PEN": "S/"}
 
+# Romano del trimestre, como lo nombra la SMV en su formulario.
+ROMANO = {1: "I", 2: "II", 3: "III", 4: "IV"}
+
+
+def periodo_de(c, cfg):
+    """
+    Año y trimestre de ESTA empresa. Por defecto los globales del config, pero una
+    empresa puede adelantarse con su propio "anio"/"trimestre".
+
+    Las empresas no presentan todas el mismo día: en julio de 2026 nueve mineras ya
+    tenían el Q2 y el resto seguía en Q1. Sin este override habría que elegir entre
+    dejar a las nueve desactualizadas o pedirle a la SMV un Q2 que las otras aún no
+    presentan (y perder sus fundamentos por 'sin_documentos').
+    """
+    return c.get("anio", cfg["anio"]), c.get("trimestre", cfg["trimestre"])
+
 
 def fmt_money(valor, moneda):
     """Formatea un monto en unidades a millones legibles. Ej: 1196589000 -> 'US$ 1,196.6 M'."""
@@ -38,8 +54,13 @@ def fmt_pct(valor):
     return f"{valor*100:.1f}%"
 
 
-def construir_empresa(cfg, res):
-    """Mapea la salida del extractor al esquema de empresa de la app."""
+def construir_empresa(cfg, res, anio=2026, trimestre=1):
+    """Mapea la salida del extractor al esquema de empresa de la app.
+
+    anio/trimestre son los del periodo REALMENTE extraído: rotulan la fuente de cada
+    dato. Quien llama los saca de periodo_de() — no se asumen aquí (Regla #1: el dato
+    dice de dónde viene, y decir Q1 cuando es Q2 es inventar).
+    """
     moneda = None
     datos = res.get("datos") if res.get("ok") else None
     if datos:
@@ -47,11 +68,26 @@ def construir_empresa(cfg, res):
         # (verificado contra los estados auditados oficiales). Ver _notaMoneda en el config.
         moneda = cfg.get("monedaForzada") or datos.get("moneda")
 
+    periodo = f"Q{trimestre} {anio}"
+    per = (datos or {}).get("_periodos") or {}
+    meses_trim = per.get("mesesTrimestre")
+
+    def sufijo_periodo(meses):
+        """Cómo nombrar el tramo que cubre un dato: el trimestre o el año corrido."""
+        if not meses or meses == meses_trim:
+            return "del trimestre"
+        return f"acumulado del año ({meses} meses, al {per.get('fin')})"
+
+    def meses_de(clave):
+        """Meses que cubre ESE concepto, según de qué periodo lo sacó el parser."""
+        o = (per.get("origen") or {}).get(clave)
+        return per.get("mesesAcumulado") if o == "acumulado" else meses_trim
+
     via = res.get("via")
     if via == "detalle":
-        fuente_base = "SMV — Estados Financieros (detalle oficial), Estados INDIVIDUALES, Q1 2026"
+        fuente_base = f"SMV — Estados Financieros (detalle oficial), Estados INDIVIDUALES, {periodo}"
     else:
-        fuente_base = "SMV — Archivo Estructurado XBRL, Estados INDIVIDUALES, Q1 2026"
+        fuente_base = f"SMV — Archivo Estructurado XBRL, Estados INDIVIDUALES, {periodo}"
     if res.get("ok"):
         fuente_base += f" (presentado {res.get('fechaPresentacion')})"
 
@@ -122,15 +158,18 @@ def construir_empresa(cfg, res):
                  "moneda": None, "fuente": fuente_base, "verificado": False}
                 if es_banco else
                 {"valor": fmt_money(d.get("fcf"), moneda), "moneda": moneda,
-                 "fuente": fuente_base + " — flujo operativo − capex", "verificado": False}),
+                 "fuente": (fuente_base + " — flujo operativo − capex, "
+                            + sufijo_periodo(d.get("fcfMeses"))),
+                 "periodoMeses": d.get("fcfMeses"), "verificado": False}),
         "eps": {"valor": fmt_eps(d.get("epsBasico"), moneda), "moneda": moneda,
-                "fuente": fuente_base + " — utilidad básica por acción común, del trimestre",
+                "fuente": (fuente_base + " — utilidad básica por acción común, "
+                           + sufijo_periodo(meses_de("epsBasico"))),
                 "verificado": False},
         "margen": {"valor": margen_str, "moneda": moneda, "fuente": fuente_base, "verificado": False},
     }
 
     # Métricas reales de ESTA empresa para inyectar en la guía "cómo leer estos números".
-    # Todo de la SMV (Q1 2026). El P/E y dividendos no se calculan aquí (ver nota en la app).
+    # Todo de la SMV (el trimestre extraído). El P/E y dividendos no se calculan aquí (ver nota en la app).
     emp["metricas"] = {
         "eps": fmt_eps(d.get("epsBasico"), moneda),
         "fcf": fmt_money(d.get("fcf"), moneda),
@@ -149,6 +188,10 @@ def construir_empresa(cfg, res):
         "eps": d.get("epsBasico"),
         "deudaFinanciera": d.get("deudaFinanciera"),
         "efectivo": d.get("efectivo"),
+        # Ganancia operativa y D&A del MISMO tramo + el factor que lo anualiza.
+        # Desde el Q2 la D&A solo viene acumulada: sumarla a la ganancia del
+        # trimestre y multiplicar por 4 inflaba el EBITDA. Usar SIEMPRE esta base.
+        "ebitdaBase": d.get("ebitdaBase"),
     }
 
     # Balance destacado
@@ -175,8 +218,8 @@ def construir_empresa(cfg, res):
         add("Efectivo y equivalentes", d.get("efectivo"))
         nota_ing = (f"periodo a {d.get('fechaPeriodo')}" if not es_holding
                     else "HOLDING: son dividendos de subsidiarias, NO ventas operativas")
-        add("Ingresos del trimestre", d.get("ingresos"), nota_ing)
-        add("Utilidad neta del trimestre", d.get("utilidadNeta"))
+        add(f"Ingresos {sufijo_periodo(meses_de('ingresos'))}", d.get("ingresos"), nota_ing)
+        add(f"Utilidad neta {sufijo_periodo(meses_de('utilidadNeta'))}", d.get("utilidadNeta"))
     if d.get("ctasPorCobrarRelacionadas") is not None:
         nota = "al " + str(d.get("fechaCierre"))
         if cfg["smvId"] == 59:
@@ -197,7 +240,7 @@ def construir_empresa(cfg, res):
         "Portal: https://www.smv.gob.pe/SIMV/Frm_InformacionFinanciera",
     ]
     emp["_extraccion"] = {"ok": True, "fechaCierre": d.get("fechaCierre"),
-                          "moneda": moneda}
+                          "moneda": moneda, "periodo": periodo}
     return emp
 
 
@@ -210,18 +253,20 @@ def main():
     empresas_app = []
 
     for c in cfg["empresas"]:
-        print(f"[{c['sector']:10}] {c['ticker']:10} smvId={c['smvId']} ...", end=" ", flush=True)
+        anio, trimestre = periodo_de(c, cfg)
+        print(f"[{c['sector']:10}] {c['ticker']:10} smvId={c['smvId']} "
+              f"Q{trimestre} {anio} ...", end=" ", flush=True)
         res = {"ok": False, "motivo": "sin_intentos"}
         for intento in range(3):
             try:
-                res = fetch_empresa(s, c["smvId"], cfg["anio"], cfg["trimestre"])
+                res = fetch_empresa(s, c["smvId"], anio, trimestre)
                 if res.get("ok"):
                     break
             except Exception as e:
                 res = {"ok": False, "motivo": f"error:{type(e).__name__}:{e}"}
             time.sleep(2)  # el portal SMV a veces falla; reintentar
         salida_cruda[c["ticker"]] = {"cfg": c, "res": res}
-        emp = construir_empresa(c, res)
+        emp = construir_empresa(c, res, anio, trimestre)
         empresas_app.append(emp)
         if res.get("ok"):
             d = res["datos"]
@@ -235,9 +280,12 @@ def main():
         json.dump(salida_cruda, f, ensure_ascii=False, indent=2)
 
     # empresas.json para la app
+    periodos = sorted({f"Q{t} {a}" for a, t in (periodo_de(c, cfg) for c in cfg["empresas"])})
     doc = {
         "_comment": ("Generado por extractor/run_batch.py desde el XBRL oficial de la SMV "
-                     "(Individual, Q1 2026). verificado=false: Jair revisa antes de publicar. "
+                     f"(Individual, {' + '.join(periodos)}). Cada empresa lleva su periodo en "
+                     "la fuente de cada dato: no todas presentan el mismo día. "
+                     "verificado=false: Jair revisa antes de publicar. "
                      "Lo que el XBRL no trae queda en null y la app lo marca como pendiente. "
                      "perfilesTentativos: la clasificación por perfil la confirma Jair."),
         "_generado": time.strftime("%Y-%m-%d %H:%M"),

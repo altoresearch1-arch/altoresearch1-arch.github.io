@@ -12,7 +12,7 @@ Regla de Oro #1: si la SMV no da el dato, queda null -> "Pendiente de verificar 
 """
 import json, os, sys, time
 from smv_extractor import nueva_sesion, fetch_empresa
-from run_batch import construir_empresa, AQUI, APP_DATA
+from run_batch import construir_empresa, periodo_de, AQUI, APP_DATA
 
 INTENTOS = 5
 
@@ -31,12 +31,14 @@ def main():
         print(f"Ticker {ticker} no está en empresas_config.json")
         sys.exit(1)
 
+    anio, trimestre = periodo_de(c, cfg)
     s = nueva_sesion()
-    print(f"[{c['sector']:10}] {c['ticker']:10} smvId={c['smvId']} ...", flush=True)
+    print(f"[{c['sector']:10}] {c['ticker']:10} smvId={c['smvId']} "
+          f"Q{trimestre} {anio} ...", flush=True)
     res = {"ok": False, "motivo": "sin_intentos"}
     for intento in range(INTENTOS):
         try:
-            res = fetch_empresa(s, c["smvId"], cfg["anio"], cfg["trimestre"])
+            res = fetch_empresa(s, c["smvId"], anio, trimestre)
             if res.get("ok"):
                 break
         except Exception as e:
@@ -44,7 +46,7 @@ def main():
         print(f"  intento {intento+1}/{INTENTOS} falló: {res.get('motivo')}")
         time.sleep(3)
 
-    emp = construir_empresa(c, res)
+    emp = construir_empresa(c, res, anio, trimestre)
     if res.get("ok"):
         d = res["datos"]
         print(f"OK  {d.get('moneda')}  activos={d.get('activos')}  cierre={d.get('fechaCierre')}")

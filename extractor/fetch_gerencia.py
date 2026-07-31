@@ -92,8 +92,13 @@ def buscar_gerencia(s, smv_id, anio, trimestre):
 def main():
     with open(os.path.join(AQUI, "empresas_config.json"), encoding="utf-8") as f:
         cfg = json.load(f)
-    anio = cfg.get("anio", 2026)
-    trimestre = cfg.get("trimestre", 1)
+    # --solo TK1,TK2: refresca únicamente esas empresas y CONSERVA el resto tal cual.
+    # Sirve cuando solo unas pocas presentaron el trimestre nuevo (ver
+    # empresas_config._nota_trimestre) y no vale la pena golpear la SMV 114 veces.
+    solo = None
+    for i, a in enumerate(sys.argv):
+        if a == "--solo" and i + 1 < len(sys.argv):
+            solo = {t.strip().upper() for t in sys.argv[i + 1].split(",") if t.strip()}
 
     viejas = {}
     if os.path.exists(SALIDA):
@@ -115,6 +120,13 @@ def main():
     salida, nuevos, fallos = {}, 0, 0
     for c in cfg["empresas"]:
         ticker, smv_id = c["ticker"], c.get("smvId")
+        # El trimestre es el de ESTA empresa: no todas presentan el mismo día.
+        anio = c.get("anio", cfg.get("anio", 2026))
+        trimestre = c.get("trimestre", cfg.get("trimestre", 1))
+        if solo is not None and ticker.upper() not in solo:
+            if ticker in viejas:
+                salida[ticker] = viejas[ticker]
+            continue
         if not smv_id or c.get("sin_documentos"):
             continue
         try:

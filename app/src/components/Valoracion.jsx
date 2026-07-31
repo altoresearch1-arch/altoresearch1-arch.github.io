@@ -113,9 +113,18 @@ export default function Valoracion({ empresa }) {
     const capitalizacion = acciones * precioEst
     const deudaNeta = (r.deudaFinanciera || 0) - (r.efectivo || 0)
     const valorEmpresa = capitalizacion + deudaNeta
-    if (r.dya != null && rangoEV) {
+    // El tramo que cubren la ganancia operativa y la D&A, con su factor de anualización.
+    // Desde el Q2 la SMV publica la D&A SOLO acumulada del año, así que la base viene
+    // sobre 6 meses (×2) y no sobre 3 (×4): sumar 3 meses de ganancia con 6 de
+    // depreciación y multiplicar por 4 inflaba el EBITDA y la empresa salía barata.
+    // Sin ebitdaBase la empresa se extrajo antes de esa corrección y sigue en un
+    // trimestre suelto (Q1): ahí trimestre y acumulado son lo mismo y el ×4 vale.
+    const base = r.ebitdaBase || {
+      utilidadOperativa: r.utilidadOperativa, dya: r.dya ?? null, meses: 3, factorAnual: 4,
+    }
+    if (base.dya != null && rangoEV) {
       // Camino ideal: sí tenemos la depreciación → EV/EBITDA de verdad, con veredicto.
-      const ebitdaAnual = (r.utilidadOperativa + r.dya) * 4
+      const ebitdaAnual = (base.utilidadOperativa + base.dya) * base.factorAnual
       if (ebitdaAnual > 0 && valorEmpresa > 0) {
         const ratio = valorEmpresa / ebitdaAnual
         let evEstado = 'en rango'
@@ -128,7 +137,7 @@ export default function Valoracion({ empresa }) {
       // Corre un poco MÁS ALTO que el EV/EBITDA (no se le suma la depreciación), así
       // que NO lo comparamos contra los rangos del sector (que son de EV/EBITDA) para
       // no marcar "cara" a todo el mundo por error: va sin veredicto, solo el número.
-      const ebitAnual = r.utilidadOperativa * 4
+      const ebitAnual = base.utilidadOperativa * base.factorAnual
       if (ebitAnual > 0 && valorEmpresa > 0) {
         evEbit = { ratio: valorEmpresa / ebitAnual, capitalizacion, deudaNeta, ganancia: ebitAnual, rango: rangoEV }
       }

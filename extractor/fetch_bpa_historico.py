@@ -368,7 +368,11 @@ def main():
             EMPRESAS = {e["ticker"]: e for e in json.load(f)["empresas"]}
     except Exception:
         EMPRESAS = {}
-    q_vivo = f"{CFG.get('anio')}-Q{CFG.get('trimestre')}"
+    # El trimestre en curso NO es el mismo para todas: una empresa puede llevar su
+    # propio "trimestre" en el config cuando ya presentó y las demás no (ver
+    # empresas_config._nota_trimestre). Se resuelve por empresa dentro del bucle.
+    def q_vivo_de(c):
+        return f"{c.get('anio', CFG.get('anio'))}-Q{c.get('trimestre', CFG.get('trimestre'))}"
 
     s = nueva_sesion()
     for i, c in enumerate(CFG["empresas"]):
@@ -447,7 +451,9 @@ def main():
             print(f"  {tk:10} BPA 0.000 en todos los años — sin gráfica (la SMV no llena el campo)")
             continue
 
-        # siembra del trimestre en curso (Q1-2026) desde empresas.json
+        # siembra del trimestre en curso desde empresas.json, con el trimestre que
+        # de verdad se extrajo para ESTA empresa (no el global)
+        q_vivo = q_vivo_de(c)
         e_app = EMPRESAS.get(tk) or {}
         if (tipo_visto == "xbrl" and e_app.get("epsTrimestreRaw") is not None
                 and q_vivo not in trimestres):

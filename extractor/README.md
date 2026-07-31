@@ -64,8 +64,10 @@ pérdida, la app dice "No aplica" (no inventa un P/E). Vuelve a correrlo para re
 el tipo de cambio o cuando salga el balance anual nuevo.
 
 ## Cómo se actualiza cada cosa
-- **Estados financieros** (deuda, FCF, EPS, capex, margen, balance): son del Q1 2026.
-  Cuando la SMV publique el Q2, cambia `trimestre` en `empresas_config.json` y corre `run_batch.py`.
+- **Estados financieros** (deuda, FCF, EPS, capex, margen, balance): el trimestre lo
+  fija `empresas_config.json`. El global va en `trimestre`, pero **cada empresa puede
+  adelantarse** con su propio `"trimestre"` — no todas presentan el mismo día. Para
+  actualizar solo algunas: márcalas y corre `run_uno.py TICKER` para cada una.
 - **Precio de cierre**: corre `fetch_precios.py` (cada día, tras el cierre).
 - **Dividendos**: corre `div_extractor.py` (cuando quieras refrescar).
 
@@ -88,7 +90,23 @@ el tipo de cambio o cuando salga el balance anual nuevo.
   cuentas por cobrar a relacionadas).
 
 ## Para otro trimestre/año
-Cambia `anio` y `trimestre` en `empresas_config.json` y vuelve a correr.
+Cambia `anio` y `trimestre` en `empresas_config.json` y vuelve a correr. Si solo
+algunas empresas ya presentaron, ponles el `"trimestre"` a ellas (override por
+empresa) en vez de mover el global: pedirle a la SMV un trimestre que una empresa
+aún no presentó devuelve `sin_documentos` y le borra los fundamentos.
+
+### Trimestre vs. acumulado (importante del Q2 en adelante)
+Del Q2 en adelante el XBRL trae **dos periodos que terminan el mismo día**: el
+trimestre (abr-jun) y el acumulado del año (ene-jun). No son intercambiables:
+
+- El **estado de resultados** viene en los dos → el extractor toma el **trimestre**.
+- El **flujo de caja** y la **depreciación (D&A)** casi siempre vienen **solo
+  acumulados** → el extractor los toma de ahí y lo **anota** en `_periodos.origen`.
+
+Por eso `fcf` trae `fcfMeses` (3 o 6) y la fuente dice cuál es, y el EBITDA se arma
+con `ebitdaBase` — ganancia operativa y D&A del **mismo** tramo, con su `factorAnual`
+(×4 si son 3 meses, ×2 si son 6). Sumar la ganancia de 3 meses con la depreciación de
+6 y multiplicar por 4 infla el EBITDA y la empresa sale más barata de lo que es.
 
 ## Notas técnicas
 - El XBRL declara UTF-8 pero emite **cp1252**; la página de detalle es **UTF-8**.

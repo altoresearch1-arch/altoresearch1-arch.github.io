@@ -2,6 +2,7 @@
   "_comment": "3 empresas por sector. smvId = value del dropdown SMV (para EE.FF.). bvlNemonico = nemónico real en la BVL (para el precio de cierre). ticker = el nemónico que se muestra. perfiles = CRITERIO TENTATIVO, lo confirma Jair. tipoLectura: minera/banco/consumo/industrial.",
   "_nota_pesqueras": "En el Mercado Principal de la SMV solo dos pesqueras presentan EE.FF.: Austral Group y Pesquera Exalmar. Por ahora van 2.",
   "_nota_precios": "bvlNemonico se eligió como la serie más líquida/representativa. Algunas (Laive, Creditex, Filamentos) se negocian poco: su último cierre puede ser de hace tiempo; la app muestra la fecha real.",
+  "_nota_trimestre": "Override por empresa: si una empresa trae su propio 'trimestre' (o 'anio'), el extractor usa ese y no el global. Las empresas no presentan el mismo dia: al 30-jul-2026 nueve mineras ya tenian el Q2 y el resto seguia en Q1. Sin el override habria que dejarlas desactualizadas o pedir un Q2 que las demas aun no presentan (y perder sus fundamentos).",
   "anio": 2026,
   "trimestre": 1,
   "empresas": [
@@ -31,7 +32,8 @@
         "dividendos"
       ],
       "bvlRpj": "B20003",
-      "bvlCompanyCode": "61200"
+      "bvlCompanyCode": "61200",
+      "trimestre": 2
     },
     {
       "sector": "minas",
@@ -45,7 +47,8 @@
         "estable"
       ],
       "bvlRpj": "CM0006",
-      "bvlCompanyCode": "64650"
+      "bvlCompanyCode": "64650",
+      "trimestre": 2
     },
     {
       "sector": "bancos",
@@ -267,7 +270,8 @@
         "mixto"
       ],
       "bvlRpj": "CM0001",
-      "bvlCompanyCode": "64801"
+      "bvlCompanyCode": "64801",
+      "trimestre": 2
     },
     {
       "sector": "minas",
@@ -281,7 +285,8 @@
         "dividendos"
       ],
       "bvlRpj": "A20032",
-      "bvlCompanyCode": "62200"
+      "bvlCompanyCode": "62200",
+      "trimestre": 2
     },
     {
       "sector": "minas",
@@ -296,7 +301,8 @@
       ],
       "_nota": "NO es junior: productora mediana de cobre/plata/plomo controlada por Buenaventura (61%), deuda casi nula. Perfil ajustado de apuesta->mixto/dividendos.",
       "bvlRpj": "B20026",
-      "bvlCompanyCode": "61700"
+      "bvlCompanyCode": "61700",
+      "trimestre": 2
     },
     {
       "sector": "alimentos",
@@ -499,7 +505,8 @@
         "estable"
       ],
       "bvlRpj": "B20027",
-      "bvlCompanyCode": "64200"
+      "bvlCompanyCode": "64200",
+      "trimestre": 2
     },
     {
       "sector": "minas",
@@ -513,7 +520,8 @@
         "mixto"
       ],
       "bvlRpj": "002597",
-      "bvlCompanyCode": "61630"
+      "bvlCompanyCode": "61630",
+      "trimestre": 2
     },
     {
       "sector": "minas",
@@ -742,7 +750,8 @@
       ],
       "_nota": "Zinc/plomo, controlada por Mitsui. Tanda 4 (01-jul-2026).",
       "bvlRpj": "B20016",
-      "bvlCompanyCode": "64400"
+      "bvlCompanyCode": "64400",
+      "trimestre": 2
     },
     {
       "sector": "minas",
@@ -1137,7 +1146,8 @@
       ],
       "_nota": "Minera junior peruana (exploración). Solo apuesta. Tanda 6.",
       "bvlRpj": "CM0002",
-      "bvlCompanyCode": "60700"
+      "bvlCompanyCode": "60700",
+      "trimestre": 2
     },
     {
       "sector": "diversas",

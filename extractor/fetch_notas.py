@@ -123,8 +123,12 @@ def main():
         cfg = json.load(f)
     with open(os.path.join(DATA, "empresas.json"), encoding="utf-8") as f:
         sectores = {e["ticker"]: e["sector"] for e in json.load(f)["empresas"]}
-    anio_actual = cfg.get("anio", 2026)
-    tri_actual = cfg.get("trimestre", 1)
+    # --solo TK1,TK2: refresca únicamente esas empresas y conserva el resto tal cual
+    # (útil cuando solo unas pocas presentaron el trimestre nuevo).
+    solo = None
+    for i, a in enumerate(sys.argv):
+        if a == "--solo" and i + 1 < len(sys.argv):
+            solo = {t.strip().upper() for t in sys.argv[i + 1].split(",") if t.strip()}
 
     viejas = {}
     if os.path.exists(SALIDA):
@@ -146,8 +150,15 @@ def main():
     salida, hechas = {}, 0
     for c in cfg["empresas"]:
         ticker, smv_id = c["ticker"], c.get("smvId")
+        if solo is not None and ticker.upper() not in solo:
+            if ticker in viejas:
+                salida[ticker] = viejas[ticker]
+            continue
         if not smv_id or c.get("sin_documentos"):
             continue
+        # El trimestre "actual" es el de ESTA empresa (override por empresa).
+        anio_actual = c.get("anio", cfg.get("anio", 2026))
+        tri_actual = c.get("trimestre", cfg.get("trimestre", 1))
         es_mina = sectores.get(ticker) == "minas"
         # trimestre actual para TODAS + los 4 de 2025 solo para las minas
         objetivos = [("actual", anio_actual, tri_actual)]

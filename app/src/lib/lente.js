@@ -73,8 +73,13 @@ export function deudaInfo(empresa) {
 
   const deudaNeta = (r.deudaFinanciera || 0) - (r.efectivo || 0)
   const sinDya = r.dya == null
-  // Trimestral × 4 — el mismo anualizado que usa "la empresa entera" en Valoracion.
-  const ganancia = (r.utilidadOperativa + (r.dya || 0)) * 4
+  // Mismo anualizado que "la empresa entera" en Valoracion: ganancia operativa y D&A
+  // del MISMO tramo, por su factor. Desde el Q2 ese tramo puede ser el acumulado del
+  // año (6 meses, ×2) porque la SMV no publica la D&A trimestral.
+  const base = r.ebitdaBase
+  const ganancia = base
+    ? (base.utilidadOperativa + (base.dya || 0)) * base.factorAnual
+    : (r.utilidadOperativa + (r.dya || 0)) * 4
 
   if (deudaNeta <= 0) {
     return { aplica: true, lente: l, cajaNeta: true, sobra: -deudaNeta, sim, ganancia, sinDya }

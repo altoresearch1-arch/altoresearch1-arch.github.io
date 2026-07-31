@@ -328,6 +328,26 @@ def parsear_xbrl(raw):
                          if c[0] == "duration" and not c[2]})
     fecha_dur = fechas_dur[-1] if fechas_dur else None
 
+    # A partir del Q2 el XBRL trae DOS periodos que terminan el mismo día: el
+    # TRIMESTRE (abr-jun) y el ACUMULADO del año (ene-jun). En el Q1 coinciden.
+    # Distinguirlos no es cosmético: el estado de resultados se reporta en ambos,
+    # pero el FLUJO DE CAJA y la DEPRECIACIÓN solo en el acumulado. Sin esta
+    # separación se mezclan — ganancia de 3 meses + D&A de 6 en un mismo EBITDA.
+    inicios = sorted({c[3] for c in contexts.values()
+                      if c[0] == "duration" and not c[2] and c[1] == fecha_dur and c[3]})
+    ini_corto = inicios[-1] if inicios else None   # el más tardío = el trimestre
+    ini_largo = inicios[0] if inicios else None    # el más temprano = el acumulado
+
+    def _meses(ini, fin):
+        if not ini or not fin:
+            return None
+        y1, m1, d1 = map(int, ini.split("-"))
+        y2, m2, d2 = map(int, fin.split("-"))
+        return (y2 - y1) * 12 + (m2 - m1) + (1 if d2 >= 28 else 0)
+
+    meses_corto = _meses(ini_corto, fecha_dur)
+    meses_largo = _meses(ini_largo, fecha_dur)
+
     # Moneda: leer unidad iso4217 de cualquier hecho monetario
     moneda = None
     for u in root.findall(f"{{{XBRLI}}}unit"):
@@ -336,8 +356,10 @@ def parsear_xbrl(raw):
             moneda = measure.text.split(":")[-1].upper()
             break
 
-    # Recolectar hechos sin dimensión
-    def valor(locales, tipo, fecha):
+    # Recolectar hechos sin dimensión.
+    # inicio: si se pasa, exige además que el periodo EMPIECE ese día. Es lo que
+    # separa el trimestre del acumulado cuando ambos terminan igual.
+    def valor(locales, tipo, fecha, inicio=None):
         for el in root.iter():
             tag = el.tag
             if not isinstance(tag, str) or "}" not in tag:
@@ -351,6 +373,8 @@ def parsear_xbrl(raw):
                 continue
             if c[0] != tipo or c[1] != fecha:
                 continue
+            if inicio is not None and (len(c) < 4 or c[3] != inicio):
+                continue
             txt = (el.text or "").strip()
             if txt == "":
                 continue
@@ -362,7 +386,7 @@ def parsear_xbrl(raw):
 
     # EPS básico: viene en contexto CON dimensión (por clase de acción: común vs inversión).
     # Las dos clases reportan el mismo EPS; tomamos la acción COMÚN (OrdinaryShares).
-    def eps_basico(fecha):
+    def eps_basico(fecha, inicio=None):
         candidatos = []
         for el in root.iter():
             tag = el.tag
@@ -374,6 +398,8 @@ def parsear_xbrl(raw):
             cref = el.get("contextRef")
             c = contexts.get(cref)
             if not c or c[0] != "duration" or c[1] != fecha:
+                continue
+            if inicio is not None and (len(c) < 4 or c[3] != inicio):
                 continue
             txt = (el.text or "").strip()
             if txt == "":
@@ -393,27 +419,83 @@ def parsear_xbrl(raw):
     out = {"fechaCierre": fecha_cierre, "fechaPeriodo": fecha_dur, "moneda": moneda}
     for clave, locales in CONCEPTOS_INSTANTE.items():
         out[clave] = valor(locales, "instant", fecha_cierre)
+
+    # Cada concepto de duración: se pide primero en el TRIMESTRE; si la empresa no lo
+    # reporta ahí (el flujo de caja casi nunca), se cae al ACUMULADO y se ANOTA de
+    # cuál salió. Anotar es el punto: sin eso, el consumidor no puede saber que está
+    # sumando 3 meses con 6 (Regla #1: el dato dice de dónde viene).
+    origen = {}
     for clave, locales in CONCEPTOS_DURACION.items():
-        out[clave] = valor(locales, "duration", fecha_dur)
-    out["epsBasico"] = eps_basico(fecha_dur)
+        v = valor(locales, "duration", fecha_dur, ini_corto)
+        if v is not None:
+            out[clave], origen[clave] = v, "trimestre"
+            continue
+        v = valor(locales, "duration", fecha_dur, ini_largo) if ini_largo != ini_corto else None
+        out[clave] = v
+        origen[clave] = "acumulado" if v is not None else None
+
+    eps_t = eps_basico(fecha_dur, ini_corto)
+    if eps_t is None and ini_largo != ini_corto:
+        eps_a = eps_basico(fecha_dur, ini_largo)
+        out["epsBasico"], origen["epsBasico"] = eps_a, ("acumulado" if eps_a is not None else None)
+    else:
+        out["epsBasico"], origen["epsBasico"] = eps_t, ("trimestre" if eps_t is not None else None)
+
+    out["_periodos"] = {
+        "inicioTrimestre": ini_corto, "mesesTrimestre": meses_corto,
+        "inicioAcumulado": ini_largo, "mesesAcumulado": meses_largo,
+        "fin": fecha_dur, "origen": origen,
+    }
 
     # Derivados
     dfc = out.get("deudaFinCorriente") or 0
     dfnc = out.get("deudaFinNoCorriente") or 0
     out["deudaFinanciera"] = (dfc + dfnc) if (out.get("deudaFinCorriente") is not None
                                               or out.get("deudaFinNoCorriente") is not None) else None
-    if out.get("flujoOperativo") is not None and out.get("capex") is not None:
+    # FCF: solo si flujo y capex salen del MISMO periodo (restar 6 meses de flujo
+    # menos 3 de capex daría un número que no existe). Se guarda cuántos meses cubre.
+    if (out.get("flujoOperativo") is not None and out.get("capex") is not None
+            and origen.get("flujoOperativo") == origen.get("capex")):
         out["fcf"] = out["flujoOperativo"] - out["capex"]
+        out["fcfOrigen"] = origen.get("flujoOperativo")
+        out["fcfMeses"] = meses_largo if out["fcfOrigen"] == "acumulado" else meses_corto
     else:
         out["fcf"] = None
-    if out.get("utilidadNeta") is not None and out.get("ingresos"):
-        out["margenNeto"] = out["utilidadNeta"] / out["ingresos"]
-    else:
-        out["margenNeto"] = None
-    if out.get("utilidadBruta") is not None and out.get("ingresos"):
-        out["margenBruto"] = out["utilidadBruta"] / out["ingresos"]
-    else:
-        out["margenBruto"] = None
+        out["fcfOrigen"] = None
+        out["fcfMeses"] = None
+
+    # Márgenes: numerador y denominador del mismo periodo o no son un porcentaje real.
+    def _margen(num_clave):
+        num, ing = out.get(num_clave), out.get("ingresos")
+        if num is None or not ing or origen.get(num_clave) != origen.get("ingresos"):
+            return None
+        return num / ing
+    out["margenNeto"] = _margen("utilidadNeta")
+    out["margenBruto"] = _margen("utilidadBruta")
+
+    # Base del EBITDA: ganancia operativa y D&A del MISMO periodo, con el factor que
+    # lo lleva a un año. La D&A, cuando existe, casi siempre viene solo acumulada; si
+    # se la sumara a la ganancia del trimestre saldría un EBITDA inflado.
+    ebitda_base = None
+    if out.get("utilidadOperativa") is not None:
+        op_trim = valor(CONCEPTOS_DURACION["utilidadOperativa"], "duration", fecha_dur, ini_corto)
+        op_acum = (valor(CONCEPTOS_DURACION["utilidadOperativa"], "duration", fecha_dur, ini_largo)
+                   if ini_largo != ini_corto else op_trim)
+        dya_origen = origen.get("dya")
+        if out.get("dya") is None:
+            base_op, meses = out["utilidadOperativa"], (
+                meses_largo if origen.get("utilidadOperativa") == "acumulado" else meses_corto)
+            base_dya = None
+        elif dya_origen == "acumulado" and op_acum is not None:
+            base_op, base_dya, meses = op_acum, out["dya"], meses_largo
+        elif dya_origen == "trimestre" and op_trim is not None:
+            base_op, base_dya, meses = op_trim, out["dya"], meses_corto
+        else:
+            base_op = base_dya = meses = None
+        if base_op is not None and meses:
+            ebitda_base = {"utilidadOperativa": base_op, "dya": base_dya,
+                           "meses": meses, "factorAnual": 12 / meses}
+    out["ebitdaBase"] = ebitda_base
     return out
 
 

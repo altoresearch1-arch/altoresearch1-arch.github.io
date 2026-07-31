@@ -1551,8 +1551,12 @@ contra la fuente. 7. No mezclar rumor con hecho. 8. Nunca prometer rendimientos.
 - **Glosario** en árbol.
 
 ## 7. Cómo se actualizan los datos
-- **Estados financieros (Q1 2026):** cuando salga el Q2, cambiar `trimestre` en
-  `empresas_config.json` y correr `python extractor/run_batch.py`.
+- **Estados financieros:** el trimestre lo fija `empresas_config.json` — global en
+  `trimestre`, y **cada empresa puede adelantarse** con el suyo (no todas presentan
+  el mismo día). Marcada la empresa, `python extractor/run_uno.py TICKER`; para el
+  lote entero, `python extractor/run_batch.py`.
+  Al **30-jul-2026**: 9 mineras en **Q2 2026** (BVN, Volcan, Cerro Verde, Minsur,
+  El Brocal, Southern Perú, Corona, Santa Luisa, Andex) y el resto en Q1.
 - **Precio:** `python extractor/fetch_precios.py` (cada día tras el cierre).
 - **Histórico + volatilidad:** `python extractor/fetch_historicos.py` (cada día, junto al precio).
 - **Dividendos:** `python extractor/div_stockanalysis.py`.
