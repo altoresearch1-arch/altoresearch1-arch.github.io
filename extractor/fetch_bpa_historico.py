@@ -31,6 +31,10 @@ original), #6 (fuente en cada serie). Los tickers de fix_eps.TICKERS se
 EXCLUYEN: su EPS del XBRL individual no representa a la acción que cotiza.
 
 Escribe app/src/data/bpa_historico.json (incremental: guarda tras cada empresa).
+
+Uso:
+  python extractor/fetch_bpa_historico.py                        # todas
+  python extractor/fetch_bpa_historico.py --solo SIDERC1,CORAREI1  # solo esas
 """
 import sys, json, os, time
 sys.stdout.reconfigure(encoding="utf-8")
@@ -385,8 +389,24 @@ def main():
     def q_vivo_de(c):
         return f"{c.get('anio', CFG.get('anio'))}-Q{c.get('trimestre', CFG.get('trimestre'))}"
 
+    # --solo TICKER[,TICKER...]: rehace SOLO esas empresas y deja el resto del
+    # archivo intacto. Cuando una empresa suelta pasa al trimestre nuevo (las dos
+    # acereras el 01-ago-2026) no hace falta repasar las 114: la corrida completa
+    # abre sesión con la SMV para cada hueco de caché y es lenta y flaky, y el
+    # archivo se reescribe entero para cambiar dos números. Sin la bandera se
+    # comporta igual que siempre (todas).
+    empresas = CFG["empresas"]
+    if "--solo" in sys.argv:
+        pedidos = {t.strip().upper()
+                   for t in sys.argv[sys.argv.index("--solo") + 1].split(",") if t.strip()}
+        empresas = [c for c in empresas if c["ticker"].upper() in pedidos]
+        faltan = pedidos - {c["ticker"].upper() for c in empresas}
+        if faltan:
+            print(f"OJO: no están en empresas_config.json: {', '.join(sorted(faltan))}")
+        print(f"MODO --solo: {len(empresas)} empresa(s) — el resto del archivo queda igual.")
+
     s = nueva_sesion()
-    for i, c in enumerate(CFG["empresas"]):
+    for i, c in enumerate(empresas):
         tk = c["ticker"]
         # fix_eps: se excluye SALVO los verificados en MOSTRAR_INDIVIDUAL (Volcan),
         # que se bajan y se marcan con NOTA_INDIVIDUAL (pedido de Jair 22-jul).
@@ -525,7 +545,7 @@ def main():
 
         with open(SALIDA, "w", encoding="utf-8") as f:
             json.dump(salida, f, ensure_ascii=False, indent=1)
-        print(f"  [{i+1}/{len(CFG['empresas'])}] {tk:10} {moneda} "
+        print(f"  [{i+1}/{len(empresas)}] {tk:10} {moneda} "
               f"anual:{len(serie)} trimestres:{len(trimestres)}"
               + (" ⚠incompleta" if fallo else ""), flush=True)
 

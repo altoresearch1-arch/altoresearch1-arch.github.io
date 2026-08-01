@@ -2,7 +2,7 @@
   "_comment": "3 empresas por sector. smvId = value del dropdown SMV (para EE.FF.). bvlNemonico = nemónico real en la BVL (para el precio de cierre). ticker = el nemónico que se muestra. perfiles = CRITERIO TENTATIVO, lo confirma Jair. tipoLectura: minera/banco/consumo/industrial.",
   "_nota_pesqueras": "En el Mercado Principal de la SMV solo dos pesqueras presentan EE.FF.: Austral Group y Pesquera Exalmar. Por ahora van 2.",
   "_nota_precios": "bvlNemonico se eligió como la serie más líquida/representativa. Algunas (Laive, Creditex, Filamentos) se negocian poco: su último cierre puede ser de hace tiempo; la app muestra la fecha real.",
-  "_nota_trimestre": "Override por empresa: si una empresa trae su propio 'trimestre' (o 'anio'), el extractor usa ese y no el global. Las empresas no presentan el mismo dia: al 30-jul-2026 nueve mineras ya tenian el Q2 y el resto seguia en Q1. Sin el override habria que dejarlas desactualizadas o pedir un Q2 que las demas aun no presentan (y perder sus fundamentos).",
+  "_nota_trimestre": "Override por empresa: si una empresa trae su propio 'trimestre' (o 'anio'), el extractor usa ese y no el global. Las empresas no presentan el mismo dia: al 30-jul-2026 nueve mineras ya tenian el Q2 y el resto seguia en Q1. Sin el override habria que dejarlas desactualizadas o pedir un Q2 que las demas aun no presentan (y perder sus fundamentos). Al 01-ago-2026 se sumaron las dos acereras: Aceros Arequipa presento el 24-jul y Siderperu el 31-jul (comprobado contra la SMV antes de mover el override; pedirlo antes de tiempo devuelve sin_documentos y borra los fundamentos).",
   "anio": 2026,
   "trimestre": 1,
   "empresas": [
@@ -202,7 +202,8 @@
         "dividendos"
       ],
       "bvlRpj": "CI0003",
-      "bvlCompanyCode": "20601"
+      "bvlCompanyCode": "20601",
+      "trimestre": 2
     },
     {
       "sector": "acereras",
@@ -215,7 +216,8 @@
         "mixto"
       ],
       "bvlRpj": "CM0003",
-      "bvlCompanyCode": "53100"
+      "bvlCompanyCode": "53100",
+      "trimestre": 2
     },
     {
       "sector": "acereras",
