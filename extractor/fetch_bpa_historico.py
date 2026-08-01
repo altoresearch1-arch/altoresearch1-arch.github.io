@@ -61,10 +61,40 @@ MOTIVO_EXCLUSION = ("El BPA del XBRL individual no representa a la acción que c
 # COHERENTE en la SMV y se pueden mostrar CON nota. Pero SOLO los verificados:
 # - Volcan ✅: individual US$0.03 (2025), consolidado ~US$0.057 → la nota calza
 #   (el consolidado es mayor, efecto holding; la serie 2020−0.01→2025 0.03 es limpia).
-# - Minsur/Backus ❌: su individual va en OTRA base de acciones (Minsur S/21 con
-#   acción a ~S/4 → P/E 0.2; Backus S/23 vs corregido S/2.6) → distorsionado de
-#   verdad, la nota diría lo contrario. Siguen excluidos.
+# - Backus ❌: su individual va en OTRA base de acciones (S/23 vs corregido S/2.6)
+#   → distorsionado de verdad, la nota diría lo contrario. Sigue excluido.
+# - Minsur ➗: era de este grupo, pero el 01-ago-2026 se midió qué tan "otra base"
+#   es y resultó un factor EXACTO de 100 (ver FACTOR_ACCIONES). Ya no se excluye:
+#   se corrige y se grafica.
 # Ampliar SOLO tras verificar que el individual es coherente con la acción que cotiza.
+
+# ➗ Emisoras cuyo XBRL publica la utilidad por acción sobre una base de acciones
+# distinta de la que cotiza, POR UN FACTOR CONSTANTE Y COMPROBADO. No es lo mismo
+# que estar distorsionado sin arreglo: aquí el número es correcto, solo está en
+# otra unidad, y dividir lo devuelve a la acción que la gente compra.
+#
+# MINSURI1 (medido el 01-ago-2026): dividir la utilidad neta del XBRL entre su
+# propio BPA da SIEMPRE ~28.83 millones de acciones —
+#   2021: 293,474,000/10.179 = 28,831,319   2023: 126,772,000/4.397  = 28,831,476
+#   2025: 278,020,000/9.643  = 28,831,277   2026-Q1: 162,279,000/5.629 = 28,829,099
+#   2026-Q2: 260,206,000/9.026 = 28,828,495
+# pero Minsur tiene 2,883 millones de acciones (capitalización S/ 19.92 mil M ÷
+# S/ 6.91, fuente INDEPENDIENTE del XBRL). Factor 100.00 en los cinco periodos.
+# Prueba por el absurdo: con 28.8 M de acciones a S/ 6.91 la empresa entera valdría
+# US$ 55 M, menos de lo que ganó en UN trimestre (US$ 260 M) y con patrimonio de
+# US$ 1,798 M. Corregido, el Q2 2026 da US$ 0.0903 por acción y el P/E cuadra con
+# el 7.5× de la ficha; sin corregir daría 0.05× (la inversión se recuperaría en un
+# trimestre). Hallazgo de Jair, que vio el 9.026 en la SMV y preguntó.
+#
+# Antes de sumar a alguien acá: comprobar el factor en VARIOS periodos y contra una
+# fuente que no sea el XBRL. Si no es constante, no es unidad — es otra cosa, y va excluido.
+FACTOR_ACCIONES = {"MINSURI1": 100}
+
+NOTA_FACTOR = ("La SMV publica la utilidad por acción de esta empresa sobre una base de "
+               "100 acciones: su propio archivo divide entre 28.8 millones de acciones "
+               "cuando la empresa tiene 2,883 millones. Estas barras ya están corregidas "
+               "(÷100), así que son lo que ganó UNA acción de las que se compran en la "
+               "BVL. El archivo original de la SMV muestra el número 100 veces más grande.")
 MOSTRAR_INDIVIDUAL = {"VOLCABC1"}
 
 # 22-jul (Jair: «si ves 0 revisa de nuevo»): hay emisoras que dejan la utilidad
@@ -410,11 +440,19 @@ def main():
         tk = c["ticker"]
         # fix_eps: se excluye SALVO los verificados en MOSTRAR_INDIVIDUAL (Volcan),
         # que se bajan y se marcan con NOTA_INDIVIDUAL (pedido de Jair 22-jul).
-        if tk in DISTORSIONADOS and tk not in MOSTRAR_INDIVIDUAL:
+        if (tk in DISTORSIONADOS and tk not in MOSTRAR_INDIVIDUAL
+                and tk not in FACTOR_ACCIONES):
             salida["excluidas"][tk] = MOTIVO_EXCLUSION
             salida["empresas"].pop(tk, None)
             continue
         mostrar_nota = tk in MOSTRAR_INDIVIDUAL
+        # ➗ factor de base de acciones: se aplica AL FINAL, al publicar. Toda la
+        # curación (curar_trimestres, quitar_ceros_falsos) corre sobre los números
+        # CRUDOS de la SMV a propósito: sus márgenes absolutos (0.003) están hechos
+        # a la medida de los 3 decimales del XBRL. Dividiendo antes, ese mismo 0.003
+        # valdría 100 veces más en términos relativos y dejaría pasar un año que hoy
+        # se descarta.
+        factor = FACTOR_ACCIONES.get(tk)
         salida.get("excluidas", {}).pop(tk, None)
 
         serie, trimestres, moneda, tipo_visto, fallo = {}, {}, None, None, False
@@ -499,12 +537,39 @@ def main():
             # q_vivo NO se hereda: ese siempre lo manda empresas.json, que es el
             # dato recién extraído (si se corrigió una cifra, debe pisar a la vieja).
             if k.startswith(anio_vivo) and k != q_vivo and k not in trimestres:
-                trimestres[k] = v
+                # lo guardado ya salió CORREGIDO (÷factor); se devuelve a escala
+                # cruda para que la curación lo compare contra los anuales crudos.
+                # Sin esto se dividiría dos veces y el trimestre heredado quedaría
+                # 100 veces más chico que sus vecinos.
+                trimestres[k] = v * factor if factor else v
                 ya_sueltos.add(k)
 
         if (tipo_visto == "xbrl" and e_app.get("epsTrimestreRaw") is not None):
             trimestres[q_vivo] = e_app["epsTrimestreRaw"]
             ya_sueltos.add(q_vivo)
+
+        # Los trimestres ANTERIORES del año en curso: la herencia de arriba solo
+        # funciona si la empresa YA estaba en el archivo. Una que entra nueva con el
+        # trimestre avanzado (Minsur, 01-ago-2026: entró en Q2 y su Q1 no existía en
+        # ningún lado) se quedaría con un solo punto del año. ANIOS_TRIM no llega al
+        # año en curso, así que se piden acá, uno por uno.
+        # Solo los ANTERIORES al vivo: si la empresa ya presentó el Q2, el Q1 existe
+        # con certeza — nunca se le pide a la SMV un trimestre que no ha presentado.
+        if tipo_visto == "xbrl":
+            anio_q, num_q = int(q_vivo[:4]), int(q_vivo[-1])
+            for t in range(1, num_q):
+                clave = f"{anio_q}-Q{t}"
+                if clave in trimestres:
+                    continue
+                r = filing_cacheado(s, c, anio_q, trimestre=t, periodo="T")
+                if not r:
+                    continue
+                for cl, v in r["dur"].items():
+                    p = periodo_de(cl)
+                    if p and p[1] != "A" and f"{p[0]}-{p[1]}" == clave:
+                        trimestres[clave] = v
+                        ya_sueltos.add(clave)
+                        print(f"    {tk}: {clave} recuperado de la SMV (no estaba en el archivo)")
 
         trimestres, nota_q = curar_trimestres(serie, trimestres, ya_sueltos)
         serie, trimestres, nota_cero = quitar_ceros_falsos(serie, trimestres)
@@ -513,6 +578,15 @@ def main():
             salida["empresas"].pop(tk, None)
             print(f"  {tk:10} sin BPA utilizable tras limpiar los 0.000 — sin gráfica")
             continue
+
+        # ➗ recién ACÁ se corrige la base de acciones, ya con la serie curada.
+        # Se redondea a 4 decimales: el XBRL trae 3, así que ÷100 daría 5 y los
+        # dos últimos serían ruido del float (0.09026000000000001).
+        if factor:
+            serie = {a: round(v / factor, 4) for a, v in serie.items()}
+            trimestres = {q: round(v / factor, 4) for q, v in trimestres.items()}
+            salida.get("excluidas", {}).pop(tk, None)
+
         moneda = c.get("monedaForzada") or moneda
         fuente = ("SMV — EE.FF. individuales, utilidad básica por acción: anual auditado "
                   "+ trimestrales intermedios (XBRL)" if tipo_visto == "xbrl" else
@@ -526,6 +600,9 @@ def main():
         }
         if mostrar_nota:
             salida["empresas"][tk]["notaBpa"] = NOTA_INDIVIDUAL
+        if factor:
+            salida["empresas"][tk]["notaBpa"] = NOTA_FACTOR
+            salida["empresas"][tk]["fuente"] = fuente + f" — corregido ÷{factor} (base de acciones)"
         if nota_q:
             salida["empresas"][tk]["notaTrimestres"] = nota_q
             print(f"    {tk}: {nota_q}")

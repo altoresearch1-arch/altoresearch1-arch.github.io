@@ -2336,6 +2336,36 @@
    "fuente": "SMV — EE.FF. individuales, utilidad básica por acción: anual auditado + trimestrales intermedios (XBRL)",
    "notaBpa": "Este BPA es el que la empresa reporta en sus estados INDIVIDUALES (solo la matriz), en su moneda original. Como es un holding, el P/E de «¿Barata o cara?» usa el resultado CONSOLIDADO (todo el grupo), que suele ser mayor: por eso estas barras y ese P/E no calzan número con número.",
    "notaTrimestres": "Trimestres de 2022/2023 omitidos: no cuadran con el anual auditado (re-expresión por acciones liberadas o tagueo XBRL inconsistente). Mejor hueco que dato engañoso."
+  },
+  "MINSURI1": {
+   "moneda": "USD",
+   "serie": {
+    "2020": 0.0024,
+    "2021": 0.1912,
+    "2022": 0.1721,
+    "2023": 0.1371,
+    "2024": 0.1608,
+    "2025": 0.2164
+   },
+   "trimestres": {
+    "2021-Q1": 0.0268,
+    "2021-Q2": 0.0237,
+    "2021-Q3": 0.0425,
+    "2021-Q4": 0.1018,
+    "2022-Q1": 0.0717,
+    "2022-Q2": 0.035,
+    "2022-Q3": 0.013,
+    "2022-Q4": 0.0525,
+    "2023-Q1": 0.0214,
+    "2023-Q2": 0.0437,
+    "2023-Q3": 0.028,
+    "2023-Q4": 0.044,
+    "2026-Q1": 0.0563,
+    "2026-Q2": 0.0903
+   },
+   "fuente": "SMV — EE.FF. individuales, utilidad básica por acción: anual auditado + trimestrales intermedios (XBRL) — corregido ÷100 (base de acciones)",
+   "notaBpa": "La SMV publica la utilidad por acción de esta empresa sobre una base de 100 acciones: su propio archivo divide entre 28.8 millones de acciones cuando la empresa tiene 2,883 millones. Estas barras ya están corregidas (÷100), así que son lo que ganó UNA acción de las que se compran en la BVL. El archivo original de la SMV muestra el número 100 veces más grande.",
+   "notaTrimestres": "Trimestres de 2020/2024/2025 omitidos: no cuadran con el anual auditado (re-expresión por acciones liberadas o tagueo XBRL inconsistente). Mejor hueco que dato engañoso."
   }
  },
  "excluidas": {
@@ -2346,7 +2376,6 @@
   "BAP": "El BPA del XBRL individual no representa a la acción que cotiza (clase de acción/holding/moneda — mismo motivo que fix_eps.py); graficarlo engañaría.",
   "SCCO": "El BPA del XBRL individual no representa a la acción que cotiza (clase de acción/holding/moneda — mismo motivo que fix_eps.py); graficarlo engañaría.",
   "COCESUI1": "El BPA del XBRL individual no representa a la acción que cotiza (clase de acción/holding/moneda — mismo motivo que fix_eps.py); graficarlo engañaría.",
-  "MINSURI1": "El BPA del XBRL individual no representa a la acción que cotiza (clase de acción/holding/moneda — mismo motivo que fix_eps.py); graficarlo engañaría.",
   "BACKUSI1": "El BPA del XBRL individual no representa a la acción que cotiza (clase de acción/holding/moneda — mismo motivo que fix_eps.py); graficarlo engañaría.",
   "BAMC1": "Su archivo XBRL en la SMV trae la utilidad por acción en 0.000 en TODOS los periodos (aunque la empresa sí tenga resultados): varias emisoras presentan sus estados por los BONOS que emiten, no por acciones, y nunca llenan ese campo. Graficar una línea plana en cero haría creer que no gana nada.",
   "INDECOI1": "Su archivo XBRL en la SMV trae la utilidad por acción en 0.000 en TODOS los periodos (aunque la empresa sí tenga resultados): varias emisoras presentan sus estados por los BONOS que emiten, no por acciones, y nunca llenan ese campo. Graficar una línea plana en cero haría creer que no gana nada.",
