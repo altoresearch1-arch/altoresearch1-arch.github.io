@@ -544,9 +544,32 @@ def main():
                 trimestres[k] = v * factor if factor else v
                 ya_sueltos.add(k)
 
+        nota_escala = None
         if (tipo_visto == "xbrl" and e_app.get("epsTrimestreRaw") is not None):
-            trimestres[q_vivo] = e_app["epsTrimestreRaw"]
-            ya_sueltos.add(q_vivo)
+            crudo_q = e_app["epsTrimestreRaw"]
+            # 🚧 Control de ESCALA del trimestre vivo. Los demás trimestres se
+            # contrastan contra su anual auditado en curar_trimestres, pero el año en
+            # curso todavía no tiene anual: lo que siembra empresas.json entra sin que
+            # nadie lo mire. Hermes (01-ago-2026) llegó así con un BPA de 14,670
+            # cuando su serie anual va de 0.70 a 1.06 — su XBRL trae la utilidad
+            # (S/ 14,670,000) dividida entre MIL acciones, un campo mal etiquetado.
+            # Publicado, dejaba una barra 15,000 veces más alta que el resto.
+            # Un trimestre puede superar al mejor año (empresa en despegue), pero no
+            # por más del triple: medido sobre las 65 empresas con trimestre 2026, la
+            # segunda más alta llega a 1.2× y Hermes a 13,839×. Nada en el medio.
+            tope = max((abs(v) for v in serie.values()), default=0)
+            if tope and abs(crudo_q) > 3 * tope:
+                nota_escala = (
+                    f"El {q_vivo} no se muestra: la SMV reporta un BPA de {crudo_q:g} "
+                    f"cuando el mejor año de la empresa fue {tope:g}. No es un trimestre "
+                    "extraordinario, es su archivo XBRL que trae ese campo en otra "
+                    "unidad (utilidad total en vez de por acción). Mejor hueco que una "
+                    "barra que aplastaría al resto de la gráfica.")
+                print(f"  ⚠ {tk}: {q_vivo} descartado por escala "
+                      f"({crudo_q:g} vs anual máx {tope:g})", flush=True)
+            else:
+                trimestres[q_vivo] = crudo_q
+                ya_sueltos.add(q_vivo)
 
         # Los trimestres ANTERIORES del año en curso: la herencia de arriba solo
         # funciona si la empresa YA estaba en el archivo. Una que entra nueva con el
@@ -609,6 +632,8 @@ def main():
         if nota_cero:
             salida["empresas"][tk]["notaCeros"] = nota_cero
             print(f"    {tk}: {nota_cero}")
+        if nota_escala:
+            salida["empresas"][tk]["notaEscala"] = nota_escala
         if fallo:
             salida["empresas"][tk]["incompleta"] = True  # otra corrida la completa
 

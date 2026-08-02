@@ -497,6 +497,11 @@ export default function GraficaBPA({ ticker, empresa }) {
                 ⚖ <Glosado text={emp.notaCeros} />
               </p>
             )}
+            {emp.notaEscala && (
+              <p className="muted" style={{ fontSize: 11.5 }}>
+                ⚖ <Glosado text={emp.notaEscala} />
+              </p>
+            )}
             <p className="muted" style={{ fontSize: 11.5 }}>
               <Glosado text={emp.fuente} /> · moneda original
               {verPrecio && <> · precio: BVL (cierres reales)</>}
