@@ -21,6 +21,7 @@ from pypdf import PdfReader
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from smv_extractor import nueva_sesion, _hidden, _form_base, BASE  # noqa: E402
+from lectura_documentos import leer_documento  # noqa: E402  (PDF/DOC/DOCX/XLS/XLSX)
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.normpath(os.path.join(AQUI, ".."))
@@ -143,11 +144,14 @@ def main():
                 continue
             r = s.get(url, timeout=90)
             r.raise_for_status()
-            lector = PdfReader(io.BytesIO(r.content))
-            texto = "\n".join((p.extract_text() or "") for p in lector.pages)[:80000]
+            texto, paginas, formato = leer_documento(r.content)
+            if texto is None:
+                print(f"  {ticker:10} -> formato no soportado ({formato})", flush=True)
+                continue
+            texto = texto[:80000]
             texto = re.sub(r"[ \t]+", " ", texto)
             if len(texto.strip()) < 200:
-                print(f"  {ticker:10} -> PDF escaneado (sin texto)", flush=True)
+                print(f"  {ticker:10} -> {formato} sin texto (escaneado)", flush=True)
                 continue
             frases = extraer_frases(texto)
             montos = list(dict.fromkeys(
@@ -158,12 +162,14 @@ def main():
                 "periodo": f"{anio}-T{trimestre}",
                 "fechaPresentacion": fecha,
                 "expediente": exp,
-                "paginas": len(lector.pages),
+                "paginas": paginas,
                 "frases": frases,
                 "montos": montos,
             }
+            if formato != "PDF":
+                salida[ticker]["formatoOrigen"] = formato
             nuevos += 1
-            print(f"  {ticker:10} -> OK ({len(lector.pages)} pág., {len(frases)} frases)", flush=True)
+            print(f"  {ticker:10} -> OK ({formato}, {paginas} pág., {len(frases)} frases)", flush=True)
             if nuevos % 10 == 0:
                 escribir(salida)  # guardado INCREMENTAL: si el proceso muere, no se pierde nada
             time.sleep(1.0)  # la SMV se atora con ráfagas

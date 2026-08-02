@@ -24,6 +24,7 @@ from pypdf import PdfReader
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from smv_extractor import nueva_sesion, _hidden, _form_base, BASE  # noqa: E402
+from lectura_documentos import leer_documento  # noqa: E402  (PDF/DOC/DOCX/XLS/XLSX)
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.normpath(os.path.join(AQUI, ".."))
@@ -100,19 +101,23 @@ def procesar(s, smv_id, anio, trimestre, cache_previa):
         return cache_previa, "sin cambios"
     r = s.get(url, timeout=120)
     r.raise_for_status()
+    # Las Notas tampoco vienen siempre en PDF: varias emisoras las suben en
+    # Word/Excel y antes se perdían como "PDF ilegible" (mismo hallazgo que en
+    # fetch_gerencia el 01-ago-2026). leer_documento reconoce los cuatro formatos.
     try:
-        lector = PdfReader(io.BytesIO(r.content))
-        texto = "\n".join((p.extract_text() or "") for p in lector.pages)[:200000]
+        texto, _paginas, _fmt = leer_documento(r.content)
     except Exception:
-        return None, "PDF ilegible"
-    texto = re.sub(r"[ \t]+", " ", texto)
+        return None, "documento ilegible"
+    if texto is None:
+        return None, f"formato no soportado ({_fmt})"
+    texto = re.sub(r"[ \t]+", " ", texto[:200000])
     if len(texto.strip()) < 300:
-        return None, "PDF escaneado"
+        return None, f"{_fmt} sin texto (escaneado)"
     frases, montos = digerir(texto)
     return {
         "periodo": f"{anio}-T{trimestre}",
         "expediente": exp,
-        "paginas": len(lector.pages),
+        "paginas": _paginas,
         "frases": frases,
         "montos": montos,
     }, "OK"
