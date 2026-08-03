@@ -1,6 +1,6 @@
 {
  "_comment": "Foto POR DÍA de lo que el endpoint de mercado de la BVL solo sabe de hoy: apertura, mínimo, máximo, volumen (monto y cantidad), número de operaciones y la hora de la última. `tomas` son los [hora, precio] de cada corrida del robot, anotados solo cuando el precio cambió. NO se puede reconstruir hacia atrás: lo que no se guarda hoy se pierde. Lo genera extractor/fetch_precios.py y guarda 45 días.",
- "generado": "2026-08-03 14:49",
+ "generado": "2026-08-03 15:40",
  "dias": {
   "2026-07-31": {
    "NEXAPEC1": {
@@ -460,16 +460,16 @@
    },
    "FIBCCAP": {
     "tomas": [],
-    "apertura": 51.0,
-    "min": 51.0,
-    "max": 53.5,
+    "apertura": null,
+    "min": null,
+    "max": null,
     "cierre": 53.5,
-    "previo": 51.0,
-    "ops": 8,
-    "monto": 9344.0,
-    "cantidad": 179.0,
+    "previo": 53.5,
+    "ops": 1,
+    "monto": 161.0,
+    "cantidad": 3.0,
     "moneda": "US$",
-    "ultima": "2026-07-31T14:03:58-05:00"
+    "ultima": null
    },
    "ETFPERUD": {
     "tomas": [],
@@ -720,16 +720,16 @@
    },
    "NLR": {
     "tomas": [],
-    "apertura": 107.48,
-    "min": 107.48,
-    "max": 107.48,
+    "apertura": null,
+    "min": null,
+    "max": null,
     "cierre": 107.48,
-    "previo": 109.76,
+    "previo": 107.48,
     "ops": 1,
-    "monto": 1075.0,
-    "cantidad": 10.0,
+    "monto": 335.0,
+    "cantidad": 3.0,
     "moneda": "US$",
-    "ultima": "2026-07-31T12:09:23-05:00"
+    "ultima": null
    },
    "VEA": {
     "tomas": [],
@@ -756,6 +756,19 @@
     "cantidad": 10864.0,
     "moneda": "US$",
     "ultima": "2026-07-31T13:38:17-05:00"
+   },
+   "ILF": {
+    "tomas": [],
+    "apertura": 34.9,
+    "min": 34.9,
+    "max": 34.9,
+    "cierre": 34.9,
+    "previo": 35.02,
+    "ops": 1,
+    "monto": 19021.0,
+    "cantidad": 545.0,
+    "moneda": "US$",
+    "ultima": null
    }
   },
   "2026-07-27": {
@@ -847,8 +860,8 @@
     "cierre": 1.7,
     "previo": 1.7,
     "ops": 1,
-    "monto": 2526.0,
-    "cantidad": 1486.0,
+    "monto": 540.0,
+    "cantidad": 300.0,
     "moneda": "S/",
     "ultima": null
    }
@@ -877,8 +890,8 @@
     "cierre": 1.9,
     "previo": 1.9,
     "ops": 1,
-    "monto": 99.0,
-    "cantidad": 90.0,
+    "monto": 342.0,
+    "cantidad": 311.0,
     "moneda": "S/",
     "ultima": null
    }
@@ -934,6 +947,19 @@
     "monto": 14358.0,
     "cantidad": 410.0,
     "moneda": "US$",
+    "ultima": null
+   },
+   "SNJUANI1": {
+    "tomas": [],
+    "apertura": null,
+    "min": null,
+    "max": null,
+    "cierre": 74.0,
+    "previo": 74.0,
+    "ops": 1,
+    "monto": 2055.0,
+    "cantidad": 28.0,
+    "moneda": "S/",
     "ultima": null
    }
   },
@@ -1047,6 +1073,19 @@
     "cantidad": 6.0,
     "moneda": "US$",
     "ultima": null
+   },
+   "BROCALC1": {
+    "tomas": [],
+    "apertura": null,
+    "min": null,
+    "max": null,
+    "cierre": 21.5,
+    "previo": 21.5,
+    "ops": 1,
+    "monto": 220.0,
+    "cantidad": 10.0,
+    "moneda": "S/",
+    "ultima": null
    }
   },
   "2026-07-22": {
@@ -1157,18 +1196,22 @@
      [
       "14:49",
       4.06
+     ],
+     [
+      "15:40",
+      4.05
      ]
     ],
     "apertura": 4.0,
-    "min": 4.0,
+    "min": 3.95,
     "max": 4.06,
-    "cierre": 4.06,
+    "cierre": 4.05,
     "previo": 4.03,
-    "ops": 42,
-    "monto": 843472.0,
-    "cantidad": 208812.0,
+    "ops": 48,
+    "monto": 886349.0,
+    "cantidad": 219667.0,
     "moneda": "S/",
-    "ultima": "2026-08-03T14:39:31-05:00"
+    "ultima": "2026-08-03T14:59:36-05:00"
    },
    "BVN": {
     "tomas": [
@@ -1187,36 +1230,44 @@
      [
       "14:49",
       30.3
+     ],
+     [
+      "15:40",
+      30.43
      ]
     ],
     "apertura": 30.53,
     "min": 30.0,
     "max": 30.53,
-    "cierre": 30.3,
+    "cierre": 30.43,
     "previo": 30.25,
-    "ops": 50,
-    "monto": 167089.0,
-    "cantidad": 5516.0,
+    "ops": 52,
+    "monto": 197549.0,
+    "cantidad": 6517.0,
     "moneda": "US$",
-    "ultima": "2026-08-03T14:36:34-05:00"
+    "ultima": "2026-08-03T14:41:41-05:00"
    },
    "CVERDEC1": {
     "tomas": [
      [
       "12:30",
       67.9
+     ],
+     [
+      "15:40",
+      67.91
      ]
     ],
     "apertura": 67.5,
     "min": 67.5,
     "max": 69.0,
-    "cierre": 67.9,
+    "cierre": 67.91,
     "previo": 69.38,
-    "ops": 12,
-    "monto": 70227.0,
-    "cantidad": 1035.0,
+    "ops": 14,
+    "monto": 70572.0,
+    "cantidad": 1040.0,
     "moneda": "US$",
-    "ultima": "2026-08-03T13:30:20-05:00"
+    "ultima": "2026-08-03T14:59:43-05:00"
    },
    "BBVAC1": {
     "tomas": [
@@ -1242,11 +1293,11 @@
     "max": 2.2,
     "cierre": 2.18,
     "previo": 2.2,
-    "ops": 75,
-    "monto": 189861.0,
-    "cantidad": 86747.0,
+    "ops": 78,
+    "monto": 201444.0,
+    "cantidad": 92060.0,
     "moneda": "S/",
-    "ultima": "2026-08-03T14:39:47-05:00"
+    "ultima": "2026-08-03T14:59:36-05:00"
    },
    "CREDITC1": {
     "tomas": [
@@ -1261,18 +1312,22 @@
      [
       "14:49",
       7.13
+     ],
+     [
+      "15:40",
+      7.16
      ]
     ],
     "apertura": 7.27,
     "min": 7.13,
     "max": 7.27,
-    "cierre": 7.13,
+    "cierre": 7.16,
     "previo": 7.2,
-    "ops": 124,
-    "monto": 177220.0,
-    "cantidad": 24574.0,
+    "ops": 126,
+    "monto": 180403.0,
+    "cantidad": 25018.0,
     "moneda": "S/",
-    "ultima": "2026-08-03T14:39:42-05:00"
+    "ultima": "2026-08-03T14:59:36-05:00"
    },
    "INTERBC1": {
     "tomas": [
@@ -1319,18 +1374,22 @@
      [
       "14:11",
       12.98
+     ],
+     [
+      "15:40",
+      13.09
      ]
     ],
     "apertura": 12.6,
     "min": 12.5,
-    "max": 12.98,
-    "cierre": 12.98,
+    "max": 13.2,
+    "cierre": 13.09,
     "previo": 12.65,
-    "ops": 79,
-    "monto": 139909.0,
-    "cantidad": 11008.0,
+    "ops": 84,
+    "monto": 189250.0,
+    "cantidad": 14762.0,
     "moneda": "S/",
-    "ultima": "2026-08-03T14:21:07-05:00"
+    "ultima": "2026-08-03T14:59:36-05:00"
    },
    "GLORIAI1": {
     "tomas": [
@@ -1344,11 +1403,11 @@
     "max": null,
     "cierre": 11.5,
     "previo": 11.5,
-    "ops": 5,
-    "monto": 3311.0,
-    "cantidad": 301.0,
+    "ops": 7,
+    "monto": 5456.0,
+    "cantidad": 496.0,
     "moneda": "S/",
-    "ultima": "2026-08-03T14:19:41-05:00"
+    "ultima": "2026-08-03T14:59:43-05:00"
    },
    "CORAREI1": {
     "tomas": [
@@ -1367,18 +1426,22 @@
      [
       "14:49",
       1.52
+     ],
+     [
+      "15:40",
+      1.51
      ]
     ],
     "apertura": 1.49,
     "min": 1.49,
     "max": 1.52,
-    "cierre": 1.52,
+    "cierre": 1.51,
     "previo": 1.45,
-    "ops": 32,
-    "monto": 151287.0,
-    "cantidad": 100487.0,
+    "ops": 36,
+    "monto": 166101.0,
+    "cantidad": 110233.0,
     "moneda": "S/",
-    "ultima": "2026-08-03T14:29:36-05:00"
+    "ultima": "2026-08-03T14:59:36-05:00"
    },
    "SIDERC1": {
     "tomas": [
@@ -1445,18 +1508,22 @@
      [
       "14:49",
       0.83
+     ],
+     [
+      "15:40",
+      0.85
      ]
     ],
     "apertura": 0.8,
     "min": 0.795,
-    "max": 0.83,
-    "cierre": 0.83,
+    "max": 0.85,
+    "cierre": 0.85,
     "previo": 0.78,
-    "ops": 206,
-    "monto": 3103673.0,
-    "cantidad": 3858038.0,
+    "ops": 265,
+    "monto": 7295724.0,
+    "cantidad": 8795863.0,
     "moneda": "S/",
-    "ultima": "2026-08-03T14:34:54-05:00"
+    "ultima": "2026-08-03T15:03:29-05:00"
    },
    "MINSURI1": {
     "tomas": [
@@ -1471,18 +1538,22 @@
      [
       "14:11",
       6.93
+     ],
+     [
+      "15:40",
+      6.9
      ]
     ],
     "apertura": 6.93,
     "min": 6.9,
     "max": 6.97,
-    "cierre": 6.93,
+    "cierre": 6.9,
     "previo": 6.91,
-    "ops": 147,
-    "monto": 1740945.0,
-    "cantidad": 251259.0,
+    "ops": 158,
+    "monto": 1847123.0,
+    "cantidad": 266645.0,
     "moneda": "S/",
-    "ultima": "2026-08-03T14:21:56-05:00"
+    "ultima": "2026-08-03T14:59:36-05:00"
    },
    "BROCALC1": {
     "tomas": [
@@ -1514,15 +1585,15 @@
      ]
     ],
     "apertura": 26.58,
-    "min": 26.45,
+    "min": 26.4,
     "max": 26.69,
     "cierre": 26.45,
     "previo": 25.99,
-    "ops": 61,
-    "monto": 177609.0,
-    "cantidad": 6692.0,
+    "ops": 65,
+    "monto": 191232.0,
+    "cantidad": 7208.0,
     "moneda": "S/",
-    "ultima": "2026-08-03T14:40:09-05:00"
+    "ultima": "2026-08-03T14:59:36-05:00"
    },
    "CASAGRC1": {
     "tomas": [
@@ -1540,11 +1611,11 @@
     "max": 9.27,
     "cierre": 8.97,
     "previo": 9.0,
-    "ops": 33,
-    "monto": 58276.0,
-    "cantidad": 6442.0,
+    "ops": 36,
+    "monto": 64153.0,
+    "cantidad": 7098.0,
     "moneda": "S/",
-    "ultima": "2026-08-03T14:38:39-05:00"
+    "ultima": "2026-08-03T14:45:16-05:00"
    },
    "LUSURC1": {
     "tomas": [
@@ -1558,11 +1629,11 @@
     "max": 13.07,
     "cierre": 13.07,
     "previo": 13.2,
-    "ops": 11,
-    "monto": 15910.0,
-    "cantidad": 1200.0,
+    "ops": 13,
+    "monto": 18248.0,
+    "cantidad": 1367.0,
     "moneda": "S/",
-    "ultima": "2026-08-03T14:32:36-05:00"
+    "ultima": "2026-08-03T14:48:05-05:00"
    },
    "ENGIEC1": {
     "tomas": [
@@ -1584,29 +1655,33 @@
     "max": 4.51,
     "cierre": 4.51,
     "previo": 4.51,
-    "ops": 45,
-    "monto": 259703.0,
-    "cantidad": 57598.0,
+    "ops": 47,
+    "monto": 304803.0,
+    "cantidad": 67598.0,
     "moneda": "S/",
-    "ultima": "2026-08-03T14:38:44-05:00"
+    "ultima": "2026-08-03T14:45:41-05:00"
    },
    "ORYGENC1": {
     "tomas": [
      [
       "12:30",
       2.86
+     ],
+     [
+      "15:40",
+      2.8
      ]
     ],
     "apertura": 2.86,
-    "min": 2.86,
+    "min": 2.8,
     "max": 2.86,
-    "cierre": 2.86,
+    "cierre": 2.8,
     "previo": 2.86,
-    "ops": 34,
-    "monto": 52606.0,
-    "cantidad": 18408.0,
+    "ops": 43,
+    "monto": 61178.0,
+    "cantidad": 21475.0,
     "moneda": "S/",
-    "ultima": "2026-08-03T14:36:15-05:00"
+    "ultima": "2026-08-03T14:59:36-05:00"
    },
    "CPACASC1": {
     "tomas": [
@@ -1635,18 +1710,22 @@
      [
       "14:11",
       2.01
+     ],
+     [
+      "15:40",
+      1.98
      ]
     ],
     "apertura": 2.0,
     "min": 1.95,
     "max": 2.01,
-    "cierre": 2.01,
+    "cierre": 1.98,
     "previo": 2.0,
-    "ops": 47,
-    "monto": 1202175.0,
-    "cantidad": 614733.0,
+    "ops": 49,
+    "monto": 1205250.0,
+    "cantidad": 616233.0,
     "moneda": "S/",
-    "ultima": "2026-08-03T14:12:39-05:00"
+    "ultima": "2026-08-03T14:41:49-05:00"
    },
    "FERREYC1": {
     "tomas": [
@@ -1661,18 +1740,22 @@
      [
       "14:49",
       4.28
+     ],
+     [
+      "15:40",
+      4.3
      ]
     ],
     "apertura": 4.29,
     "min": 4.25,
     "max": 4.31,
-    "cierre": 4.28,
+    "cierre": 4.3,
     "previo": 4.25,
-    "ops": 123,
-    "monto": 374950.0,
-    "cantidad": 87269.0,
+    "ops": 129,
+    "monto": 429421.0,
+    "cantidad": 99939.0,
     "moneda": "S/",
-    "ultima": "2026-08-03T14:40:47-05:00"
+    "ultima": "2026-08-03T14:59:36-05:00"
    },
    "INRETC1": {
     "tomas": [
@@ -1683,18 +1766,22 @@
      [
       "14:11",
       37.0
+     ],
+     [
+      "15:40",
+      37.3
      ]
     ],
     "apertura": 37.64,
     "min": 37.0,
     "max": 37.64,
-    "cierre": 37.0,
+    "cierre": 37.3,
     "previo": 37.32,
-    "ops": 17,
-    "monto": 27987.0,
-    "cantidad": 754.0,
+    "ops": 20,
+    "monto": 73418.0,
+    "cantidad": 1972.0,
     "moneda": "US$",
-    "ultima": "2026-08-03T13:58:44-05:00"
+    "ultima": "2026-08-03T14:59:43-05:00"
    },
    "IFS": {
     "tomas": [
@@ -1727,12 +1814,16 @@
      [
       "14:49",
       0.44
+     ],
+     [
+      "15:40",
+      0.439
      ]
     ],
     "apertura": 0.435,
     "min": 0.434,
     "max": 0.44,
-    "cierre": 0.44,
+    "cierre": 0.439,
     "previo": 0.435,
     "ops": 41,
     "monto": 116313.0,
@@ -1792,11 +1883,11 @@
     "max": null,
     "cierre": 0.35,
     "previo": 0.35,
-    "ops": 17,
-    "monto": 8743.0,
-    "cantidad": 25347.0,
+    "ops": 19,
+    "monto": 9877.0,
+    "cantidad": 28673.0,
     "moneda": "S/",
-    "ultima": "2026-08-03T14:21:32-05:00"
+    "ultima": "2026-08-03T14:59:43-05:00"
    },
    "CARTAVC1": {
     "tomas": [
@@ -1829,18 +1920,22 @@
      [
       "14:49",
       0.36
+     ],
+     [
+      "15:40",
+      0.39
      ]
     ],
     "apertura": 0.39,
     "min": 0.349,
     "max": 0.39,
-    "cierre": 0.36,
+    "cierre": 0.39,
     "previo": 0.34,
-    "ops": 23,
-    "monto": 59253.0,
-    "cantidad": 161944.0,
+    "ops": 25,
+    "monto": 65493.0,
+    "cantidad": 177944.0,
     "moneda": "S/",
-    "ultima": "2026-08-03T14:37:25-05:00"
+    "ultima": "2026-08-03T14:59:43-05:00"
    },
    "HIDRA2C1": {
     "tomas": [
@@ -1894,11 +1989,11 @@
     "max": 5.26,
     "cierre": 5.26,
     "previo": 5.1,
-    "ops": 61,
-    "monto": 109663.0,
-    "cantidad": 21081.0,
+    "ops": 63,
+    "monto": 116248.0,
+    "cantidad": 22333.0,
     "moneda": "US$",
-    "ultima": "2026-08-03T14:39:30-05:00"
+    "ultima": "2026-08-03T14:47:09-05:00"
    },
    "IPCHBC1": {
     "tomas": [
@@ -1916,29 +2011,33 @@
     "max": 0.132,
     "cierre": 0.132,
     "previo": 0.135,
-    "ops": 22,
-    "monto": 20281.0,
-    "cantidad": 152741.0,
+    "ops": 24,
+    "monto": 22983.0,
+    "cantidad": 172751.0,
     "moneda": "S/",
-    "ultima": "2026-08-03T14:21:36-05:00"
+    "ultima": "2026-08-03T14:59:36-05:00"
    },
    "FIBPRIME": {
     "tomas": [
      [
       "12:30",
       6.9
+     ],
+     [
+      "15:40",
+      6.91
      ]
     ],
     "apertura": 6.88,
     "min": 6.88,
     "max": 6.99,
-    "cierre": 6.9,
+    "cierre": 6.91,
     "previo": 6.68,
-    "ops": 37,
-    "monto": 24907.0,
-    "cantidad": 3607.0,
+    "ops": 39,
+    "monto": 25443.0,
+    "cantidad": 3684.0,
     "moneda": "US$",
-    "ultima": "2026-08-03T14:30:58-05:00"
+    "ultima": "2026-08-03T14:59:58-05:00"
    },
    "ETFPERUD": {
     "tomas": [
@@ -1982,11 +2081,11 @@
     "max": 113.1,
     "cierre": 113.1,
     "previo": 113.3,
-    "ops": 7,
-    "monto": 15701.0,
-    "cantidad": 139.0,
+    "ops": 8,
+    "monto": 15814.0,
+    "cantidad": 140.0,
     "moneda": "S/",
-    "ultima": "2026-08-03T14:03:35-05:00"
+    "ultima": "2026-08-03T14:59:43-05:00"
    },
    "SPY": {
     "tomas": [
@@ -2205,18 +2304,22 @@
      [
       "14:11",
       397.4
+     ],
+     [
+      "15:40",
+      396.86
      ]
     ],
     "apertura": 400.0,
-    "min": 397.4,
+    "min": 396.02,
     "max": 400.0,
-    "cierre": 397.4,
+    "cierre": 396.86,
     "previo": 402.3,
-    "ops": 5,
-    "monto": 7149.0,
-    "cantidad": 18.0,
+    "ops": 7,
+    "monto": 13094.0,
+    "cantidad": 33.0,
     "moneda": "US$",
-    "ultima": "2026-08-03T14:31:35-05:00"
+    "ultima": "2026-08-03T14:47:52-05:00"
    },
    "SCCO": {
     "tomas": [
@@ -2304,11 +2407,11 @@
     "max": 0.154,
     "cierre": 0.153,
     "previo": 0.15,
-    "ops": 14,
-    "monto": 37366.0,
-    "cantidad": 244582.0,
+    "ops": 15,
+    "monto": 37379.0,
+    "cantidad": 244670.0,
     "moneda": "US$",
-    "ultima": "2026-08-03T14:15:21-05:00"
+    "ultima": "2026-08-03T14:49:31-05:00"
    },
    "RIO": {
     "tomas": [
@@ -2322,11 +2425,11 @@
     "max": 1.87,
     "cierre": 1.87,
     "previo": 1.85,
-    "ops": 6,
-    "monto": 3063.0,
-    "cantidad": 1638.0,
+    "ops": 7,
+    "monto": 3220.0,
+    "cantidad": 1722.0,
     "moneda": "US$",
-    "ultima": "2026-08-03T14:15:25-05:00"
+    "ultima": "2026-08-03T14:56:22-05:00"
    },
    "SNJUANI1": {
     "tomas": [
@@ -2369,18 +2472,22 @@
      [
       "14:11",
       692.32
+     ],
+     [
+      "15:40",
+      695.0
      ]
     ],
     "apertura": 692.32,
     "min": 692.32,
-    "max": 692.32,
-    "cierre": 692.32,
+    "max": 695.0,
+    "cierre": 695.0,
     "previo": 684.37,
-    "ops": 1,
-    "monto": 1385.0,
-    "cantidad": 2.0,
+    "ops": 2,
+    "monto": 4860.0,
+    "cantidad": 7.0,
     "moneda": "US$",
-    "ultima": "2026-08-03T08:35:08-05:00"
+    "ultima": "2026-08-03T13:15:10-05:00"
    }
   }
  }
