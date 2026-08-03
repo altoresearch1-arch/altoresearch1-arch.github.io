@@ -7,8 +7,13 @@ name: Robot diario y despliegue
 #  - HECHOS (cada 30 min, horario de mercado): solo Hechos de Importancia +
 #    BEM. El BEM es MENSUAL (fetch_bem tiene caché y no hace ruido), pero los
 #    hechos sí caen a cualquier hora → la web los muestra casi en vivo.
-#  - PRECIOS (12:05 y 15:05 hora Perú): refresca precio y históricos a media
-#    rueda, como pidió Jair ("a las 12 y a las 3").
+#  - PRECIOS + PRENSA (CADA 10 MIN, 9:00-16:59 Perú): refresca precio,
+#    históricos, el acumulador intradía y el barrido de portadas (Perú y
+#    mundo). La red dirigida de Google News NO va acá — serían ~4,560
+#    consultas diarias y Google corta mucho antes; esa corre en el cierre.
+#    OJO CON EL RUIDO: con ~48 corridas al día, el repo puede recibir decenas
+#    de commits de datos por jornada. Se commitea solo si algo cambió, pero en
+#    horario de mercado los precios cambian casi siempre.
 #  - Solo se COMMITEA Y REPUBLICA si los datos realmente cambiaron (si no,
 #    el run termina en ~1 min sin tocar nada — cero ruido en el historial).
 #  - La PC de Jair NO necesita estar prendida: todo corre en GitHub
@@ -31,13 +36,35 @@ on:
     #    recién los agarraba el cierre de las 22:23 (horas tarde). Ahora se cubre todo
     #    el día laboral hasta la noche, en cadencia continua de 30 min:
     #    a) 13-23 UTC == 8:07 a 18:37 Perú (Lun-Vie).
-    - cron: '7,37 13-23 * * 1-5'
+    - cron: '7,17,27,37,47,57 13-23 * * 1-5'
     #    b) 0-2 UTC == 19:07 a 21:37 Perú. OJO: en UTC eso ya es el día SIGUIENTE,
     #       por eso el rango de días es 2-6 (mar-sáb UTC = lun-vie noche en Perú).
-    - cron: '7,37 0-2 * * 2-6'
-    # 3) PRECIOS: 17:15 y 20:15 UTC == 12:15 y 15:15 Perú, Lun-Vie (minuto propio,
-    #    no choca con el run de hechos).
-    - cron: '15 17,20 * * 1-5'
+    - cron: '7,17,27,37,47,57 0-2 * * 2-6'
+    # 3) PRECIOS + PRENSA: CADA 10 MINUTOS en horario de rueda.
+    #    14-21 UTC == 9:00 a 16:59 Perú, Lun-Vie. Son ~48 corridas por día.
+    #
+    #    QUÉ CORRE Y QUÉ NO, con la cuenta hecha (02-ago-2026):
+    #      · precios      1 POST a la BVL por corrida ->    48/día   trivial
+    #      · barrido Perú  8 feeds RSS               ->   384/día = 48 por medio
+    #      · barrido mundo 5 feeds RSS               ->   240/día = 48 por medio
+    #      · red DIRIGIDA de Google News: ~95 consultas por corrida
+    #        ->  ¡4,560 al día!  Esa NO corre acá: Google corta mucho antes, y
+    #        además llega tarde igual (tarda en indexar). Sigue en el cierre.
+    #
+    #    Minutos 3,13,...,53 y no 0,10,...,50: GitHub agenda peor los minutos
+    #    "redondos" y ahí el cron se retrasa (visto 09-jul, el de las 03:00 corrió
+    #    7 horas tarde). El cron de Actions es mejor esfuerzo, no un reloj.
+    #    Va PARTIDO EN DOS, y es la decisión de diseño que más ahorra:
+    #      a) :03 y :33 -> corre Y DESPLIEGA. La web se refresca cada 30 min.
+    #      b) el resto  -> corre y COMMITEA, pero NO despliega.
+    #    Por qué: cada despliegue es build de la PWA + Pages (minutos, y las
+    #    colas de Pages se pisan entre sí). 48 al día no le sirven a nadie —
+    #    nadie mira la página cada 10 minutos. Los COMMITS sí valen los 48: el
+    #    historial de git resultó ser el único archivo intradía que existía
+    #    (descubierto 02-ago-2026, 29 commits con hora), así que commitear
+    #    seguido no es ruido, es el archivo.
+    - cron: '3,33 14-21 * * 1-5'
+    - cron: '13,23,43,53 14-21 * * 1-5'
   push:
     branches: [main]
   workflow_dispatch: {}   # botón manual "Run workflow" en la pestaña Actions
@@ -62,6 +89,10 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       cambios: ${{ steps.commit.outputs.cambios }}
+      # 'no' en las corridas de datos puros: se commitea el JSON pero NO se
+      # rehace la web. Así el archivo intradía queda completo y Pages solo
+      # trabaja cada 30 min.
+      desplegar: ${{ steps.modo.outputs.desplegar }}
     steps:
       - uses: actions/checkout@v4
 
@@ -77,10 +108,26 @@ jobs:
         # github.event.schedule trae el cron EXACTO que disparó este run.
         # A mano (workflow_dispatch) se corre el modo completo del robot (--rapido).
         run: |
+          # 'desplegar' decide si además de commitear se rehace la web.
           case "${{ github.event.schedule }}" in
-            '7,37 13-23 * * 1-5'|'7,37 0-2 * * 2-6') echo "flag=--hechos"  >> "$GITHUB_OUTPUT"; echo "etiqueta=hechos/BEM intradía" >> "$GITHUB_OUTPUT" ;;
-            '15 17,20 * * 1-5')                      echo "flag=--precios" >> "$GITHUB_OUTPUT"; echo "etiqueta=precios intradía"    >> "$GITHUB_OUTPUT" ;;
-            *)                                       echo "flag=--rapido"  >> "$GITHUB_OUTPUT"; echo "etiqueta=cierre del día"      >> "$GITHUB_OUTPUT" ;;
+            '7,17,27,37,47,57 13-23 * * 1-5'|'7,17,27,37,47,57 0-2 * * 2-6')
+              echo "flag=--hechos"  >> "$GITHUB_OUTPUT"
+              echo "etiqueta=hechos/BEM cada 10 min" >> "$GITHUB_OUTPUT"
+              echo "desplegar=si" >> "$GITHUB_OUTPUT" ;;
+            '3,33 14-21 * * 1-5')
+              echo "flag=--precios" >> "$GITHUB_OUTPUT"
+              echo "etiqueta=precios+prensa (con despliegue)" >> "$GITHUB_OUTPUT"
+              echo "desplegar=si" >> "$GITHUB_OUTPUT" ;;
+            '13,23,43,53 14-21 * * 1-5')
+              # Sin prensa: las portadas no cambian cada 10 min y la prensa
+              # llega después del Hecho. Solo precio + intradía, que sí cambian.
+              echo "flag=--precios --sin-prensa" >> "$GITHUB_OUTPUT"
+              echo "etiqueta=precios (solo datos)" >> "$GITHUB_OUTPUT"
+              echo "desplegar=no" >> "$GITHUB_OUTPUT" ;;
+            *)
+              echo "flag=--rapido"  >> "$GITHUB_OUTPUT"
+              echo "etiqueta=cierre del día" >> "$GITHUB_OUTPUT"
+              echo "desplegar=si" >> "$GITHUB_OUTPUT" ;;
           esac
 
       - name: Correr el robot (${{ steps.modo.outputs.etiqueta }})
@@ -120,7 +167,9 @@ jobs:
       always() && (
         github.event_name == 'push' ||
         (github.event_name == 'workflow_dispatch' && needs.actualizar-datos.result == 'success') ||
-        (needs.actualizar-datos.result == 'success' && needs.actualizar-datos.outputs.cambios == 'true')
+        (needs.actualizar-datos.result == 'success'
+         && needs.actualizar-datos.outputs.cambios == 'true'
+         && needs.actualizar-datos.outputs.desplegar != 'no')
       )
     runs-on: ubuntu-latest
     environment:

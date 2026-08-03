@@ -9,6 +9,11 @@ import { TOTAL_TARJETAS } from './LeccionExpres'
 const ITEMS = [
   { id: 'inicio', icono: '🏠', label: 'Inicio', hash: '#/' },
   { id: 'explorar', icono: '🔎', label: 'Explorar empresas', hash: '#/explorar' },
+  // 📡 nivel: 4 — mismo criterio que la topbar (ver App.jsx). No se esconde un
+  // dato (los precios BVL son públicos): se cuida que la portada no parezca
+  // que recomienda. En celular TODO pasa por este menú, así que sin esta
+  // línea el candado de arriba no serviría de nada.
+  { id: 'radar', icono: '📡', label: 'Radar de rotación', hash: '#/radar', beta: true, nivel: 4 },
   { id: 'cuaderno', icono: '📓', label: 'Mi Cuaderno', hash: '#/cuaderno', beta: true },
   { id: 'glosario', icono: '📖', label: 'Glosario', hash: '#/glosario' },
   { id: 'ia', icono: '🧠', label: 'Atlas', hash: '#/ia', beta: true },
@@ -18,8 +23,9 @@ const ITEMS = [
 
 const MS_CIERRE = 180 // espejo de .menu-nav-fondo.cerrando en styles.css
 
-export default function MenuNav({ vista, onIr, onApoyar, onTour, onLeccion, onEnganche, onColores, onCerrar }) {
+export default function MenuNav({ vista, nivel, onIr, onApoyar, onTour, onLeccion, onEnganche, onColores, onCerrar }) {
   const [cerrando, setCerrando] = useState(false)
+  const items = ITEMS.filter((it) => !it.nivel || (nivel ?? 0) >= it.nivel)
 
   // Cierre con animación de salida (más corta que la entrada, como debe ser)
   const cerrar = () => {
@@ -48,7 +54,7 @@ export default function MenuNav({ vista, onIr, onApoyar, onTour, onLeccion, onEn
         onPointerDown={(e) => e.stopPropagation()}
       >
         <div className="menu-nav-asa" aria-hidden="true" />
-        {ITEMS.map((it, i) => (
+        {items.map((it, i) => (
           <button
             key={it.id}
             className={'menu-nav-item' + (vista === it.id ? ' activo' : '')}
@@ -67,7 +73,7 @@ export default function MenuNav({ vista, onIr, onApoyar, onTour, onLeccion, onEn
         <div className="menu-nav-sep" aria-hidden="true" />
         <button
           className="menu-nav-item"
-          style={{ '--i': ITEMS.length }}
+          style={{ '--i': items.length }}
           onClick={() => {
             onTour()
             cerrar()
@@ -80,7 +86,7 @@ export default function MenuNav({ vista, onIr, onApoyar, onTour, onLeccion, onEn
             para volver a ella (o para enseñársela a alguien) — #135. */}
         <button
           className="menu-nav-item"
-          style={{ '--i': ITEMS.length + 1 }}
+          style={{ '--i': items.length + 1 }}
           onClick={() => {
             onLeccion()
             cerrar()
@@ -96,7 +102,7 @@ export default function MenuNav({ vista, onIr, onApoyar, onTour, onLeccion, onEn
         {onEnganche && (
           <button
             className="menu-nav-item"
-            style={{ '--i': ITEMS.length + 2 }}
+            style={{ '--i': items.length + 2 }}
             onClick={() => {
               onEnganche()
               cerrar()
@@ -112,7 +118,7 @@ export default function MenuNav({ vista, onIr, onApoyar, onTour, onLeccion, onEn
         {onColores && (
           <button
             className="menu-nav-item"
-            style={{ '--i': ITEMS.length + 3 }}
+            style={{ '--i': items.length + 3 }}
             onClick={() => {
               onColores()
               cerrar()
@@ -124,7 +130,7 @@ export default function MenuNav({ vista, onIr, onApoyar, onTour, onLeccion, onEn
         )}
         <button
           className="menu-nav-item menu-nav-apoyo"
-          style={{ '--i': ITEMS.length + 4 }}
+          style={{ '--i': items.length + 4 }}
           onClick={() => {
             onApoyar()
             cerrar()

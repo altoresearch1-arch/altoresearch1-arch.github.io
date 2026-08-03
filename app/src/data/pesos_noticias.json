@@ -1,0 +1,740 @@
+{
+ "_comment": "ESTUDIO, NO FILTRO. Mide cuánto se movió el precio después de cada titular, contra lo que ESA MISMA acción hace un día cualquiera. Generado por extractor/estudio_noticias.py sobre un año de prensa y los cierres reales del repo. VEREDICTO: no alcanza para filtrar. Un día con titular se mueve ~1.2x un día sin titular, el efecto desaparece a las 10 ruedas, y ninguna palabra de CONTENIDO se separa del ruido — las que puntean son nombres propios de un hecho puntual (la operación Holcim/Pacasmayo) que no se repite. Por eso el peso que usa fetch_noticias.py sigue siendo un criterio EDITORIAL declarado y no un predictor: esto es lo que se probó para no fingir que lo era. NO PRUEBA CAUSA en ningún caso, y el periodo medido fue de mercado al alza.",
+ "generado": "2026-08-01 15:20",
+ "titularesMedidos": 2259,
+ "ruedasEfecto": 3,
+ "minApariciones": 25,
+ "vecesUnDiaCualquiera": 1.185,
+ "fuerzaMedianaConTitular": 0.508,
+ "fuerzaMedianaDiaCualquiera": 0.409,
+ "porTipo": [
+  {
+   "tipo": "dividendo",
+   "n": 20,
+   "mediana": 2.869,
+   "lift": 2.42
+  },
+  {
+   "tipo": "operativo",
+   "n": 202,
+   "mediana": 1.259,
+   "lift": 1.06
+  },
+  {
+   "tipo": "resultados",
+   "n": 219,
+   "mediana": 1.253,
+   "lift": 1.06
+  },
+  {
+   "tipo": "corporativo",
+   "n": 81,
+   "mediana": 1.246,
+   "lift": 1.05
+  },
+  {
+   "tipo": "general",
+   "n": 1122,
+   "mediana": 1.206,
+   "lift": 1.02
+  },
+  {
+   "tipo": "expansion",
+   "n": 401,
+   "mediana": 1.108,
+   "lift": 0.93
+  },
+  {
+   "tipo": "riesgo",
+   "n": 100,
+   "mediana": 1.104,
+   "lift": 0.93
+  },
+  {
+   "tipo": "legal",
+   "n": 114,
+   "mediana": 0.884,
+   "lift": 0.75
+  }
+ ],
+ "palabras": [
+  {
+   "palabra": "holcim",
+   "n": 35,
+   "mediana": 6.206,
+   "lift": 5.236
+  },
+  {
+   "palabra": "pacasmayo",
+   "n": 73,
+   "mediana": 3.103,
+   "lift": 2.618
+  },
+  {
+   "palabra": "cementos",
+   "n": 73,
+   "mediana": 3.036,
+   "lift": 2.562
+  },
+  {
+   "palabra": "resources",
+   "n": 27,
+   "mediana": 2.44,
+   "lift": 2.059
+  },
+  {
+   "palabra": "pluz",
+   "n": 71,
+   "mediana": 2.24,
+   "lift": 1.89
+  },
+  {
+   "palabra": "presidente",
+   "n": 25,
+   "mediana": 2.221,
+   "lift": 1.874
+  },
+  {
+   "palabra": "orygen",
+   "n": 51,
+   "mediana": 2.049,
+   "lift": 1.729
+  },
+  {
+   "palabra": "energia",
+   "n": 105,
+   "mediana": 2.011,
+   "lift": 1.696
+  },
+  {
+   "palabra": "adquiere",
+   "n": 27,
+   "mediana": 1.985,
+   "lift": 1.675
+  },
+  {
+   "palabra": "bonos",
+   "n": 30,
+   "mediana": 1.947,
+   "lift": 1.642
+  },
+  {
+   "palabra": "cerro",
+   "n": 173,
+   "mediana": 1.864,
+   "lift": 1.573
+  },
+  {
+   "palabra": "eleva",
+   "n": 31,
+   "mediana": 1.86,
+   "lift": 1.57
+  },
+  {
+   "palabra": "verde",
+   "n": 173,
+   "mediana": 1.818,
+   "lift": 1.534
+  },
+  {
+   "palabra": "refuerza",
+   "n": 26,
+   "mediana": 1.816,
+   "lift": 1.533
+  },
+  {
+   "palabra": "nexa",
+   "n": 69,
+   "mediana": 1.794,
+   "lift": 1.514
+  },
+  {
+   "palabra": "operaciones",
+   "n": 53,
+   "mediana": 1.738,
+   "lift": 1.466
+  },
+  {
+   "palabra": "creditos",
+   "n": 28,
+   "mediana": 1.726,
+   "lift": 1.456
+  },
+  {
+   "palabra": "gabriel",
+   "n": 40,
+   "mediana": 1.705,
+   "lift": 1.438
+  },
+  {
+   "palabra": "inretail",
+   "n": 34,
+   "mediana": 1.625,
+   "lift": 1.371
+  },
+  {
+   "palabra": "ventas",
+   "n": 25,
+   "mediana": 1.576,
+   "lift": 1.33
+  },
+  {
+   "palabra": "inicia",
+   "n": 29,
+   "mediana": 1.565,
+   "lift": 1.32
+  },
+  {
+   "palabra": "acuerdo",
+   "n": 27,
+   "mediana": 1.542,
+   "lift": 1.301
+  },
+  {
+   "palabra": "utilidades",
+   "n": 36,
+   "mediana": 1.534,
+   "lift": 1.294
+  },
+  {
+   "palabra": "inversion",
+   "n": 54,
+   "mediana": 1.532,
+   "lift": 1.293
+  },
+  {
+   "palabra": "arequipa",
+   "n": 80,
+   "mediana": 1.524,
+   "lift": 1.286
+  },
+  {
+   "palabra": "durante",
+   "n": 25,
+   "mediana": 1.52,
+   "lift": 1.282
+  },
+  {
+   "palabra": "apuesta",
+   "n": 32,
+   "mediana": 1.488,
+   "lift": 1.255
+  },
+  {
+   "palabra": "mercado",
+   "n": 38,
+   "mediana": 1.446,
+   "lift": 1.22
+  },
+  {
+   "palabra": "buenaventura",
+   "n": 116,
+   "mediana": 1.447,
+   "lift": 1.22
+  },
+  {
+   "palabra": "financiera",
+   "n": 25,
+   "mediana": 1.398,
+   "lift": 1.179
+  },
+  {
+   "palabra": "ingresos",
+   "n": 29,
+   "mediana": 1.388,
+   "lift": 1.171
+  },
+  {
+   "palabra": "unacem",
+   "n": 58,
+   "mediana": 1.385,
+   "lift": 1.169
+  },
+  {
+   "palabra": "minsur",
+   "n": 61,
+   "mediana": 1.379,
+   "lift": 1.164
+  },
+  {
+   "palabra": "volcan",
+   "n": 117,
+   "mediana": 1.359,
+   "lift": 1.147
+  },
+  {
+   "palabra": "produccion",
+   "n": 75,
+   "mediana": 1.353,
+   "lift": 1.142
+  },
+  {
+   "palabra": "primer",
+   "n": 60,
+   "mediana": 1.353,
+   "lift": 1.142
+  },
+  {
+   "palabra": "poderosa",
+   "n": 106,
+   "mediana": 1.339,
+   "lift": 1.129
+  },
+  {
+   "palabra": "recibe",
+   "n": 27,
+   "mediana": 1.336,
+   "lift": 1.127
+  },
+  {
+   "palabra": "plata",
+   "n": 26,
+   "mediana": 1.301,
+   "lift": 1.097
+  },
+  {
+   "palabra": "pasco",
+   "n": 25,
+   "mediana": 1.289,
+   "lift": 1.087
+  },
+  {
+   "palabra": "romina",
+   "n": 29,
+   "mediana": 1.289,
+   "lift": 1.087
+  },
+  {
+   "palabra": "reporta",
+   "n": 35,
+   "mediana": 1.287,
+   "lift": 1.086
+  },
+  {
+   "palabra": "copper",
+   "n": 40,
+   "mediana": 1.287,
+   "lift": 1.086
+  },
+  {
+   "palabra": "plaza",
+   "n": 27,
+   "mediana": 1.283,
+   "lift": 1.083
+  },
+  {
+   "palabra": "contra",
+   "n": 36,
+   "mediana": 1.282,
+   "lift": 1.082
+  },
+  {
+   "palabra": "agua",
+   "n": 36,
+   "mediana": 1.278,
+   "lift": 1.078
+  },
+  {
+   "palabra": "minera",
+   "n": 167,
+   "mediana": 1.261,
+   "lift": 1.064
+  },
+  {
+   "palabra": "acciones",
+   "n": 54,
+   "mediana": 1.255,
+   "lift": 1.059
+  },
+  {
+   "palabra": "cobre",
+   "n": 59,
+   "mediana": 1.253,
+   "lift": 1.057
+  },
+  {
+   "palabra": "trimestre",
+   "n": 85,
+   "mediana": 1.253,
+   "lift": 1.057
+  },
+  {
+   "palabra": "caida",
+   "n": 28,
+   "mediana": 1.249,
+   "lift": 1.054
+  },
+  {
+   "palabra": "southern",
+   "n": 113,
+   "mediana": 1.243,
+   "lift": 1.049
+  },
+  {
+   "palabra": "backus",
+   "n": 62,
+   "mediana": 1.228,
+   "lift": 1.036
+  },
+  {
+   "palabra": "nacional",
+   "n": 29,
+   "mediana": 1.217,
+   "lift": 1.027
+  },
+  {
+   "palabra": "plan",
+   "n": 33,
+   "mediana": 1.213,
+   "lift": 1.023
+  },
+  {
+   "palabra": "impulsa",
+   "n": 46,
+   "mediana": 1.199,
+   "lift": 1.012
+  },
+  {
+   "palabra": "avanza",
+   "n": 27,
+   "mediana": 1.197,
+   "lift": 1.01
+  },
+  {
+   "palabra": "proyectos",
+   "n": 31,
+   "mediana": 1.197,
+   "lift": 1.01
+  },
+  {
+   "palabra": "mina",
+   "n": 71,
+   "mediana": 1.195,
+   "lift": 1.008
+  },
+  {
+   "palabra": "mining",
+   "n": 28,
+   "mediana": 1.194,
+   "lift": 1.007
+  },
+  {
+   "palabra": "real",
+   "n": 27,
+   "mediana": 1.193,
+   "lift": 1.007
+  },
+  {
+   "palabra": "mayor",
+   "n": 30,
+   "mediana": 1.18,
+   "lift": 0.996
+  },
+  {
+   "palabra": "bolsa",
+   "n": 28,
+   "mediana": 1.175,
+   "lift": 0.992
+  },
+  {
+   "palabra": "bbva",
+   "n": 109,
+   "mediana": 1.144,
+   "lift": 0.965
+  },
+  {
+   "palabra": "distritos",
+   "n": 25,
+   "mediana": 1.144,
+   "lift": 0.965
+  },
+  {
+   "palabra": "ferreyros",
+   "n": 26,
+   "mediana": 1.14,
+   "lift": 0.962
+  },
+  {
+   "palabra": "proyecta",
+   "n": 26,
+   "mediana": 1.133,
+   "lift": 0.956
+  },
+  {
+   "palabra": "alcanza",
+   "n": 26,
+   "mediana": 1.13,
+   "lift": 0.953
+  },
+  {
+   "palabra": "capital",
+   "n": 89,
+   "mediana": 1.114,
+   "lift": 0.94
+  },
+  {
+   "palabra": "maria",
+   "n": 119,
+   "mediana": 1.11,
+   "lift": 0.936
+  },
+  {
+   "palabra": "minero",
+   "n": 27,
+   "mediana": 1.104,
+   "lift": 0.932
+  },
+  {
+   "palabra": "proyecto",
+   "n": 146,
+   "mediana": 1.104,
+   "lift": 0.932
+  },
+  {
+   "palabra": "anos",
+   "n": 38,
+   "mediana": 1.088,
+   "lift": 0.918
+  },
+  {
+   "palabra": "planta",
+   "n": 28,
+   "mediana": 1.08,
+   "lift": 0.911
+  },
+  {
+   "palabra": "compra",
+   "n": 87,
+   "mediana": 1.045,
+   "lift": 0.882
+  },
+  {
+   "palabra": "usuarios",
+   "n": 35,
+   "mediana": 1.042,
+   "lift": 0.879
+  },
+  {
+   "palabra": "yape",
+   "n": 35,
+   "mediana": 1.042,
+   "lift": 0.879
+  },
+  {
+   "palabra": "grupo",
+   "n": 69,
+   "mediana": 1.037,
+   "lift": 0.875
+  },
+  {
+   "palabra": "primera",
+   "n": 32,
+   "mediana": 1.036,
+   "lift": 0.874
+  },
+  {
+   "palabra": "compania",
+   "n": 39,
+   "mediana": 1.034,
+   "lift": 0.872
+  },
+  {
+   "palabra": "minas",
+   "n": 27,
+   "mediana": 1.03,
+   "lift": 0.869
+  },
+  {
+   "palabra": "alicorp",
+   "n": 168,
+   "mediana": 1.01,
+   "lift": 0.853
+  },
+  {
+   "palabra": "trujillo",
+   "n": 25,
+   "mediana": 1.01,
+   "lift": 0.852
+  },
+  {
+   "palabra": "peruana",
+   "n": 44,
+   "mediana": 1.008,
+   "lift": 0.85
+  },
+  {
+   "palabra": "lanza",
+   "n": 32,
+   "mediana": 1.007,
+   "lift": 0.85
+  },
+  {
+   "palabra": "helm",
+   "n": 36,
+   "mediana": 1.007,
+   "lift": 0.85
+  },
+  {
+   "palabra": "bank",
+   "n": 37,
+   "mediana": 1.007,
+   "lift": 0.85
+  },
+  {
+   "palabra": "sanciona",
+   "n": 28,
+   "mediana": 1.0,
+   "lift": 0.844
+  },
+  {
+   "palabra": "acuerda",
+   "n": 26,
+   "mediana": 1.0,
+   "lift": 0.843
+  },
+  {
+   "palabra": "engie",
+   "n": 40,
+   "mediana": 0.989,
+   "lift": 0.835
+  },
+  {
+   "palabra": "negocio",
+   "n": 48,
+   "mediana": 0.989,
+   "lift": 0.834
+  },
+  {
+   "palabra": "general",
+   "n": 28,
+   "mediana": 0.987,
+   "lift": 0.832
+  },
+  {
+   "palabra": "crecimiento",
+   "n": 34,
+   "mediana": 0.981,
+   "lift": 0.827
+  },
+  {
+   "palabra": "credicorp",
+   "n": 220,
+   "mediana": 0.981,
+   "lift": 0.827
+  },
+  {
+   "palabra": "indecopi",
+   "n": 74,
+   "mediana": 0.968,
+   "lift": 0.817
+  },
+  {
+   "palabra": "ecuador",
+   "n": 36,
+   "mediana": 0.962,
+   "lift": 0.811
+  },
+  {
+   "palabra": "operacion",
+   "n": 36,
+   "mediana": 0.948,
+   "lift": 0.799
+  },
+  {
+   "palabra": "colombia",
+   "n": 48,
+   "mediana": 0.934,
+   "lift": 0.788
+  },
+  {
+   "palabra": "chile",
+   "n": 27,
+   "mediana": 0.931,
+   "lift": 0.786
+  },
+  {
+   "palabra": "multa",
+   "n": 26,
+   "mediana": 0.904,
+   "lift": 0.763
+  },
+  {
+   "palabra": "construccion",
+   "n": 31,
+   "mediana": 0.88,
+   "lift": 0.742
+  },
+  {
+   "palabra": "interbank",
+   "n": 105,
+   "mediana": 0.86,
+   "lift": 0.726
+  },
+  {
+   "palabra": "neta",
+   "n": 46,
+   "mediana": 0.845,
+   "lift": 0.713
+  },
+  {
+   "palabra": "utilidad",
+   "n": 63,
+   "mediana": 0.841,
+   "lift": 0.709
+  },
+  {
+   "palabra": "credito",
+   "n": 34,
+   "mediana": 0.84,
+   "lift": 0.709
+  },
+  {
+   "palabra": "pataz",
+   "n": 55,
+   "mediana": 0.818,
+   "lift": 0.69
+  },
+  {
+   "palabra": "clientes",
+   "n": 25,
+   "mediana": 0.784,
+   "lift": 0.661
+  },
+  {
+   "palabra": "anuncia",
+   "n": 41,
+   "mediana": 0.727,
+   "lift": 0.613
+  },
+  {
+   "palabra": "ferreycorp",
+   "n": 26,
+   "mediana": 0.682,
+   "lift": 0.575
+  },
+  {
+   "palabra": "banco",
+   "n": 42,
+   "mediana": 0.654,
+   "lift": 0.552
+  },
+  {
+   "palabra": "mineria",
+   "n": 37,
+   "mediana": 0.649,
+   "lift": 0.547
+  },
+  {
+   "palabra": "corte",
+   "n": 25,
+   "mediana": 0.625,
+   "lift": 0.527
+  },
+  {
+   "palabra": "pero",
+   "n": 35,
+   "mediana": 0.463,
+   "lift": 0.391
+  }
+ ]
+}

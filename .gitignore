@@ -12,6 +12,9 @@ dist/
 # al repo solo viaja leidos.json, que es lo que el robot necesita para no
 # re-descargarlos en cada corrida.
 extractor/cache_dividendos/*.pdf
+# La caché del estudio de noticias (2 MB y creciendo): estudio_noticias.py NO
+# lo corre el robot, se corre a mano acá. Al repo no le sirve de nada.
+extractor/cache/
 __pycache__/
 *.py[cod]
 *.egg-info/

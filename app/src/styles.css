@@ -9565,3 +9565,1293 @@ a.link {
   }
   .eng-nivel::before { transition: none; }
 }
+
+/* ── 📡 RADAR DE ROTACIÓN ──────────────────────────────────────────────
+   Pantalla de mirar el mercado moverse: barras de sector arriba, ranking
+   acción por acción abajo. Reusa los colores de siempre (--verde/--rojo
+   por .sube/.baja) para que un % se lea igual acá que en "Así cerró la BVL". */
+.radar { display: grid; gap: 16px; }
+.radar-cab {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Selector de plazo: 5d · 20d · 60d */
+.radar-plazos { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.radar-plazo {
+  background: var(--negro-3);
+  border: 1px solid var(--gris);
+  border-radius: 999px;
+  padding: 6px 14px;
+  color: var(--texto);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.radar-plazo:hover { border-color: var(--oro); }
+.radar-plazo.activo {
+  border-color: var(--oro);
+  background: var(--oro-tenue);
+  color: var(--oro);
+}
+.radar-plazo .muted { font-weight: 500; }
+
+/* Rotación por sector: la barra hace visible de un vistazo quién se prendió */
+.radar-sector { margin-top: 12px; }
+.radar-sector-fila { display: flex; align-items: center; gap: 10px; }
+.radar-sector-nom {
+  flex: 0 0 40%;
+  font-size: 13.5px;
+  font-weight: 700;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.radar-sector-barra {
+  flex: 1;
+  height: 8px;
+  background: var(--negro-3);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.radar-sector-barra i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.35s var(--ease-salida);
+}
+.sube-bg { background: var(--verde); }
+.baja-bg { background: var(--rojo); }
+.radar-sector-pct { flex: 0 0 auto; font-weight: 800; font-size: 13.5px; min-width: 58px; text-align: right; }
+.radar-sector-quien { font-size: 11.5px; margin: 3px 0 0 0; padding-left: 2px; }
+
+/* Ranking acción por acción */
+.radar-lista { display: grid; gap: 6px; }
+.radar-fila {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  background: var(--negro-3);
+  border: 1px solid var(--gris);
+  border-radius: 8px;
+  padding: 9px 11px;
+  color: var(--texto);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.radar-fila:hover { border-color: var(--oro); }
+.radar-tk { font-weight: 800; font-size: 13.5px; flex: 0 0 auto; }
+.radar-nom {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  color: var(--texto-tenue);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 6px;
+}
+.radar-sec { font-size: 11.5px; }
+.radar-hecho {
+  font-size: 11px;
+  color: var(--oro);
+  border: 1px solid var(--oro);
+  background: var(--oro-tenue);
+  border-radius: 999px;
+  padding: 1px 8px;
+  white-space: nowrap;
+}
+.radar-nums { flex: 0 0 auto; display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
+.radar-pct { font-weight: 800; font-size: 14px; }
+.radar-fuerza { font-size: 11px; color: var(--ambar); white-space: nowrap; }
+.radar-fuerza.muted { color: var(--texto-tenue); }
+
+/* Celular: el nombre largo se va a su propio renglón antes que aplastar el % */
+@media (max-width: 520px) {
+  .radar-sector-nom { flex-basis: 34%; font-size: 12.5px; }
+  .radar-nom { font-size: 11.5px; }
+  .radar-fuerza { font-size: 10.5px; }
+}
+
+/* ── 🔥 LO CANDENTE y 🌎 LOS TEMAS (bloques de noticias del Radar) ──────
+   Un titular es un LINK que se va a la fuente: se ve y se toca como link,
+   no como tarjeta decorativa. El ícono a la izquierda es la etiqueta por
+   palabras clave (resultados/legal/riesgo…) que puso fetch_noticias.py. */
+.cand { margin-top: 14px; }
+.cand + .cand { border-top: 1px solid var(--gris); padding-top: 14px; }
+.cand-cab {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--texto);
+  cursor: pointer;
+}
+.cand-cab:hover .cand-tk { color: var(--oro); }
+.cand-tk { font-weight: 800; font-size: 14.5px; transition: color 0.15s; }
+.cand-nom {
+  font-size: 12px;
+  flex: 1;
+  min-width: 90px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.cand-pct { font-weight: 800; font-size: 14.5px; }
+.cand-fz {
+  font-size: 11.5px;
+  color: var(--ambar);
+  flex-basis: 100%;
+  margin-top: 1px;
+}
+
+/* Cada titular / hecho */
+.cand-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 7px 10px;
+  background: var(--negro-3);
+  border: 1px solid var(--gris);
+  border-left-width: 3px;
+  border-radius: 8px;
+  color: var(--texto);
+  text-decoration: none;
+  font-size: 12.5px;
+  line-height: 1.45;
+  transition: border-color 0.15s;
+}
+.cand-item:hover { border-color: var(--oro); }
+/* El Hecho de Importancia es la fuente PRIMARIA: se distingue de la prensa */
+.cand-hecho { border-left-color: var(--oro); background: var(--oro-tenue); }
+.cand-icono { flex: 0 0 auto; font-size: 13px; line-height: 1.4; }
+.cand-nada { font-size: 12.5px; margin: 8px 0 0; }
+
+/* Temas de sector: chips arriba, titulares del tema abierto abajo */
+.tema-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.tema-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--negro-3);
+  border: 1px solid var(--gris);
+  border-radius: 999px;
+  padding: 5px 12px;
+  color: var(--texto);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.tema-chip:hover { border-color: var(--oro); }
+.tema-chip.activo { border-color: var(--oro); background: var(--oro-tenue); color: var(--oro); }
+.tema-n {
+  font-size: 10.5px;
+  font-weight: 800;
+  opacity: 0.7;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 999px;
+  padding: 0 6px;
+}
+.tema-cuerpo { margin-top: 12px; }
+.tema-pega { font-size: 11.5px; margin: 0 0 4px; }
+
+@media (max-width: 520px) {
+  .cand-item { font-size: 12px; }
+  .cand-nom { flex-basis: 100%; }
+}
+
+/* ── 📰 EL MURO DE TITULARES (formato tablero de sala de trading) ───────
+   Denso, monoespaciado en los números, ámbar sobre negro. Cada línea es un
+   ENLACE a la fuente: nunca reproducimos el cuerpo de la nota. */
+.muro-barra {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--gris);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+.muro-barra-der { display: flex; align-items: baseline; gap: 10px; font-size: 12px; }
+.muro-cuenta {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: var(--negro);
+  background: var(--oro);
+  border-radius: 999px;
+  padding: 2px 9px;
+}
+
+.muro-cols { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 860px) {
+  .muro-cols { grid-template-columns: minmax(0, 1.9fr) minmax(210px, 1fr); }
+}
+
+/* El flujo de titulares */
+.muro-flujo { display: flex; flex-direction: column; }
+.muro-linea {
+  display: grid;
+  grid-template-columns: 46px 62px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 9px;
+  padding: 7px 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 2px solid transparent;
+  color: var(--texto);
+  text-decoration: none;
+  font-size: 12.5px;
+  line-height: 1.4;
+  transition: background 0.15s, border-color 0.15s;
+}
+.muro-linea:hover { background: rgba(212, 175, 55, 0.07); border-left-color: var(--oro); }
+/* Lo NO leído se lee en ámbar vivo; lo ya visto se apaga (misma jerarquía que
+   un tablero de verdad: el ojo va solo a lo que no ha pasado todavía). */
+.muro-linea.nuevo { border-left-color: var(--oro); }
+.muro-linea.nuevo .muro-titulo { color: var(--oro-suave); font-weight: 600; }
+.muro-linea:not(.nuevo) .muro-titulo { color: var(--texto-tenue); }
+
+.muro-fecha {
+  font-size: 10.5px;
+  color: var(--texto-tenue);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.muro-chip {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  color: var(--oro);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  border-radius: 4px;
+  padding: 1px 4px;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.muro-chip.tema {
+  font-size: 12px;
+  border-color: transparent;
+  background: none;
+  padding: 0;
+}
+.muro-titulo { min-width: 0; }
+.muro-nuevo {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  color: var(--negro);
+  background: var(--oro);
+  border-radius: 3px;
+  padding: 1px 4px;
+  margin-right: 6px;
+  vertical-align: 1px;
+}
+.muro-medio { font-size: 11px; color: var(--texto-tenue); }
+
+/* La columna lateral: mercado y próximos pagos */
+.muro-lado { display: flex; flex-direction: column; gap: 14px; }
+.muro-panel {
+  border: 1px solid var(--gris);
+  border-radius: 8px;
+  padding: 9px 10px;
+  background: var(--negro-3);
+}
+.muro-panel-tit {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--oro);
+  border-bottom: 1px solid var(--gris);
+  padding-bottom: 5px;
+  margin-bottom: 6px;
+}
+.muro-panel-pie { font-size: 10.5px; margin-top: 6px; }
+.muro-mover, .muro-pago {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 4px 0;
+  color: var(--texto);
+  font-size: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+.muro-mover:hover .muro-mover-tk, .muro-pago:hover .muro-pago-tk { color: var(--oro); }
+.muro-mover-tk, .muro-pago-tk { font-weight: 800; flex: 0 0 auto; transition: color 0.15s; }
+.muro-mover-px { flex: 1; font-size: 11px; text-align: right; }
+.muro-mover-pct { font-weight: 800; flex: 0 0 auto; min-width: 52px; text-align: right; }
+.muro-pago-fecha { font-size: 10.5px; color: var(--texto-tenue); flex: 0 0 44px; }
+.muro-pago-monto { flex: 1; text-align: right; font-size: 11.5px; }
+.muro-pie { font-size: 11.5px; margin: 12px 0 0; line-height: 1.55; }
+
+@media (max-width: 520px) {
+  .muro-linea { grid-template-columns: 40px 56px minmax(0, 1fr); gap: 7px; font-size: 12px; }
+}
+
+/* ── 📡 EL RADAR A PANTALLA COMPLETA (modo tablero) ─────────────────────
+   El resto de la app vive en 760px porque son TEXTOS y esa es la medida en
+   que se lee cómodo. El Radar no es un texto: es un tablero de sala de
+   trading, y ahí el ancho ES la función — quieres ver el flujo de titulares,
+   el mercado y lo candente SIN hacer scroll entre uno y otro. */
+.app-shell-ancho {
+  max-width: 1680px;
+  padding-left: 22px;
+  padding-right: 22px;
+}
+
+/* A partir de 1180px se arma la grilla de tres zonas:
+     ┌──────────────────────────────────────────┐
+     │ cabecera + plazos            (todo ancho)│
+     ├───────────────────────┬──────────────────┤
+     │ MURO DE TITULARES     │ 🔥 LO CANDENTE   │
+     │ (flujo + mercado)     │ ¿QUÉ SECTOR?     │
+     ├───────────────────────┴──────────────────┤
+     │ Acción por acción            (todo ancho)│
+     └──────────────────────────────────────────┘
+   Debajo de 1180 se apila como estaba: en celular la grilla no ayuda. */
+@media (min-width: 1180px) {
+  .app-shell-ancho .radar {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(360px, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+  /* Filas y columnas EXPLÍCITAS, emparejando bloques de ALTURA PARECIDA.
+     Con colocación automática cada bloque nuevo se iba al fondo (le pasó al
+     sonar) y la fila dejaba cientos de píxeles de negro vacío. Repartido:
+       fila 2 -> sonar (526px) | sectores (568px)   ← parejos
+       fila 3 -> muro          | candente           ← el muro se estira
+       fila 4 -> historia      (todo el ancho: su tabla lo pide)
+       fila 5 -> ranking       (todo el ancho, a dos tiras)                */
+  .app-shell-ancho .radar-cabecera { grid-row: 1; grid-column: 1 / -1; }
+  /* El sonar manda: toma las dos columnas. Es la pantalla que se mira
+     primero y de un vistazo, y con el plato grande los contactos dejan de
+     amontonarse dentro de su cuña. */
+  .app-shell-ancho .sonar-card { grid-row: 2; grid-column: 1 / -1; }
+  .app-shell-ancho .muro { grid-row: 3; grid-column: 1; }
+  .app-shell-ancho .radar-candente { grid-row: 3; grid-column: 2; }
+  .app-shell-ancho .radar-ranking { grid-row: 4; grid-column: 1; }
+  .app-shell-ancho .radar-sectores { grid-row: 4; grid-column: 2; }
+  .app-shell-ancho .historia { grid-row: 5; grid-column: 1 / -1; }
+  .app-shell-ancho .radar > p { grid-row: 6; grid-column: 1 / -1; }
+
+  /* El muro se ESTIRA a lo alto de su fila y el flujo de titulares se come
+     el sobrante con su propio scroll: así no queda hueco muerto debajo
+     cuando la columna de al lado es más larga. */
+  .app-shell-ancho .muro {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+  }
+  .app-shell-ancho .muro-cols { flex: 1; min-height: 0; align-items: stretch; }
+
+  /* El flujo de titulares con su propio scroll: así el muro no empuja el
+     resto del tablero hacia abajo y todo queda a la vista de una. */
+  .app-shell-ancho .muro-flujo {
+    min-height: 340px;   /* piso: aunque la columna de al lado sea cortita */
+    max-height: 78vh;    /* techo: que no crezca más que la pantalla */
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--gris) transparent;
+  }
+  .app-shell-ancho .muro-flujo::-webkit-scrollbar { width: 8px; }
+  .app-shell-ancho .muro-flujo::-webkit-scrollbar-thumb {
+    background: var(--gris);
+    border-radius: 999px;
+  }
+  /* Con el tablero ancho, el muro reparte flujo y lateral con más aire */
+  .app-shell-ancho .muro-cols { grid-template-columns: minmax(0, 2.1fr) minmax(190px, 0.85fr); }
+
+  /* El ranking a dos tiras: 32 acciones en una sola columna desperdician
+     media pantalla en un monitor de escritorio. */
+  .app-shell-ancho .radar-lista {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+}
+
+/* Pantallas grandes de verdad (el monitor del que mira la rueda): tres
+   columnas, y el ranking a tres tiras. */
+@media (min-width: 1560px) {
+  .app-shell-ancho .radar { grid-template-columns: minmax(0, 1.75fr) minmax(400px, 1fr); }
+}
+
+/* Botón "ver más" del muro: es una línea más del flujo, no un botón que grite */
+.muro-mas {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--gris);
+  padding: 10px 6px 4px;
+  margin-top: 4px;
+  color: var(--oro);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.muro-mas:hover { color: var(--oro-suave); }
+
+/* Filtros de sector del muro */
+.muro-filtros { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.muro-filtro {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--negro-3);
+  border: 1px solid var(--gris);
+  border-radius: 999px;
+  padding: 4px 10px;
+  color: var(--texto-tenue);
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.muro-filtro:hover { border-color: var(--oro); color: var(--texto); }
+.muro-filtro.activo { border-color: var(--oro); background: var(--oro-tenue); color: var(--oro); }
+/* Cuánto se movió la acción del titular: el motivo de que esté donde está */
+.muro-fuerza {
+  margin-left: 6px;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: var(--ambar);
+  white-space: nowrap;
+}
+
+/* ── 📚 LO QUE PASÓ ANTES (memoria histórica del Radar) ─────────────────── */
+.hist-titular {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--negro-3);
+  border: 1px solid var(--gris);
+  border-left: 3px solid var(--oro);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+.hist-numero {
+  font-size: 34px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--oro);
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+}
+.hist-texto { font-size: 12.5px; line-height: 1.5; color: var(--texto-tenue); }
+.hist-texto b { color: var(--texto); }
+
+.hist-tit {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--oro);
+  border-bottom: 1px solid var(--gris);
+  padding-bottom: 5px;
+  margin: 16px 0 9px;
+}
+
+/* Quién lideró más seguido */
+.hist-sectores { display: grid; gap: 5px; }
+.hist-sector { display: flex; align-items: center; gap: 9px; font-size: 12.5px; }
+.hist-sector-nom { flex: 0 0 34%; }
+.hist-sector-barra { flex: 1; height: 7px; background: var(--negro-3); border-radius: 999px; overflow: hidden; }
+.hist-sector-barra i { display: block; height: 100%; background: var(--oro); border-radius: 999px; }
+.hist-sector-pct {
+  flex: 0 0 auto;
+  min-width: 46px;
+  text-align: right;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Tabla empresa por empresa */
+.hist-tabla { display: grid; gap: 3px; }
+.hist-fila {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 62px 62px 62px 46px;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-radius: 6px;
+  padding: 6px 8px;
+  color: var(--texto);
+  font-size: 12px;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+.hist-fila:not(.hist-cab):hover { background: rgba(212, 175, 55, 0.07); }
+.hist-cab {
+  font-size: 10px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--texto-tenue);
+  cursor: default;
+  border-bottom: 1px solid var(--gris);
+  border-radius: 0;
+}
+.hist-emp { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.hist-sec {
+  font-size: 10px;
+  color: var(--oro);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 3px;
+  padding: 0 4px;
+  margin-left: 6px;
+}
+.hist-num { position: relative; text-align: right; font-weight: 700; }
+/* Barrita de fondo dentro de la celda: el número Y su tamaño de un vistazo */
+.hist-mini {
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 3px;
+  border-radius: 999px;
+  opacity: 0.55;
+}
+.hist-saldo { font-weight: 800; }
+
+@media (max-width: 620px) {
+  .hist-fila { grid-template-columns: minmax(0, 1fr) 46px 46px 52px; font-size: 11.5px; }
+  .hist-fila > :last-child { display: none; } /* la volatilidad se va en celular */
+  .hist-numero { font-size: 28px; }
+  .hist-sec { display: none; }
+}
+
+/* ── 🟢 EL SONAR ────────────────────────────────────────────────────────
+   Fósforo verde sobre fondo profundo. Es la ÚNICA pantalla de la app que
+   se sale del oro: un sonar verde es un lenguaje que ya se entiende sin
+   explicar, y ese reconocimiento vale más acá que la coherencia de marca. */
+.sonar-card { --fosforo: #3ddc84; --fosforo-baja: #ff6b5a; }
+.sonar-cab {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.sonar-alerta { color: var(--fosforo); }
+
+.sonar-cuerpo { display: grid; grid-template-columns: 1fr; gap: 14px; }
+@media (min-width: 760px) {
+  .sonar-cuerpo { grid-template-columns: minmax(0, 1fr) minmax(280px, 380px); align-items: start; }
+}
+/* A todo el ancho del tablero el plato crece y el panel de lectura se lleva
+   un tercio: ahí caben el precio y los titulares sin apretarse. */
+@media (min-width: 1180px) {
+  .app-shell-ancho .sonar-cuerpo { grid-template-columns: minmax(0, 1.35fr) minmax(340px, 1fr); }
+  .app-shell-ancho .sonar-plato { max-width: 620px; }
+}
+.sonar-plato { max-width: 460px; margin: 0 auto; width: 100%; }
+.sonar-plato svg { width: 100%; height: auto; display: block; overflow: visible; }
+
+.sonar-anillo { fill: none; stroke: rgba(61, 220, 132, 0.18); stroke-width: 1; }
+.sonar-anillo.umbral { stroke: rgba(61, 220, 132, 0.55); stroke-dasharray: 4 4; }
+.sonar-radio { stroke: rgba(61, 220, 132, 0.1); stroke-width: 1; }
+.sonar-etq-anillo { fill: rgba(61, 220, 132, 0.6); font-size: 9px; letter-spacing: 0.5px; }
+.sonar-etq-sector {
+  fill: rgba(61, 220, 132, 0.5);
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+}
+
+/* El haz que barre. Es adorno honesto: no significa nada, solo dice que la
+   pantalla está viva. Por eso se apaga con reduced-motion sin perder dato. */
+.sonar-haz-g { animation: sonarBarrido 6s linear infinite; }
+@keyframes sonarBarrido { to { transform: rotate(360deg); } }
+
+/* Contactos */
+.sonar-contacto { cursor: pointer; }
+.sonar-punto { fill: var(--fosforo); opacity: 0.55; transition: opacity 0.15s, r 0.2s; }
+.sonar-contacto.baja .sonar-punto { fill: var(--fosforo-baja); }
+.sonar-contacto:hover .sonar-punto { opacity: 1; }
+.sonar-contacto.anomalia .sonar-punto { opacity: 0.95; }
+.sonar-eco {
+  fill: none;
+  stroke: var(--fosforo);
+  stroke-width: 1;
+  opacity: 0.5;
+  animation: sonarEco 2.4s ease-out infinite;
+}
+.sonar-contacto.baja .sonar-eco { stroke: var(--fosforo-baja); }
+@keyframes sonarEco {
+  0% { transform: scale(0.75); opacity: 0.7; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+.sonar-eco { transform-box: fill-box; transform-origin: center; }
+.sonar-contacto.elegido .sonar-punto { opacity: 1; stroke: #fff; stroke-width: 1.5; }
+.sonar-etq {
+  fill: var(--fosforo);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  pointer-events: none;
+}
+.sonar-contacto.baja .sonar-etq { fill: var(--fosforo-baja); }
+
+/* Panel de lectura */
+.sonar-lectura { min-height: 120px; }
+.sonar-vacio { font-size: 12.5px; line-height: 1.55; }
+.sonar-vacio p { margin: 0 0 9px; }
+.sonar-ficha-cab { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.sonar-ficha-tk { font-size: 17px; letter-spacing: 0.5px; }
+.sonar-ficha-pct { font-size: 17px; font-weight: 800; }
+.sonar-ficha-nom { font-size: 12px; margin-top: 1px; }
+.sonar-ficha-fz { font-size: 12px; color: var(--ambar); margin: 6px 0 4px; font-weight: 700; }
+.sonar-ficha-btn { margin-top: 10px; width: 100%; font-size: 12.5px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sonar-haz-g, .sonar-eco { animation: none; }
+  .sonar-eco { opacity: 0.35; }
+}
+
+/* Panel de lectura del sonar: lista por defecto + ficha del elegido */
+.sonar-lista-tit {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--fosforo, #3ddc84);
+  border-bottom: 1px solid var(--gris);
+  padding-bottom: 5px;
+  margin-bottom: 8px;
+}
+.sonar-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  text-align: left;
+  background: var(--negro-3);
+  border: 1px solid var(--gris);
+  border-left: 3px solid var(--fosforo, #3ddc84);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 7px;
+  color: var(--texto);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.sonar-item:hover { background: rgba(61, 220, 132, 0.07); }
+.sonar-item-cab {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+}
+.sonar-item-tk { font-size: 13.5px; }
+.sonar-item-px { flex: 1; font-size: 12px; color: var(--texto-tenue); }
+.sonar-item-pct { font-size: 13.5px; font-weight: 800; }
+.sonar-item-fz { font-size: 11px; color: var(--ambar); }
+.sonar-item-hi { color: var(--oro); }
+.sonar-item-nota {
+  font-size: 11.5px;
+  color: var(--texto-tenue);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.sonar-ayuda { font-size: 11px; line-height: 1.6; margin: 10px 0 0; }
+
+.sonar-volver {
+  background: none;
+  border: 0;
+  padding: 0 0 6px;
+  color: var(--fosforo, #3ddc84);
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.sonar-volver:hover { text-decoration: underline; }
+/* El precio: el número que decide si puedes entrar */
+.sonar-precio {
+  margin: 6px 0 2px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.sonar-precio-val { font-size: 18px; font-weight: 800; color: var(--oro); }
+
+/* Todo contacto del sonar es clicable, cruzara el anillo o no ─────────── */
+/* Blanco de clic invisible: iguala el área táctil de todos los contactos */
+.sonar-blanco { fill: transparent; }
+/* La etiqueta: siempre visible en los que cruzaron el anillo, al pasar por
+   encima en el resto. Sin esto, 28 de 32 contactos eran puntos anónimos. */
+.sonar-etq { opacity: 0; transition: opacity 0.15s; }
+.sonar-contacto.anomalia .sonar-etq,
+.sonar-contacto.elegido .sonar-etq,
+.sonar-contacto:hover .sonar-etq,
+.sonar-contacto:focus-visible .sonar-etq { opacity: 1; }
+.sonar-contacto:focus-visible .sonar-punto { stroke: #fff; stroke-width: 1.5; }
+.sonar-contacto:hover .sonar-punto { r: attr(r); }
+
+/* Los que NO cruzaron el anillo se listan más apagados: se pueden abrir
+   igual, pero no compiten por la atención con los que sí se movieron. */
+.sonar-lista-tit.tenue { color: var(--texto-tenue); margin-top: 14px; }
+.sonar-item.tenue {
+  border-left-color: var(--gris);
+  background: transparent;
+}
+.sonar-item.tenue .sonar-item-tk { color: var(--texto-tenue); }
+.sonar-item.tenue:hover {
+  background: rgba(61, 220, 132, 0.05);
+  border-left-color: var(--fosforo, #3ddc84);
+}
+.sonar-item.tenue .sonar-item-fz { color: var(--texto-tenue); }
+.sonar-item-n { color: var(--texto-tenue); }
+
+/* ── ⚠ «TAL VEZ SEA POR ESTO» ───────────────────────────────────────────
+   La única parte de la app que se acerca a explicar un porqué, y por eso
+   la que más cuidado lleva. Va en ÁMBAR de advertencia, no en verde de
+   confirmación: el color dice «hipótesis», no «dato». El % de la izquierda
+   es lo que hizo el precio DESDE ese titular — eso sí es un hecho medido;
+   que una cosa causara la otra, no. */
+.quiza {
+  border: 1px solid var(--ambar);
+  background: rgba(199, 154, 58, 0.09);
+  border-radius: 8px;
+  padding: 9px 11px;
+  margin: 10px 0;
+}
+.quiza-tit {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--ambar);
+  letter-spacing: 0.2px;
+}
+.quiza-sub { font-size: 11px; line-height: 1.45; margin: 3px 0 8px; }
+.quiza-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 5px 0;
+  border-top: 1px solid rgba(199, 154, 58, 0.25);
+  color: var(--texto);
+  text-decoration: none;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.quiza-item:hover .quiza-txt { text-decoration: underline; }
+.quiza-efecto {
+  flex: 0 0 auto;
+  min-width: 48px;
+  text-align: right;
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--ambar);
+  font-variant-numeric: tabular-nums;
+}
+.quiza-txt { min-width: 0; }
+.quiza-fuera { font-size: 10.5px; color: var(--texto-tenue); font-style: italic; }
+.sonar-otros-tit {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 10px 0 4px;
+}
+
+/* ═══ LA FIRMA DEL CONTACTO ═══════════════════════════════════════════════
+   Las marcas que dicen QUÉ CLASE de movimiento fue (sola o en grupo, de a
+   poco o en un día, techo del año, dividendo…). Van en gris-fósforo apagado
+   y NO en verde brillante: son contexto, no alarma — la alarma sigue siendo
+   una sola, la distancia al centro del plato.
+   La excepción es 💸 el dividendo, que va en ámbar de advertencia porque es
+   la única marca que le RESTA verdad al movimiento en vez de describirlo. */
+.sonar-rastreos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 9px 0 0;
+}
+.sonar-rastreo {
+  background: var(--negro-3);
+  border: 1px solid var(--gris);
+  border-radius: 999px;
+  color: var(--texto-tenue);
+  padding: 4px 9px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.sonar-rastreo:hover:not(:disabled) {
+  border-color: var(--fosforo, #3ddc84);
+  color: var(--texto);
+}
+.sonar-rastreo.activo {
+  border-color: var(--fosforo, #3ddc84);
+  background: rgba(61, 220, 132, 0.12);
+  color: var(--fosforo, #3ddc84);
+}
+/* Un rastreo sin contactos no se esconde: se apaga. Que hoy nadie se haya
+   dado vuelta también es una respuesta. */
+.sonar-rastreo.vacio { opacity: 0.35; cursor: default; }
+.sonar-rastreo-n {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.7;
+  margin-left: 2px;
+}
+.sonar-rastreo-ayuda { font-size: 11px; margin: 6px 0 0; line-height: 1.5; }
+
+/* Los contactos que quedaron fuera de la pregunta: siguen en el plato, pero
+   en penumbra. Se pueden abrir igual. */
+.sonar-contacto.apagado .sonar-punto { opacity: 0.13; }
+.sonar-contacto.apagado .sonar-eco { display: none; }
+.sonar-contacto.apagado .sonar-etq { opacity: 0; }
+.sonar-contacto.apagado:hover .sonar-punto { opacity: 0.5; }
+.sonar-contacto.apagado:hover .sonar-etq { opacity: 0.6; }
+
+/* Las marcas en la lista: chips chiquitos, tres como mucho */
+.sonar-marcas { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px; }
+.sonar-marca {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: var(--texto-tenue);
+  border: 1px solid var(--gris);
+  border-radius: 4px;
+  padding: 1px 5px;
+  white-space: nowrap;
+  cursor: help;
+}
+.sonar-marca.m-dividendo,
+.sonar-marca.m-exdiv {
+  color: var(--ambar);
+  border-color: rgba(199, 154, 58, 0.45);
+  background: rgba(199, 154, 58, 0.08);
+}
+.sonar-marca.m-nueva {
+  color: var(--fosforo, #3ddc84);
+  border-color: rgba(61, 220, 132, 0.45);
+}
+
+/* Las marcas en la ficha: cada una con la cuenta que la sostiene */
+.firma { margin: 8px 0 2px; }
+.firma-tit {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.firma-item {
+  display: flex;
+  gap: 7px;
+  align-items: baseline;
+  font-size: 11.5px;
+  line-height: 1.45;
+  padding: 4px 0;
+  border-top: 1px solid var(--gris);
+}
+.firma-item b { color: var(--texto); }
+.firma-icono { flex: 0 0 auto; }
+.firma-txt { color: var(--texto-tenue); }
+.firma-item.f-dividendo,
+.firma-item.f-exdiv {
+  border: 1px solid var(--ambar);
+  background: rgba(199, 154, 58, 0.09);
+  border-radius: 6px;
+  padding: 6px 8px;
+  margin-bottom: 4px;
+}
+.firma-item.f-dividendo b,
+.firma-item.f-exdiv b { color: var(--ambar); }
+
+/* Dónde está el precio dentro de su propio año: piso ─────●── techo */
+.firma-rango { margin: 9px 0 4px; }
+.firma-rango-barra {
+  position: relative;
+  height: 4px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(255, 107, 90, 0.35), rgba(61, 220, 132, 0.35));
+}
+.firma-rango-barra i {
+  position: absolute;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  margin-left: -4.5px;
+  border-radius: 50%;
+  background: var(--oro);
+  transform: translateY(-50%);
+}
+.firma-rango-pies {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ═══ 🌍 EL MUNDO ═════════════════════════════════════════════════════════
+   Va en AZUL y no en el verde del sonar ni en el oro de los fundamentos: es
+   un tercer registro. Verde = medido en la BVL. Oro = número de la empresa.
+   Azul = viene de afuera y NO está medido contra nada. Que se distinga de un
+   vistazo es parte de la honestidad, no decoración. */
+.mundo-card { --mundo: #6ea8ff; }
+.mundo-cab {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.mundo-intro { font-size: 12.5px; line-height: 1.55; margin: 6px 0 12px; }
+.mundo-tema {
+  border: 1px solid var(--gris);
+  border-left: 3px solid var(--mundo, #6ea8ff);
+  border-radius: 8px;
+  padding: 9px 11px;
+  margin-bottom: 9px;
+  background: var(--negro-3);
+}
+.mundo-tema.abierto { background: rgba(110, 168, 255, 0.06); }
+.mundo-tema-cab {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  width: 100%;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--texto);
+  cursor: pointer;
+  text-align: left;
+  font-size: 13.5px;
+  font-weight: 800;
+}
+.mundo-icono { flex: 0 0 auto; font-size: 15px; }
+.mundo-tema-tit { flex: 1; min-width: 0; }
+.mundo-flecha { color: var(--mundo, #6ea8ff); font-size: 11px; }
+.mundo-quees {
+  font-size: 11.5px;
+  line-height: 1.5;
+  margin: 5px 0 8px;
+}
+
+/* LA CADENA: el ticker nunca va suelto, siempre cuelga de su canal */
+.mundo-canales { margin-bottom: 7px; }
+.mundo-canal { margin-bottom: 6px; }
+.mundo-via {
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--mundo, #6ea8ff);
+}
+.mundo-tickers { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px; }
+.mundo-tk {
+  background: rgba(110, 168, 255, 0.1);
+  border: 1px solid rgba(110, 168, 255, 0.35);
+  border-radius: 4px;
+  color: var(--texto);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  padding: 2px 7px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.mundo-tk:hover { background: rgba(110, 168, 255, 0.25); }
+.mundo-nota {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  border-top: 1px solid var(--gris);
+  padding: 5px 0 0;
+  margin-top: 5px;
+  color: var(--texto);
+  text-decoration: none;
+  font-size: 11.5px;
+  line-height: 1.4;
+}
+.mundo-nota:hover .mundo-nota-txt { text-decoration: underline; }
+.mundo-nota-fecha {
+  flex: 0 0 auto;
+  color: var(--texto-tenue);
+  font-variant-numeric: tabular-nums;
+  font-size: 10.5px;
+}
+.mundo-nota-txt { min-width: 0; }
+.mundo-mas {
+  background: none;
+  border: 0;
+  padding: 4px 0 0;
+  color: var(--mundo, #6ea8ff);
+  font-size: 11px;
+  cursor: pointer;
+}
+.mundo-mas:hover { text-decoration: underline; }
+.mundo-pie { font-size: 11px; line-height: 1.6; margin: 10px 0 0; }
+
+/* ═══ 📋 EL RESUMEN ═══════════════════════════════════════════════════════
+   La respuesta corta a "¿qué pasó?". Va primero en el Radar y por eso lleva
+   el sello de fecha y hora bien visible: un resumen sin sello no se puede
+   auditar — no se sabe si es de hoy o de la semana pasada. */
+.res-cab {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.res-sello { font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.res-tabs { display: flex; gap: 5px; margin: 9px 0 4px; }
+.res-tab {
+  background: var(--negro-3);
+  border: 1px solid var(--gris);
+  border-radius: 999px;
+  color: var(--texto-tenue);
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.res-tab.activo { border-color: var(--oro); color: var(--oro); background: rgba(199, 154, 58, 0.1); }
+.res-intro { font-size: 12.5px; line-height: 1.55; margin: 6px 0 10px; }
+.res-cols { display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media (min-width: 820px) { .res-cols { grid-template-columns: 1fr 1fr; } }
+.res-col-tit {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--gris);
+  padding-bottom: 5px;
+  margin-bottom: 8px;
+}
+.res-nada { font-size: 12px; }
+.res-mov {
+  border: 1px solid var(--gris);
+  border-left: 3px solid var(--gris);
+  border-radius: 8px;
+  padding: 7px 9px;
+  margin-bottom: 7px;
+}
+/* Marcado = esta vara la ve y la otra no. Es el dato más útil de la tarjeta. */
+.res-mov.marcado { border-left-color: var(--ambar); background: rgba(199, 154, 58, 0.06); }
+.res-mov-cab {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+}
+.res-tk {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--texto);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+}
+.res-tk:hover { color: var(--oro); text-decoration: underline; }
+.res-pct { font-weight: 800; font-size: 13px; }
+.res-fz, .res-vol { font-size: 11px; }
+.res-rango { font-size: 10.5px; margin: 2px 0 3px; }
+.res-nota {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  font-size: 11px;
+  line-height: 1.4;
+  margin-top: 4px;
+  color: var(--texto);
+  text-decoration: none;
+}
+a.res-nota:hover .res-nota-txt { text-decoration: underline; }
+.res-hora {
+  flex: 0 0 auto;
+  color: var(--oro);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.res-hi { flex: 0 0 auto; color: var(--oro); }
+.res-mundo { flex: 0 0 auto; color: #6ea8ff; }
+.res-nota-txt { min-width: 0; }
+
+.res-desacuerdo {
+  border: 1px solid var(--ambar);
+  background: rgba(199, 154, 58, 0.09);
+  border-radius: 8px;
+  padding: 9px 11px;
+  margin-top: 12px;
+  font-size: 11.5px;
+  line-height: 1.55;
+}
+.res-desacuerdo-tit { font-weight: 800; color: var(--ambar); margin-bottom: 4px; }
+
+/* La favorita del periodo */
+.res-favorita {
+  border: 1px solid var(--oro);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  background: rgba(199, 154, 58, 0.07);
+}
+.res-fav-cab { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; }
+.res-fav-eti { font-size: 11px; font-weight: 800; color: var(--oro); letter-spacing: 0.4px; }
+.res-fav-tk {
+  background: none; border: 0; padding: 0;
+  color: var(--texto); font-size: 19px; font-weight: 800; letter-spacing: 0.5px;
+  cursor: pointer;
+}
+.res-fav-tk:hover { color: var(--oro); }
+.res-fav-pct { font-size: 18px; font-weight: 800; }
+.res-fav-nom { font-size: 12px; margin-top: 1px; }
+.res-fav-datos {
+  display: flex; flex-wrap: wrap; gap: 12px;
+  font-size: 11.5px; margin-top: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.res-criterio { font-size: 10.5px; line-height: 1.5; margin: 7px 0 0; }
+.res-dia { border-top: 1px solid var(--gris); padding: 6px 0; }
+.res-dia-cab {
+  display: flex; align-items: baseline; gap: 9px;
+  font-variant-numeric: tabular-nums; font-size: 12px;
+}
+.res-dia-f { font-weight: 800; min-width: 42px; }
+.res-tabla { display: flex; flex-direction: column; }
+.res-tabla-fila {
+  display: grid;
+  grid-template-columns: 90px 78px 66px 1fr;
+  gap: 8px;
+  align-items: baseline;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--gris);
+  padding: 5px 2px;
+  color: var(--texto);
+  font-size: 11.5px;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+.res-tabla-fila:hover { background: rgba(199, 154, 58, 0.06); }
+.res-pie { font-size: 11px; line-height: 1.6; margin: 12px 0 0; }
+
+/* ── EL ORDEN de la lista: detectar (fuerza) vs tomar (%) ─────────────────
+   Dos preguntas distintas, y la lista no puede responder las dos a la vez. */
+.sonar-orden {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 7px;
+  font-size: 11px;
+}
+.sonar-orden-b {
+  background: none;
+  border: 1px solid var(--gris);
+  border-radius: 999px;
+  color: var(--texto-tenue);
+  padding: 2px 9px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.sonar-orden-b.activo {
+  border-color: var(--oro);
+  color: var(--oro);
+  background: rgba(199, 154, 58, 0.1);
+}
+
+/* ── EL VOLUMEN: de qué tamaño era tomable ese movimiento ─────────────────
+   Va en tono neutro, NUNCA en rojo de alarma: poca liquidez no invalida una
+   subida, solo dice cuánto cabe en ella. */
+.sonar-item-vol {
+  font-size: 10.5px;
+  color: var(--texto-tenue);
+  font-variant-numeric: tabular-nums;
+  cursor: help;
+}
+.sonar-vol-flaco { color: var(--ambar); font-weight: 700; }
+.sonar-vol {
+  border: 1px solid var(--gris);
+  border-radius: 8px;
+  padding: 7px 9px;
+  margin: 8px 0 2px;
+}
+.sonar-vol-fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.sonar-vol-rango { font-size: 11px; margin-top: 3px; }
+.sonar-vol-aviso {
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--ambar);
+  margin-top: 5px;
+}
+
+/* El mundo dentro de la ficha del sonar */
+.sonar-item-mundo { color: #6ea8ff; cursor: help; }
+.mundo-ficha {
+  border: 1px solid rgba(110, 168, 255, 0.4);
+  background: rgba(110, 168, 255, 0.07);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin: 9px 0;
+}
+.mundo-ficha-tit {
+  font-size: 12px;
+  font-weight: 800;
+  color: #6ea8ff;
+}
+.mundo-ficha-sub { font-size: 10.5px; line-height: 1.45; margin: 2px 0 7px; }
+.mundo-ficha-item {
+  border-top: 1px solid rgba(110, 168, 255, 0.2);
+  padding: 6px 0 0;
+  margin-top: 6px;
+}
+.mundo-ficha-item:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
+.mundo-ficha-cab { font-size: 12px; }
+.mundo-ficha-via {
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--texto-tenue);
+  margin: 2px 0 3px;
+}
+.mundo-ficha-nota {
+  display: block;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--texto);
+  text-decoration: none;
+}
+.mundo-ficha-nota:hover { text-decoration: underline; }

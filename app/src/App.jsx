@@ -11,6 +11,7 @@ import ApoyoModal from './components/ApoyoModal'
 import Pildora from './components/Pildora'
 import Disclaimer from './components/Disclaimer'
 import HoyBVL from './components/HoyBVL'
+import Radar from './components/Radar'
 import EmpresaDelDia from './components/EmpresaDelDia'
 import MiLista from './components/MiLista'
 import Cuaderno from './components/Cuaderno'
@@ -164,6 +165,9 @@ export default function App() {
   // el listener de hashchange necesita leer las respuestas actuales
   const respuestasRef = useRef(null)
   useEffect(() => { respuestasRef.current = respuestas }, [respuestas])
+  // …y el nivel actual, para la puerta del Radar (#/radar es nivel 4)
+  const nivelRef = useRef(null)
+  useEffect(() => { nivelRef.current = nivel }, [nivel])
 
   useEffect(() => {
     const aplicarHash = () => {
@@ -174,6 +178,10 @@ export default function App() {
       else if (ruta === 'resultados') setVista(respuestasRef.current ? 'resultados' : 'quiz')
       else if (ruta === 'glosario') setVista('glosario')
       else if (ruta === 'explorar') setVista('explorar')
+      // El link directo a #/radar también respeta la puerta: sin nivel 4, al
+      // inicio. No es seguridad (el dato es público) — es coherencia: que no
+      // exista un atajo que contradiga lo que la app dice en la portada.
+      else if (ruta === 'radar') setVista((nivelRef.current ?? 0) >= 4 ? 'radar' : 'inicio')
       else if (ruta === 'ia') setVista('ia')
       else if (ruta === 'cuaderno') setVista('cuaderno')
       else if (ruta === 'comentarios') setVista('comentarios')
@@ -266,6 +274,13 @@ export default function App() {
   const navPrimario = [
     { id: 'inicio', label: 'Inicio', hash: '#/' },
     { id: 'explorar', label: 'Explorar', hash: '#/explorar' },
+    // 📡 El Radar es NIVEL 4 y a propósito. No es por esconder un dato (los
+    // precios de la BVL son públicos y este repo lleva meses commiteándolos):
+    // es por la promesa de la portada. «La app educa, no recomienda» — y un
+    // ranking de "lo más caliente" a la vista del que recién llega se lee
+    // como consejo, diga lo que diga la letra chica. Del 4 en adelante, el
+    // que entra ya sabe lo que está mirando.
+    ...(nivel >= 4 ? [{ id: 'radar', label: '📡 Radar', hash: '#/radar', beta: true }] : []),
     { id: 'cuaderno', label: '📓 Cuaderno', hash: '#/cuaderno', beta: true },
     { id: 'ia', label: '🧠 Atlas', hash: '#/ia', beta: true },
   ]
@@ -338,7 +353,10 @@ export default function App() {
     <>
       <FondoVivo />
       <div className="aurora" aria-hidden="true" />
-      <div className="app-shell">
+      {/* 📡 El Radar rompe el ancho de lectura (760px, pensado para textos) y
+          se va a pantalla completa: es un TABLERO, no un artículo. El resto
+          de la app no se toca. */}
+      <div className={'app-shell' + (vista === 'radar' ? ' app-shell-ancho' : '')}>
         <div className="topbar">
           <div className="brand" onClick={irInicio}>
             <img
@@ -378,6 +396,7 @@ export default function App() {
         {menuAbierto && (
           <MenuNav
             vista={vista}
+            nivel={nivel}
             onIr={irA}
             onApoyar={() => setApoyoAbierto(true)}
             onTour={abrirTour}
@@ -592,6 +611,12 @@ export default function App() {
           )}
 
           {vista === 'glosario' && <Glosario />}
+
+          {/* nivel >= 4 también acá: si baja de nivel estando en el Radar, se
+              apaga solo (el hashchange ya no vuelve a correr en ese caso). */}
+          {vista === 'radar' && nivel >= 4 && (
+            <Radar onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />
+          )}
 
           {vista === 'ia' && <Atlas onVerEmpresa={(t) => abrirEmpresa(t, 'inicio')} />}
 
