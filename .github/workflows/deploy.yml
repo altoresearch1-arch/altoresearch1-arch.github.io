@@ -119,10 +119,19 @@ jobs:
               echo "etiqueta=precios+prensa (con despliegue)" >> "$GITHUB_OUTPUT"
               echo "desplegar=si" >> "$GITHUB_OUTPUT" ;;
             '13,23,43,53 14-21 * * 1-5')
-              # Sin prensa: las portadas no cambian cada 10 min y la prensa
-              # llega después del Hecho. Solo precio + intradía, que sí cambian.
-              echo "flag=--precios --sin-prensa" >> "$GITHUB_OUTPUT"
-              echo "etiqueta=precios (solo datos)" >> "$GITHUB_OUTPUT"
+              # CON PRENSA desde el 03-ago-2026, y el motivo es nuevo: antes
+              # estas corridas NO desplegaban, así que buscar titulares acá era
+              # tirar lecturas a la basura — nadie los iba a ver hasta el
+              # siguiente despliegue. Ahora la app lee noticias.json
+              # DIRECTO DEL REPO (app/src/lib/vivo.js), o sea que un commit sin
+              # despliegue igual le llega al lector. Con eso, la prensa pasa de
+              # refrescarse cada 30 min a cada 10.
+              # El costo es el que este mismo archivo ya había presupuestado
+              # arriba: 8 feeds de Perú + 5 del mundo, ~48 lecturas por medio
+              # al día. La red DIRIGIDA de Google News sigue sin correr acá
+              # (serían ~4,560 consultas diarias); esa es solo del cierre.
+              echo "flag=--precios" >> "$GITHUB_OUTPUT"
+              echo "etiqueta=precios+prensa (sin despliegue)" >> "$GITHUB_OUTPUT"
               echo "desplegar=no" >> "$GITHUB_OUTPUT" ;;
             *)
               echo "flag=--rapido"  >> "$GITHUB_OUTPUT"

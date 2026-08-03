@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { muroTitulares, sectoresDelMuro, leerVistos, marcarVistos, noticiasGeneradas } from '../lib/radar'
+import { muroTitulares, sectoresDelMuro, leerVistos, marcarVistos, generadoNoticias } from '../lib/radar'
 import pagosData from '../data/pagos_dividendos.json'
 
 // 📰 EL MURO — titulares en formato tablero de sala de trading: el más nuevo
@@ -115,7 +115,7 @@ export default function MuroNoticias({ filas = [], ruedas = 20, onVerEmpresa }) 
         <h3 style={{ margin: 0 }}>📰 Muro de titulares</h3>
         <div className="muro-barra-der">
           {nuevos > 0 && <span className="muro-cuenta">{nuevos} sin leer</span>}
-          {noticiasGeneradas && <span className="muted">{noticiasGeneradas}</span>}
+          {generadoNoticias() && <span className="muted">{generadoNoticias()}</span>}
         </div>
       </div>
 

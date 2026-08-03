@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import preciosData from '../data/precios.json'
 import hechosData from '../data/hechos.json'
+import { usarNoticiasFrescas } from './radar'
 
 // ═════════════════════════════════════════════════════════════════════════
 // 🔴 EL MERCADO EN VIVO — la app le pregunta a la BVL, sin intermediarios.
@@ -277,6 +278,65 @@ export async function bajarColaHistorica({ tickers, desde, hasta, signal } = {})
   }
   const pares = (await enTandas(tickers, CONCURRENCIA, pide)).filter(Boolean)
   return Object.fromEntries(pares)
+}
+
+// ── 📰 LA PRENSA, POR EL CAMINO CORTO ────────────────────────────────────
+//
+// Los titulares NO se pueden pedir desde el navegador: se probaron 18 medios
+// desde el dominio real (03-ago-2026) y 16 lo bloquean — Gestión, El
+// Comercio, La República, Andina, RPP, El Peruano, Perú21, Infomercado,
+// Semana Económica, Rumbo Minero, Energiminas, Proactivo, Bloomberg Línea,
+// FXStreet, Investing y Google News. Solo pasan Yahoo Finanzas y El País, que
+// son internacionales y no cubren la BVL. Ahí no hay vuelta: para la prensa
+// el robot es insustituible.
+//
+// PERO el recorrido tenía DOS patas, no una. La prensa viaja
+//   robot -> commit al repo -> despliegue de Pages -> tu pantalla
+// y la app solo la veía al final del todo, porque noticias.json venía
+// horneado dentro del bundle. Este atajo se salta el despliegue entero:
+// raw.githubusercontent sirve el archivo del repo con CORS abierto
+// (comprobado), así que los titulares aparecen apenas el robot los commitea,
+// aunque la web no se haya vuelto a publicar.
+//
+// Si falla —sin red, GitHub caído, o el archivo aún no existe— no pasa nada:
+// se sigue con la copia horneada, que es exactamente lo que había antes.
+const RAW = 'https://raw.githubusercontent.com/altoresearch1-arch/'
+  + 'altoresearch1-arch.github.io/main/app/src/data/'
+
+// Cada 5 min. El robot no commitea prensa más seguido que eso, y raw tiene su
+// propio caché de unos minutos: preguntar más sería pedirle lo mismo.
+const PRENSA_MS = 5 * 60000
+
+export async function bajarNoticiasDelRepo({ signal } = {}) {
+  const r = await fetch(`${RAW}noticias.json`, { cache: 'no-store', signal })
+  if (!r.ok) throw new Error(`raw noticias.json ${r.status}`)
+  return r.json()
+}
+
+// Devuelve un número que sube cada vez que ENTRA una copia más nueva. Sirve
+// para que React sepa que tiene que repintar: los titulares viven en un
+// módulo, no en el estado.
+export function useNoticiasFrescas({ activo = true, cada = PRENSA_MS } = {}) {
+  const [version, setVersion] = useState(0)
+
+  useEffect(() => {
+    if (!activo) return undefined
+    let seguir = true
+    const ac = new AbortController()
+
+    const mirar = async () => {
+      try {
+        const doc = await bajarNoticiasDelRepo({ signal: ac.signal })
+        if (seguir && usarNoticiasFrescas(doc)) setVersion((v) => v + 1)
+      } catch { /* se sigue con la copia horneada */ }
+    }
+
+    mirar()
+    const id = setInterval(() => { if (!document.hidden) mirar() }, cada)
+    return () => { seguir = false; ac.abort(); clearInterval(id) }
+  }, [activo, cada])
+
+  return version
 }
 
 // ── El hook que usa el Radar ─────────────────────────────────────────────

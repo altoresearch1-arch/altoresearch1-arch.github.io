@@ -55,6 +55,28 @@ export const PLAZOS = [
   { ruedas: 20, corto: '1m', etiqueta: 'el mes' },
 ]
 
+// ── LA PRENSA, QUE PUEDE VENIR DE DOS LADOS ──────────────────────────────
+//
+// La copia horneada en el bundle es el piso: siempre está y funciona sin red.
+// Encima, lib/vivo.js puede traer una MÁS NUEVA leyéndola del repo, que es
+// donde el robot la deja cada vez que corre — sin esperar a que la web se
+// vuelva a publicar. Los titulares son la única pieza del Radar que no se
+// puede pedir desde el navegador (16 de 18 medios bloquean al navegador), así
+// que acortar el camino que ya existe era lo único que quedaba por hacer.
+//
+// Solo se acepta una copia MÁS NUEVA que la horneada: nunca se retrocede.
+let NOTICIAS = noticiasData
+
+export function usarNoticiasFrescas(doc) {
+  if (!doc?.porEmpresa || !doc.generado) return false
+  if (NOTICIAS.generado && doc.generado <= NOTICIAS.generado) return false
+  NOTICIAS = doc
+  cacheMundoTk = null // el cruce mundo→ticker se arma de estos titulares
+  return true
+}
+
+export const generadoNoticias = () => NOTICIAS.generado || null
+
 const RUEDAS_ANIO = 252 // ruedas de bolsa en un año, para escalar la volatilidad
 
 const EMPRESAS = new Map(empresasData.empresas.map((e) => [e.ticker, e]))
@@ -575,7 +597,7 @@ function porPesoYFecha(a, b) {
 }
 
 export function noticiasDe(ticker) {
-  return noticiasData.porEmpresa?.[ticker] || []
+  return NOTICIAS.porEmpresa?.[ticker] || []
 }
 
 // Los titulares de una acción, del que más puede explicar un movimiento al que
@@ -668,7 +690,7 @@ export function candentes(filas, ruedas, diasNoticia = 12) {
 // ninguna empresa). Se devuelven con los sectores a los que les pega, para
 // poder ponerlos al lado de la rotación.
 export function temasDeSector(sectoresVisibles = null) {
-  const temas = Object.entries(noticiasData.temas || {})
+  const temas = Object.entries(NOTICIAS.temas || {})
     .map(([id, t]) => ({ id, ...t }))
     .filter((t) => (t.items || []).length > 0)
   if (!sectoresVisibles) return temas
@@ -677,7 +699,6 @@ export function temasDeSector(sectoresVisibles = null) {
   )
 }
 
-export const noticiasGeneradas = noticiasData.generado || null
 
 // ═════════════════════════════════════════════════════════════════════════
 // 🌍 EL MUNDO — lo que le llega a la BVL desde afuera
@@ -713,7 +734,7 @@ function frescos(items, dias = DIAS_MUNDO) {
 
 // Los temas de mundo que tienen algo reciente, con sus titulares ya podados.
 export function temasDelMundo() {
-  return Object.entries(noticiasData.mundo || {})
+  return Object.entries(NOTICIAS.mundo || {})
     .map(([id, t]) => ({ ...t, id, items: frescos(t.items) }))
     .filter((t) => t.items.length > 0)
     // El que más ha publicado encabeza: no es "importancia", es actividad.
@@ -776,7 +797,7 @@ export function muroTitulares(filas = [], ruedas = 20) {
   }
 
   const flujo = []
-  for (const [ticker, items] of Object.entries(noticiasData.porEmpresa || {})) {
+  for (const [ticker, items] of Object.entries(NOTICIAS.porEmpresa || {})) {
     const emp = EMPRESAS.get(ticker)
     for (const n of items) {
       flujo.push({
@@ -786,7 +807,7 @@ export function muroTitulares(filas = [], ruedas = 20) {
       })
     }
   }
-  for (const [id, t] of Object.entries(noticiasData.temas || {})) {
+  for (const [id, t] of Object.entries(NOTICIAS.temas || {})) {
     // Un tema de sector pesa lo que pesa el sector al que le pega: el
     // antidumping del acero vale lo que se estén moviendo las acereras.
     const suFuerza = (t.sectores || []).length

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
-import { PLAZOS, filasRadar, huecoHistorico, rotacionSectores, leerFuerza, noticiasGeneradas } from '../lib/radar'
-import { useColaHistorica, useMercadoVivo } from '../lib/vivo'
+import { PLAZOS, filasRadar, huecoHistorico, rotacionSectores, leerFuerza, generadoNoticias } from '../lib/radar'
+import { useColaHistorica, useMercadoVivo, useNoticiasFrescas } from '../lib/vivo'
 import RadarCandente from './RadarCandente'
 import MuroNoticias from './MuroNoticias'
 import RadarHistoria from './RadarHistoria'
@@ -51,9 +51,14 @@ export default function Radar({ onVerEmpresa }) {
   // una vez por visita. Con el archivo al día no cuesta ni una llamada.
   const hueco = useMemo(() => huecoHistorico(), [])
   const { cola } = useColaHistorica(hueco)
+  // 📰 La prensa es lo único que no se puede pedir desde el navegador (los
+  // medios bloquean). Lo que sí se puede es leerla del REPO en vez de esperar
+  // a que la web se vuelva a publicar: así aparece apenas el robot la
+  // commitea. `prensa` sube de número cada vez que entra una copia más nueva.
+  const prensa = useNoticiasFrescas()
   const { filas, descartadas, total, fecha } = useMemo(
     () => filasRadar(vivo.precios, vivo.hechos, cola),
-    [vivo.precios, vivo.hechos, cola],
+    [vivo.precios, vivo.hechos, cola, prensa],
   )
   const sectores = useMemo(() => rotacionSectores(filas, ruedas), [filas, ruedas])
 
@@ -205,7 +210,7 @@ export default function Radar({ onVerEmpresa }) {
 
       <p className="muted" style={{ fontSize: 12, lineHeight: 1.6 }}>
         Cierres reales de la BVL (los mismos que baja el robot todos los días)
-        {noticiasGeneradas && <> · titulares al {noticiasGeneradas}</>}. El Radar{' '}
+        {generadoNoticias() && <> · titulares al {generadoNoticias()}</>}. El Radar{' '}
         <b>mide lo que ya pasó y lo ordena</b> — que algo haya subido no dice
         nada de si va a seguir subiendo, y la fuerza mide movimiento, no motivo.
         Esto es material de estudio, no una recomendación de inversión.
