@@ -10236,6 +10236,64 @@ a.link {
   .sonar-eco { opacity: 0.35; }
 }
 
+/* ══════════ 🔴 EL SELLO "EN VIVO" ══════════
+   Va en la cabecera del Radar y del Sonar. Deliberadamente chico: no es un
+   logro que celebrar, es la fecha del dato. El punto late para distinguirse
+   de un cartel pintado, y se queda quieto con reduced-motion. */
+.sello-vivo {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  color: #0f9d58;
+  background: rgba(61, 220, 132, 0.13);
+  border: 1px solid rgba(61, 220, 132, 0.4);
+  border-radius: 999px;
+  padding: 2px 9px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.sello-punto {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #e5484d;
+  box-shadow: 0 0 0 0 rgba(229, 72, 77, 0.7);
+  animation: sello-latido 2s ease-out infinite;
+}
+@keyframes sello-latido {
+  0%   { box-shadow: 0 0 0 0 rgba(229, 72, 77, 0.65); }
+  70%  { box-shadow: 0 0 0 6px rgba(229, 72, 77, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(229, 72, 77, 0); }
+}
+.sello-hora { font-weight: 600; opacity: 0.75; letter-spacing: 0; }
+/* Cuando NO hay dato fresco el sello se apaga: mismo lugar, sin color de
+   alarma. Que la BVL no publique no es un error del usuario ni nuestro. */
+.sello-vivo.apagado {
+  color: var(--texto-suave, #6b7280);
+  background: transparent;
+  border-color: rgba(128, 128, 128, 0.35);
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+.sonar-precio-vivo { color: #0f9d58; font-weight: 800; }
+
+/* En la pantalla del sonar (fondo oscuro de fósforo) el verde tiene que ser
+   el del plato, no el de la app. */
+.sonar-card .sello-vivo { color: var(--fosforo); }
+.sonar-card .sonar-precio-vivo { color: var(--fosforo); }
+
+@media (prefers-color-scheme: dark) {
+  .sello-vivo { color: #3ddc84; }
+  .sonar-precio-vivo { color: #3ddc84; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sello-punto { animation: none; }
+}
+
 /* Panel de lectura del sonar: lista por defecto + ficha del elegido */
 .sonar-lista-tit {
   font-size: 10.5px;

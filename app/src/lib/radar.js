@@ -280,8 +280,45 @@ function ultimoHecho(ticker, hoyISO) {
   }
 }
 
+// ── EL PRECIO DE HOY, PEGADO AL FINAL DE LA SERIE ────────────────────────
+//
+// historicos.json solo se rehace en el cierre de las 22:23, así que durante
+// la rueda su última fila es el cierre de AYER. El precio de hoy vive aparte
+// (precios.json, o el vivo que baja el navegador). Mientras estuvieron
+// separados el Sonar decía dos cosas a la vez: la ficha mostraba «S/ 2.70» y
+// el punto se dibujaba en la posición que le tocaba a S/ 2.45.
+//
+// Acá se juntan. La regla es la fecha de la SESIÓN (la de la última
+// operación, no la de nuestra consulta):
+//   · sesión POSTERIOR al último cierre -> se agrega una fila: hoy existe.
+//   · sesión IGUAL al último cierre     -> se reemplaza: es el mismo día,
+//     más fresco.
+//   · sesión ANTERIOR (o sin dato)      -> no se toca NADA. Esto es lo que
+//     protege de la acción que lleva días sin negociar: la BVL repite su
+//     último cierre, y estamparlo como si fuera de hoy inventaría un día que
+//     no existió.
+//
+// Al agregar una fila, las ventanas se corren solas: `atras=1` pasa a ser
+// «esta misma ventana vista en el cierre anterior», que es justo lo que la
+// firma necesita para saber si el contacto acaba de cruzar el anillo.
+function conUltimoPrecio(base, px) {
+  const precio = px?.precio
+  if (!(precio > 0)) return base
+  const sesion = (px.ultimaOperacion || '').slice(0, 10) || px.fecha
+  if (!sesion) return base
+  const ultima = base[base.length - 1][0]
+  if (sesion > ultima) return [...base, [sesion, precio]]
+  if (sesion === ultima) return [...base.slice(0, -1), [sesion, precio]]
+  return base
+}
+
 // ── Las filas del Radar: una por acción realmente negociable.
-export function filasRadar() {
+//
+// `vivos` (opcional) es el mapa ticker -> precio que baja lib/vivo.js
+// directo de la BVL. Cuando llega, manda sobre el precios.json horneado y el
+// Radar entero —plato, ranking, sectores, candente— se recalcula con él. Sin
+// él, todo funciona igual que siempre con el dato del robot.
+export function filasRadar(vivos = null) {
   const filas = []
   let descartadas = 0
   const fechas = {}
@@ -289,15 +326,15 @@ export function filasRadar() {
   for (const [ticker, h] of Object.entries(historicosData.historicos || {})) {
     const emp = EMPRESAS.get(ticker)
     if (!emp) continue
-    const valores = (h.valores || []).filter(([, v]) => v > 0)
-    if (valores.length < 21) { descartadas++; continue }
+    const base = (h.valores || []).filter(([, v]) => v > 0)
+    if (base.length < 21) { descartadas++; continue }
     // Regla 1: el precio congelado no es una tendencia, es un archivo viejo.
     if (h.pocoNegociada) { descartadas++; continue }
 
+    const px = vivos?.[ticker] || preciosData.precios?.[ticker]
+    const valores = conUltimoPrecio(base, px)
     const fechaCierre = valores[valores.length - 1][0]
     fechas[fechaCierre] = (fechas[fechaCierre] || 0) + 1
-
-    const px = preciosData.precios?.[ticker]
     const retornos = {}
     const fuerzas = {}
     const normales = {}
@@ -374,6 +411,10 @@ export function filasRadar() {
       precio,
       moneda,
       fechaCierre,
+      // Si ESTE precio vino del navegador o del archivo. Por acción y no
+      // global: en una misma pantalla puede haber contactos con precio de
+      // hace segundos y otros que no negocian desde el jueves.
+      envivo: !!px?.envivo,
       hecho: ultimoHecho(ticker, fechaCierre),
     })
   }

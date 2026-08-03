@@ -1,11 +1,13 @@
 import { useMemo, useState } from 'react'
 import { PLAZOS, filasRadar, rotacionSectores, leerFuerza, noticiasGeneradas } from '../lib/radar'
+import { useMercadoVivo } from '../lib/vivo'
 import RadarCandente from './RadarCandente'
 import MuroNoticias from './MuroNoticias'
 import RadarHistoria from './RadarHistoria'
 import RadarSonar from './RadarSonar'
 import RadarMundo from './RadarMundo'
 import RadarResumen from './RadarResumen'
+import SelloVivo from './SelloVivo'
 
 // 📡 RADAR DE ROTACIÓN — la pantalla del que mira el mercado moverse.
 //
@@ -39,7 +41,14 @@ export default function Radar({ onVerEmpresa }) {
   // un trader deja de ser excepcional (43% de las ventanas en 18 meses de
   // historia, contra 3% en un solo día). Ver RadarHistoria.
   const [ruedas, setRuedas] = useState(10)
-  const { filas, descartadas, total, fecha } = useMemo(() => filasRadar(), [])
+  // 🔴 El mercado en vivo. Mientras hay rueda el navegador le pregunta el
+  // precio a la BVL cada 45 s y TODO el Radar se recalcula con él: el plato,
+  // el ranking, los sectores. Si la BVL no contesta (o es domingo), `precios`
+  // queda en null y filasRadar cae sola al dato horneado del robot.
+  const vivo = useMercadoVivo()
+  const { filas, descartadas, total, fecha } = useMemo(
+    () => filasRadar(vivo.precios), [vivo.precios],
+  )
   const sectores = useMemo(() => rotacionSectores(filas, ruedas), [filas, ruedas])
 
   const ranking = useMemo(
@@ -69,7 +78,7 @@ export default function Radar({ onVerEmpresa }) {
       <div className="card radar-cabecera">
         <div className="radar-cab">
           <h2 style={{ margin: 0 }}>📡 Radar de rotación</h2>
-          {fecha && <span className="muted">cierre del {fechaCorta(fecha)}</span>}
+          <SelloVivo vivo={vivo} fecha={fecha ? fechaCorta(fecha) : null} />
         </div>
         <p className="muted" style={{ margin: '6px 0 0' }}>
           Qué se movió en la BVL durante <b>{plazo.etiqueta}</b>, con las{' '}
@@ -97,7 +106,7 @@ export default function Radar({ onVerEmpresa }) {
       <RadarResumen onVerEmpresa={onVerEmpresa} />
 
       {/* ── 2) El sonar: el mercado de un vistazo, en pantalla de submarino. */}
-      <RadarSonar filas={filas} ruedas={ruedas} plazo={plazo} onVerEmpresa={onVerEmpresa} />
+      <RadarSonar filas={filas} ruedas={ruedas} plazo={plazo} vivo={vivo} onVerEmpresa={onVerEmpresa} />
 
       {/* ── 3) El mundo: lo que llega de afuera, con el canal por el que llega.
              Va antes del muro y del ranking a propósito — más de un tercio del

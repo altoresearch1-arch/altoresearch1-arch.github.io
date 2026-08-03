@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { RASTREOS, firmaDe, leerFuerza, mundoDe, noticiasDe, noticiasOrdenadas, noticiasConEfecto, pesoDe, posiblesExplicaciones, tickersTocadosPorElMundo } from '../lib/radar'
+import SelloVivo from './SelloVivo'
 
 // 🟢 EL SONAR — el Radar como pantalla de submarino.
 //
@@ -46,7 +47,7 @@ function semilla(texto) {
   return Math.abs(h % 1000) / 1000
 }
 
-export default function RadarSonar({ filas, ruedas, plazo, onVerEmpresa }) {
+export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa }) {
   const [sel, setSel] = useState(null)
   const [verTodos, setVerTodos] = useState(false)
   // Para qué se enciende el sonar hoy. Arranca en «todo el plato»: el filtro
@@ -145,6 +146,7 @@ export default function RadarSonar({ filas, ruedas, plazo, onVerEmpresa }) {
           <b className={cuentas.anillo ? 'sonar-alerta' : ''}>
             {cuentas.anillo} fuera de rango
           </b>
+          {' '}<SelloVivo vivo={vivo} compacto />
         </span>
       </div>
 
@@ -395,7 +397,17 @@ export default function RadarSonar({ filas, ruedas, plazo, onVerEmpresa }) {
                     la BVL, no precio en vivo — y se dice. */}
                 <div className="sonar-precio">
                   <span className="sonar-precio-val">{elegido.moneda} {elegido.precio}</span>
-                  <span className="muted"> · cierre del {elegido.fechaCierre}</span>
+                  {/* De cuándo es ESTE precio. Por acción: que el Sonar esté
+                      en vivo no significa que esta acción haya negociado hoy
+                      — la BVL repite el último cierre de la que no operó. */}
+                  {elegido.envivo ? (
+                    <span className="muted">
+                      {' '}· <span className="sonar-precio-vivo">en vivo</span>
+                      {elegido.volumen?.ultima && <> · última operación {elegido.volumen.ultima.slice(11, 16)}</>}
+                    </span>
+                  ) : (
+                    <span className="muted"> · cierre del {elegido.fechaCierre}</span>
+                  )}
                 </div>
                 <div className="sonar-ficha-fz">{fz?.icono} {fz?.texto}</div>
 
