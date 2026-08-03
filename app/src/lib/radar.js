@@ -312,6 +312,42 @@ function ultimoHecho(ticker, hoyISO, hechosVivos) {
 // Al agregar una fila, las ventanas se corren solas: `atras=1` pasa a ser
 // «esta misma ventana vista en el cierre anterior», que es justo lo que la
 // firma necesita para saber si el contacto acaba de cruzar el anillo.
+// ── LAS RUEDAS QUE EL ROBOT NO ALCANZÓ A GUARDAR ─────────────────────────
+//
+// historicos.json se rehace solo en el cierre de las 22:23. Si el robot no
+// corre —el 03-ago-2026 llevaba dos días sin correr— el archivo se va
+// quedando ruedas atrás, y entonces «dos semanas» deja de medir dos semanas:
+// mide desde una fecha vieja hasta otra fecha vieja.
+//
+// Esto pega al final las ruedas que faltan, bajadas en vivo del mismo
+// endpoint de la BVL. Solo se agregan fechas POSTERIORES a la última del
+// archivo: nunca se reescribe un cierre ya guardado.
+function conCola(base, cola) {
+  if (!cola?.length) return base
+  const ultima = base[base.length - 1][0]
+  const nuevas = cola
+    .filter(([f, v]) => f > ultima && v > 0)
+    .sort((a, b) => (a[0] < b[0] ? -1 : 1))
+  return nuevas.length ? [...base, ...nuevas] : base
+}
+
+// Qué le falta al archivo: los tickers que el Radar realmente usa y la última
+// fecha guardada. Con esto lib/vivo.js sabe qué pedir y desde cuándo, sin
+// tener que conocer las reglas del Radar.
+export function huecoHistorico() {
+  const tickers = []
+  let ultima = null
+  for (const [ticker, h] of Object.entries(historicosData.historicos || {})) {
+    if (!EMPRESAS.has(ticker) || h.pocoNegociada) continue
+    const vals = (h.valores || []).filter(([, v]) => v > 0)
+    if (vals.length < 21) continue
+    tickers.push(ticker)
+    const f = vals[vals.length - 1][0]
+    if (!ultima || f > ultima) ultima = f
+  }
+  return { tickers, ultima }
+}
+
 function conUltimoPrecio(base, px) {
   const precio = px?.precio
   if (!(precio > 0)) return base
@@ -329,7 +365,7 @@ function conUltimoPrecio(base, px) {
 // directo de la BVL. Cuando llega, manda sobre el precios.json horneado y el
 // Radar entero —plato, ranking, sectores, candente— se recalcula con él. Sin
 // él, todo funciona igual que siempre con el dato del robot.
-export function filasRadar(vivos = null, hechosVivos = null) {
+export function filasRadar(vivos = null, hechosVivos = null, cola = null) {
   const filas = []
   let descartadas = 0
   const fechas = {}
@@ -337,11 +373,15 @@ export function filasRadar(vivos = null, hechosVivos = null) {
   for (const [ticker, h] of Object.entries(historicosData.historicos || {})) {
     const emp = EMPRESAS.get(ticker)
     if (!emp) continue
-    const base = (h.valores || []).filter(([, v]) => v > 0)
-    if (base.length < 21) { descartadas++; continue }
+    const guardadas = (h.valores || []).filter(([, v]) => v > 0)
+    if (guardadas.length < 21) { descartadas++; continue }
     // Regla 1: el precio congelado no es una tendencia, es un archivo viejo.
     if (h.pocoNegociada) { descartadas++; continue }
 
+    // Primero las ruedas que el robot no alcanzó a guardar, después el precio
+    // de hoy. En ese orden: la cola trae cierres cerrados, el precio de hoy
+    // es la rueda en curso.
+    const base = conCola(guardadas, cola?.[ticker])
     const px = vivos?.[ticker] || preciosData.precios?.[ticker]
     const valores = conUltimoPrecio(base, px)
     const fechaCierre = valores[valores.length - 1][0]

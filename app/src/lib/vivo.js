@@ -232,6 +232,53 @@ export async function bajarHechosVivos({ signal, dias = HECHOS_DIAS } = {}) {
   return porTicker
 }
 
+// ── 📈 LAS RUEDAS QUE LE FALTAN AL ARCHIVO ───────────────────────────────
+//
+// El histórico de cierres sale del mismo host y también pasa el CORS:
+//   GET /v1/stock-quote/share-values/{NEMONICO}?startDate=&endDate=
+//
+// Esto NO es para tener el histórico en vivo — los cierres viejos no cambian,
+// y recalcular la volatilidad cada 45 s sería absurdo. Es para REPARAR el
+// hueco cuando el robot lleva días sin correr: sin esto, «dos semanas» mide
+// desde una fecha vieja hasta otra fecha vieja, y toda la fuerza del Sonar
+// queda corrida.
+//
+// Va de a pocos y una sola vez por visita: son ~45 llamadas y no hay ninguna
+// razón para repetirlas — un cierre ya cerrado no se mueve.
+const CONCURRENCIA = 6
+
+async function enTandas(items, n, fn) {
+  const salida = []
+  for (let i = 0; i < items.length; i += n) {
+    salida.push(...await Promise.all(items.slice(i, i + n).map(fn)))
+  }
+  return salida
+}
+
+export async function bajarColaHistorica({ tickers, desde, hasta, signal } = {}) {
+  const pide = async (ticker) => {
+    const nem = preciosData.precios?.[ticker]?.nemonico
+    if (!nem) return null
+    try {
+      const r = await fetch(
+        `https://dataondemand.bvl.com.pe/v1/stock-quote/share-values/${encodeURIComponent(nem)}`
+        + `?startDate=${desde}&endDate=${hasta}`,
+        { signal },
+      )
+      if (!r.ok) return null
+      const d = await r.json()
+      // Los valores vienen como texto ("2.183"): a número acá, que es donde
+      // se sabe de dónde salieron.
+      const vals = (d?.values || [])
+        .map(([f, v]) => [f, Number(v)])
+        .filter(([f, v]) => f && Number.isFinite(v) && v > 0)
+      return vals.length ? [ticker, vals] : null
+    } catch { return null }
+  }
+  const pares = (await enTandas(tickers, CONCURRENCIA, pide)).filter(Boolean)
+  return Object.fromEntries(pares)
+}
+
 // ── El hook que usa el Radar ─────────────────────────────────────────────
 //
 // ESTADOS, y cada uno dice una cosa distinta al usuario:
@@ -332,4 +379,38 @@ export function useMercadoVivo({ activo = true, cada = CADA_MS } = {}) {
   }, [activo, cada, consultar])
 
   return { precios, hechos, estado, actualizado, error, refrescar: consultar }
+}
+
+// Repara el hueco UNA vez por visita. `hueco` es lo que devuelve
+// huecoHistorico() de lib/radar.js: los tickers que el Radar usa y la última
+// fecha que el archivo alcanzó a guardar.
+export function useColaHistorica(hueco) {
+  const [cola, setCola] = useState(null)
+  const [reparando, setReparando] = useState(false)
+  const yaFue = useRef(false)
+
+  const { tickers, ultima } = hueco || {}
+
+  useEffect(() => {
+    if (yaFue.current || !ultima || !tickers?.length) return undefined
+    const hasta = partesLima().fecha
+    // OJO: `startDate` de la BVL es EXCLUSIVO — comprobado el 03-ago-2026.
+    // Pedir desde el 31 devuelve [] y pedir desde el 30 devuelve el 31. Por
+    // eso se manda la última fecha QUE YA TENEMOS, sin sumarle un día: sumarlo
+    // se saltaba justo la rueda que faltaba.
+    const desde = ultima
+    // El archivo ya está al día: no se pide nada. Es el caso normal cuando el
+    // robot corrió anoche, y entonces esto no cuesta ni una llamada.
+    if (desde >= hasta) return undefined
+
+    yaFue.current = true
+    const ac = new AbortController()
+    setReparando(true)
+    bajarColaHistorica({ tickers, desde, hasta, signal: ac.signal })
+      .then((c) => { if (!ac.signal.aborted && Object.keys(c).length) setCola(c) })
+      .finally(() => { if (!ac.signal.aborted) setReparando(false) })
+    return () => ac.abort()
+  }, [tickers, ultima])
+
+  return { cola, reparando }
 }

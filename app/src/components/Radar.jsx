@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
-import { PLAZOS, filasRadar, rotacionSectores, leerFuerza, noticiasGeneradas } from '../lib/radar'
-import { useMercadoVivo } from '../lib/vivo'
+import { PLAZOS, filasRadar, huecoHistorico, rotacionSectores, leerFuerza, noticiasGeneradas } from '../lib/radar'
+import { useColaHistorica, useMercadoVivo } from '../lib/vivo'
 import RadarCandente from './RadarCandente'
 import MuroNoticias from './MuroNoticias'
 import RadarHistoria from './RadarHistoria'
@@ -46,8 +46,14 @@ export default function Radar({ onVerEmpresa }) {
   // el ranking, los sectores. Si la BVL no contesta (o es domingo), `precios`
   // queda en null y filasRadar cae sola al dato horneado del robot.
   const vivo = useMercadoVivo()
+  // 📈 Si el robot no corrió, el archivo de cierres se quedó ruedas atrás y
+  // los plazos medirían mal. Esto baja de la BVL solo las ruedas que faltan,
+  // una vez por visita. Con el archivo al día no cuesta ni una llamada.
+  const hueco = useMemo(() => huecoHistorico(), [])
+  const { cola } = useColaHistorica(hueco)
   const { filas, descartadas, total, fecha } = useMemo(
-    () => filasRadar(vivo.precios, vivo.hechos), [vivo.precios, vivo.hechos],
+    () => filasRadar(vivo.precios, vivo.hechos, cola),
+    [vivo.precios, vivo.hechos, cola],
   )
   const sectores = useMemo(() => rotacionSectores(filas, ruedas), [filas, ruedas])
 
