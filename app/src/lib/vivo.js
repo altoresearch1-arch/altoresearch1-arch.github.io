@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import preciosData from '../data/precios.json'
+import hechosData from '../data/hechos.json'
 
 // ═════════════════════════════════════════════════════════════════════════
 // 🔴 EL MERCADO EN VIVO — la app le pregunta a la BVL, sin intermediarios.
@@ -35,6 +36,22 @@ import preciosData from '../data/precios.json'
 // ═════════════════════════════════════════════════════════════════════════
 
 const URL_BVL = 'https://dataondemand.bvl.com.pe/v1/stock-quote/market'
+// 📄 Los Hechos de Importancia salen del MISMO host, y por eso también pasan
+// el CORS. La prensa no: se probaron los 8 feeds del robot desde el dominio
+// real (03-ago-2026) y 7 los bloquea el navegador — Google News, Gestión, El
+// Comercio, Rumbo Minero, Energiminas, Bloomberg Línea y FXStreet. Solo El
+// País deja leer. O sea que la prensa SIGUE necesitando al robot; el Hecho
+// oficial, no.
+//
+// Y el Hecho es justamente el que importa para esto: el propio repo midió
+// (31-jul-2026) que los titulares LLEGAN DESPUÉS del Hecho de Importancia.
+// Acá se gana la noticia en su primer minuto, no cuando la prensa la levanta.
+const URL_HECHOS = 'https://dataondemand.bvl.com.pe/v1/corporate-actions'
+// Sin rpjCode el endpoint devuelve el mercado ENTERO: 174 Hechos de los
+// últimos 6 días entraron en una sola página. Preguntar empresa por empresa
+// serían 152 llamadas por vuelta y sería inaceptable desde un navegador.
+const HECHOS_DIAS = 7
+const HECHOS_SIZE = 300
 
 // Perú es UTC-5 todo el año (no hay horario de verano), igual que asume el
 // extractor. Por eso alcanza con restarle 5 horas al UTC y leer los campos
@@ -159,6 +176,62 @@ export async function bajarMercadoVivo({ signal } = {}) {
   return { precios, filas: filas.length, tickers: Object.keys(precios).length }
 }
 
+// rpjCode de la BVL -> ticker nuestro. Sale de hechos.json, que ya guarda el
+// rpj de cada empresa.
+const POR_RPJ = new Map()
+for (const [ticker, h] of Object.entries(hechosData.hechos || {})) {
+  if (h?.rpj) POR_RPJ.set(h.rpj, ticker)
+}
+
+const menosDias = (iso, n) =>
+  new Date(new Date(`${iso}T12:00:00Z`).getTime() - n * 86400000).toISOString().slice(0, 10)
+
+// ── 📄 LOS HECHOS DE IMPORTANCIA, EN SU PRIMER MINUTO ────────────────────
+// Devuelve { TICKER: [hecho, …] } con los más recientes primero. Solo los
+// últimos días: lo viejo ya vive en hechos.json y no hace falta traerlo dos
+// veces.
+export async function bajarHechosVivos({ signal, dias = HECHOS_DIAS } = {}) {
+  const hoy = partesLima().fecha
+  const r = await fetch(URL_HECHOS, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      page: 1, size: HECHOS_SIZE, search: '',
+      startDate: menosDias(hoy, dias), endDate: hoy,
+    }),
+    signal,
+  })
+  if (!r.ok) throw new Error(`BVL (hechos) respondió ${r.status}`)
+  const doc = await r.json()
+
+  const porTicker = {}
+  for (const it of doc?.content || []) {
+    const ticker = POR_RPJ.get(it?.rpjCode)
+    if (!ticker) continue
+    const reg = it.registerDate || ''
+    const fecha = reg.slice(0, 10)
+    if (!fecha) continue
+    const titulo = (it.observation || '').trim()
+    const categoria = (it.codes?.[0]?.descCodeHHII || '').trim()
+    // Mismo criterio que fetch_hechos.py: muchos HI llegan con observation en
+    // blanco y ahí la CATEGORÍA es el contenido (el de Petroperú del 02-ago
+    // es uno). Exigir título los botaría.
+    if (!titulo && !categoria) continue
+    const ruta = it.documents?.[0]?.path
+    const h = { fecha, titulo, categoria, envivo: true }
+    // La HORA, que el archivo horneado tira: recorta registerDate a 10
+    // caracteres. Saber que un Hecho salió 07:08 y no "hoy" es la diferencia
+    // entre explicar la rueda y llegar tarde a mirarla.
+    if (reg.length >= 16) h.hora = reg.slice(11, 16)
+    if (ruta) h.pdf = `https://documents.bvl.com.pe${ruta}`
+    ;(porTicker[ticker] ||= []).push(h)
+  }
+  for (const lista of Object.values(porTicker)) {
+    lista.sort((a, b) => (`${b.fecha} ${b.hora || ''}`).localeCompare(`${a.fecha} ${a.hora || ''}`))
+  }
+  return porTicker
+}
+
 // ── El hook que usa el Radar ─────────────────────────────────────────────
 //
 // ESTADOS, y cada uno dice una cosa distinta al usuario:
@@ -176,6 +249,7 @@ export async function bajarMercadoVivo({ signal } = {}) {
 export function useMercadoVivo({ activo = true, cada = CADA_MS } = {}) {
   const [estado, setEstado] = useState('inicial')
   const [precios, setPrecios] = useState(null)
+  const [hechos, setHechos] = useState(null)
   const [actualizado, setActualizado] = useState(null)
   const [error, setError] = useState(null)
 
@@ -189,26 +263,35 @@ export function useMercadoVivo({ activo = true, cada = CADA_MS } = {}) {
     aborta.current?.abort()
     const ac = new AbortController()
     aborta.current = ac
-    try {
-      const { precios: p, tickers } = await bajarMercadoVivo({ signal: ac.signal })
-      if (!vivo.current || ac.signal.aborted) return
+    // Las dos llamadas van juntas y NINGUNA puede tumbar a la otra: que la
+    // BVL no publique cotizaciones (le pasa) no es razón para quedarse sin
+    // los Hechos, y al revés igual.
+    const [mercado, hi] = await Promise.allSettled([
+      bajarMercadoVivo({ signal: ac.signal }),
+      bajarHechosVivos({ signal: ac.signal }),
+    ])
+    if (!vivo.current || ac.signal.aborted) return
+
+    if (hi.status === 'fulfilled' && Object.keys(hi.value).length) setHechos(hi.value)
+
+    if (mercado.status === 'fulfilled') {
       fallos.current = 0
       setError(null)
       setActualizado(partesLima().hora)
-      if (tickers > 0) {
-        setPrecios(p)
+      if (mercado.value.tickers > 0) {
+        setPrecios(mercado.value.precios)
         setEstado(hayRueda() ? 'vivo' : 'cerrado')
       } else {
         // Sin cotizaciones no se pisa lo que ya teníamos: un archivo viejo es
         // mejor que una pantalla vacía.
         setEstado('vacio')
       }
-    } catch (e) {
-      if (ac.signal.aborted || !vivo.current) return
-      fallos.current += 1
-      setError(e?.message || String(e))
-      setEstado('error')
+      return
     }
+
+    fallos.current += 1
+    setError(mercado.reason?.message || String(mercado.reason))
+    setEstado('error')
   }, [])
 
   useEffect(() => {
@@ -248,5 +331,5 @@ export function useMercadoVivo({ activo = true, cada = CADA_MS } = {}) {
     }
   }, [activo, cada, consultar])
 
-  return { precios, estado, actualizado, error, refrescar: consultar }
+  return { precios, hechos, estado, actualizado, error, refrescar: consultar }
 }

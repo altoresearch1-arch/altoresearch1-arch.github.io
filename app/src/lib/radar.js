@@ -267,8 +267,17 @@ function dividendoCerca(ticker, desdeISO, hastaISO, precio, moneda) {
 // ordenado del más nuevo al más viejo). Es el puente con el lado noticias:
 // una acción que se salió de su rango Y publicó algo esta semana es otra
 // cosa que una que se movió sola.
-function ultimoHecho(ticker, hoyISO) {
-  const h = hechosData.hechos?.[ticker]?.hechos?.[0]
+// `hechosVivos` (opcional) es lo que baja lib/vivo.js del mismo endpoint de
+// la BVL, sin esperar al robot. Gana el más reciente, y con fecha empatada
+// gana el vivo porque trae la HORA. Esto es lo que hace que un Hecho salga en
+// el Sonar a los segundos de publicarse: el 03-ago-2026 Alicorp publicó su
+// compra a Unilever a las 07:08 y el archivo del repo seguía clavado en el 24
+// de julio.
+function ultimoHecho(ticker, hoyISO, hechosVivos) {
+  const guardado = hechosData.hechos?.[ticker]?.hechos?.[0]
+  const fresco = hechosVivos?.[ticker]?.[0]
+  const h = fresco?.fecha && (!guardado?.fecha || fresco.fecha >= guardado.fecha)
+    ? fresco : guardado
   if (!h?.fecha) return null
   const dias = Math.round((new Date(hoyISO) - new Date(h.fecha)) / 86400000)
   return {
@@ -276,6 +285,8 @@ function ultimoHecho(ticker, hoyISO) {
     titulo: h.titulo || '',
     categoria: h.categoria || '',
     pdf: h.pdf || null, // el documento oficial: siempre a un clic
+    hora: h.hora || null,
+    envivo: !!h.envivo,
     dias: isFinite(dias) && dias >= 0 ? dias : null,
   }
 }
@@ -318,7 +329,7 @@ function conUltimoPrecio(base, px) {
 // directo de la BVL. Cuando llega, manda sobre el precios.json horneado y el
 // Radar entero —plato, ranking, sectores, candente— se recalcula con él. Sin
 // él, todo funciona igual que siempre con el dato del robot.
-export function filasRadar(vivos = null) {
+export function filasRadar(vivos = null, hechosVivos = null) {
   const filas = []
   let descartadas = 0
   const fechas = {}
@@ -415,7 +426,7 @@ export function filasRadar(vivos = null) {
       // global: en una misma pantalla puede haber contactos con precio de
       // hace segundos y otros que no negocian desde el jueves.
       envivo: !!px?.envivo,
-      hecho: ultimoHecho(ticker, fechaCierre),
+      hecho: ultimoHecho(ticker, fechaCierre, hechosVivos),
     })
   }
 

@@ -47,7 +47,7 @@ export default function Radar({ onVerEmpresa }) {
   // queda en null y filasRadar cae sola al dato horneado del robot.
   const vivo = useMercadoVivo()
   const { filas, descartadas, total, fecha } = useMemo(
-    () => filasRadar(vivo.precios), [vivo.precios],
+    () => filasRadar(vivo.precios, vivo.hechos), [vivo.precios, vivo.hechos],
   )
   const sectores = useMemo(() => rotacionSectores(filas, ruedas), [filas, ruedas])
 

@@ -302,7 +302,14 @@ export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa })
                   <span className="sonar-item-fz">
                     {c.anomalia ? '🔥 ' : ''}{Math.abs(c.fz).toFixed(1)}× su vaivén
                     {c.hecho?.dias != null && c.hecho.dias <= 12 && (
-                      <span className="sonar-item-hi"> · 📄 hecho hace {c.hecho.dias}d</span>
+                      // Con la HORA cuando el Hecho es de hoy y vino en vivo:
+                      // «📄 HI 07:08» dice cuándo mirar la rueda; «hace 0d»
+                      // no dice nada.
+                      <span className={'sonar-item-hi' + (c.hecho.envivo && c.hecho.dias === 0 ? ' nuevo' : '')}>
+                        {' '}· 📄 {c.hecho.dias === 0 && c.hecho.hora
+                          ? `HI ${c.hecho.hora}`
+                          : `hecho hace ${c.hecho.dias}d`}
+                      </span>
                     )}
                     {cuantas > 0 && (
                       <span className="sonar-item-n"> · {cuantas} titular{cuantas > 1 ? 'es' : ''}</span>
@@ -521,7 +528,11 @@ export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa })
                       <b>Hecho de Importancia</b>{' '}
                       {elegido.hecho.dias === 0 ? 'hoy' : elegido.hecho.dias === 1 ? 'ayer'
                         : `hace ${elegido.hecho.dias} días`}
+                      {elegido.hecho.hora && <b> a las {elegido.hecho.hora}</b>}
                       {elegido.hecho.categoria && <> · {elegido.hecho.categoria.toLowerCase()}</>}
+                      {elegido.hecho.titulo && (
+                        <span className="sonar-hi-tit"> — {elegido.hecho.titulo}</span>
+                      )}
                     </span>
                   </a>
                 )}
