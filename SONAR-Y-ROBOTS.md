@@ -1,6 +1,11 @@
 # 📡 El Sonar y los robots — cómo funciona hoy
 
 > Documento de traspaso. Estado al **3 de agosto de 2026**.
+>
+> 👉 **Antes de proponer cualquier cambio, lee [INVARIANTES.md](INVARIANTES.md)** —
+> lo que nunca debe romperse y por qué. Este documento cuenta qué hace el
+> sistema; ese cuenta qué no se puede tocar, y es el que evita que una "mejora"
+> razonable resulte destructiva.
 > Si vas a tocar algo de acá, lee primero los comentarios del archivo que vas a
 > tocar: este repo documenta el **porqué** dentro del código, y esos comentarios
 > mandan sobre este resumen si alguna vez se contradicen.
