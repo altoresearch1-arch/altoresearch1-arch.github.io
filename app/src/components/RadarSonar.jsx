@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { RASTREOS, firmaDe, leerFuerza, mundoDe, noticiasDe, noticiasOrdenadas, noticiasConEfecto, pesoDe, posiblesExplicaciones, tickersTocadosPorElMundo } from '../lib/radar'
 import SelloVivo from './SelloVivo'
 import SonarGrafica from './SonarGrafica'
@@ -57,6 +57,47 @@ export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa })
   // 'fuerza' = qué se salió de su rango (detectar). 'pct' = qué se movió más
   // en plata (tomar). Arranca en fuerza porque es lo que el plato ya dibuja.
   const [orden, setOrden] = useState('fuerza')
+
+  // 🔍 LA LUPA. El plato tiene un problema de geometría que no se arregla
+  // dibujando mejor: los contactos que se movieron NORMAL se apilan cerca del
+  // centro, que es justo donde menos sitio hay. Con 45 puntos ahí las
+  // etiquetas se pisan y los círculos chicos (4.5 px de radio) no se
+  // distinguen.
+  //
+  // Se resuelve moviendo el viewBox, no escalando con CSS: así el SVG
+  // REDIBUJA a la nueva escala y los bordes quedan nítidos en vez de
+  // pixelados. Y como el texto también escala, las etiquetas se agrandan solas.
+  const [vista, setVista] = useState({ z: 1, x: CENTRO, y: CENTRO })
+  const arrastre = useRef(null)
+
+  // El centro visible se limita para que el plato no se pueda perder de vista:
+  // con la mitad del alto de la ventana como margen, nunca te quedas mirando
+  // el vacío de afuera.
+  const encuadrar = (z, x, y) => {
+    const medio = 200 / z
+    const lim = (v) => Math.max(medio, Math.min(400 - medio, v))
+    return { z, x: lim(x), y: lim(y) }
+  }
+  const zoomear = (dz) => setVista((v) => {
+    const z = Math.max(1, Math.min(4, +(v.z * dz).toFixed(2)))
+    return encuadrar(z, v.x, v.y)
+  })
+  const resetear = () => setVista({ z: 1, x: CENTRO, y: CENTRO })
+
+  const alArrastrar = (e) => {
+    if (!arrastre.current) return
+    const { x0, y0, vx, vy, caja } = arrastre.current
+    // De píxeles de pantalla a unidades del viewBox: sin esto el plato se
+    // mueve más o menos que el dedo según el tamaño de la pantalla.
+    const escala = (400 / vista.z) / caja.width
+    setVista((v) => encuadrar(v.z, vx - (e.clientX - x0) * escala,
+                              vy - (e.clientY - y0) * escala))
+  }
+  const soltar = (e) => {
+    arrastre.current = null
+    e.currentTarget.releasePointerCapture?.(e.pointerId)
+  }
+  const ancho = 400 / vista.z
 
   const { contactos, sectores } = useMemo(() => {
     const conDatos = filas.filter((f) => f.fuerzas[ruedas] != null && f.retornos[ruedas] != null)
@@ -190,8 +231,37 @@ export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa })
       </div>
 
       <div className="sonar-cuerpo">
-        <div className="sonar-plato">
-          <svg viewBox="0 0 400 400" role="img" aria-label="Sonar del mercado">
+        <div className={'sonar-plato' + (vista.z > 1 ? ' ampliado' : '')}>
+          {/* 🔍 LA LUPA. Botones y no rueda del ratón: secuestrar el scroll de
+              la página para hacer zoom es hostil, y en celular la rueda no
+              existe. Con el plato ampliado se arrastra para moverse. */}
+          <div className="sonar-lupa" role="group" aria-label="Ampliar el sonar">
+            <button onClick={() => zoomear(1 / 1.4)} disabled={vista.z <= 1}
+                    aria-label="Alejar">−</button>
+            <button className="sonar-lupa-z" onClick={resetear}
+                    disabled={vista.z === 1}
+                    title="Volver a ver el plato entero">
+              {vista.z === 1 ? '🔍' : `${vista.z.toFixed(1)}×`}
+            </button>
+            <button onClick={() => zoomear(1.4)} disabled={vista.z >= 4}
+                    aria-label="Ampliar">+</button>
+          </div>
+          <svg
+            viewBox={`${vista.x - ancho / 2} ${vista.y - ancho / 2} ${ancho} ${ancho}`}
+            role="img" aria-label="Sonar del mercado"
+            onDoubleClick={resetear}
+            onPointerDown={(e) => {
+              if (vista.z === 1) return
+              arrastre.current = {
+                x0: e.clientX, y0: e.clientY, vx: vista.x, vy: vista.y,
+                caja: e.currentTarget.getBoundingClientRect(),
+              }
+              e.currentTarget.setPointerCapture?.(e.pointerId)
+            }}
+            onPointerMove={alArrastrar}
+            onPointerUp={soltar}
+            onPointerCancel={soltar}
+          >
             <defs>
               <radialGradient id="sonarFondo">
                 <stop offset="0%" stopColor="#0b2a18" />
