@@ -4,16 +4,20 @@ name: Robot diario y despliegue
 #  ¿Qué hace esto?
 #  - CIERRE (noche, Lun-Vie): baja TODO lo diario (precios, históricos,
 #    dividendos, hechos, BEM), commitea y republica. Igual que siempre.
-#  - HECHOS (cada 30 min, horario de mercado): solo Hechos de Importancia +
-#    BEM. El BEM es MENSUAL (fetch_bem tiene caché y no hace ruido), pero los
-#    hechos sí caen a cualquier hora → la web los muestra casi en vivo.
+#  - HECHOS (CADA 10 MIN, de 8:07 a 21:57 Perú — no solo en horario de rueda):
+#    Hechos de Importancia + BEM. El BEM es MENSUAL (fetch_bem tiene caché y no
+#    hace ruido), pero los hechos sí caen a cualquier hora → la web los muestra
+#    casi en vivo. Desde el 03-ago-2026 la app además los pide DIRECTO a la BVL
+#    desde el navegador (app/src/lib/vivo.js), así que esto es el respaldo.
 #  - PRECIOS + PRENSA (CADA 10 MIN, 9:00-16:59 Perú): refresca precio,
 #    históricos, el acumulador intradía y el barrido de portadas (Perú y
 #    mundo). La red dirigida de Google News NO va acá — serían ~4,560
 #    consultas diarias y Google corta mucho antes; esa corre en el cierre.
-#    OJO CON EL RUIDO: con ~48 corridas al día, el repo puede recibir decenas
-#    de commits de datos por jornada. Se commitea solo si algo cambió, pero en
-#    horario de mercado los precios cambian casi siempre.
+#    OJO CON EL RUIDO: son ~133 corridas al día (84 de hechos + 48 de precios +
+#    el cierre), así que el repo puede recibir decenas de commits de datos por
+#    jornada. Se commitea solo si algo cambió — y desde el 03-ago-2026 eso ya es
+#    cierto también para intradia.json, que antes difería siempre por su sello
+#    de hora y commiteaba aunque no se moviera un precio.
 #  - Solo se COMMITEA Y REPUBLICA si los datos realmente cambiaron (si no,
 #    el run termina en ~1 min sin tocar nada — cero ruido en el historial).
 #  - La PC de Jair NO necesita estar prendida: todo corre en GitHub
@@ -34,14 +38,15 @@ on:
     #    MINEM) salen a CUALQUIER hora — también de tarde/noche: Los Portales 17:47,
     #    Credicorp 20:08 (vistos 10-jul). Antes la ventana moría 16:37 y esos hechos
     #    recién los agarraba el cierre de las 22:23 (horas tarde). Ahora se cubre todo
-    #    el día laboral hasta la noche, en cadencia continua de 30 min:
+    #    el día laboral hasta la noche, en cadencia continua de 10 min:
     #    a) 13-23 UTC == 8:07 a 18:37 Perú (Lun-Vie).
     - cron: '7,17,27,37,47,57 13-23 * * 1-5'
     #    b) 0-2 UTC == 19:07 a 21:37 Perú. OJO: en UTC eso ya es el día SIGUIENTE,
     #       por eso el rango de días es 2-6 (mar-sáb UTC = lun-vie noche en Perú).
     - cron: '7,17,27,37,47,57 0-2 * * 2-6'
     # 3) PRECIOS + PRENSA: CADA 10 MINUTOS en horario de rueda.
-    #    14-21 UTC == 9:00 a 16:59 Perú, Lun-Vie. Son ~48 corridas por día.
+    #    14-21 UTC == 9:00 a 16:59 Perú, Lun-Vie. Son ~48 corridas por día SOLO
+    #    de precios; sumadas a las ~84 de hechos, el total diario es ~133.
     #
     #    QUÉ CORRE Y QUÉ NO, con la cuenta hecha (02-ago-2026):
     #      · precios      1 POST a la BVL por corrida ->    48/día   trivial
@@ -91,7 +96,7 @@ jobs:
       cambios: ${{ steps.commit.outputs.cambios }}
       # 'no' en las corridas de datos puros: se commitea el JSON pero NO se
       # rehace la web. Así el archivo intradía queda completo y Pages solo
-      # trabaja cada 30 min.
+      # trabaja cada 30 min (los despliegues siguen siendo :03 y :33).
       desplegar: ${{ steps.modo.outputs.desplegar }}
     steps:
       - uses: actions/checkout@v4
@@ -168,7 +173,7 @@ jobs:
 
   # 2) Build de la PWA y publicación en GitHub Pages.
   #    Corre tras 'actualizar-datos' SOLO si los datos cambiaron (o en push /
-  #    disparo manual). Así los runs de cada 30 min sin novedades no gastan
+  #    disparo manual). Así los runs sin novedades no gastan
   #    un despliegue de Pages.
   desplegar:
     needs: [actualizar-datos]

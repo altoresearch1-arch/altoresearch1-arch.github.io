@@ -61,6 +61,24 @@ La consola de Windows usa cp1252 y revienta con `UnicodeEncodeError`. La guarda
 fallaría **justo en el momento en que tiene que proteger**. Se descubrió
 probándola.
 
+En el resto de scripts los emojis se toleran porque `actualizar_todo.py` fuerza
+`PYTHONIOENCODING=utf-8` en el subproceso. Pero si corres uno **a mano** en
+Windows, sigue tronando: es la única razón por la que estos dos archivos van sin
+emojis pase lo que pase.
+
+### 7. No todos los extractores llevan guarda, y es deliberado
+El criterio es **frecuencia × daño**, no "ponerlas en todos lados":
+
+| | |
+|---|---|
+| `fetch_precios` | cada 10 min y **borraba** precios → guarda obligatoria |
+| `fetch_hechos`, `fetch_historicos` | frecuentes y sobrescriben → guarda |
+| `fetch_noticias` | **fusiona** en vez de reemplazar → no hace falta |
+| El resto | 1 vez al día en el cierre → riesgo bajo |
+
+Poner guardas en los 20 sería sobreingeniería y daría una falsa sensación de
+cobertura. Si añades un extractor, decide por este criterio y **anótalo aquí**.
+
 ---
 
 ## 🤖 El robot

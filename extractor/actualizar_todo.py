@@ -141,7 +141,13 @@ def correr(script, args=None):
     inicio = time.time()
     cmd = [sys.executable, os.path.join(AQUI, script)] + (args or [])
     print(f"\n{'='*60}\n>> {script}\n{'='*60}", flush=True)
-    r = subprocess.run(cmd, cwd=RAIZ)
+    # UTF-8 A LA FUERZA, y en un solo sitio para los 20 scripts. La consola de
+    # Windows usa cp1252: cualquier print con emoji revienta con
+    # UnicodeEncodeError y tumba el paso entero. En GitHub Actions (Linux) no
+    # pasa, así que el fallo solo aparece corriendo el robot a mano acá — que
+    # es justo cuando uno está depurando y menos ganas tiene de pelear con eso.
+    entorno = {**os.environ, "PYTHONIOENCODING": "utf-8"}
+    r = subprocess.run(cmd, cwd=RAIZ, env=entorno)
     dur = time.time() - inicio
     estado = "OK" if r.returncode == 0 else f"FALLÓ (código {r.returncode})"
     print(f"<< {script}: {estado} en {dur:.0f}s", flush=True)
