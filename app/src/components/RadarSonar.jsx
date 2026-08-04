@@ -163,6 +163,15 @@ export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa })
     const sectores = secs.map((sector, i) => {
       const ang = (i * paso) + paso / 2 - 90
       const rad = (ang * Math.PI) / 180
+      // El TRIÁNGULO DE PASTEL entero, para poder tocarlo. Antes solo el
+      // nombre abría la cuña, y el nombre mide 8 px: el gesto natural es
+      // tocar el pedazo, no la etiqueta.
+      const punto = (grados) => {
+        const r = (grados * Math.PI) / 180
+        return `${CENTRO + Math.cos(r) * RADIO},${CENTRO + Math.sin(r) * RADIO}`
+      }
+      const desde = i * paso - 90
+      const hasta = (i + 1) * paso - 90
       return {
         sector,
         x: CENTRO + Math.cos(rad) * (RADIO + 22),
@@ -170,6 +179,8 @@ export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa })
         // línea divisoria al inicio de la cuña
         lx: CENTRO + Math.cos(((i * paso - 90) * Math.PI) / 180) * RADIO,
         ly: CENTRO + Math.sin(((i * paso - 90) * Math.PI) / 180) * RADIO,
+        d: `M ${CENTRO} ${CENTRO} L ${punto(desde)} `
+          + `A ${RADIO} ${RADIO} 0 ${paso > 180 ? 1 : 0} 1 ${punto(hasta)} Z`,
       }
     })
     return { contactos, sectores }
@@ -313,6 +324,24 @@ export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa })
             </defs>
 
             <circle cx={CENTRO} cy={CENTRO} r={RADIO} fill="url(#sonarFondo)" />
+
+            {/* 🍕 EL PEDAZO DE PASTEL, tocable entero. Va lo más abajo posible
+                en el orden de pintado: los contactos se dibujan después y
+                quedan encima, así tocar un punto sigue abriendo su ficha y no
+                la cuña. */}
+            {!sectorAbierto && sectores.map((s) => (
+              <path
+                key={s.sector}
+                d={s.d}
+                className="sonar-cuna"
+                role="button"
+                tabIndex={0}
+                onClick={() => abrirCuna(s.sector)}
+                onKeyDown={(e) => { if (e.key === 'Enter') abrirCuna(s.sector) }}
+              >
+                <title>{`${NOMBRE_SECTOR[s.sector] || s.sector} — tócalo para ver solo este sector`}</title>
+              </path>
+            ))}
 
             {/* Anillos: el de 1× es EL umbral, por eso va marcado distinto */}
             {[1, 2, 3].map((n) => (

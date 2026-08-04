@@ -10177,6 +10177,19 @@ a.link {
 /* ══════════ 🍕 LA CUÑA ABIERTA ══════════ */
 /* El nombre del sector va donde estaban las etiquetas de las cuñas, y ES el
    botón de salida: no hay que buscar cómo volver. */
+/* El pedazo de pastel. Invisible hasta que lo apuntas: el plato no puede
+   parecer un menú de doce botones, pero al pasar por encima tiene que quedar
+   clarísimo que se puede abrir. */
+.sonar-cuna {
+  fill: transparent;
+  cursor: pointer;
+  transition: fill 0.15s;
+}
+.sonar-cuna:hover,
+.sonar-cuna:focus-visible {
+  fill: rgba(61, 220, 132, 0.09);
+  outline: none;
+}
 .sonar-etq-sector.abrible { cursor: pointer; }
 .sonar-etq-sector.abrible:hover,
 .sonar-etq-sector.abrible:focus-visible {
