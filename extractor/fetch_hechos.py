@@ -21,7 +21,8 @@ Regla de Oro #1: solo lo que la BVL/SMV publica; cero datos inventados.
 import json, os, time
 from datetime import date, timedelta
 
-from guardas import se_puede_escribir
+from guardas import cambio_real, se_puede_escribir
+from heartbeat import latir, OK, GUARDA, ERROR
 
 import requests
 
@@ -115,11 +116,15 @@ def main():
     # 🛡️ Mismo cortafuegos que en precios: si el API no respondió por nadie,
     # el archivo anterior vale más que uno vacío.
     if not se_puede_escribir(out, "hechos", ok, "HECHOS DE IMPORTANCIA"):
+        latir("hechos", estado=GUARDA, error="el API no devolvió hechos",
+              cambios=False, registros=ok)
         return
 
+    cambios = cambio_real(out, "hechos", salida)
     with open(out, "w", encoding="utf-8") as f:
         json.dump(doc, f, ensure_ascii=False, indent=1)
     print(f"\nEscrito: {out}  ({ok}/{len(salida)} con datos)")
+    latir("hechos", estado=OK, cambios=cambios, registros=ok)
 
 
 if __name__ == "__main__":

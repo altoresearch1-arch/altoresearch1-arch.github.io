@@ -50,6 +50,30 @@ def _cuantos(ruta, clave, campo="encontrado"):
     return sum(1 for v in datos.values() if isinstance(v, dict) and v.get(campo))
 
 
+def cambio_real(ruta, clave, datos_nuevos):
+    """
+    ¿El contenido ÚTIL cambió respecto de lo que ya está en disco?
+
+    Compara solo `clave`, ignorando el resto del documento — y ese "resto" es
+    justo el problema: varios archivos estampan un `generado` con la hora en
+    cada corrida, así que el archivo SIEMPRE difiere aunque el dato sea
+    idéntico. Eso anula la guarda del workflow (`git diff --cached --quiet`) y
+    hace que se commitee 48 veces al día sin novedad. Comprobado el
+    03-ago-2026: precios.json salió idéntico e intradia.json figuró como
+    modificado, solo por el sello de hora.
+
+    Sin archivo previo devuelve True: todo es nuevo.
+    """
+    if not os.path.exists(ruta):
+        return True
+    try:
+        with open(ruta, encoding="utf-8") as f:
+            viejo = json.load(f)
+    except (ValueError, OSError):
+        return True
+    return viejo.get(clave) != datos_nuevos
+
+
 def se_puede_escribir(ruta, clave, n_nuevos, etiqueta, minimo_pct=MINIMO_PCT):
     """
     ¿Es seguro sobrescribir `ruta` con `n_nuevos` registros útiles?

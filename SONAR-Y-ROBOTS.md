@@ -230,6 +230,39 @@ script sano; **se recuperó solo**. El propio archivo ya documentaba un retraso 
 
 Mitigación ya hecha: precio, Hechos e histórico ya no dependen de él.
 
+### ✅ Cerrado — `intradia.json` se commiteaba aunque no cambiara nada
+
+El workflow promete *"solo se commitea si los datos cambiaron"* y esa guarda
+existe (`git diff --cached --quiet`), pero estaba **anulada**: `intradia.json`
+estampa `generado` con la hora al minuto, así que el archivo siempre difería
+aunque no se hubiera movido un precio. En rueda quieta o feriado, 48 commits sin
+novedad. Ahora `guardas.cambio_real()` compara solo la clave útil (`dias`),
+ignorando el sello de hora, y si no cambió no se reescribe.
+
+### 💓 El pulso de los robots — `app/src/data/estados/`
+
+Un JSON por robot (`precios.json`, `hechos.json`, `historicos.json`), escrito por
+`extractor/heartbeat.py` → `latir()`.
+
+**Uno por robot y no uno solo** porque los modos corren en runs separados de
+Actions y se solapan; con un archivo compartido, dos runners haciendo pull/push
+casi a la vez chocan. Con uno cada uno, el rebase nunca decide nada.
+
+**Las tres fechas no son redundantes:**
+
+| Campo | Qué contesta |
+|---|---|
+| `ultimo_run_utc` | ¿el cron disparó? Si se congela, **GitHub no está arrancando** |
+| `ultimo_ok_utc` | ¿cuándo terminó bien? Si `run` avanza y esto no, corre y falla |
+| `ultima_con_cambios_utc` | ¿cuándo trajo algo nuevo? "Corrí hace 2 min" ≠ "actualicé hace 3 días" |
+
+Más `estado` (`ok` / `guarda` / `error`), `fallos_consecutivos`, `registros`,
+`duracion_ms` y el `commit` que lo produjo. `latir()` **nunca lanza**: un fallo
+escribiendo el pulso no puede tumbar al robot que hacía el trabajo real.
+
+Falta la parte visible: que el Radar lo lea y muestre "hechos hace 40 s · prensa
+hace 3 min".
+
 ### 🟡 Comentarios desactualizados en `deploy.yml`
 
 La cabecera dice que los Hechos corren "cada 30 min, horario de mercado". El cron

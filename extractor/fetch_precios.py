@@ -43,10 +43,13 @@ que el cierre solo esconde.
 Se escribe todo en precios.json y ADEMÁS se acumula por día en intradia.json,
 porque un dato de mercado que no se guarda hoy no se puede recuperar mañana.
 """
-import json, os, requests
+import json, os, time, requests
 from datetime import datetime, timedelta, timezone
 
-from guardas import se_puede_escribir
+from guardas import cambio_real, se_puede_escribir
+from heartbeat import latir, OK, GUARDA, ERROR
+
+_ms = lambda t0: int((time.time() - t0) * 1000)
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 APP_DATA = os.path.normpath(os.path.join(AQUI, "..", "app", "src", "data"))
@@ -146,6 +149,14 @@ def acumular_intradia(precios):
         "generado": ahora.strftime("%Y-%m-%d %H:%M"),
         "dias": dias,
     }
+    # Si la foto del día quedó IGUAL, no se reescribe. Antes se reescribía
+    # siempre, porque `generado` lleva la hora con minutos y eso hace que el
+    # archivo difiera aunque no se haya movido un solo precio — con eso quedaba
+    # anulada la promesa del workflow de "solo se commitea si los datos
+    # cambiaron", y el robot commiteaba 48 veces al día en ruedas quietas.
+    if not cambio_real(INTRADIA, "dias", dias):
+        print("Intradía: sin cambios, no se reescribe.")
+        return
     with open(INTRADIA, "w", encoding="utf-8") as f:
         json.dump(salida, f, ensure_ascii=False, indent=1)
     hoy = dias.get(max(dias)) if dias else {}
@@ -168,6 +179,7 @@ def bajar_mercado():
 
 
 def main():
+    t0 = time.time()
     with open(os.path.join(AQUI, "empresas_config.json"), encoding="utf-8") as f:
         cfg = json.load(f)
 
@@ -251,8 +263,11 @@ def main():
     # buenos del día anterior. Se sale limpio y no se toca nada.
     encontrados = sum(1 for p in precios.values() if p.get("encontrado"))
     if not se_puede_escribir(out, "precios", encontrados, "PRECIOS"):
+        latir("precios", estado=GUARDA, error="la BVL no devolvió cotizaciones",
+              cambios=False, registros=encontrados, duracion_ms=_ms(t0))
         return
 
+    cambios = cambio_real(out, "precios", precios)
     with open(out, "w", encoding="utf-8") as f:
         json.dump(doc, f, ensure_ascii=False, indent=2)
     print(f"\nEscrito: {out}")
@@ -262,6 +277,17 @@ def main():
     # estampar una vacía ensuciaría el único archivo que no se puede rehacer.
     acumular_intradia(precios)
 
+    latir("precios", estado=OK, cambios=cambios, registros=encontrados,
+          duracion_ms=_ms(t0))
+
 
 if __name__ == "__main__":
-    main()
+    # El pulso también tiene que registrar las CAÍDAS: si el robot se levanta,
+    # explota y no deja rastro, desde la app se ve igual que si no hubiera
+    # corrido — y son dos problemas distintos.
+    _t = time.time()
+    try:
+        main()
+    except Exception as e:  # noqa: BLE001
+        latir("precios", estado=ERROR, error=e, duracion_ms=_ms(_t))
+        raise

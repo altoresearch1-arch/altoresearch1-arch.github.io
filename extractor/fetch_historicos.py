@@ -23,7 +23,8 @@ inspeccionando main.js de bvl.com.pe (receta en extractor/FUENTES.md).
 import json, math, os, time
 from datetime import date, timedelta
 
-from guardas import se_puede_escribir
+from guardas import cambio_real, se_puede_escribir
+from heartbeat import latir, OK, GUARDA, ERROR
 
 import requests
 
@@ -173,11 +174,15 @@ def main():
     # fuerza del Sonar entero. Un archivo a medias no rompe la app: la hace
     # mentir, que es peor.
     if not se_puede_escribir(out, "historicos", ok, "HISTÓRICOS"):
+        latir("historicos", estado=GUARDA, error="la BVL no devolvió series",
+              cambios=False, registros=ok)
         return
 
+    cambios = cambio_real(out, "historicos", historicos)
     with open(out, "w", encoding="utf-8") as f:
         json.dump(doc, f, ensure_ascii=False, indent=1)
     print(f"\nEscrito: {out}  ({ok}/{len(historicos)} con datos)")
+    latir("historicos", estado=OK, cambios=cambios, registros=ok)
 
 
 if __name__ == "__main__":
