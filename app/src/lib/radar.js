@@ -451,6 +451,11 @@ export function filasRadar(vivos = null, hechosVivos = null, cola = null) {
       normales,
       desde,
       senales,
+      // La serie para dibujar, ya con la cola reparada y el precio de hoy
+      // pegado: es EXACTAMENTE la misma de la que salen el % y la fuerza, así
+      // que la gráfica no puede contradecir al número que tiene al lado.
+      // 24 puntos = el plazo más largo (20 ruedas) con margen.
+      serie: valores.slice(-24),
       racha: racha(valores),
       rango52: rango52(h, precio),
       // Qué tan seguido se puede entrar y salir de verdad. Una acción que

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { RASTREOS, firmaDe, leerFuerza, mundoDe, noticiasDe, noticiasOrdenadas, noticiasConEfecto, pesoDe, posiblesExplicaciones, tickersTocadosPorElMundo } from '../lib/radar'
 import SelloVivo from './SelloVivo'
+import SonarGrafica from './SonarGrafica'
 
 // 🟢 EL SONAR — el Radar como pantalla de submarino.
 //
@@ -417,6 +418,17 @@ export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa })
                   )}
                 </div>
                 <div className="sonar-ficha-fz">{fz?.icono} {fz?.texto}</div>
+
+                {/* 📈 CÓMO llegó hasta ahí. Va pegado a la fuerza a propósito:
+                    la fuerza dice cuánto se salió de su rango y esto dice si
+                    fue derechito, a los saltos o rebotando del piso. */}
+                <SonarGrafica
+                  serie={elegido.serie}
+                  ruedas={ruedas}
+                  moneda={elegido.moneda}
+                  sube={elegido.sube}
+                  etiqueta={plazo.etiqueta}
+                />
 
                 {/* ── CON CUÁNTA PLATA se movió, y el rango real del día ─────
                     Esto no juzga la subida: la subida es buena igual. Dice de

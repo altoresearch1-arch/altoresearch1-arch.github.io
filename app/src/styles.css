@@ -10282,6 +10282,25 @@ a.link {
 /* El Hecho de HOY que llegó en vivo. Se resalta solo ese: lo de ayer ya no
    es noticia y pintarlo igual sería gritar todo el tiempo. */
 .sonar-item-hi.nuevo { color: #e5484d; font-weight: 800; }
+
+/* ══════════ 📈 LA GRÁFICA DE LA VENTANA ══════════ */
+.sonar-grafica { margin: 10px 0 2px; }
+.sonar-grafica svg { width: 100%; height: auto; display: block; overflow: visible; }
+.sgraf-linea { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+/* El precio de partida: punteado porque no es un dato de la serie, es el
+   origen contra el que se mide el % que está justo arriba. */
+.sgraf-base { stroke: currentColor; stroke-width: 1; stroke-dasharray: 3 4; opacity: 0.28; }
+.sgraf-extremo { fill: currentColor; opacity: 0.45; }
+.sgraf-fin { stroke: var(--fondo, #fff); stroke-width: 1.5; }
+.sgraf-pies {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+  margin-top: 3px;
+  flex-wrap: wrap;
+}
+.sgraf-rango { text-align: right; }
 .sonar-hi-tit { opacity: 0.85; }
 
 /* En la pantalla del sonar (fondo oscuro de fósforo) el verde tiene que ser
