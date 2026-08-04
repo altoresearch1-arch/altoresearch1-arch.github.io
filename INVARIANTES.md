@@ -83,7 +83,7 @@ cobertura. Si añades un extractor, decide por este criterio y **anótalo aquí*
 
 ## 🤖 El robot
 
-### 7. `fetch_historicos.py` rehace la serie COMPLETA desde enero del año anterior
+### 8. `fetch_historicos.py` rehace la serie COMPLETA desde enero del año anterior
 ```python
 inicio = date(hoy.year - 1, 1, 1)   # fetch_historicos.py
 ```
@@ -93,25 +93,25 @@ siguiente corrida buena.
 > ❌ *"Añadan una rutina de backfill que recupere los días faltantes"* — resuelve
 > un problema que este repo no tiene.
 
-### 8. `fetch_historicos` NO va en el intradía
+### 9. `fetch_historicos` NO va en el intradía
 Son 115 llamadas por corrida (~5,520 diarias) contra un API que no es nuestro,
 para refrescar **cierres que intradía no cambian**. El dato vivo ya viene en
 `precios.json` y en la capa del navegador.
 
-### 9. La red dirigida de Google News corre SOLO en el cierre
+### 10. La red dirigida de Google News corre SOLO en el cierre
 Son ~95 consultas por corrida. En intradía serían ~4,560 diarias y Google corta
 mucho antes — y llegaría tarde igual, porque tarda en indexar. El barrido de
 portadas RSS (13 feeds) sí corre cada 10 min: son ~15 s.
 
-### 10. Los pasos del cierre son secuenciales a propósito
+### 11. Los pasos del cierre son secuenciales a propósito
 La SMV se atora con sesiones simultáneas y `fetch_anual_eps` ya falló una vez
 así. **No paralelizar.**
 
-### 11. Un archivo de estado por robot, nunca uno compartido
+### 12. Un archivo de estado por robot, nunca uno compartido
 Los modos corren en runs **separados** de GitHub Actions y se solapan. Con un
 archivo único, dos runners haciendo pull/push casi a la vez chocan.
 
-### 12. Todo lo que deba viajar al repo vive bajo `app/src/data/`
+### 13. Todo lo que deba viajar al repo vive bajo `app/src/data/`
 El workflow commitea con `git add app/src/data …`. Cualquier cosa fuera de ahí
 se escribe en el runner y **se pierde al terminar el job**.
 
@@ -119,27 +119,27 @@ se escribe en el runner y **se pierde al terminar el job**.
 
 ## 🌐 Los endpoints de la BVL (comprobados el 3-ago-2026)
 
-### 13. `Content-Type` debe ser `application/json`
+### 14. `Content-Type` debe ser `application/json`
 Con `text/plain` —que evitaría el preflight— el endpoint responde **415**.
 
-### 14. El preflight NO lista `POST` y funciona igual
+### 15. El preflight NO lista `POST` y funciona igual
 `Allow-Methods: GET,OPTIONS,PUT,DELETE,PATCH`. Pasa porque `POST` es un método
 *safelisted* del estándar CORS. **Si algo falla, el método no es el problema.**
 
-### 15. `startDate` de `share-values` es EXCLUSIVO
+### 16. `startDate` de `share-values` es EXCLUSIVO
 Pedir desde el 31 devuelve `[]`; pedir desde el 30 devuelve el 31. Sumarle un
 día a la última fecha guardada se salta justo la rueda que falta.
 
-### 16. `200` con `content: []` es un ESTADO, no un fallo
+### 17. `200` con `content: []` es un ESTADO, no un fallo
 Le pasa a la BVL de verdad; su propia web muestra "no hay datos disponibles".
 Tratarlo como error dispara alarmas falsas; tratarlo como dato bueno corrompe
 archivos.
 
-### 17. Nunca usar `sell` como precio
+### 18. Nunca usar `sell` como precio
 `sell` es la orden de venta parada en pantalla, **no una transacción**. El precio
 es `last`, con caída a `previous` cuando no negoció.
 
-### 18. CORS no existe fuera del navegador
+### 19. CORS no existe fuera del navegador
 Que 16 de 18 medios bloqueen al navegador **no dice nada** sobre leerlos desde
 Python. El robot los lee sin problema: por eso el robot es la solución, no el
 problema.
@@ -148,22 +148,22 @@ problema.
 
 ## 📡 El Radar
 
-### 19. El filtro `pocoNegociada` no se puede quitar
+### 20. El filtro `pocoNegociada` no se puede quitar
 De 114 acciones, 82 tienen el precio congelado; la BVL repite el último cierre
 cuando nadie operó. Sin el filtro, GRHOLDC1 aparecía con **+674% en 20 días**
 habiendo cambiado de precio 2 veces en el mes.
 
-### 20. A la acción que no negoció NO se le inventa un día
+### 21. A la acción que no negoció NO se le inventa un día
 En `conUltimoPrecio()`: si la fecha de sesión es **anterior** al último cierre
 guardado, no se toca nada. La BVL repite el cierre viejo, y estamparlo como si
 fuera de hoy inventaría una rueda que no existió.
 
-### 21. La prensa nunca retrocede
+### 22. La prensa nunca retrocede
 Solo se acepta una copia con `generado` **más nuevo** que el que ya se usa. Y al
 entrar una nueva hay que invalidar `cacheMundoTk`, o el 🌍 seguiría cruzando
 titulares viejos.
 
-### 22. Dentro de una cuña, el ángulo NO significa nada
+### 23. Dentro de una cuña, el ángulo NO significa nada
 Es una semilla estable (`semilla(ticker)`) para que los tickers no se monten,
 nada más. El ángulo codifica **sector** y solo eso.
 
@@ -175,10 +175,10 @@ redundante. Es lo que lleva la separación mínima entre contactos de **0.5° a
 > Si alguna vez le das significado al ángulo dentro de la cuña, la expansión
 > deja de ser honesta y hay que quitarla.
 
-### 23. Los sectores usan MEDIANA, no promedio
+### 24. Los sectores usan MEDIANA, no promedio
 Con 2 o 3 nombres por sector, un caso raro cuenta una película que no pasó.
 
-### 24. La gráfica y el número no pueden contradecirse
+### 25. La gráfica y el número no pueden contradecirse
 `SonarGrafica` dibuja `fila.serie`, **la misma** de la que salen el `%` y la
 fuerza. Si alguna vez no coinciden, el bug está en la serie, no en el dibujo.
 
@@ -186,17 +186,17 @@ fuerza. Si alguna vez no coinciden, el bug está en la serie, no en el dibujo.
 
 ## 🎯 Tono (la Regla de Oro del proyecto)
 
-### 25. Todo en pasado y en modo descripción
+### 26. Todo en pasado y en modo descripción
 "Se movió", nunca "va a subir". "Mira", nunca "compra". La app **muestra, no
 recomienda**.
 
-### 26. Lo medido va separado de lo hipotético
+### 27. Lo medido va separado de lo hipotético
 El 🌍 mundo lleva otro rótulo que la firma **a propósito**: la firma trae su
 cuenta sacada de los cierres, el mundo son cadenas escritas a mano sin medir
 contra el precio. Mezclarlas le daría a una hipótesis el mismo peso visual que a
 un hecho, y esa es justo la confusión que el Radar existe para evitar.
 
-### 27. Nunca "porque", siempre "puede"
+### 28. Nunca "porque", siempre "puede"
 Que el precio subiera después del titular no significa que subiera **por** el
 titular. `estudio_noticias.py` midió que ni los titulares de la propia empresa
 predicen su cierre.
