@@ -23,6 +23,8 @@ inspeccionando main.js de bvl.com.pe (receta en extractor/FUENTES.md).
 import json, math, os, time
 from datetime import date, timedelta
 
+from guardas import se_puede_escribir
+
 import requests
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
@@ -164,9 +166,17 @@ def main():
         "historicos": historicos,
     }
     out = os.path.join(APP_DATA, "historicos.json")
+    ok = sum(1 for h in historicos.values() if h.get("encontrado"))
+
+    # 🛡️ Acá el cortafuegos protege lo más caro del repo: 12 meses de cierres
+    # de cada acción, y con ellos la VOLATILIDAD, que es de donde sale la
+    # fuerza del Sonar entero. Un archivo a medias no rompe la app: la hace
+    # mentir, que es peor.
+    if not se_puede_escribir(out, "historicos", ok, "HISTÓRICOS"):
+        return
+
     with open(out, "w", encoding="utf-8") as f:
         json.dump(doc, f, ensure_ascii=False, indent=1)
-    ok = sum(1 for h in historicos.values() if h.get("encontrado"))
     print(f"\nEscrito: {out}  ({ok}/{len(historicos)} con datos)")
 
 

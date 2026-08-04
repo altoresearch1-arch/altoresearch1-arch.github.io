@@ -193,18 +193,33 @@ Para revertirlo es una línea: volver a poner `--precios --sin-prensa`.
 
 ## 7. Problemas conocidos
 
-### 🔴 Abierto — `fetch_precios.py` pisa datos buenos con `null`
+### ✅ Cerrado — la fuente vacía ya no puede borrar datos buenos
 
-Cuando la BVL responde `content: []`, el bucle marca **todas** las empresas como
-"NO encontrado" y escribe `{"precio": null, …}` para cada una, pisando los precios
-del día anterior. Se reprodujo el 3-ago (hubo que restaurar con `git checkout`).
-En producción ese cron corre cada 10 min, así que un feed vacío puede vaciar
-`precios.json` y commitearlo.
+**El accidente:** cuando la BVL responde `content: []`, el bucle marca todas las
+empresas como "NO encontrado" y escribía `{"precio": null, …}` para cada una,
+encima de los precios buenos. Pasó el 3-ago y hubo que restaurar con `git
+checkout`. En producción ese cron corre cada 10 min y commitea.
 
-**Arreglo propuesto:** si `mercado` viene vacío (o si los encontrados caen muy por
-debajo del archivo anterior), **no escribir el archivo** y salir con código 0.
-Revisar si `acumular_intradia()` necesita la misma guarda, y si otros `fetch_*`
-tienen el mismo patrón de "escribo siempre, aunque no haya traído nada".
+**El arreglo:** `extractor/guardas.py` → `se_puede_escribir()`, conectada a
+`fetch_precios`, `fetch_hechos` y `fetch_historicos`. Si la corrida trae cero
+registros útiles, o menos del **80%** de los que ya tenía el archivo, se avisa y
+se sale limpio (código 0) **sin tocar nada**.
+
+Dos detalles que no son obvios y conviene no deshacer:
+
+- **Cuenta registros con `encontrado: True`, NO `len()` del diccionario.** Es la
+  diferencia entre funcionar y no funcionar: `precios.json` tiene sus 152
+  entradas incluso cuando están todas en `null`, así que un `len()` daría 152 y
+  dejaría pasar exactamente el bug que esto evita.
+- **En `fetch_precios` la guarda va ANTES de `acumular_intradia()`.** Sin precios
+  no hay foto del día que guardar, y ensuciar el único archivo que no se puede
+  reconstruir sería peor que no escribir.
+- **Sin emojis en los `print` de `guardas.py`.** La consola de Windows usa cp1252
+  y revienta con `UnicodeEncodeError` — o sea que la guarda fallaría justo cuando
+  tiene que proteger. Pasó al probarla.
+
+Probado con los dos escenarios: mercado vacío (aborta, archivos byte por byte
+idénticos) y mercado normal de 783 cotizaciones (escribe, la guarda no se asoma).
 
 ### 🟡 El cron de GitHub es "mejor esfuerzo"
 

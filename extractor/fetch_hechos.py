@@ -21,6 +21,8 @@ Regla de Oro #1: solo lo que la BVL/SMV publica; cero datos inventados.
 import json, os, time
 from datetime import date, timedelta
 
+from guardas import se_puede_escribir
+
 import requests
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
@@ -108,9 +110,15 @@ def main():
         "hechos": salida,
     }
     out = os.path.join(APP_DATA, "hechos.json")
+    ok = sum(1 for v in salida.values() if v.get("encontrado"))
+
+    # 🛡️ Mismo cortafuegos que en precios: si el API no respondió por nadie,
+    # el archivo anterior vale más que uno vacío.
+    if not se_puede_escribir(out, "hechos", ok, "HECHOS DE IMPORTANCIA"):
+        return
+
     with open(out, "w", encoding="utf-8") as f:
         json.dump(doc, f, ensure_ascii=False, indent=1)
-    ok = sum(1 for v in salida.values() if v.get("encontrado"))
     print(f"\nEscrito: {out}  ({ok}/{len(salida)} con datos)")
 
 

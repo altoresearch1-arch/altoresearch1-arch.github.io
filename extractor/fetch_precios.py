@@ -46,6 +46,8 @@ porque un dato de mercado que no se guarda hoy no se puede recuperar mañana.
 import json, os, requests
 from datetime import datetime, timedelta, timezone
 
+from guardas import se_puede_escribir
+
 AQUI = os.path.dirname(os.path.abspath(__file__))
 APP_DATA = os.path.normpath(os.path.join(AQUI, "..", "app", "src", "data"))
 URL = "https://dataondemand.bvl.com.pe/v1/stock-quote/market"
@@ -242,11 +244,22 @@ def main():
         "precios": precios,
     }
     out = os.path.join(APP_DATA, "precios.json")
+
+    # 🛡️ EL CORTAFUEGOS. Si la BVL contestó sin cotizaciones —le pasa: el
+    # 03-ago-2026 devolvió `content: []` toda la mañana— acá arriba TODAS las
+    # empresas quedaron con precio null, y escribir eso borraría los precios
+    # buenos del día anterior. Se sale limpio y no se toca nada.
+    encontrados = sum(1 for p in precios.values() if p.get("encontrado"))
+    if not se_puede_escribir(out, "precios", encontrados, "PRECIOS"):
+        return
+
     with open(out, "w", encoding="utf-8") as f:
         json.dump(doc, f, ensure_ascii=False, indent=2)
     print(f"\nEscrito: {out}")
 
-    # El archivo que solo se puede construir hacia adelante.
+    # El archivo que solo se puede construir hacia adelante. Va DESPUÉS de la
+    # guarda a propósito: sin precios no hay foto del día que guardar, y
+    # estampar una vacía ensuciaría el único archivo que no se puede rehacer.
     acumular_intradia(precios)
 
 
