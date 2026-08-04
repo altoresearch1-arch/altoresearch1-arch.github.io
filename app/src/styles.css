@@ -10174,6 +10174,38 @@ a.link {
 }
 .sonar-plato { max-width: 460px; margin: 0 auto; width: 100%; position: relative; }
 
+/* ══════════ 🍕 LA CUÑA ABIERTA ══════════ */
+/* El nombre del sector va donde estaban las etiquetas de las cuñas, y ES el
+   botón de salida: no hay que buscar cómo volver. */
+.sonar-etq-sector.abrible { cursor: pointer; }
+.sonar-etq-sector.abrible:hover,
+.sonar-etq-sector.abrible:focus-visible {
+  fill: var(--fosforo);
+  font-size: 10px;
+  outline: none;
+}
+.sonar-cuna-abierta {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(61, 220, 132, 0.35);
+  background: rgba(5, 13, 9, 0.75);
+  backdrop-filter: blur(2px);
+  color: var(--fosforo);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  cursor: pointer;
+}
+.sonar-cuna-abierta:hover { background: rgba(61, 220, 132, 0.16); }
+
 /* ══════════ 🔍 LA LUPA DEL PLATO ══════════ */
 .sonar-lupa {
   position: absolute;

@@ -69,6 +69,14 @@ export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa })
   // pixelados. Y como el texto también escala, las etiquetas se agrandan solas.
   const [vista, setVista] = useState({ z: 1, x: CENTRO, y: CENTRO })
   const arrastre = useRef(null)
+  // 🍕 Qué cuña está abierta. Es el de-saturador de verdad: la lupa agranda
+  // el borrón, esto lo deshace.
+  const [sectorAbierto, setSectorAbierto] = useState(null)
+  const abrirCuna = (s) => {
+    setSectorAbierto((previo) => (previo === s ? null : s))
+    setSel(null)
+    setVista({ z: 1, x: CENTRO, y: CENTRO }) // se entra siempre al plato entero
+  }
 
   // El centro visible se limita para que el plato no se pueda perder de vista:
   // con la mitad del alto de la ventana como margen, nunca te quedas mirando
@@ -100,10 +108,31 @@ export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa })
   const ancho = 400 / vista.z
 
   const { contactos, sectores } = useMemo(() => {
-    const conDatos = filas.filter((f) => f.fuerzas[ruedas] != null && f.retornos[ruedas] != null)
-    const secs = [...new Set(conDatos.map((f) => f.sector))].sort()
+    const todos = filas.filter((f) => f.fuerzas[ruedas] != null && f.retornos[ruedas] != null)
+    // Los sectores del plato SIEMPRE salen del universo completo: si se
+    // calcularan sobre el sector abierto, al entrar quedaría una sola cuña de
+    // 360° y al salir habría que recomponer el plato de memoria.
+    const secs = [...new Set(todos.map((f) => f.sector))].sort()
     const paso = 360 / Math.max(secs.length, 1)
-    const maxRet = Math.max(...conDatos.map((f) => Math.abs(f.retornos[ruedas])), 1)
+    const maxRet = Math.max(...todos.map((f) => Math.abs(f.retornos[ruedas])), 1)
+
+    // 🍕 CUÑA ABIERTA: solo ese sector, y repartido en los 360° enteros.
+    //
+    // Esto no pierde información, y esa es la razón por la que se puede hacer:
+    // DENTRO de una cuña el ángulo YA era arbitrario — una semilla estable
+    // para que los tickers no se monten, nada más. El ángulo solo codifica
+    // SECTOR, así que mirando un sector solo esa codificación es redundante y
+    // el círculo entero queda libre para separarlos.
+    //
+    // La distancia al centro NO se toca: sigue siendo la fuerza. Lo único que
+    // cambia es cuánto aire hay entre un contacto y el siguiente.
+    const conDatos = sectorAbierto
+      ? todos.filter((f) => f.sector === sectorAbierto)
+      : todos
+    // Repartidos por igual y en orden de ticker: sin colisiones posibles, y
+    // cada acción siempre en el mismo sitio al volver a abrir la cuña.
+    const enCuna = [...conDatos].sort((a, b) => a.ticker.localeCompare(b.ticker))
+    const pasoCuna = 360 / Math.max(enCuna.length, 1)
 
     const contactos = conDatos.map((f) => {
       const fz = f.fuerzas[ruedas]
@@ -111,7 +140,9 @@ export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa })
       const i = secs.indexOf(f.sector)
       // dentro de su cuña, con margen para que no se monten en el borde
       const s = semilla(f.ticker)
-      const ang = (i * paso) + paso * (0.18 + s * 0.64) - 90 // -90: arrancar arriba
+      const ang = sectorAbierto
+        ? enCuna.findIndex((x) => x.ticker === f.ticker) * pasoCuna - 90
+        : (i * paso) + paso * (0.18 + s * 0.64) - 90 // -90: arrancar arriba
       const rad = (ang * Math.PI) / 180
       const dist = R_MINIMO + (Math.min(Math.abs(fz), FUERZA_MAX) / FUERZA_MAX) * (RADIO - R_MINIMO)
       const firma = firmaDe(f, ruedas)
@@ -142,7 +173,7 @@ export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa })
       }
     })
     return { contactos, sectores }
-  }, [filas, ruedas])
+  }, [filas, ruedas, sectorAbierto])
 
   const elegido = contactos.find((c) => c.ticker === sel) || null
   // DOS ÓRDENES, y hacen falta los dos.
@@ -235,6 +266,14 @@ export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa })
           {/* 🔍 LA LUPA. Botones y no rueda del ratón: secuestrar el scroll de
               la página para hacer zoom es hostil, y en celular la rueda no
               existe. Con el plato ampliado se arrastra para moverse. */}
+          {/* 🍕 La cuña abierta, con la salida siempre a la vista. Va FUERA
+              del SVG: es un control, no parte del dibujo. */}
+          {sectorAbierto && (
+            <button className="sonar-cuna-abierta" onClick={() => abrirCuna(sectorAbierto)}>
+              ← {NOMBRE_SECTOR[sectorAbierto] || sectorAbierto}
+              <span className="muted"> · {contactos.length} de {filas.length}</span>
+            </button>
+          )}
           <div className="sonar-lupa" role="group" aria-label="Ampliar el sonar">
             <button onClick={() => zoomear(1 / 1.4)} disabled={vista.z <= 1}
                     aria-label="Alejar">−</button>
@@ -288,13 +327,20 @@ export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa })
             <text x={CENTRO + 4} y={CENTRO - R_MINIMO - (1 / FUERZA_MAX) * (RADIO - R_MINIMO) + 12}
                   className="sonar-etq-anillo">1× su vaivén</text>
 
-            {/* Divisorias y nombres de sector */}
-            {sectores.map((s) => (
+            {/* Divisorias y nombres de sector. Con una cuña abierta no se
+                dibujan: el círculo entero ES ese sector, y dejar las
+                divisiones diría que sigue habiendo doce. */}
+            {!sectorAbierto && sectores.map((s) => (
               <line key={s.sector} x1={CENTRO} y1={CENTRO} x2={s.lx} y2={s.ly} className="sonar-radio" />
             ))}
-            {sectores.map((s) => (
-              <text key={s.sector} x={s.x} y={s.y} className="sonar-etq-sector"
-                    textAnchor="middle" dominantBaseline="middle">
+            {!sectorAbierto && sectores.map((s) => (
+              <text key={s.sector} x={s.x} y={s.y}
+                    className="sonar-etq-sector abrible"
+                    textAnchor="middle" dominantBaseline="middle"
+                    role="button" tabIndex={0}
+                    onClick={() => abrirCuna(s.sector)}
+                    onKeyDown={(e) => { if (e.key === 'Enter') abrirCuna(s.sector) }}>
+                <title>{`Abrir ${NOMBRE_SECTOR[s.sector] || s.sector} — se reparte en todo el plato`}</title>
                 {NOMBRE_SECTOR[s.sector] || s.sector}
               </text>
             ))}

@@ -163,10 +163,22 @@ Solo se acepta una copia con `generado` **más nuevo** que el que ya se usa. Y a
 entrar una nueva hay que invalidar `cacheMundoTk`, o el 🌍 seguiría cruzando
 titulares viejos.
 
-### 22. Los sectores usan MEDIANA, no promedio
+### 22. Dentro de una cuña, el ángulo NO significa nada
+Es una semilla estable (`semilla(ticker)`) para que los tickers no se monten,
+nada más. El ángulo codifica **sector** y solo eso.
+
+Por eso al abrir una cuña se puede repartir ese sector en los 360° enteros sin
+perder información: si estás mirando un solo sector, esa codificación es
+redundante. Es lo que lleva la separación mínima entre contactos de **0.5° a
+32.7°** en minas.
+
+> Si alguna vez le das significado al ángulo dentro de la cuña, la expansión
+> deja de ser honesta y hay que quitarla.
+
+### 23. Los sectores usan MEDIANA, no promedio
 Con 2 o 3 nombres por sector, un caso raro cuenta una película que no pasó.
 
-### 23. La gráfica y el número no pueden contradecirse
+### 24. La gráfica y el número no pueden contradecirse
 `SonarGrafica` dibuja `fila.serie`, **la misma** de la que salen el `%` y la
 fuerza. Si alguna vez no coinciden, el bug está en la serie, no en el dibujo.
 
@@ -174,17 +186,17 @@ fuerza. Si alguna vez no coinciden, el bug está en la serie, no en el dibujo.
 
 ## 🎯 Tono (la Regla de Oro del proyecto)
 
-### 24. Todo en pasado y en modo descripción
+### 25. Todo en pasado y en modo descripción
 "Se movió", nunca "va a subir". "Mira", nunca "compra". La app **muestra, no
 recomienda**.
 
-### 25. Lo medido va separado de lo hipotético
+### 26. Lo medido va separado de lo hipotético
 El 🌍 mundo lleva otro rótulo que la firma **a propósito**: la firma trae su
 cuenta sacada de los cierres, el mundo son cadenas escritas a mano sin medir
 contra el precio. Mezclarlas le daría a una hipótesis el mismo peso visual que a
 un hecho, y esa es justo la confusión que el Radar existe para evitar.
 
-### 26. Nunca "porque", siempre "puede"
+### 27. Nunca "porque", siempre "puede"
 Que el precio subiera después del titular no significa que subiera **por** el
 titular. `estudio_noticias.py` midió que ni los titulares de la propia empresa
 predicen su cierre.
