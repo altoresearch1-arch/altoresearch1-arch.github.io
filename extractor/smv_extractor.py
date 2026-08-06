@@ -289,6 +289,41 @@ def _parse_root(raw):
     return etree.fromstring(text.encode("utf-8"), parser=parser)
 
 
+def elegir_eps_por_clase(candidatos):
+    """Elige el EPS entre las CLASES DE ACCIÓN que trae el XBRL (común vs
+    inversión). `candidatos` es [(miembro_dimensional, valor), ...] del mismo
+    periodo. Devuelve None si no hay ninguno.
+
+    Casi siempre las dos clases reportan el mismo número y se toma la acción
+    COMÚN (OrdinaryShares). PERO NO SIEMPRE (regla de Jair, «si ves 0 revisa de
+    nuevo»): varias empresas taguean 0.0 en la clase que NO les aplica y el valor
+    REAL en la otra. Southern (SPCCPI1): OrdinarySharesMember 0.0 y
+    AccionesDeInversionMiembro 6.095 — y en la BVL cotizan justamente sus acciones
+    de inversión. Con la preferencia ciega por OrdinaryShares, una empresa con
+    US$ 723.9 M de ganancia salía con EPS 0.0000 en la ficha y el P/E la daba por
+    PERDIDA (visto el 05-ago-2026).
+
+    Esta regla ya vivía en fetch_bpa_historico.py desde el 22-jul, donde se cazó
+    primero porque la gráfica salía plana en cero. Estaba en UN solo archivo, así
+    que la ficha y el P/E siguieron mostrando el 0 tres semanas más. Ahora vive
+    acá, que es por donde pasan todos: run_batch, fetch_anual_eps y fetch_empresa.
+
+    Si TODOS los candidatos son 0 se devuelve 0 — puede ser un campo sin llenar,
+    pero eso ya no se decide acá: lo juzga eps_es_cero_sin_llenar (run_batch.py),
+    que tiene la utilidad neta con qué compararlo.
+    """
+    if not candidatos:
+        return None
+    # Un valor CON CONTENIDO le gana siempre a un 0 de relleno; entre los no-cero
+    # se mantiene la preferencia por la acción común.
+    no_cero = [(m, v) for m, v in candidatos if v != 0]
+    pool = no_cero or candidatos
+    for miembro, v in pool:
+        if "OrdinaryShares" in miembro:
+            return v
+    return pool[0][1]
+
+
 def parsear_xbrl(raw):
     """Parsea el XBRL y devuelve un dict con cifras del último periodo reportado."""
     root = _parse_root(raw)
@@ -384,8 +419,9 @@ def parsear_xbrl(raw):
                 return txt
         return None
 
-    # EPS básico: viene en contexto CON dimensión (por clase de acción: común vs inversión).
-    # Las dos clases reportan el mismo EPS; tomamos la acción COMÚN (OrdinaryShares).
+    # EPS básico: viene en contexto CON dimensión (por clase de acción). La
+    # elección entre clases la hace elegir_eps_por_clase (arriba, a nivel de
+    # módulo): acá solo se juntan los candidatos del periodo pedido.
     def eps_basico(fecha, inicio=None):
         candidatos = []
         for el in root.iter():
@@ -409,12 +445,7 @@ def parsear_xbrl(raw):
             except ValueError:
                 continue
             candidatos.append((ctx_member.get(cref, ""), v))
-        if not candidatos:
-            return None
-        for miembro, v in candidatos:
-            if "OrdinaryShares" in miembro:  # acción común
-                return v
-        return candidatos[0][1]
+        return elegir_eps_por_clase(candidatos)
 
     out = {"fechaCierre": fecha_cierre, "fechaPeriodo": fecha_dur, "moneda": moneda}
     for clave, locales in CONCEPTOS_INSTANTE.items():

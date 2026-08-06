@@ -2,9 +2,9 @@
  "_comment": "3 empresas por sector. smvId = value del dropdown SMV (para EE.FF.). bvlNemonico = nemónico real en la BVL (para el precio de cierre). ticker = el nemónico que se muestra. perfiles = CRITERIO TENTATIVO, lo confirma Jair. tipoLectura: minera/banco/consumo/industrial.",
  "_nota_pesqueras": "En el Mercado Principal de la SMV solo dos pesqueras presentan EE.FF.: Austral Group y Pesquera Exalmar. Por ahora van 2.",
  "_nota_precios": "bvlNemonico se eligió como la serie más líquida/representativa. Algunas (Laive, Creditex, Filamentos) se negocian poco: su último cierre puede ser de hace tiempo; la app muestra la fecha real.",
- "_nota_trimestre": "Override por empresa: si una empresa trae su propio 'trimestre' (o 'anio'), el extractor usa ese y no el global. Las empresas no presentan el mismo dia: al 30-jul-2026 nueve mineras ya tenian el Q2 y el resto seguia en Q1. Sin el override habria que dejarlas desactualizadas o pedir un Q2 que las demas aun no presentan (y perder sus fundamentos). Al 01-ago-2026 se sumaron las dos acereras: Aceros Arequipa presento el 24-jul y Siderperu el 31-jul (comprobado contra la SMV antes de mover el override; pedirlo antes de tiempo devuelve sin_documentos y borra los fundamentos).",
+ "_nota_trimestre": "Override por empresa: si una empresa trae su propio 'trimestre' (o 'anio'), el extractor usa ese y no el global. Las empresas no presentan el mismo dia: al 30-jul-2026 nueve mineras ya tenian el Q2 y el resto seguia en Q1. Sin el override habria que dejarlas desactualizadas o pedir un Q2 que las demas aun no presentan (y perder sus fundamentos). Al 01-ago-2026 se sumaron las dos acereras: Aceros Arequipa presento el 24-jul y Siderperu el 31-jul (comprobado contra la SMV antes de mover el override; pedirlo antes de tiempo devuelve sin_documentos y borra los fundamentos). Al 05-ago-2026 pasaron las dos Nexa: Nexa Peru y Atacocha presentaron ambas el 05-ago (van 103 en Q2). De las que quedan por via SMV, IFS y Credicorp aun no presentan el Q2 (su Q1 si esta); Southern Copper y Agro Pucala no presentan a la SMV en ningun trimestre. Auna, PPX, Panoro y Rio2 son emisores extranjeros y van por extranjero_config.json, no por este override.",
  "anio": 2026,
- "trimestre": 1,
+ "trimestre": 2,
  "empresas": [
   {
    "sector": "minas",
@@ -18,7 +18,8 @@
     "mixto"
    ],
    "bvlRpj": "B20010",
-   "bvlCompanyCode": "62000"
+   "bvlCompanyCode": "62000",
+   "trimestre": 2
   },
   {
    "sector": "minas",
@@ -488,7 +489,9 @@
    "esHolding": true,
    "_notaHolding": "IFS es la holding financiera (Interbank, Interseguro, Inteligo). Individual = dividendos/equity de sus filiales, sin negocio operativo propio.",
    "bvlRpj": "OE2305",
-   "bvlCompanyCode": "5626F"
+   "bvlCompanyCode": "5626F",
+   "trimestre": 1,
+   "_notaTrimestre": "ANCLADA EN Q1 A PROPOSITO (05-ago-2026). Presento el Q1 el 11-may-2026 pero el Q2 aun no. Ahora que el global es 2, sin este override se le pediria un Q2 inexistente: sin_documentos y se borran sus fundamentos reales. Quitar este override recien cuando la SMV devuelva fecha+xbrl para 2026-T2."
   },
   {
    "sector": "retail",
@@ -562,7 +565,8 @@
     "mixto"
    ],
    "bvlRpj": "CM0007",
-   "bvlCompanyCode": "60800"
+   "bvlCompanyCode": "60800",
+   "trimestre": 2
   },
   {
    "sector": "alimentos",
@@ -1460,7 +1464,9 @@
    "bvlRpj": "B60051",
    "bvlCompanyCode": "73250",
    "esHolding": true,
-   "_notaHolding": "Credicorp Ltd. es la holding del grupo (BCP, Pacífico, Prima, Credicorp Capital): su individual son dividendos/participaciones, no el negocio bancario."
+   "_notaHolding": "Credicorp Ltd. es la holding del grupo (BCP, Pacífico, Prima, Credicorp Capital): su individual son dividendos/participaciones, no el negocio bancario.",
+   "trimestre": 1,
+   "_notaTrimestre": "ANCLADA EN Q1 A PROPOSITO (05-ago-2026). Presento el Q1 el 14-may-2026 pero el Q2 aun no. Ahora que el global es 2, sin este override se le pediria un Q2 inexistente: sin_documentos y se borran sus fundamentos reales. Quitar este override recien cuando la SMV devuelva fecha+xbrl para 2026-T2."
   },
   {
    "sector": "minas",

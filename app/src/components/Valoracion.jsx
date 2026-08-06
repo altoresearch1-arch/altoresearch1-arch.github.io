@@ -33,13 +33,19 @@ export default function Valoracion({ empresa }) {
   // EPS anual llevado a la moneda del precio
   const sim = px.moneda === 'US$' ? 'US$' : 'S/'
   const monedaPrecio = px.moneda === 'US$' ? 'USD' : 'PEN'
-  const tienePerdida = ea.epsAnual <= 0
+  // Pérdida y "sin dato" son cosas DISTINTAS, aunque las dos dejen sin P/E.
+  // Hasta el 05-ago-2026 el <= 0 las metía en la misma bolsa y la SMV publica un
+  // BPA de 0.000 cuando nadie llenó el campo: Southern (SPCCPI1), con US$ 723.9 M
+  // de ganancia en el trimestre, salía acá como "la empresa tuvo pérdida".
+  // Decirle perdedora a una empresa que ganó es peor que no decir nada.
+  const tienePerdida = ea.epsAnual < 0
+  const sinBpa = ea.epsAnual === 0
   let eps = ea.epsAnual
   let nota = null
   let pe = null
   let estado = null
   let clase = 'val-perdida'
-  if (!tienePerdida) {
+  if (!tienePerdida && !sinBpa) {
     if (monedaPrecio !== ea.moneda) {
       const fx = epsAnualData.tipoCambioUSDPEN
       if (ea.moneda === 'USD' && monedaPrecio === 'PEN') eps = eps * fx
@@ -154,7 +160,15 @@ export default function Valoracion({ empresa }) {
           💎 ¿Barata o cara? {estado && <span className="val-estado">{estado}</span>}
         </div>
 
-        {tienePerdida ? (
+        {sinBpa ? (
+          <div className="val-txt">
+            No se puede valorar por <Glosado text="P/E" />: la SMV <strong>no publicó</strong> la ganancia
+            por acción de 2025 de esta empresa — su archivo la trae en 0.000, que es un campo sin llenar
+            y no una ganancia de cero. Sin ese número no hay entre qué dividir el precio.
+            {' '}Ojo: esto <strong>no</strong> significa que haya perdido plata.
+            {(ev || evEbit) && <> Más abajo hay otro ángulo (la empresa entera) que no depende de este dato.</>}
+          </div>
+        ) : tienePerdida ? (
           <div className="val-txt">
             No se puede valorar por <Glosado text="P/E" />: la empresa tuvo <strong>pérdida</strong> en 2025
             (no hay ganancia con qué dividir el precio).
@@ -195,7 +209,10 @@ export default function Valoracion({ empresa }) {
           </>
         )}
 
-        {!tienePerdida && px.sinNegociacionReciente && (
+        {/* Los dos avisos hablan de cuánto FIAR del P/E, así que se cuelgan de que
+            el P/E exista — no de que no haya pérdida. Con `!tienePerdida` salían
+            también cuando no hay P/E que advertir (empresa sin BPA publicado). */}
+        {pe != null && px.sinNegociacionReciente && (
           <div className="val-aviso">
             ⚠️ Ojo: el precio es de un cierre antiguo (la acción casi no se negocia), así que este P/E puede no ser fiable.
           </div>
@@ -203,7 +220,7 @@ export default function Valoracion({ empresa }) {
         {/* El aviso de ciclo ahora lo dispara el LENTE, no solo el sector: las
             azucareras viven en el sector "alimentos" y son tan cíclicas como
             una minera (mejora #21 del análisis educativo). */}
-        {!tienePerdida && (rango.ciclico || esCiclico(empresa)) && (
+        {pe != null && (rango.ciclico || esCiclico(empresa)) && (
           <div className="val-aviso">
             ⚠️ Cuidado: con este lente el P/E ENGAÑA. {lenteDe(empresa)
               ? `Aquí manda ${lenteDe(empresa).queManda}: cuando está caro, la ganancia se infla`

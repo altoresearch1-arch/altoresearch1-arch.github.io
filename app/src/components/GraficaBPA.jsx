@@ -108,6 +108,33 @@ function conDeltas(items) {
   })
 }
 
+// Alto de la barra más alta y piso de las demás, en px.
+//
+// EL PISO NO ES COSMÉTICO (Jair, 06-ago-2026: «la BPA de Nexa está vacía»).
+// La altura es proporcional al valor absoluto más grande de la serie, así que un
+// solo año malo aplasta al resto. Atacocha: su pérdida de −0.080 en 2020 es 5.7
+// veces el BPA de 2025, y con el piso viejo de 8 px CINCO de sus seis barras
+// quedaban pegadas al suelo (8, 8, 8, 12, 17). Se veía una barra roja alta y una
+// fila de rayitas — o sea, una gráfica vacía.
+//
+// El piso NO se aplica recortando (`max(piso, proporcional)`): así las cinco
+// barras chicas de Atacocha quedaban TODAS en 18 px exactos, o sea visibles pero
+// idénticas entre sí — y −0.001 (2021) se veía igual que 0.014 (2025), que es
+// catorce veces más. Cambiar "no se ve" por "se ve mal" no es arreglarlo.
+//
+// En vez de eso el rango proporcional se MAPEA sobre [piso, alta]:
+//     h = piso + (|v| / max) * (alta − piso)
+// Así ninguna barra baja de 18 px y el orden entre las chicas se conserva
+// (Atacocha queda 96 · 19 · 19 · 24 · 28 · 32). El canje es a propósito: se
+// pierde "cuán diminuta es una barra diminuta" y se gana que exista y que se
+// note cuál es mayor. Nada queda escondido — el número exacto va impreso encima
+// de cada barra.
+//
+// El hueco de "s/d" se queda en 12 px justamente para que NO se confunda con una
+// barra real: más bajo que el piso, y además punteado y transparente.
+const BARRA_ALTA = 96
+const BARRA_PISO = 18
+
 // Barras genéricas: items = [{ etiqueta, valor|null, delta? }] — hueco honesto
 // si null; ⭐ al mejor periodo y 🔻 al peor SOLO si fue pérdida.
 function Barras({ items, sim }) {
@@ -129,7 +156,7 @@ function Barras({ items, sim }) {
           )
         }
         const v = it.valor
-        const h = Math.max(8, (Math.abs(v) / max) * 96)
+        const h = BARRA_PISO + (Math.abs(v) / max) * (BARRA_ALTA - BARRA_PISO)
         const esMejor = marcar && v === mejor && mejor !== peor
         const esPeor = marcar && v === peor && peor < 0
         return (

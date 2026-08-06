@@ -62,6 +62,27 @@ def eps_es_plausible(d):
     return abs(un / eps) >= ACCIONES_MINIMAS_PLAUSIBLES
 
 
+def eps_es_cero_sin_llenar(d):
+    """True si el XBRL trae la utilidad por acción en 0 pero la empresa SÍ tuvo
+    resultado en el periodo: ese 0.000 no es "ganó cero", es un campo que nadie
+    llenó (regla de Jair, «si ves 0 revisa de nuevo»).
+
+    Visto el 05-ago-2026 en 14 empresas del Q2. El caso que lo delata: Southern
+    (SPCCPI1) declaró US$ 723.9 M de utilidad y un EPS de 0.000 en el MISMO
+    archivo. La ficha mostraba "US$ 0.0000" al lado de esa ganancia — y peor, el
+    P/E daba a la empresa por PERDIDA, porque trataba el cero como un resultado
+    negativo. O sea que un campo vacío se leía como que la empresa perdió plata.
+
+    fetch_bpa_historico.py y fetch_fcf_ttm.py ya se niegan a publicar estos ceros
+    ("mejor hueco que dato engañoso"); esta es la misma regla del lado de la ficha.
+
+    Ojo con el orden: esto se pregunta DESPUÉS de eps_es_plausible, que juzga otra
+    cosa (el EPS en otra unidad). Un eps de 0 es falsy y se le escapa a aquella.
+    """
+    un, eps = d.get("utilidadNeta"), d.get("epsBasico")
+    return eps == 0 and un not in (None, 0)
+
+
 def fmt_eps(valor, moneda):
     if valor is None:
         return None
@@ -166,8 +187,36 @@ def construir_empresa(cfg, res, anio=2026, trimestre=1):
         if d.get("margenBruto") is not None:
             margen_str += f" · {fmt_pct(d['margenBruto'])} bruto"
 
-    # ¿El "por acción" del XBRL es de verdad por acción? (ver eps_es_plausible)
+    # Dos formas distintas de que el "por acción" del XBRL no se pueda publicar:
+    # que esté en otra unidad (eps_es_plausible) o que sea un 0 que nadie llenó
+    # (eps_es_cero_sin_llenar). En los dos casos va como hueco, con el motivo
+    # escrito — nunca como número.
     eps_plausible = eps_es_plausible(d)
+    eps_cero_falso = eps_es_cero_sin_llenar(d)
+    eps_publicable = eps_plausible and not eps_cero_falso
+
+    if not eps_plausible:
+        eps_fundamento = {
+            "valor": ("Pendiente de verificar (SMV): su archivo trae la utilidad por "
+                      "acción en otra unidad — dividir la utilidad entre ese número da "
+                      f"{abs(d['utilidadNeta']/d['epsBasico']):,.0f} acciones, imposible "
+                      "para una empresa listada. Mostrarlo haría ver una ganancia por "
+                      "acción cientos de veces mayor que el precio de la acción."),
+            "moneda": moneda, "fuente": fuente_base, "verificado": False}
+    elif eps_cero_falso:
+        eps_fundamento = {
+            "valor": ("No lo publica la SMV: su archivo trae la utilidad por acción en "
+                      "0.000 aunque la empresa sí tuvo resultado en el periodo "
+                      f"({fmt_money(d.get('utilidadNeta'), moneda)}). Un 0 tagueado no es "
+                      "una ganancia de cero, es un campo sin llenar: mostrarlo haría ver "
+                      "a la empresa como si no ganara nada. Mejor hueco que dato engañoso."),
+            "moneda": moneda, "fuente": fuente_base, "verificado": False}
+    else:
+        eps_fundamento = {
+            "valor": fmt_eps(d.get("epsBasico"), moneda), "moneda": moneda,
+            "fuente": (fuente_base + " — utilidad básica por acción común, "
+                       + sufijo_periodo(meses_de("epsBasico"))),
+            "verificado": False}
 
     es_banco = bool(d.get("esBanco"))
     deuda_fuente = fuente_base
@@ -185,17 +234,7 @@ def construir_empresa(cfg, res, anio=2026, trimestre=1):
                  "fuente": (fuente_base + " — flujo operativo − capex, "
                             + sufijo_periodo(d.get("fcfMeses"))),
                  "periodoMeses": d.get("fcfMeses"), "verificado": False}),
-        "eps": ({"valor": ("Pendiente de verificar (SMV): su archivo trae la utilidad por "
-                           "acción en otra unidad — dividir la utilidad entre ese número da "
-                           f"{abs(d['utilidadNeta']/d['epsBasico']):,.0f} acciones, imposible "
-                           "para una empresa listada. Mostrarlo haría ver una ganancia por "
-                           "acción cientos de veces mayor que el precio de la acción."),
-                 "moneda": moneda, "fuente": fuente_base, "verificado": False}
-                if not eps_plausible else
-                {"valor": fmt_eps(d.get("epsBasico"), moneda), "moneda": moneda,
-                 "fuente": (fuente_base + " — utilidad básica por acción común, "
-                            + sufijo_periodo(meses_de("epsBasico"))),
-                 "verificado": False}),
+        "eps": eps_fundamento,
         "margen": {"valor": margen_str, "moneda": moneda, "fuente": fuente_base, "verificado": False},
     }
 
@@ -203,8 +242,9 @@ def construir_empresa(cfg, res, anio=2026, trimestre=1):
     # Todo de la SMV (el trimestre extraído). El P/E y dividendos no se calculan aquí (ver nota en la app).
     emp["metricas"] = {
         # None (no el número crudo): la guía "cómo leer estos números" lo inyecta
-        # como ejemplo real, y un EPS en otra unidad enseñaría al revés.
-        "eps": fmt_eps(d.get("epsBasico"), moneda) if eps_plausible else None,
+        # como ejemplo real, y un EPS en otra unidad —o un 0 sin llenar— enseñaría
+        # al revés ("mira, esta empresa gana US$ 0.0000 por acción").
+        "eps": fmt_eps(d.get("epsBasico"), moneda) if eps_publicable else None,
         "fcf": fmt_money(d.get("fcf"), moneda),
         "capex": fmt_money(d.get("capex"), moneda),
         "deuda": deuda_str,
@@ -212,9 +252,10 @@ def construir_empresa(cfg, res, anio=2026, trimestre=1):
     }
     # Datos crudos para el simulador de escenarios (BPA del trimestre, su moneda).
     # Lo consumen el simulador de escenarios y la siembra de la gráfica BPA: si el
-    # EPS está en otra unidad va null, no el número crudo (fetch_bpa_historico tiene
-    # su propio control de escala, pero mejor no repartir el dato malo de origen).
-    emp["epsTrimestreRaw"] = d.get("epsBasico") if eps_plausible else None
+    # EPS está en otra unidad —o es un 0 sin llenar— va null, no el número crudo
+    # (fetch_bpa_historico tiene sus propios controles, pero mejor no repartir el
+    # dato malo de origen).
+    emp["epsTrimestreRaw"] = d.get("epsBasico") if eps_publicable else None
     emp["monedaEstados"] = moneda
     # Piezas crudas para EV/EBITDA (todo del trimestre, SMV).
     emp["evEbitdaRaw"] = {

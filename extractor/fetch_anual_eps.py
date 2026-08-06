@@ -10,6 +10,11 @@ import sys, json, os, requests
 sys.stdout.reconfigure(encoding="utf-8")
 from smv_extractor import (nueva_sesion, buscar_documentos, descargar,
                            parsear_xbrl, parsear_detalle_banco)
+# La MISMA guarda que usa la ficha: un EPS de 0 con utilidad real es un campo sin
+# llenar, no una ganancia de cero. Acá pesa todavía más que en la ficha, porque
+# este archivo alimenta el P/E y un 0 lo hacía leer como PÉRDIDA (ver peInfo en
+# app/src/lib/finanzas.js).
+from run_batch import eps_es_cero_sin_llenar
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 APP_DATA = os.path.normpath(os.path.join(AQUI, "..", "app", "src", "data"))
@@ -38,24 +43,36 @@ def main():
     for c in CFG["empresas"]:
         tk = c["ticker"]
         eps = moneda = None
+        cero_sin_llenar = False
         for intento in range(2):
             try:
                 docs = buscar_documentos(s, c["smvId"], anio=2025, trimestre=4, periodo="A")
+                d = None
                 if docs.get("xbrl"):
                     d = parsear_xbrl(descargar(s, docs["xbrl"]))
-                    eps = d.get("epsBasico")
                     moneda = c.get("monedaForzada") or d.get("moneda")
                 elif docs.get("detalle"):
                     d = parsear_detalle_banco(descargar(s, docs["detalle"]))
-                    eps = d.get("epsBasico")
                     moneda = d.get("moneda")
+                if d is not None:
+                    if eps_es_cero_sin_llenar(d):
+                        # Va null, NO 0.0: el P/E prefiere no existir antes que
+                        # declarar en pérdida a una empresa que ganó plata.
+                        eps, cero_sin_llenar = None, True
+                        break
+                    eps = d.get("epsBasico")
                 if eps is not None:
                     break
             except Exception as e:
                 print(f"   {tk} intento {intento}: {type(e).__name__}")
-        eps_anual[tk] = {"epsAnual": eps, "moneda": moneda, "anio": 2025,
-                         "fuente": "SMV — EE.FF. individuales anuales 2025, utilidad básica por acción"}
-        print(f"  {tk:10} EPS anual 2025: {moneda} {eps}")
+        eps_anual[tk] = {
+            "epsAnual": eps, "moneda": moneda, "anio": 2025,
+            "fuente": ("SMV — EE.FF. individuales anuales 2025, utilidad básica por acción"
+                       + (" — la SMV lo trae en 0.000 con utilidad real: campo sin llenar, "
+                          "va como hueco (no hay P/E)" if cero_sin_llenar else "")),
+        }
+        print(f"  {tk:10} EPS anual 2025: {moneda} {eps}"
+              + ("   (0.000 sin llenar -> hueco)" if cero_sin_llenar else ""))
 
     tc, tc_url = tipo_cambio_usdpen()
     print(f"\nTipo de cambio USD/PEN: {tc}  ({tc_url})")
