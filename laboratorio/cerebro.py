@@ -326,8 +326,23 @@ def leer(ticker, i):
     cuartil = 4 if abs(hoy) > c75 else (1 if abs(hoy) <= tam[int(0.25 * len(tam))] else 2)
 
     # ── qué pasó las otras veces que ESTA acción tuvo un día así ─────────
+    # ── ARREGLO 7: LA PUERTA ERA INALCANZABLE (8-ago-2026) ───────────────
+    # Acá pedía `>= 25` y eso NUNCA se podía cumplir en el cuartil alto. Es
+    # aritmética, no mala suerte: `pasado` tope 90 (VENTANA), el cuartil alto
+    # es su 25% -> el grupo tope es 22. Medido sobre el examen: 978 lecturas
+    # caen en cuartil 4 y **las 978** salían por acá, con grupo de mediana 19 y
+    # máximo 22. O sea el cerebro corría su lógica de días parecidos SOLO sobre
+    # los días normales y se abstenía en los días grandes — al revés de para lo
+    # que se escribió. Y como `habla` exige cuartil 4, hablaba 0 de 4626 veces.
+    #
+    # La puerta se baja, no se saca: sigue haciendo falta un piso. Pero el que
+    # protege de un grupo chico es el ENCOGIMIENTO de abajo, que es gradual —
+    # con 13 casos el número propio pesa 34% y con 22 pesa 47%. Una puerta dura
+    # encima de eso duplica la protección, y puesta por arriba del techo
+    # estructural no protege: apaga.
+    MIN_GRUPO = 12
     grupo = [s for x, s, _c, _t in pasado if (x > c75) == (cuartil == 4)]
-    if len(grupo) < 25:
+    if len(grupo) < MIN_GRUPO:
         return {'p': base, 'motivo': 'pocos días parecidos en su historia',
                 'base': base, 'cruda': cruda, 'rango': rango_de(pasado, cuartil, c75),
                 'n': len(pasado), 'cuartil': cuartil, 'habla': False}

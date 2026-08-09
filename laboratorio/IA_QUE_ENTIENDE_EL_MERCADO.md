@@ -149,6 +149,7 @@ Se guarda para no volver a desenterrarlo. Detalle completo en
 | Compresión precede expansión | falso acá: la quieta explota **menos** (6.3% vs 8.9%) |
 | Filtro de volumen del ADR | 60% contra base 42.5%, pero **p=0.18** y todo son 4 casos de RIO |
 | Magnitud (¿se va a mover?) | 72% aparente, pero **era composición**: dentro de cada acción el lift es −2.8 pts |
+| Metal grande → semana movida (9-ago) | el signo se da vuelta entre tramos (−0.170 entrenando, +0.210 en examen, p=0.75 los dos) y el control lo remata: mineras 6 de 10 a favor, no-mineras **22 de 36**, la misma proporción |
 
 **El patrón de todos:** un efecto agregado que en realidad decía en qué acción
 estabas parado. La prueba por defecto ya no es entrenamiento/prueba —
@@ -166,8 +167,31 @@ dirección**: 34% de acierto medido a una rueda.
 **Se puntúa con Brier, no con tasa de acierto.** Un lector honesto no es el que
 más acierta: es el que cuando dice 70% acierta 70%.
 
-**Estado: 2 de 5.** Calibrado sin sesgo (dice 58.5%, pasa 58.4%; dice 70-80%,
-pasa 74.9%; dice 0-10%, pasa 1.4%). Falla las tres que piden lectura de día.
+**Estado: 2 de 5.** Calibrado sin sesgo (dice 58.6%, pasa 58.5%; dice 70-80%,
+pasa 75.6%; dice 0-10%, pasa 1.4%). Falla las tres que piden lectura de día.
+
+**El número que ordena todo lo demás (9-ago):** resolución total **0.0365**, de
+la cual su base por acción sola ya aporta **0.0358**. O sea **el 98% de lo que
+el cerebro sabe es en qué acción está parado**, y toda la lectura del día
+—clima, cuartil, zona— se reparte el 2% que queda.
+
+**Dos variables de día estaban apagadas por construcción, no por umbral:**
+
+1. *El cuartil* (ARREGLADO el 9-ago). La puerta pedía un grupo de 25 casos y el
+   techo estructural era 22: `pasado` tope 90 ruedas por `VENTANA`, y el
+   cuartil alto es su 25%. Las **978 de 978** lecturas de cuartil 4 salían por
+   ahí. El cerebro corría su lógica de días parecidos solo sobre los días
+   normales y se abstenía en los grandes — al revés de para lo que se escribió.
+   Y como `habla` exige cuartil 4, hablaba **0 de 4626 veces**.
+2. *La zona del precio*, todavía muerta. Pide 8 acciones con la celda de techo
+   llena y hay **5**; con la de piso, **1**. `posicion52` pide 120 ruedas de
+   calentamiento, la serie arranca en abr-2025 y quedan 82 días útiles por
+   acción antes del corte: partidos en tres zonas, ningún balde junta gente.
+
+**Y el arreglo del cuartil no movió la nota: sigue 2/5.** Ahora habla 217 veces
+y acierta 59% contra 58% cuando calla — un punto. La prueba 2 hasta empeoró
+(+0.00082 → +0.00061). La puerta rota no tapaba una señal buena: tapaba que ahí
+no hay señal.
 
 **Las seis reglas de arquitectura, todas nacidas de un error:**
 1. Todo se compara **dentro de la misma acción**.
@@ -218,6 +242,7 @@ mide todo **como ganancia sobre esa base**.
 | `bitacora.jsonl` | el registro. **No se edita nunca** |
 | `REGLAS_CONGELADAS.md` | R1 a R8 con su corte, su fecha y su resultado |
 | `metal_manda.py` | la prueba del metal → minera |
+| `metal_magnitud.py` | el intento de pasar R8 de dirección a magnitud, rechazado |
 | `estabilidad_colas.py` | Spearman de la cola, el que mató la tabla de explosión |
 | `filtro_adr.py` + `eventos_adr.csv` | el filtro de volumen extranjero, rechazado |
 | `pregunta_magnitud.py` | el cambio de pregunta: magnitud en vez de dirección |
