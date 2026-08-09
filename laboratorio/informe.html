@@ -1,0 +1,659 @@
+<title>Laboratorio ALTO — qué aguanta y qué se cae</title>
+
+<style>
+  :root{
+    --ground:#F7F7F4; --panel:#FFFFFF; --panel-2:#F1F2EE;
+    --ink:#15191A; --ink-2:#47514F; --ink-3:#78837F;
+    --rule:#E1E4DE; --rule-2:#EDEFEA;
+    --cobre:#BE5A18; --verdin:#008C82;
+    --cobre-soft:rgba(190,90,24,.13); --verdin-soft:rgba(0,140,130,.13);
+    --azar:rgba(120,131,127,.13);
+    --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:ui-monospace,"Cascadia Mono",Consolas,"SF Mono",Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --ground:#101416; --panel:#171C1F; --panel-2:#1D2427;
+      --ink:#E9ECEA; --ink-2:#A8B2AF; --ink-3:#7C8784;
+      --rule:#262D30; --rule-2:#1F2629;
+      --cobre:#D2762F; --verdin:#12A192;
+      --cobre-soft:rgba(210,118,47,.16); --verdin-soft:rgba(18,161,146,.16);
+      --azar:rgba(124,135,132,.16);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#101416; --panel:#171C1F; --panel-2:#1D2427;
+    --ink:#E9ECEA; --ink-2:#A8B2AF; --ink-3:#7C8784;
+    --rule:#262D30; --rule-2:#1F2629;
+    --cobre:#D2762F; --verdin:#12A192;
+    --cobre-soft:rgba(210,118,47,.16); --verdin-soft:rgba(18,161,146,.16);
+    --azar:rgba(124,135,132,.16);
+  }
+  :root[data-theme="light"]{
+    --ground:#F7F7F4; --panel:#FFFFFF; --panel-2:#F1F2EE;
+    --ink:#15191A; --ink-2:#47514F; --ink-3:#78837F;
+    --rule:#E1E4DE; --rule-2:#EDEFEA;
+    --cobre:#BE5A18; --verdin:#008C82;
+    --cobre-soft:rgba(190,90,24,.13); --verdin-soft:rgba(0,140,130,.13);
+    --azar:rgba(120,131,127,.13);
+  }
+
+  body{background:var(--ground);color:var(--ink);font-family:var(--sans);
+    line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:60rem;margin:0 auto;padding:clamp(1.5rem,4vw,4rem) clamp(1rem,4vw,2.5rem) 5rem;
+    display:flex;flex-direction:column;gap:clamp(2rem,4vw,3.25rem);}
+  .prose{max-width:36rem;display:flex;flex-direction:column;gap:.9rem;}
+  p{margin:0;color:var(--ink-2);}
+  strong{color:var(--ink);font-weight:600;}
+
+  /* ── cabecera ── */
+  header{display:flex;flex-direction:column;gap:1rem;
+    border-bottom:1px solid var(--rule);padding-bottom:clamp(1.5rem,3vw,2.25rem);}
+  .eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-3);margin:0;}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(2rem,5.5vw,3.1rem);
+    line-height:1.08;margin:0;text-wrap:balance;letter-spacing:-.015em;}
+  .standfirst{font-family:var(--serif);font-size:clamp(1.05rem,2.2vw,1.25rem);
+    line-height:1.5;color:var(--ink-2);max-width:34rem;margin:0;}
+  .meta{display:flex;flex-wrap:wrap;gap:.4rem 1.5rem;font-family:var(--mono);
+    font-size:.72rem;color:var(--ink-3);margin:0;padding-top:.3rem;}
+  .meta b{color:var(--ink-2);font-weight:500;}
+
+  /* ── secciones ── */
+  section{display:flex;flex-direction:column;gap:1.1rem;}
+  .head{display:flex;justify-content:space-between;align-items:flex-start;
+    gap:1rem;flex-wrap:wrap;}
+  h2{font-family:var(--serif);font-size:clamp(1.35rem,3vw,1.75rem);font-weight:600;
+    line-height:1.2;margin:0;text-wrap:balance;letter-spacing:-.01em;max-width:28rem;}
+  .chip{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;
+    text-transform:uppercase;padding:.32rem .6rem;border-radius:2px;white-space:nowrap;
+    border:1px solid currentColor;flex-shrink:0;margin-top:.35rem;}
+  .chip.si{color:var(--verdin);background:var(--verdin-soft);}
+  .chip.no{color:var(--cobre);background:var(--cobre-soft);}
+  .chip.gris{color:var(--ink-3);background:var(--azar);}
+
+  /* ── panel de gráfico ── */
+  figure{margin:0;background:var(--panel);border:1px solid var(--rule);
+    border-radius:3px;padding:clamp(.9rem,2.5vw,1.4rem);
+    display:flex;flex-direction:column;gap:.85rem;}
+  .plot{overflow-x:auto;}
+  .plot svg{display:block;width:100%;height:auto;min-width:min(100%,30rem);}
+  figcaption{font-size:.82rem;color:var(--ink-3);line-height:1.5;margin:0;}
+  .legend{display:flex;flex-wrap:wrap;gap:.4rem 1.15rem;font-family:var(--mono);
+    font-size:.72rem;color:var(--ink-2);}
+  .legend span{display:inline-flex;align-items:center;gap:.4rem;}
+  .swatch{width:.7rem;height:.7rem;border-radius:2px;flex-shrink:0;}
+
+  text{font-family:var(--mono);fill:var(--ink-3);}
+  .lbl{font-size:11px;}
+  .val{font-size:11.5px;fill:var(--ink-2);}
+  .val-b{font-size:12px;font-weight:600;}
+  .axis{stroke:var(--rule);stroke-width:1;}
+  .grid{stroke:var(--rule-2);stroke-width:1;}
+  .zero{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:2 3;opacity:.7;}
+
+  /* ── datos crudos ── */
+  details{background:var(--panel-2);border:1px solid var(--rule);border-radius:3px;
+    font-size:.8rem;}
+  summary{cursor:pointer;padding:.55rem .85rem;font-family:var(--mono);font-size:.72rem;
+    letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);}
+  summary:focus-visible{outline:2px solid var(--verdin);outline-offset:2px;}
+  .tabla{overflow-x:auto;padding:0 .85rem .85rem;}
+  table{border-collapse:collapse;width:100%;font-family:var(--mono);font-size:.74rem;
+    font-variant-numeric:tabular-nums;}
+  th,td{text-align:right;padding:.3rem .55rem;border-bottom:1px solid var(--rule);
+    white-space:nowrap;color:var(--ink-2);}
+  th{color:var(--ink-3);font-weight:500;}
+  th:first-child,td:first-child{text-align:left;color:var(--ink);}
+
+  /* ── cierre ── */
+  .limites{background:var(--panel);border:1px solid var(--rule);border-radius:3px;
+    padding:clamp(1rem,2.5vw,1.5rem);display:flex;flex-direction:column;gap:.85rem;}
+  .limites ol{margin:0;padding-left:1.15rem;display:flex;flex-direction:column;gap:.7rem;
+    color:var(--ink-2);font-size:.92rem;}
+  .limites li::marker{font-family:var(--mono);font-size:.8rem;color:var(--ink-3);}
+  footer{border-top:1px solid var(--rule);padding-top:1.25rem;font-size:.82rem;
+    color:var(--ink-3);max-width:36rem;}
+
+  #tip{position:fixed;z-index:9;pointer-events:none;opacity:0;transition:opacity .1s;
+    background:var(--ink);color:var(--ground);font-family:var(--mono);font-size:.72rem;
+    line-height:1.45;padding:.4rem .55rem;border-radius:3px;max-width:15rem;
+    box-shadow:0 4px 14px rgba(0,0,0,.18);}
+  #tip.on{opacity:1;}
+  [data-tip]{cursor:crosshair;}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Laboratorio ALTO · informe de medición</p>
+  <h1>Qué aguanta, qué se cae y qué es indistinguible del azar</h1>
+  <p class="standfirst">Seis pruebas sobre 19 meses de cierres de la BVL. Cada una
+    entrenada en un tramo y juzgada en otro que nunca vio. Lo que sobrevive cabe
+    en dos hallazgos; lo que se cae, en once señales.</p>
+  <p class="meta">
+    <span><b>11 086</b> filas · acción × rueda</span>
+    <span><b>45</b> acciones negociadas</span>
+    <span><b>431</b> hechos de importancia</span>
+    <span>corte <b>31-ene-2026</b></span>
+    <span>rueda <b>05-ago-2026</b></span>
+  </p>
+</header>
+
+<!-- 1 ─────────────────────────────────────────────── -->
+<section>
+  <div class="head">
+    <h2>El episodio que empezó todo</h2>
+    <span class="chip gris">el caso</span>
+  </div>
+  <div class="prose">
+    <p>Volcan cayó siete ruedas seguidas después de sus resultados del 2T26 y el
+      martes 4 de agosto recuperó todo en un solo día: <strong>+8.4%</strong>. La
+      pregunta era si eso es un patrón que se puede operar.</p>
+    <p>El gráfico también desmiente una lectura tentadora: las calificadoras no
+      fueron el piso. Tras el informe de Fitch la acción <strong>cayó de 0.805 a
+      0.690</strong>. El despegue arrancó nueve días después, el día de la Junta.</p>
+  </div>
+  <figure>
+    <div class="plot" id="p-volcan"></div>
+    <figcaption>Cierres diarios de VOLCABC1 (BVL). Las marcas son Hechos de
+      Importancia con su fecha de publicación real, leída de la ruta del PDF.</figcaption>
+  </figure>
+</section>
+
+<!-- 2 ─────────────────────────────────────────────── -->
+<section>
+  <div class="head">
+    <h2>La caída fuerte sí rebota</h2>
+    <span class="chip si">sobrevive</span>
+  </div>
+  <div class="prose">
+    <p>Comprar una acción que cayó en tres ruedas y soltarla diez ruedas después.
+      Mientras más hondo el hueco, más grande el rebote — y funciona igual en los
+      dos tramos, que es lo que separa un hallazgo de una casualidad.</p>
+    <p>Todo está <strong>neto</strong>: menos 0.6% de comisión y 1% de spread
+      supuesto. Comprar cualquier cosa cualquier día pierde <strong>−1.11%</strong>
+      fuera de muestra.</p>
+  </div>
+  <figure>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--cobre)"></span>entrena · abr-25 a ene-26</span>
+      <span><span class="swatch" style="background:var(--verdin)"></span>examen · feb-26 a jul-26</span>
+    </div>
+    <div class="plot" id="p-rebote"></div>
+    <figcaption>Retorno medio neto a 10 ruedas, sin ventanas pisadas: una posición
+      a la vez por acción.</figcaption>
+  </figure>
+  <details>
+    <summary>Ver los números</summary>
+    <div class="tabla" id="t-rebote"></div>
+  </details>
+</section>
+
+<!-- 3 ─────────────────────────────────────────────── -->
+<section>
+  <div class="head">
+    <h2>Once señales que se dan vuelta</h2>
+    <span class="chip no">se cae</span>
+  </div>
+  <div class="prose">
+    <p>Cada señal se partió en quintiles y se midió la brecha entre el mejor y el
+      peor. En el entrenamiento todas parecen funcionar. En el examen,
+      <strong>nueve de once cambian de signo</strong>: el quintil que ganaba pasa a
+      perder.</p>
+    <p>La causa no es sutil. El tramo de entrenamiento fue alcista y el de examen
+      plano, así que cualquier señal aprendió a decir «que suba». Por eso el objetivo
+      se mide <strong>contra la mediana de la bolsa de ese día</strong>, no contra cero.</p>
+  </div>
+  <figure>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--cobre)"></span>brecha en el entrenamiento</span>
+      <span><span class="swatch" style="background:var(--verdin)"></span>brecha en el examen</span>
+    </div>
+    <div class="plot" id="p-senales"></div>
+    <figcaption>Brecha entre quintiles extremos, en puntos porcentuales de retorno
+      relativo a 10 ruedas. A la izquierda de la línea punteada, la señal apunta al
+      revés de como se entrenó.</figcaption>
+  </figure>
+</section>
+
+<!-- 4 ─────────────────────────────────────────────── -->
+<section>
+  <div class="head">
+    <h2>El estado financiero es la única familia en rojo</h2>
+    <span class="chip si">medido</span>
+  </div>
+  <div class="prose">
+    <p>De las cinco familias de Hechos con muestra suficiente, la de resultados
+      trimestrales es la única que se inclina a la baja. Las juntas de accionistas y
+      las clasificaciones de riesgo van al otro lado.</p>
+    <p>Junto con el hallazgo anterior queda un mercado coherente:
+      <strong>exagera el ruido y se queda corto con la noticia</strong>. La caída sin
+      motivo rebota; la que causó el estado financiero sigue bajando.</p>
+  </div>
+  <figure>
+    <div class="plot" id="p-familias"></div>
+    <figcaption>Mediana del retorno a 10 ruedas desde la última rueda que aún no
+      sabía la noticia. Solo familias con 10 eventos o más.</figcaption>
+  </figure>
+</section>
+
+<!-- 5 ─────────────────────────────────────────────── -->
+<section>
+  <div class="head">
+    <h2>La memoria encuentra, pero no evita</h2>
+    <span class="chip si">sobrevive a medias</span>
+  </div>
+  <div class="prose">
+    <p>El motor busca las 20 ruedas más parecidas del pasado y sortea 800 grupos al
+      azar para saber si el resultado se distingue del ruido. Se calla el
+      <strong>62%</strong> de las veces, y esa es la respuesta valiosa.</p>
+    <p>Cuando dice BUENO le gana al piso con holgura. Cuando dice MALO
+      <strong>no acierta</strong>: el precio sube casi igual. Sirve para encontrar,
+      no para evitar.</p>
+  </div>
+  <figure>
+    <div class="plot" id="p-memoria"></div>
+    <figcaption>400 ruedas del examen, con vecinos tomados solo del pasado de cada
+      una. El porcentaje al costado es cuántas terminaron en verde.</figcaption>
+  </figure>
+</section>
+
+<!-- 6 ─────────────────────────────────────────────── -->
+<section>
+  <div class="head">
+    <h2>La plata no es de Volcan, es del sector</h2>
+    <span class="chip no">se cae</span>
+  </div>
+  <div class="prose">
+    <p>En crudo, Volcan sigue a la plata (<strong>+0.65</strong>) y no al zinc,
+      siendo minera de zinc. Parece confirmar la tesis… hasta que el estaño también
+      sale significativo en empresas que no producen estaño.</p>
+    <p>Al descontar el movimiento de las mineras mes a mes, la correlación de Volcan
+      se desploma a <strong>+0.31</strong> y deja de significar nada. Atacocha es la
+      única que conserva exposición propia. Operar Volcan por la plata es operar el
+      sector entero con riesgo idiosincrásico encima.</p>
+  </div>
+  <figure>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--cobre)"></span>correlación cruda</span>
+      <span><span class="swatch" style="background:var(--verdin)"></span>descontando el sector</span>
+      <span><span class="swatch" style="background:var(--azar)"></span>zona que alcanza el azar</span>
+    </div>
+    <div class="plot" id="p-metales"></div>
+    <figcaption>Variación mensual de la acción contra la de la plata, 18 meses. La
+      banda gris es lo que logra una serie sin ninguna relación, según 2 000
+      permutaciones: dentro de ella, el número no dice nada.</figcaption>
+  </figure>
+  <details>
+    <summary>Ver los números</summary>
+    <div class="tabla" id="t-metales"></div>
+  </details>
+</section>
+
+<!-- 7 ─────────────────────────────────────────────── -->
+<section>
+  <div class="head">
+    <h2>Lo que ningún gráfico de acá puede decir</h2>
+    <span class="chip gris">sin historia</span>
+  </div>
+  <div class="limites">
+    <ol>
+      <li><strong>El spread no está en ningún archivo.</strong> Una acción que acaba
+        de caer 8% no se compra al precio de cierre. Con 3% de ida y vuelta, toda la
+        ventaja del hallazgo 2 muere. Es el supuesto más frágil de todo esto.</li>
+      <li><strong>No hay historia de noticias.</strong> El archivo es una ventana
+        móvil de 20 días. Una frase como «en 17 casos similares con titulares
+        positivos» es imposible de calcular y de refutar.</li>
+      <li><strong>No hay volumen viejo.</strong> El histórico guarda fecha y precio,
+        nada más.</li>
+      <li><strong>19 meses no contienen una caída general de la BVL.</strong> Ninguna
+        de estas tasas base ha visto un mercado feo de verdad.</li>
+    </ol>
+  </div>
+  <footer>
+    Todo sale de datos que el robot de ALTO ya baja a diario. Esto muestra tasas base
+    de situaciones parecidas; no es una recomendación de compra ni de venta, y ninguna
+    operación suelta se parece al promedio.
+  </footer>
+</section>
+
+</div>
+<div id="tip" role="status"></div>
+
+<script>
+const D = {"volcan":[["2026-05-20",0.78],["2026-05-21",0.8],["2026-05-22",0.795],["2026-05-25",0.789],["2026-05-26",0.783],["2026-05-27",0.795],["2026-05-28",0.81],["2026-05-29",0.805],["2026-06-01",0.72],["2026-06-02",0.774],["2026-06-03",0.77],["2026-06-04",0.728],["2026-06-05",0.702],["2026-06-08",0.69],["2026-06-09",0.701],["2026-06-10",0.799],["2026-06-11",0.81],["2026-06-12",0.87],["2026-06-15",0.843],["2026-06-16",0.88],["2026-06-17",0.89],["2026-06-18",0.895],["2026-06-19",0.889],["2026-06-22",0.87],["2026-06-23",0.88],["2026-06-24",0.842],["2026-06-25",0.77],["2026-06-26",0.82],["2026-06-30",0.84],["2026-07-01",0.85],["2026-07-02",0.85],["2026-07-03",0.861],["2026-07-06",0.875],["2026-07-07",0.9],["2026-07-08",0.898],["2026-07-09",0.861],["2026-07-10",0.88],["2026-07-13",0.877],["2026-07-14",0.865],["2026-07-15",0.873],["2026-07-16",0.87],["2026-07-17",0.868],["2026-07-20",0.85],["2026-07-21",0.851],["2026-07-22",0.865],["2026-07-24",0.82],["2026-07-27",0.796],["2026-07-30",0.795],["2026-07-31",0.791],["2026-08-03",0.784],["2026-08-04",0.85],["2026-08-05",0.86]],
+"rebote":[{"umbral":-3,"entrena":{"n":213,"mediana":1.63,"neto":0.69,"gana":64},"examen":{"n":254,"mediana":1.54,"neto":0.65,"gana":59}},{"umbral":-5,"entrena":{"n":119,"mediana":1.74,"neto":0.48,"gana":66},"examen":{"n":160,"mediana":2.25,"neto":1.49,"gana":63}},{"umbral":-8,"entrena":{"n":52,"mediana":3.34,"neto":1.33,"gana":69},"examen":{"n":88,"mediana":4.4,"neto":3.14,"gana":68}}],
+"piso":{"entrena":{"n":689,"mediana":0.8,"neto":0.61,"gana":59},"examen":{"n":506,"mediana":0.22,"neto":-1.11,"gana":52}},
+"senales":[{"k":"mom1","etq":"golpe de 1 rueda","entrena":0.84,"examen":-0.84},{"k":"mom3","etq":"tramo de 3 ruedas","entrena":1.11,"examen":-0.93},{"k":"mom5","etq":"tramo de 5 ruedas","entrena":1.28,"examen":-0.77},{"k":"mom10","etq":"tramo de 10 ruedas","entrena":1.91,"examen":-0.68},{"k":"mom20","etq":"tramo de 20 ruedas","entrena":1.74,"examen":0.02},{"k":"z5","etq":"fuerza en sigmas","entrena":1.38,"examen":-0.95},{"k":"rsi14","etq":"rsi 14","entrena":0.88,"examen":-0.45},{"k":"dd60","etq":"distancia al techo","entrena":1.51,"examen":-0.35},{"k":"rel5","etq":"fuerza relativa","entrena":1.13,"examen":-1.43},{"k":"mercado5","etq":"humor de la bolsa","entrena":0.89,"examen":0.02},{"k":"vol20","etq":"volatilidad","entrena":3.15,"examen":0.73}],
+"familias":[{"fam":"junta de accionistas","n":23,"mediana":3.15,"gana":65},{"fam":"clasificación de riesgo","n":20,"mediana":2.86,"gana":90},{"fam":"otros","n":184,"mediana":0.89,"gana":57},{"fam":"cambio en el directorio","n":11,"mediana":-0.31,"gana":45},{"fam":"EEFF trimestral","n":61,"mediana":-1.05,"gana":41}],
+"memoria":[{"g":"dijo BUENO","n":57,"mediana":2.53,"gana":63},{"g":"dijo MALO","n":93,"mediana":0.11,"gana":51},{"g":"se calló","n":250,"mediana":0.18,"gana":52},{"g":"piso: todas","n":400,"mediana":0.30,"gana":53}],
+"metales":[{"t":"ATACOBC1","nombre":"Atacocha","cruda":0.82,"propia":0.78,"propia_sig":true,"umbral":0.53},{"t":"MINSURI1","nombre":"Minsur","cruda":0.77,"propia":0.01,"propia_sig":false,"umbral":0.47},{"t":"NEXAPEC1","nombre":"Nexa Perú","cruda":0.71,"propia":0.4,"propia_sig":false,"umbral":0.48},{"t":"SCCO","nombre":"Southern Copper","cruda":0.7,"propia":0.39,"propia_sig":false,"umbral":0.47},{"t":"VOLCABC1","nombre":"Volcan","cruda":0.65,"propia":0.31,"propia_sig":false,"umbral":0.45},{"t":"BVN","nombre":"Buenaventura","cruda":0.64,"propia":0.12,"propia_sig":false,"umbral":0.46},{"t":"CVERDEC1","nombre":"Cerro Verde","cruda":0.44,"propia":-0.57,"propia_sig":true,"umbral":0.47},{"t":"RIO","nombre":"Rio2","cruda":0.44,"propia":0.13,"propia_sig":false,"umbral":0.49},{"t":"PPX","nombre":"PPX Mining","cruda":0.38,"propia":0.11,"propia_sig":false,"umbral":0.48},{"t":"PODERC1","nombre":"Poderosa","cruda":0.32,"propia":-0.5,"propia_sig":true,"umbral":0.46},{"t":"PML","nombre":"Panoro","cruda":-0.06,"propia":-0.42,"propia_sig":false,"umbral":0.46}]};
+
+const SVGNS = "http://www.w3.org/2000/svg";
+const el = (n, a = {}, txt) => {
+  const e = document.createElementNS(SVGNS, n);
+  for (const k in a) e.setAttribute(k, a[k]);
+  if (txt != null) e.textContent = txt;
+  return e;
+};
+const svg = (w, h) => {
+  const s = el("svg", {viewBox: `0 0 ${w} ${h}`, role: "img"});
+  return s;
+};
+const nf = (v, d = 2) => (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(d);
+const mesCorto = f => {
+  const M = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+  return `${+f.slice(8,10)} ${M[+f.slice(5,7)-1]}`;
+};
+
+/* ── tooltip compartido ── */
+const tip = document.getElementById("tip");
+const mostrar = (e, html) => {
+  tip.innerHTML = html; tip.classList.add("on");
+  const r = tip.getBoundingClientRect();
+  let x = e.clientX + 14, y = e.clientY - r.height - 10;
+  if (x + r.width > innerWidth - 8) x = e.clientX - r.width - 14;
+  if (y < 8) y = e.clientY + 18;
+  tip.style.left = x + "px"; tip.style.top = y + "px";
+};
+const ocultar = () => tip.classList.remove("on");
+const cebar = (nodo, html) => {
+  nodo.setAttribute("data-tip", "");
+  nodo.addEventListener("pointerenter", e => mostrar(e, html));
+  nodo.addEventListener("pointermove", e => mostrar(e, html));
+  nodo.addEventListener("pointerleave", ocultar);
+};
+
+/* ── 1. Volcan ── */
+(function () {
+  const W = 860, H = 360, mL = 46, mR = 16, mT = 56, mB = 34;
+  const d = D.volcan, n = d.length;
+  const lo = 0.66, hi = 0.93;
+  const x = i => mL + (i * (W - mL - mR)) / (n - 1);
+  const y = v => mT + ((hi - v) / (hi - lo)) * (H - mT - mB);
+  const s = svg(W, H);
+
+  for (let v = 0.70; v <= 0.90001; v += 0.05) {
+    s.appendChild(el("line", {x1: mL, x2: W - mR, y1: y(v), y2: y(v), class: "grid"}));
+    s.appendChild(el("text", {x: mL - 8, y: y(v) + 4, class: "lbl", "text-anchor": "end"},
+      v.toFixed(2)));
+  }
+  [0, 12, 24, 36, 51].forEach(i => s.appendChild(
+    el("text", {x: x(i), y: H - 12, class: "lbl", "text-anchor": i === 0 ? "start" : (i === 51 ? "end" : "middle")},
+      mesCorto(d[i][0]))));
+
+  // Fitch y la Junta caen a 7 ruedas una de otra: si las dos etiquetas salen
+  // hacia la derecha se pisan. La de Fitch se ancla a la izquierda para que
+  // cada una crezca en dirección contraria a la otra.
+  const HECHOS = [
+    {f: "2026-06-01", t: "Informe de Fitch", sub: "cerró −10.6% ese día",
+     col: "var(--cobre)", anchor: "end"},
+    {f: "2026-06-10", t: "Junta de accionistas", sub: "+24% en 3 ruedas",
+     col: "var(--verdin)", anchor: "start"},
+    {f: "2026-07-21", t: "Resultados 2T26", sub: "−7.9% en 7 ruedas",
+     col: "var(--cobre)", anchor: "end"},
+  ];
+  HECHOS.forEach(h => {
+    const i = d.findIndex(r => r[0] === h.f);
+    if (i < 0) return;
+    s.appendChild(el("line", {x1: x(i), x2: x(i), y1: mT - 24, y2: H - mB,
+      stroke: h.col, "stroke-width": 1, "stroke-dasharray": "3 3", opacity: ".65"}));
+    const dx = h.anchor === "end" ? -6 : 6;
+    s.appendChild(el("text", {x: x(i) + dx, y: mT - 30, class: "val-b",
+      "text-anchor": h.anchor, fill: h.col}, h.t));
+    s.appendChild(el("text", {x: x(i) + dx, y: mT - 17, class: "lbl",
+      "text-anchor": h.anchor}, h.sub));
+  });
+
+  const relleno = d.map((r, i) => `${i ? "L" : "M"}${x(i)},${y(r[1])}`).join("") +
+    `L${x(n - 1)},${y(lo)}L${x(0)},${y(lo)}Z`;
+  s.appendChild(el("path", {d: relleno, fill: "var(--verdin-soft)"}));
+  s.appendChild(el("path", {
+    d: d.map((r, i) => `${i ? "L" : "M"}${x(i)},${y(r[1])}`).join(""),
+    fill: "none", stroke: "var(--verdin)", "stroke-width": 2,
+    "stroke-linejoin": "round", "stroke-linecap": "round"}));
+
+  // La anotación del salto se sube a la banda vacía de arriba con un tirante:
+  // pegada al punto se montaba sobre la línea punteada de los resultados.
+  const salto = d.findIndex(r => r[0] === "2026-08-04");
+  s.appendChild(el("circle", {cx: x(salto), cy: y(d[salto][1]), r: 5,
+    fill: "var(--verdin)", stroke: "var(--panel)", "stroke-width": 2}));
+  s.appendChild(el("line", {x1: x(salto), x2: x(salto), y1: 96,
+    y2: y(d[salto][1]) - 9, stroke: "var(--verdin)", "stroke-width": 1, opacity: ".55"}));
+  s.appendChild(el("text", {x: x(salto) + 7, y: 92, class: "val-b",
+    "text-anchor": "end", fill: "var(--verdin)"}, "+8.4% en un día"));
+  const fin = n - 1;
+  s.appendChild(el("circle", {cx: x(fin), cy: y(d[fin][1]), r: 3.5, fill: "var(--verdin)"}));
+
+  d.forEach((r, i) => {
+    const hit = el("rect", {x: x(i) - (W - mL - mR) / (2 * n), y: mT - 24,
+      width: (W - mL - mR) / n, height: H - mT - mB + 24, fill: "transparent"});
+    const prev = i ? ((r[1] / d[i - 1][1] - 1) * 100) : 0;
+    cebar(hit, `<b>${mesCorto(r[0])}</b> · S/${r[1].toFixed(3)}` +
+      (i ? `<br>${nf(prev, 2)}% vs. la rueda anterior` : ""));
+    s.appendChild(hit);
+  });
+  document.getElementById("p-volcan").appendChild(s);
+})();
+
+/* ── 2. Rebote ── */
+(function () {
+  const W = 860, H = 300, mL = 162, mR = 70, mT = 22, mB = 40;
+  const filas = [
+    {et: "comprar cualquier cosa", e: D.piso.entrena, x: D.piso.examen, piso: true},
+    ...D.rebote.map(r => ({et: `cayó ${r.umbral}% en 3 ruedas`, e: r.entrena, x: r.examen})),
+  ];
+  const lo = -1.6, hi = 3.6;
+  const x = v => mL + ((v - lo) / (hi - lo)) * (W - mL - mR);
+  const bandaH = (H - mT - mB) / filas.length;
+  const s = svg(W, H);
+
+  for (let v = -1; v <= 3.0001; v += 1) {
+    s.appendChild(el("line", {x1: x(v), x2: x(v), y1: mT, y2: H - mB, class: "grid"}));
+    s.appendChild(el("text", {x: x(v), y: H - 20, class: "lbl", "text-anchor": "middle"},
+      nf(v, 0) + "%"));
+  }
+  s.appendChild(el("line", {x1: x(0), x2: x(0), y1: mT, y2: H - mB, class: "zero"}));
+
+  filas.forEach((f, i) => {
+    const yb = mT + i * bandaH;
+    s.appendChild(el("text", {x: mL - 12, y: yb + bandaH / 2 + 4, class: "val",
+      "text-anchor": "end", fill: f.piso ? "var(--ink-3)" : "var(--ink)"}, f.et));
+    [["e", "var(--cobre)", "entrena"], ["x", "var(--verdin)", "examen"]].forEach(([k, col, nom], j) => {
+      const v = f[k].neto, alto = bandaH * 0.3;
+      const yr = yb + bandaH * 0.16 + j * (alto + 3);
+      const x0 = Math.min(x(0), x(v)), w = Math.abs(x(v) - x(0));
+      const r = el("rect", {x: x0, y: yr, width: Math.max(w, 1.5), height: alto,
+        fill: col, opacity: f.piso ? ".45" : "1", rx: 2});
+      cebar(r, `<b>${f.et}</b><br>${nom} · ${f[k].n} operaciones<br>` +
+        `neto ${nf(v)}% · mediana ${nf(f[k].mediana)}% · gana ${f[k].gana}%`);
+      s.appendChild(r);
+      s.appendChild(el("text", {x: v >= 0 ? x(v) + 6 : x(v) - 6, y: yr + alto / 2 + 4,
+        class: "val", "text-anchor": v >= 0 ? "start" : "end",
+        fill: f.piso ? "var(--ink-3)" : col}, nf(v) + "%"));
+    });
+    if (i) s.appendChild(el("line", {x1: mL - 4, x2: W - mR, y1: yb, y2: yb, class: "grid"}));
+  });
+  document.getElementById("p-rebote").appendChild(s);
+
+  const t = ["<table><thead><tr><th>situación</th><th>tramo</th><th>ops</th>" +
+    "<th>mediana</th><th>gana</th><th>neto</th></tr></thead><tbody>"];
+  filas.forEach(f => [["entrena", f.e], ["examen", f.x]].forEach(([nom, v]) =>
+    t.push(`<tr><td>${f.et}</td><td>${nom}</td><td>${v.n}</td>` +
+      `<td>${nf(v.mediana)}%</td><td>${v.gana}%</td><td>${nf(v.neto)}%</td></tr>`)));
+  document.getElementById("t-rebote").innerHTML = t.join("") + "</tbody></table>";
+})();
+
+/* ── 3. Señales ── */
+(function () {
+  const W = 860, H = 400, mL = 150, mR = 60, mT = 30, mB = 40;
+  const d = [...D.senales].sort((a, b) => a.examen - b.examen);
+  const lo = -1.8, hi = 3.4;
+  const x = v => mL + ((v - lo) / (hi - lo)) * (W - mL - mR);
+  const paso = (H - mT - mB) / d.length;
+  const s = svg(W, H);
+
+  s.appendChild(el("rect", {x: mL, y: mT - 14, width: x(0) - mL, height: H - mT - mB + 14,
+    fill: "var(--cobre-soft)"}));
+  s.appendChild(el("text", {x: mL + 6, y: mT - 4, class: "lbl", fill: "var(--cobre)"},
+    "apunta al revés de como se entrenó"));
+
+  for (let v = -1; v <= 3.0001; v += 1) {
+    s.appendChild(el("line", {x1: x(v), x2: x(v), y1: mT, y2: H - mB, class: "grid"}));
+    s.appendChild(el("text", {x: x(v), y: H - 20, class: "lbl", "text-anchor": "middle"},
+      nf(v, 0)));
+  }
+  s.appendChild(el("line", {x1: x(0), x2: x(0), y1: mT - 14, y2: H - mB, class: "zero"}));
+
+  d.forEach((f, i) => {
+    const yc = mT + i * paso + paso / 2;
+    s.appendChild(el("text", {x: mL - 12, y: yc + 4, class: "val", "text-anchor": "end"}, f.etq));
+    s.appendChild(el("line", {x1: x(f.entrena), x2: x(f.examen), y1: yc, y2: yc,
+      stroke: "var(--ink-3)", "stroke-width": 1.5, opacity: ".4"}));
+    const g = el("g");
+    [[f.entrena, "var(--cobre)", "entrenamiento"], [f.examen, "var(--verdin)", "examen"]]
+      .forEach(([v, col]) => {
+        g.appendChild(el("circle", {cx: x(v), cy: yc, r: 5, fill: col,
+          stroke: "var(--panel)", "stroke-width": 2}));
+      });
+    cebar(g, `<b>${f.etq}</b><br>entrenamiento ${nf(f.entrena)} pp<br>` +
+      `examen ${nf(f.examen)} pp<br>${f.examen < 0 ? "se dio vuelta" : "conservó el signo"}`);
+    s.appendChild(g);
+    s.appendChild(el("text", {x: x(f.examen) - 10, y: yc + 4, class: "val",
+      "text-anchor": "end", fill: f.examen < 0 ? "var(--cobre)" : "var(--verdin)"},
+      nf(f.examen)));
+  });
+  document.getElementById("p-senales").appendChild(s);
+})();
+
+/* ── 4. Familias ── */
+(function () {
+  // mR generoso a propósito: con la barra más larga (+3.15%) el valor pegado a
+  // su punta se montaba sobre la columna de «n=… · % verde» de la derecha.
+  const W = 860, H = 250, mL = 170, mR = 200, mT = 18, mB = 38;
+  const d = D.familias;
+  const lo = -1.8, hi = 3.6;
+  const x = v => mL + ((v - lo) / (hi - lo)) * (W - mL - mR);
+  const paso = (H - mT - mB) / d.length;
+  const s = svg(W, H);
+
+  for (let v = -1; v <= 3.0001; v += 1) {
+    s.appendChild(el("line", {x1: x(v), x2: x(v), y1: mT, y2: H - mB, class: "grid"}));
+    s.appendChild(el("text", {x: x(v), y: H - 18, class: "lbl", "text-anchor": "middle"},
+      nf(v, 0) + "%"));
+  }
+  s.appendChild(el("line", {x1: x(0), x2: x(0), y1: mT, y2: H - mB, class: "zero"}));
+
+  d.forEach((f, i) => {
+    const yb = mT + i * paso, alto = paso * 0.52;
+    const yr = yb + (paso - alto) / 2;
+    const col = f.mediana >= 0 ? "var(--verdin)" : "var(--cobre)";
+    s.appendChild(el("text", {x: mL - 12, y: yr + alto / 2 + 4, class: "val",
+      "text-anchor": "end", fill: "var(--ink)"}, f.fam));
+    const x0 = Math.min(x(0), x(f.mediana)), w = Math.abs(x(f.mediana) - x(0));
+    const r = el("rect", {x: x0, y: yr, width: Math.max(w, 2), height: alto, fill: col, rx: 2});
+    cebar(r, `<b>${f.fam}</b><br>${f.n} eventos medidos<br>` +
+      `mediana a 10 ruedas ${nf(f.mediana)}%<br>terminó en verde el ${f.gana}%`);
+    s.appendChild(r);
+    s.appendChild(el("text", {x: f.mediana >= 0 ? x(f.mediana) + 7 : x(f.mediana) - 7,
+      y: yr + alto / 2 + 4, class: "val-b", "text-anchor": f.mediana >= 0 ? "start" : "end",
+      fill: col}, nf(f.mediana) + "%"));
+    s.appendChild(el("text", {x: W - 8, y: yr + alto / 2 + 4, class: "lbl",
+      "text-anchor": "end"}, `n=${f.n} · ${f.gana}% verde`));
+  });
+  document.getElementById("p-familias").appendChild(s);
+})();
+
+/* ── 5. Memoria ── */
+(function () {
+  const W = 860, H = 220, mL = 150, mR = 130, mT = 18, mB = 36;
+  const d = D.memoria;
+  const hi = 3.0;
+  const x = v => mL + (v / hi) * (W - mL - mR);
+  const paso = (H - mT - mB) / d.length;
+  const s = svg(W, H);
+
+  for (let v = 0; v <= 3.0001; v += 1) {
+    s.appendChild(el("line", {x1: x(v), x2: x(v), y1: mT, y2: H - mB, class: "grid"}));
+    s.appendChild(el("text", {x: x(v), y: H - 16, class: "lbl", "text-anchor": "middle"},
+      "+" + v.toFixed(0) + "%"));
+  }
+  d.forEach((f, i) => {
+    const piso = f.g.startsWith("piso"), bueno = f.g.includes("BUENO");
+    const yb = mT + i * paso, alto = paso * 0.5, yr = yb + (paso - alto) / 2;
+    s.appendChild(el("text", {x: mL - 12, y: yr + alto / 2 + 4, class: "val",
+      "text-anchor": "end", fill: bueno ? "var(--verdin)" : "var(--ink)"}, f.g));
+    const r = el("rect", {x: mL, y: yr, width: Math.max(x(f.mediana) - mL, 2), height: alto,
+      fill: bueno ? "var(--verdin)" : (piso ? "var(--ink-3)" : "var(--verdin)"),
+      opacity: bueno ? "1" : (piso ? ".55" : ".38"), rx: 2});
+    cebar(r, `<b>${f.g}</b><br>${f.n} ruedas<br>mediana ${nf(f.mediana)}% a 10 ruedas<br>` +
+      `terminó en verde el ${f.gana}%`);
+    s.appendChild(r);
+    s.appendChild(el("text", {x: x(f.mediana) + 7, y: yr + alto / 2 + 4, class: "val-b",
+      "text-anchor": "start", fill: bueno ? "var(--verdin)" : "var(--ink-2)"},
+      nf(f.mediana) + "%"));
+    s.appendChild(el("text", {x: W - 8, y: yr + alto / 2 + 4, class: "lbl",
+      "text-anchor": "end"}, `n=${f.n} · ${f.gana}% verde`));
+  });
+  const yPiso = mT + 3 * paso + (paso - paso * 0.5) / 2;
+  s.appendChild(el("line", {x1: x(D.memoria[3].mediana), x2: x(D.memoria[3].mediana),
+    y1: mT, y2: yPiso, stroke: "var(--ink-3)", "stroke-width": 1, "stroke-dasharray": "2 3"}));
+  document.getElementById("p-memoria").appendChild(s);
+})();
+
+/* ── 6. Metales ── */
+(function () {
+  const W = 860, H = 430, mL = 132, mR = 74, mT = 34, mB = 40;
+  const d = D.metales;
+  const lo = -0.75, hi = 0.95;
+  const x = v => mL + ((v - lo) / (hi - lo)) * (W - mL - mR);
+  const paso = (H - mT - mB) / d.length;
+  const s = svg(W, H);
+
+  s.appendChild(el("rect", {x: x(-0.48), y: mT - 16, width: x(0.48) - x(-0.48),
+    height: H - mT - mB + 16, fill: "var(--azar)"}));
+  s.appendChild(el("text", {x: x(0), y: mT - 22, class: "lbl", "text-anchor": "middle"},
+    "lo que alcanza una serie sin ninguna relación"));
+
+  for (let v = -0.5; v <= 0.75001; v += 0.25) {
+    s.appendChild(el("line", {x1: x(v), x2: x(v), y1: mT, y2: H - mB, class: "grid"}));
+    s.appendChild(el("text", {x: x(v), y: H - 18, class: "lbl", "text-anchor": "middle"},
+      v.toFixed(2)));
+  }
+  s.appendChild(el("line", {x1: x(0), x2: x(0), y1: mT, y2: H - mB, class: "zero"}));
+
+  d.forEach((f, i) => {
+    const yc = mT + i * paso + paso / 2;
+    const foco = f.t === "VOLCABC1";
+    s.appendChild(el("text", {x: mL - 12, y: yc + 4,
+      class: foco ? "val-b" : "val", "text-anchor": "end",
+      fill: foco ? "var(--ink)" : "var(--ink-2)"}, f.nombre));
+    s.appendChild(el("line", {x1: x(f.cruda), x2: x(f.propia), y1: yc, y2: yc,
+      stroke: "var(--ink-3)", "stroke-width": foco ? 2 : 1.5, opacity: foco ? ".7" : ".35"}));
+    const g = el("g");
+    g.appendChild(el("circle", {cx: x(f.cruda), cy: yc, r: foco ? 6 : 5,
+      fill: "var(--cobre)", stroke: "var(--panel)", "stroke-width": 2}));
+    g.appendChild(el("circle", {cx: x(f.propia), cy: yc, r: foco ? 6 : 5,
+      fill: "var(--verdin)", stroke: "var(--panel)", "stroke-width": 2,
+      opacity: f.propia_sig ? "1" : ".5"}));
+    cebar(g, `<b>${f.nombre}</b> · ${f.t}<br>cruda r=${f.cruda.toFixed(2)}<br>` +
+      `descontando el sector r=${f.propia.toFixed(2)}<br>` +
+      (f.propia_sig ? "exposición propia real" : "dentro de la zona del azar"));
+    s.appendChild(g);
+    s.appendChild(el("text", {x: W - 10, y: yc + 4, class: "lbl", "text-anchor": "end",
+      fill: f.propia_sig ? "var(--verdin)" : "var(--ink-3)"},
+      f.propia_sig ? "propia" : "del sector"));
+  });
+  document.getElementById("p-metales").appendChild(s);
+
+  const t = ["<table><thead><tr><th>minera</th><th>r cruda</th><th>r propia</th>" +
+    "<th>umbral azar</th><th>veredicto</th></tr></thead><tbody>"];
+  d.forEach(f => t.push(`<tr><td>${f.nombre}</td><td>${f.cruda.toFixed(2)}</td>` +
+    `<td>${f.propia.toFixed(2)}</td><td>±${f.umbral.toFixed(2)}</td>` +
+    `<td>${f.propia_sig ? "exposición propia" : "del sector"}</td></tr>`));
+  document.getElementById("t-metales").innerHTML = t.join("") + "</tbody></table>";
+})();
+</script>

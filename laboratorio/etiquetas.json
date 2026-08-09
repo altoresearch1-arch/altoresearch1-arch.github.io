@@ -1,0 +1,162 @@
+{
+  "_comment": "Libro de etiquetas del laboratorio. Ver etiquetas.py.",
+  "etiquetas": [
+    {
+      "ticker": "VOLCABC1",
+      "fecha": "2026-07-21",
+      "tipo": "transicion_operativa",
+      "base": "consolidado",
+      "texto": "2T26 leido como trimestre de transicion: utilidad cae 71.8 a 46.9 MM USD pero por paradas programadas",
+      "fuente": "análisis del tercero (GPT) sobre los informes 2T26 de Volcan — no verificado contra el PDF por el laboratorio",
+      "verificado": false,
+      "nota": "el repo (individual) dice utilidad del trimestre 5.5 M USD; base distinta"
+    },
+    {
+      "ticker": "VOLCABC1",
+      "fecha": "2026-07-21",
+      "tipo": "costo_por_volumen",
+      "base": "consolidado",
+      "texto": "costo unitario 65.7 USD/TM (+27% YoY) pero 8.7 USD del alza es efecto volumen, no ineficiencia",
+      "fuente": "análisis del tercero (GPT) sobre los informes 2T26 de Volcan — no verificado contra el PDF por el laboratorio",
+      "verificado": false
+    },
+    {
+      "ticker": "VOLCABC1",
+      "fecha": "2026-07-21",
+      "tipo": "hito_produccion",
+      "base": "no_aplica",
+      "texto": "Romina inicia operacion comercial en junio 2026 con 37.9 mil TM; meta de costo consolidado 45 USD/MT",
+      "fuente": "análisis del tercero (GPT) sobre los informes 2T26 de Volcan — no verificado contra el PDF por el laboratorio",
+      "verificado": false
+    },
+    {
+      "ticker": "VOLCABC1",
+      "fecha": "2026-06-12",
+      "tipo": "validacion_externa",
+      "base": "no_aplica",
+      "texto": "Moodys B1 y Fitch B+ suben la calificacion en junio",
+      "fuente": "análisis del tercero (GPT) sobre los informes 2T26 de Volcan — no verificado contra el PDF por el laboratorio",
+      "verificado": false,
+      "nota": "hechos: Fitch 01-jun y Clasificacion de Riesgo 12-jun SI existen. Pero tras Fitch el precio cayo 0.805 a 0.690; la subida arranco el 10-jun, dia de la JGA"
+    },
+    {
+      "ticker": "VOLCABC1",
+      "fecha": "2026-06-30",
+      "tipo": "precio_metal",
+      "base": "no_aplica",
+      "texto": "plata -12.45% entre Q1 y Q2 2026 (83.64 a 73.23 USD/oz, BCRP). La plata es 47.3% de las ventas segun el informe",
+      "fuente": "verificado por el laboratorio contra cotizaciones.json (BCRP)",
+      "verificado": true,
+      "nota": "el -12.45% esta verificado; el 47.3% de ventas no"
+    },
+    {
+      "ticker": "VOLCABC1",
+      "fecha": "2026-07-21",
+      "tipo": "caja_fuerte",
+      "base": "consolidado",
+      "texto": "caja de 493.2 MM USD y reapertura de bonos",
+      "fuente": "análisis del tercero (GPT) sobre los informes 2T26 de Volcan — no verificado contra el PDF por el laboratorio",
+      "verificado": false,
+      "nota": "el repo (individual) dice efectivo 400.9 M USD vs 493.2 M del consolidado. La aparente contradiccion del bono quedo RESUELTA: 8.500% es el cupon de los Senior Secured Notes (hechos 16 y 24-jun) y 7.75% la tasa de la reapertura de 220 MM — colocar bajo el cupon es apetito institucional, no un error de dato."
+    },
+    {
+      "ticker": "VOLCABC1",
+      "fecha": "2026-08-05",
+      "tipo": "guidance",
+      "base": "no_aplica",
+      "texto": "TESIS DEL TERCERO: con caja grande y Romina arrancando, la accion no puede gotear para siempre por un mal dato de costos fijos",
+      "fuente": "análisis del tercero (GPT) sobre los informes 2T26 de Volcan — no verificado contra el PDF por el laboratorio",
+      "verificado": false,
+      "hipotesis": {
+        "direccion": "sube",
+        "ruedas": 10,
+        "quien": "GPT (tercero)",
+        "escrita": "2026-08-06",
+        "precio_ref": 0.86
+      }
+    },
+    {
+      "ticker": "VOLCABC1",
+      "fecha": "2026-08-05",
+      "tipo": "cuello_de_botella",
+      "base": "no_aplica",
+      "texto": "DISPARADOR A VIGILAR: Yauli con retraso por falta de mano de obra y equipos; un hecho de regularizacion de contratistas seria la señal",
+      "fuente": "análisis del tercero (GPT) sobre los informes 2T26 de Volcan — no verificado contra el PDF por el laboratorio",
+      "verificado": false
+    },
+    {
+      "ticker": "VOLCABC1",
+      "fecha": "2026-08-05",
+      "tipo": "rampa_produccion",
+      "base": "no_aplica",
+      "texto": "DISPARADOR A VIGILAR: tratamiento de Romina por encima de 35.2 mil TM",
+      "fuente": "análisis del tercero (GPT) sobre los informes 2T26 de Volcan — no verificado contra el PDF por el laboratorio",
+      "verificado": false
+    },
+    {
+      "ticker": "VOLCABC1",
+      "fecha": "2026-07-21",
+      "tipo": "coberturas",
+      "base": "consolidado",
+      "texto": "1H26: perdida de 84.0 MM USD en coberturas porque el precio de mercado subio mas de lo asegurado. Hunde la utilidad neta sin tocar la operacion",
+      "fuente": "analisis del tercero (NotebookLM sobre informes 1T26/2T26 y anexo) — no verificado contra el PDF por el laboratorio",
+      "verificado": false,
+      "nota": "es la etiqueta que mejor reconcilia el 5.5 M individual del repo con el relato de negocio sano"
+    },
+    {
+      "ticker": "VOLCABC1",
+      "fecha": "2026-07-21",
+      "tipo": "costo_estructural",
+      "base": "consolidado",
+      "texto": "cost bridge 2T26: +13.9 USD/MT total, de los cuales 8.7 por efecto volumen (reversible), 2.6 servicios y 1.0 mano de obra (persistentes)",
+      "fuente": "analisis del tercero (NotebookLM sobre informes 1T26/2T26 y anexo) — no verificado contra el PDF por el laboratorio",
+      "verificado": false
+    },
+    {
+      "ticker": "VOLCABC1",
+      "fecha": "2026-06-24",
+      "tipo": "colocacion_deuda",
+      "base": "no_aplica",
+      "texto": "reapertura de bonos 2032 por 220 MM USD al 7.75%, por debajo del cupon de 8.500%, con demanda sobre la oferta",
+      "fuente": "analisis del tercero (NotebookLM sobre informes 1T26/2T26 y anexo) — no verificado contra el PDF por el laboratorio",
+      "verificado": false,
+      "nota": "los hechos del 16 y 24-jun confirman la emision de 8.500% Senior Secured Notes; el monto, la tasa de reapertura y la demanda no estan en el repo"
+    },
+    {
+      "ticker": "VOLCABC1",
+      "fecha": "2026-07-21",
+      "tipo": "pipeline_proyecto",
+      "base": "no_aplica",
+      "texto": "pipeline: Palma y Zoraida en prefactibilidad para 2029; Esperanza 2035; Santa 2039",
+      "fuente": "analisis del tercero (NotebookLM sobre informes 1T26/2T26 y anexo) — no verificado contra el PDF por el laboratorio",
+      "verificado": false
+    },
+    {
+      "ticker": "VOLCABC1",
+      "fecha": "2026-06-30",
+      "tipo": "precio_metal",
+      "base": "no_aplica",
+      "texto": "MEDIDO POR EL LABORATORIO: la correlacion mensual de Volcan con la plata (+0.65) DESAPARECE al descontar el sector (+0.31, no significativo). La exposicion a la plata es del sector minero, no propia de Volcan",
+      "fuente": "laboratorio/metales.py, prueba de permutacion 2000 barajadas, n=18 meses",
+      "verificado": true
+    },
+    {
+      "ticker": "NEXAPEC1",
+      "fecha": "2026-08-05",
+      "tipo": "transicion_operativa",
+      "base": "individual",
+      "texto": "2T26: BPA +0.038 USD. Baja contra 1T26 (+0.051) y sube contra 2T25 (+0.023). El precio NO cayo con el EEFF: cerro +2.55% ese dia, en su techo de 3 meses",
+      "fuente": "app/src/data/bpa_historico.json (SMV, individual) + laboratorio/ficha.py rueda 2026-08-05",
+      "verificado": true
+    },
+    {
+      "ticker": "NEXAPEC1",
+      "fecha": "2026-08-05",
+      "tipo": "caja_fuerte",
+      "base": "individual",
+      "texto": "FCF 12 meses +130.1 M USD al 30-jun-2026",
+      "fuente": "app/src/data/fcf_ttm.json (SMV, individual)",
+      "verificado": true
+    }
+  ]
+}

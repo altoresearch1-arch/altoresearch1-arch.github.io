@@ -1,0 +1,327 @@
+<title>Nexa Resources Perú S.A.A. — el precio y lo que se publicó</title>
+
+<style>
+  :root{
+    --ground:#F7F7F4;--panel:#FFFFFF;--panel-2:#F1F2EE;
+    --ink:#15191A;--ink-2:#47514F;--ink-3:#78837F;
+    --rule:#E1E4DE;--rule-2:#EDEFEA;
+    --sube:#008C82;--baja:#BE5A18;
+    --sube-soft:rgba(0,140,130,.13);--baja-soft:rgba(190,90,24,.13);
+    --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:ui-monospace,"Cascadia Mono",Consolas,"SF Mono",Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--ground:#101416;--panel:#171C1F;--panel-2:#1D2427;
+      --ink:#E9ECEA;--ink-2:#A8B2AF;--ink-3:#7C8784;--rule:#262D30;--rule-2:#1F2629;
+      --sube:#12A192;--baja:#D2762F;
+      --sube-soft:rgba(18,161,146,.16);--baja-soft:rgba(210,118,47,.16);}
+  }
+  :root[data-theme="dark"]{--ground:#101416;--panel:#171C1F;--panel-2:#1D2427;
+    --ink:#E9ECEA;--ink-2:#A8B2AF;--ink-3:#7C8784;--rule:#262D30;--rule-2:#1F2629;
+    --sube:#12A192;--baja:#D2762F;
+    --sube-soft:rgba(18,161,146,.16);--baja-soft:rgba(210,118,47,.16);}
+  :root[data-theme="light"]{--ground:#F7F7F4;--panel:#FFFFFF;--panel-2:#F1F2EE;
+    --ink:#15191A;--ink-2:#47514F;--ink-3:#78837F;--rule:#E1E4DE;--rule-2:#EDEFEA;
+    --sube:#008C82;--baja:#BE5A18;
+    --sube-soft:rgba(0,140,130,.13);--baja-soft:rgba(190,90,24,.13);}
+
+  body{background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.6;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:62rem;margin:0 auto;padding:clamp(1.25rem,3.5vw,2.75rem) clamp(.9rem,3vw,2rem) 4rem;
+    display:flex;flex-direction:column;gap:clamp(1.25rem,2.5vw,2rem);}
+
+  .tape{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem 1.5rem;
+    border-bottom:1px solid var(--rule);padding-bottom:1rem;}
+  .tape h1{font-family:var(--serif);font-size:clamp(1.5rem,3.5vw,2.1rem);font-weight:600;
+    margin:0;letter-spacing:-.01em;line-height:1.15;}
+  .tk{font-family:var(--mono);font-size:.78rem;color:var(--ink-3);letter-spacing:.08em;}
+  .px{font-family:var(--mono);font-size:clamp(1.4rem,3vw,1.9rem);font-weight:600;
+    font-variant-numeric:tabular-nums;margin-left:auto;}
+  .dt{font-family:var(--mono);font-size:.95rem;font-variant-numeric:tabular-nums;}
+  .up{color:var(--sube);} .dn{color:var(--baja);}
+
+  .tiras{display:grid;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));gap:.75rem;}
+  .tira{background:var(--panel);border:1px solid var(--rule);border-radius:3px;
+    padding:.7rem .85rem;display:flex;flex-direction:column;gap:.2rem;}
+  .tira .k{font-family:var(--mono);font-size:.66rem;letter-spacing:.09em;
+    text-transform:uppercase;color:var(--ink-3);}
+  .tira .v{font-family:var(--mono);font-size:1.15rem;font-weight:600;
+    font-variant-numeric:tabular-nums;}
+  .tira .s{font-size:.76rem;color:var(--ink-3);line-height:1.35;}
+
+  figure{margin:0;background:var(--panel);border:1px solid var(--rule);border-radius:3px;
+    padding:clamp(.75rem,2vw,1.15rem);display:flex;flex-direction:column;gap:.7rem;}
+  .plot{overflow-x:auto;}
+  .plot svg{display:block;width:100%;height:auto;min-width:min(100%,32rem);}
+  figcaption{font-size:.8rem;color:var(--ink-3);line-height:1.5;margin:0;}
+  .legend{display:flex;flex-wrap:wrap;gap:.35rem 1.1rem;font-family:var(--mono);
+    font-size:.7rem;color:var(--ink-2);}
+  .legend span{display:inline-flex;align-items:center;gap:.35rem;}
+  .sw{width:.65rem;height:.65rem;border-radius:2px;flex-shrink:0;}
+
+  text{font-family:var(--mono);fill:var(--ink-3);}
+  .lbl{font-size:11px;} .val{font-size:11.5px;fill:var(--ink-2);}
+  .val-b{font-size:11.5px;font-weight:600;}
+  .grid{stroke:var(--rule-2);stroke-width:1;}
+  .zero{stroke:var(--ink-3);stroke-width:1;opacity:.5;}
+
+  h2{font-family:var(--serif);font-size:1.25rem;font-weight:600;margin:0;letter-spacing:-.01em;}
+  .movs{display:flex;flex-direction:column;gap:0;background:var(--panel);
+    border:1px solid var(--rule);border-radius:3px;overflow:hidden;}
+  .mov{display:grid;grid-template-columns:5.5rem 4.5rem 1fr;gap:.75rem;align-items:baseline;
+    padding:.6rem .85rem;border-bottom:1px solid var(--rule-2);font-size:.86rem;}
+  .mov:last-child{border-bottom:none;}
+  .mov .f{font-family:var(--mono);font-size:.74rem;color:var(--ink-3);}
+  .mov .c{font-family:var(--mono);font-weight:600;font-variant-numeric:tabular-nums;}
+  .mov .q{color:var(--ink-2);line-height:1.45;}
+  .mov .nada{color:var(--ink-3);font-style:italic;}
+  .fam{font-family:var(--mono);font-size:.64rem;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--ink-3);display:block;margin-top:.15rem;}
+
+  .niv{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.82rem;
+    font-variant-numeric:tabular-nums;}
+  .niv th,.niv td{padding:.42rem .6rem;border-bottom:1px solid var(--rule-2);
+    text-align:right;white-space:nowrap;color:var(--ink-2);}
+  .niv th{color:var(--ink-3);font-weight:500;font-size:.68rem;letter-spacing:.07em;
+    text-transform:uppercase;}
+  .niv td:first-child,.niv th:first-child{text-align:left;}
+  .niv tr.medio td{color:var(--ink);font-weight:600;
+    border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);}
+  .niv tr:last-child td{border-bottom:none;}
+  .aviso{background:var(--baja-soft);border-left:2px solid var(--baja);
+    padding:.6rem .8rem;font-size:.84rem;color:var(--ink-2);border-radius:2px;}
+  .nota{background:var(--panel);border:1px solid var(--rule);border-radius:3px;
+    padding:clamp(.85rem,2vw,1.2rem);display:flex;flex-direction:column;gap:.6rem;
+    font-size:.88rem;color:var(--ink-2);}
+  .nota b{color:var(--ink);}
+  .nota ul{margin:0;padding-left:1.1rem;display:flex;flex-direction:column;gap:.45rem;}
+  footer{border-top:1px solid var(--rule);padding-top:1rem;font-size:.8rem;color:var(--ink-3);}
+
+  #tip{position:fixed;z-index:9;pointer-events:none;opacity:0;transition:opacity .1s;
+    background:var(--ink);color:var(--ground);font-family:var(--mono);font-size:.72rem;
+    line-height:1.45;padding:.4rem .55rem;border-radius:3px;max-width:17rem;
+    box-shadow:0 4px 14px rgba(0,0,0,.18);}
+  #tip.on{opacity:1;}
+  [data-tip]{cursor:crosshair;}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+
+<div class="wrap">
+  <div class="tape">
+    <div>
+      <h1>Nexa Resources Perú S.A.A.</h1>
+      <span class="tk">NEXAPEC1 · minas · rueda 2026-08-05</span>
+    </div>
+    <div class="px up">S/4.050</div>
+    <div class="dt up">+0.07%</div>
+  </div>
+
+  <div class="tiras"><div class="tira"><span class="k">en la ventana</span><span class="v up">+11.9%</span><span class="s">de S/3.620 a S/4.050</span></div><div class="tira"><span class="k">rango</span><span class="v ">2.998–4.143</span><span class="s">130 ruedas de cierre</span></div><div class="tira"><span class="k">movimiento típico</span><span class="v ">±1.18%</span><span class="s">desviación de las últimas 20 ruedas</span></div><div class="tira"><span class="k">saltos ≥4%</span><span class="v ">19</span><span class="s">0 con un hecho publicado</span></div><div class="tira"><span class="k">último hecho</span><span class="v ">EEFF trimestral</span><span class="s">2026-08-05 · tasa base: -2.12% a 10 ruedas, 42% en verde (n=43)</span></div></div>
+
+  <figure>
+    <div class="legend">
+      <span><span class="sw" style="background:var(--sube)"></span>subió</span>
+      <span><span class="sw" style="background:var(--baja)"></span>bajó</span>
+      <span style="color:var(--ink-3)">◆ rueda con hecho de importancia publicado</span>
+    </div>
+    <div class="plot" id="p-precio"></div>
+    <figcaption>Cierres de la BVL, 130 ruedas. Los rombos marcan las ruedas en
+      que el mercado ya podía leer un Hecho de Importancia — colocados según la hora
+      real de publicación, no según la fecha del archivo. Pasa el cursor por
+      cualquier rueda.</figcaption>
+  </figure>
+
+  <figure>
+    <table class="niv">
+      <thead><tr><th>a 10 ruedas desde S/4.050</th>
+        <th colspan="2">situaciones parecidas (n=25)</th>
+        <th colspan="2">su propia historia (n=244)</th></tr></thead>
+      <tbody><tr><td>9 de cada 10 quedaron por DEBAJO de</td><td>S/4.185</td><td>+3.33%</td><td>S/4.804</td><td>+18.61%</td></tr><tr><td>3 de cada 4 por debajo de</td><td>S/4.131</td><td>+2.01%</td><td>S/4.490</td><td>+10.86%</td></tr><tr class="medio"><td>la mitad por encima, la mitad por debajo</td><td>S/4.066</td><td>+0.40%</td><td>S/4.197</td><td>+3.62%</td></tr><tr><td>1 de cada 4 por debajo de</td><td>S/3.973</td><td>-1.91%</td><td>S/4.002</td><td>-1.19%</td></tr><tr><td>1 de cada 10 por debajo de</td><td>S/3.881</td><td>-4.18%</td><td>S/3.860</td><td>-4.70%</td></tr></tbody>
+    </table>
+    <div class="aviso"><b>El centro de este cono no dice nada.</b> La prueba nula
+      lo deja en «percentil 40: INDISTINGUIBLE DEL AZAR»: un grupo de ruedas al azar del mismo pozo dio
+      una mediana de +0.67%, prácticamente lo mismo. Lo que el
+      cono sí dice es el <b>ancho</b>: ese es el rango en que esta acción se movió,
+      y es la parte que sirve para dimensionar una posición.</div>
+    <figcaption>Percentiles de lo que pasó en los casos históricos, aplicados al
+      precio de hoy. No es un pronóstico: es dónde terminó el precio las veces
+      anteriores. De los 25 casos parecidos, 60% terminaron
+      por encima del precio de partida.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="plot" id="p-var"></div>
+    <figcaption>Variación de cada rueda contra la anterior. Va acá en lugar del
+      volumen porque el volumen viejo no existe en el repo: solo se guarda el de hoy.</figcaption>
+  </figure>
+
+  <h2>Los movimientos grandes, y qué se había publicado</h2>
+  <div class="movs"><div class="mov"><span class="f">2026-02-02</span><span class="c dn">-10.80%</span><span class="q nada">no se publicó nada ese día — ni hecho ni titular</span></div><div class="mov"><span class="f">2026-03-02</span><span class="c up">+10.48%</span><span class="q nada">no se publicó nada ese día — ni hecho ni titular</span></div><div class="mov"><span class="f">2026-03-20</span><span class="c dn">-7.27%</span><span class="q nada">no se publicó nada ese día — ni hecho ni titular</span></div><div class="mov"><span class="f">2026-04-17</span><span class="c up">+8.00%</span><span class="q nada">no se publicó nada ese día — ni hecho ni titular</span></div><div class="mov"><span class="f">2026-05-21</span><span class="c up">+5.20%</span><span class="q nada">no se publicó nada ese día — ni hecho ni titular</span></div><div class="mov"><span class="f">2026-06-10</span><span class="c up">+8.74%</span><span class="q nada">no se publicó nada ese día — ni hecho ni titular</span></div></div>
+
+  <div class="nota">
+    <p><b>De los 19 movimientos de 4% o más de esta acción en la ventana,
+      0 coincidieron con un Hecho publicado.</b> En toda la BVL la proporción
+      es 9%: <b>el 91% de los saltos grandes ocurre sin ningún papel de por medio</b>.
+      Por eso, cuando no hay nada, acá dice «no se publicó nada» en vez de buscarle una
+      explicación.</p>
+    
+  </div>
+
+  <footer>
+    Sin velas y sin barras de volumen a propósito: el histórico guarda solo el cierre,
+    y el volumen únicamente del día de hoy. Dibujarlos sería inventar los números que
+    faltan. Esto no es una recomendación de compra ni de venta.
+  </footer>
+</div>
+<div id="tip" role="status"></div>
+
+<script>
+const D = {"puntos":[{"f":"2026-01-27","p":3.62,"chg":0.0,"h":[],"n":[]},{"f":"2026-01-28","p":3.6,"chg":-0.55,"h":[],"n":[]},{"f":"2026-01-29","p":3.58,"chg":-0.56,"h":[],"n":[]},{"f":"2026-01-30","p":3.61,"chg":0.84,"h":[],"n":[]},{"f":"2026-02-02","p":3.22,"chg":-10.8,"h":[],"n":[]},{"f":"2026-02-03","p":3.15,"chg":-2.17,"h":[],"n":[]},{"f":"2026-02-04","p":3.33,"chg":5.71,"h":[],"n":[]},{"f":"2026-02-05","p":3.24,"chg":-2.7,"h":[],"n":[]},{"f":"2026-02-06","p":3.19,"chg":-1.54,"h":[],"n":[]},{"f":"2026-02-09","p":3.29,"chg":3.13,"h":[],"n":[]},{"f":"2026-02-10","p":3.4,"chg":3.34,"h":[],"n":[]},{"f":"2026-02-11","p":3.3,"chg":-2.94,"h":[],"n":[]},{"f":"2026-02-12","p":3.39,"chg":2.73,"h":[],"n":[]},{"f":"2026-02-13","p":3.3,"chg":-2.65,"h":[],"n":[]},{"f":"2026-02-16","p":3.36,"chg":1.82,"h":[],"n":[]},{"f":"2026-02-17","p":3.36,"chg":0.0,"h":[],"n":[]},{"f":"2026-02-18","p":3.27,"chg":-2.68,"h":[],"n":[]},{"f":"2026-02-19","p":3.28,"chg":0.31,"h":[],"n":[]},{"f":"2026-02-20","p":3.21,"chg":-2.13,"h":[],"n":[]},{"f":"2026-02-23","p":3.25,"chg":1.25,"h":[],"n":[]},{"f":"2026-02-24","p":3.24,"chg":-0.31,"h":[],"n":[]},{"f":"2026-02-25","p":3.3,"chg":1.85,"h":[],"n":[]},{"f":"2026-02-26","p":3.35,"chg":1.52,"h":[],"n":[]},{"f":"2026-02-27","p":3.34,"chg":-0.3,"h":[],"n":[]},{"f":"2026-03-02","p":3.69,"chg":10.48,"h":[],"n":[]},{"f":"2026-03-03","p":3.7,"chg":0.27,"h":[],"n":[]},{"f":"2026-03-04","p":3.55,"chg":-4.05,"h":[],"n":[]},{"f":"2026-03-05","p":3.59,"chg":1.13,"h":[],"n":[]},{"f":"2026-03-06","p":3.6,"chg":0.28,"h":[],"n":[]},{"f":"2026-03-09","p":3.55,"chg":-1.39,"h":[],"n":[]},{"f":"2026-03-10","p":3.45,"chg":-2.82,"h":[],"n":[]},{"f":"2026-03-11","p":3.55,"chg":2.9,"h":[],"n":[]},{"f":"2026-03-12","p":3.57,"chg":0.56,"h":[],"n":[]},{"f":"2026-03-13","p":3.55,"chg":-0.56,"h":[],"n":[]},{"f":"2026-03-16","p":3.56,"chg":0.28,"h":[],"n":[]},{"f":"2026-03-17","p":3.5,"chg":-1.69,"h":[],"n":[]},{"f":"2026-03-18","p":3.49,"chg":-0.29,"h":[],"n":[]},{"f":"2026-03-19","p":3.3,"chg":-5.44,"h":[],"n":[]},{"f":"2026-03-20","p":3.06,"chg":-7.27,"h":[],"n":[]},{"f":"2026-03-23","p":3.01,"chg":-1.63,"h":[],"n":[]},{"f":"2026-03-24","p":3.2,"chg":6.31,"h":[],"n":[]},{"f":"2026-03-25","p":3.33,"chg":4.06,"h":[],"n":[]},{"f":"2026-03-26","p":3.4,"chg":2.1,"h":[],"n":[]},{"f":"2026-03-27","p":3.35,"chg":-1.47,"h":[],"n":[]},{"f":"2026-03-30","p":3.34,"chg":-0.3,"h":[],"n":[]},{"f":"2026-03-31","p":3.38,"chg":1.2,"h":[],"n":[]},{"f":"2026-04-01","p":3.5,"chg":3.55,"h":[],"n":[]},{"f":"2026-04-06","p":3.49,"chg":-0.29,"h":[],"n":[]},{"f":"2026-04-07","p":3.43,"chg":-1.72,"h":[],"n":[]},{"f":"2026-04-08","p":3.33,"chg":-2.92,"h":[],"n":[]},{"f":"2026-04-09","p":3.46,"chg":3.9,"h":[],"n":[]},{"f":"2026-04-10","p":3.46,"chg":0.0,"h":[],"n":[]},{"f":"2026-04-13","p":3.4,"chg":-1.73,"h":[],"n":[]},{"f":"2026-04-14","p":3.34,"chg":-1.76,"h":[],"n":[]},{"f":"2026-04-15","p":3.16,"chg":-5.39,"h":[],"n":[]},{"f":"2026-04-16","p":3.0,"chg":-5.06,"h":[],"n":[]},{"f":"2026-04-17","p":3.24,"chg":8.0,"h":[],"n":[]},{"f":"2026-04-20","p":3.1,"chg":-4.32,"h":[],"n":[]},{"f":"2026-04-21","p":3.1,"chg":0.0,"h":[],"n":[]},{"f":"2026-04-22","p":3.33,"chg":7.42,"h":[],"n":[]},{"f":"2026-04-23","p":3.35,"chg":0.6,"h":[],"n":[]},{"f":"2026-04-24","p":3.4,"chg":1.49,"h":[],"n":[]},{"f":"2026-04-27","p":3.35,"chg":-1.47,"h":[],"n":[]},{"f":"2026-04-28","p":3.347,"chg":-0.09,"h":[],"n":[]},{"f":"2026-04-29","p":3.327,"chg":-0.6,"h":[],"n":[]},{"f":"2026-04-30","p":3.3,"chg":-0.81,"h":[],"n":[]},{"f":"2026-05-04","p":3.304,"chg":0.12,"h":[],"n":[]},{"f":"2026-05-05","p":3.262,"chg":-1.27,"h":[],"n":[]},{"f":"2026-05-06","p":3.307,"chg":1.38,"h":[],"n":[]},{"f":"2026-05-07","p":3.404,"chg":2.93,"h":[{"titulo":"de su matriz Nexa Resources S.A. sobre sus resultados financieros al 1er. Trimestre de 2026","fam":"EEFF trimestral","fecha":"2026-05-06","hora":"21h","pdf":"https://documents.bvl.com.pe/hhii/B20010/20260506215501/HI32ER32NEXA32RESOURCES321Q26.PDF"},{"titulo":"Sobre resultados financieros y operativos consolidados de Nexa Resources Perú S.A.A.al Primer Tr","fam":"EEFF trimestral","fecha":"2026-05-06","hora":"21h","pdf":"https://documents.bvl.com.pe/hhii/B20010/20260506215401/HI32ER32NEXA32PERU321Q26.PDF"},{"titulo":"Notas a los Estados Financieros Consolidados al 31-Mar-2026 (en inglés)","fam":"EEFF trimestral","fecha":"2026-05-06","hora":"21h","pdf":"https://documents.bvl.com.pe/hhii/B20010/20260506215101/HI32PUBLICACI211N32EEFF321Q26.PDF"}],"n":[]},{"f":"2026-05-08","p":3.369,"chg":-1.03,"h":[],"n":[]},{"f":"2026-05-11","p":3.305,"chg":-1.9,"h":[],"n":[]},{"f":"2026-05-12","p":3.358,"chg":1.6,"h":[{"titulo":"Al 30-Abr-2026","fam":"otros","fecha":"2026-05-11","hora":"20h","pdf":"https://documents.bvl.com.pe/hhii/B20010/20260511203701/HI95NRP9532HEDGING32ABR26.PDF"}],"n":[]},{"f":"2026-05-13","p":3.261,"chg":-2.89,"h":[],"n":[]},{"f":"2026-05-14","p":3.387,"chg":3.86,"h":[],"n":[]},{"f":"2026-05-15","p":3.33,"chg":-1.68,"h":[],"n":[]},{"f":"2026-05-18","p":3.3,"chg":-0.9,"h":[{"titulo":"Acuerdo de Ses-Dir del 15-May-2026","fam":"dividendo / utilidades","fecha":"2026-05-15","hora":"20h","pdf":"https://documents.bvl.com.pe/hhii/B20010/20260515203901/CARTAB200109549520260515103156.PDF"}],"n":[]},{"f":"2026-05-19","p":3.351,"chg":1.55,"h":[],"n":[]},{"f":"2026-05-20","p":3.191,"chg":-4.77,"h":[],"n":[]},{"f":"2026-05-21","p":3.357,"chg":5.2,"h":[],"n":[]},{"f":"2026-05-22","p":3.387,"chg":0.89,"h":[],"n":[]},{"f":"2026-05-25","p":3.368,"chg":-0.56,"h":[],"n":[]},{"f":"2026-05-26","p":3.36,"chg":-0.24,"h":[],"n":[]},{"f":"2026-05-27","p":3.382,"chg":0.65,"h":[],"n":[]},{"f":"2026-05-28","p":3.399,"chg":0.5,"h":[],"n":[]},{"f":"2026-05-29","p":3.42,"chg":0.62,"h":[],"n":[]},{"f":"2026-06-01","p":3.5,"chg":2.34,"h":[{"titulo":"Informes De Clasificación De Riesgo.","fam":"clasificación de riesgo","fecha":"2026-05-29","hora":"20h","pdf":"https://documents.bvl.com.pe/hhii/B20010/20260529204001/MLPE95INF32FINAL32NRP3229052026.PDF"}],"n":[]},{"f":"2026-06-02","p":3.47,"chg":-0.86,"h":[],"n":[]},{"f":"2026-06-03","p":3.385,"chg":-2.45,"h":[],"n":[]},{"f":"2026-06-04","p":3.2,"chg":-5.47,"h":[],"n":[]},{"f":"2026-06-05","p":3.153,"chg":-1.47,"h":[],"n":[]},{"f":"2026-06-08","p":2.998,"chg":-4.92,"h":[],"n":[]},{"f":"2026-06-09","p":3.054,"chg":1.87,"h":[],"n":[]},{"f":"2026-06-10","p":3.321,"chg":8.74,"h":[],"n":[]},{"f":"2026-06-11","p":3.372,"chg":1.54,"h":[],"n":[]},{"f":"2026-06-12","p":3.437,"chg":1.93,"h":[{"titulo":"Al 31-May-2026","fam":"otros","fecha":"2026-06-12","hora":"14h","pdf":"https://documents.bvl.com.pe/hhii/B20010/20260612140101/HI95HEDGING32PROGRAM95MAY26.PDF"}],"n":[]},{"f":"2026-06-15","p":3.43,"chg":-0.2,"h":[],"n":[]},{"f":"2026-06-16","p":3.588,"chg":4.61,"h":[],"n":[]},{"f":"2026-06-17","p":3.68,"chg":2.56,"h":[],"n":[]},{"f":"2026-06-18","p":3.778,"chg":2.66,"h":[],"n":[]},{"f":"2026-06-19","p":3.715,"chg":-1.67,"h":[],"n":[]},{"f":"2026-06-22","p":3.75,"chg":0.94,"h":[],"n":[]},{"f":"2026-06-23","p":3.783,"chg":0.88,"h":[],"n":[]},{"f":"2026-06-24","p":3.728,"chg":-1.45,"h":[],"n":[]},{"f":"2026-06-25","p":3.601,"chg":-3.41,"h":[],"n":[]},{"f":"2026-06-26","p":3.621,"chg":0.56,"h":[],"n":[]},{"f":"2026-06-30","p":3.618,"chg":-0.08,"h":[],"n":[]},{"f":"2026-07-01","p":3.58,"chg":-1.05,"h":[{"titulo":"Inicio de Trabajos de Auditoria","fam":"otros","fecha":"2026-06-30","hora":"19h","pdf":"https://documents.bvl.com.pe/hhii/B20010/20260630193201/CARTAB2001095879520260630145833.PDF"}],"n":[]},{"f":"2026-07-02","p":3.576,"chg":-0.11,"h":[],"n":[]},{"f":"2026-07-03","p":3.704,"chg":3.58,"h":[{"titulo":"de su matriz Nexa Resources S.A","fam":"otros","fecha":"2026-07-02","hora":"19h","pdf":"https://documents.bvl.com.pe/hhii/B20010/20260702192201/NEXA32RESOURCES32PR.PDF"}],"n":[]},{"f":"2026-07-06","p":3.8,"chg":2.59,"h":[],"n":[]},{"f":"2026-07-07","p":3.849,"chg":1.29,"h":[],"n":[]},{"f":"2026-07-08","p":3.864,"chg":0.39,"h":[],"n":[]},{"f":"2026-07-09","p":3.86,"chg":-0.1,"h":[{"titulo":"Al 30-Jun-2026","fam":"otros","fecha":"2026-07-08","hora":"18h","pdf":"https://documents.bvl.com.pe/hhii/B20010/20260708181701/HI95NRP9532HEDGING32PROGRAM95JUN26.PDF"}],"n":[]},{"f":"2026-07-10","p":3.95,"chg":2.33,"h":[],"n":[]},{"f":"2026-07-13","p":4.035,"chg":2.15,"h":[],"n":[]},{"f":"2026-07-14","p":4.08,"chg":1.12,"h":[],"n":[]},{"f":"2026-07-15","p":4.094,"chg":0.34,"h":[],"n":[]},{"f":"2026-07-16","p":4.11,"chg":0.39,"h":[],"n":[]},{"f":"2026-07-17","p":4.128,"chg":0.44,"h":[],"n":[]},{"f":"2026-07-20","p":4.13,"chg":0.05,"h":[],"n":[]},{"f":"2026-07-21","p":4.1,"chg":-0.73,"h":[],"n":[]},{"f":"2026-07-22","p":4.143,"chg":1.05,"h":[],"n":[]},{"f":"2026-07-24","p":4.134,"chg":-0.22,"h":[],"n":[]},{"f":"2026-07-27","p":4.116,"chg":-0.44,"h":[],"n":[]},{"f":"2026-07-30","p":4.075,"chg":-1.0,"h":[],"n":[{"titulo":"Nexa pone sus ojos en Vanessa","medio":"energiminas.com"}]},{"f":"2026-07-31","p":4.047,"chg":-0.69,"h":[],"n":[{"titulo":"Antamina, Volcan y Nexa Resources concentran el 43.2 % de la producción nacional de zinc","medio":"Rumbo Minero"},{"titulo":"Antamina, Volcan y Nexa concentran el 43.2% de la producción de zinc en Perú","medio":"mineriaenlinea.com"}]},{"f":"2026-08-03","p":4.03,"chg":-0.42,"h":[],"n":[{"titulo":"Nexa Resources: Cerro Lindo es la primera mina del Perú en implementar el método Block Caving","medio":"ProActivo"},{"titulo":"Cerro Lindo se convierte en primera mina del Perú en implementar el método Block Caving","medio":"Energiminas"},{"titulo":"El 43.2% del zinc peruano es producido por Antamina, Volcan y Nexa","medio":"Revista Minería & Energía"}]},{"f":"2026-08-04","p":4.047,"chg":0.42,"h":[],"n":[{"titulo":"Cerro lindo, de Nexa resources, se convierte en la primera mina del Perú en implementar el métod","medio":"Dipromin"},{"titulo":"Cerro Lindo implementa tecnología Block Caving","medio":"revistaeconomia.com"}]},{"f":"2026-08-05","p":4.05,"chg":0.07,"h":[],"n":[{"titulo":"Antamina, Volcan y Nexa concentran el 43.2 % de la producción peruana de zinc a mayo","medio":"Energiminas"}]}],"notas":[{"i":4,"f":"2026-02-02","chg":-10.8,"que":null,"fam":null,"fuente":"nada"},{"i":24,"f":"2026-03-02","chg":10.48,"que":null,"fam":null,"fuente":"nada"},{"i":38,"f":"2026-03-20","chg":-7.27,"que":null,"fam":null,"fuente":"nada"},{"i":56,"f":"2026-04-17","chg":8.0,"que":null,"fam":null,"fuente":"nada"},{"i":79,"f":"2026-05-21","chg":5.2,"que":null,"fam":null,"fuente":"nada"},{"i":93,"f":"2026-06-10","chg":8.74,"que":null,"fam":null,"fuente":"nada"}],"cono":{"p0":4.05,"horizonte":10,"propia":{"p10":-4.7,"p25":-1.19,"p50":3.62,"p75":10.86,"p90":18.61},"propia_n":244,"cond":{"p10":-4.18,"p25":-1.91,"p50":0.4,"p75":2.01,"p90":3.33},"cond_n":25,"sube":60,"veredicto":"percentil 40: INDISTINGUIBLE DEL AZAR","azar_mediana":0.67}};
+const SVGNS="http://www.w3.org/2000/svg";
+const el=(n,a={},t)=>{const e=document.createElementNS(SVGNS,n);
+  for(const k in a)e.setAttribute(k,a[k]);if(t!=null)e.textContent=t;return e;};
+const nf=(v,d=2)=>(v>=0?"+":"−")+Math.abs(v).toFixed(d);
+const MES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+const fecha=f=>`${+f.slice(8,10)} ${MES[+f.slice(5,7)-1]}`;
+
+const tip=document.getElementById("tip");
+const mostrar=(e,html)=>{tip.innerHTML=html;tip.classList.add("on");
+  const r=tip.getBoundingClientRect();
+  let x=e.clientX+14,y=e.clientY-r.height-10;
+  if(x+r.width>innerWidth-8)x=e.clientX-r.width-14;
+  if(y<8)y=e.clientY+18;
+  tip.style.left=x+"px";tip.style.top=y+"px";};
+const cebar=(n,html)=>{n.setAttribute("data-tip","");
+  n.addEventListener("pointerenter",e=>mostrar(e,html));
+  n.addEventListener("pointermove",e=>mostrar(e,html));
+  n.addEventListener("pointerleave",()=>tip.classList.remove("on"));};
+
+const P=D.puntos,N=P.length;
+const globo=q=>{
+  let s=`<b>${fecha(q.f)}</b> · S/${q.p.toFixed(3)} · ${nf(q.chg)}%`;
+  q.h.forEach(h=>{s+=`<br>📄 ${h.titulo}`;});
+  q.n.forEach(n=>{s+=`<br>📰 ${n.titulo}`;});
+  if(!q.h.length&&!q.n.length)s+=`<br><span style="opacity:.65">no se publicó nada</span>`;
+  return s;};
+
+/* ── precio ── */
+(function(){
+  const W=980,H=390,mL=48,mR=74,mT=74,mB=32;
+  const C=D.cono,FUT=C?C.horizonte:0,TOT=N-1+FUT;
+  const ps=P.map(q=>q.p);
+  const extra=C?[C.p0*(1+C.cond.p90/100),C.p0*(1+C.cond.p10/100)]:[];
+  const lo=Math.min(...ps,...extra),hi=Math.max(...ps,...extra);
+  const pad=(hi-lo)*.14||.1;
+  const y0=lo-pad,y1=hi+pad;
+  const x=i=>mL+i*(W-mL-mR)/TOT;
+  const y=v=>mT+((y1-v)/(y1-y0))*(H-mT-mB);
+  const pasoX=(W-mL-mR)/TOT;
+  const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"});
+
+  const paso=(y1-y0)/4;
+  for(let k=0;k<=4;k++){const v=y0+k*paso;
+    s.appendChild(el("line",{x1:mL,x2:W-mR,y1:y(v),y2:y(v),class:"grid"}));
+    s.appendChild(el("text",{x:mL-8,y:y(v)+4,class:"lbl","text-anchor":"end"},v.toFixed(3)));}
+  [0,Math.floor(N/4),Math.floor(N/2),Math.floor(3*N/4),N-1].forEach(i=>
+    s.appendChild(el("text",{x:x(i),y:H-12,class:"lbl",
+      "text-anchor":i===0?"start":(i===N-1?"end":"middle")},fecha(P[i].f))));
+
+  const linea=P.map((q,i)=>`${i?"L":"M"}${x(i)},${y(q.p)}`).join("");
+  s.appendChild(el("path",{d:linea+`L${x(N-1)},${y(y0)}L${x(0)},${y(y0)}Z`,
+    fill:"var(--sube-soft)"}));
+  s.appendChild(el("path",{d:linea,fill:"none",stroke:"var(--sube)","stroke-width":2,
+    "stroke-linejoin":"round"}));
+
+  /* ── el cono ──────────────────────────────────────────────────────────
+     Solo la rueda 10 está MEDIDA; las intermedias se interpolan por √t, que
+     es como se ensancha la dispersión de un precio. Se dibuja así para que se
+     lea el ancho, no para fingir que sabemos la rueda 4. */
+  if(C){
+    const banda=(qa,qb,op)=>{
+      const arr=[],vol=[];
+      for(let k=0;k<=FUT;k++){
+        const f=Math.sqrt(k/FUT);
+        arr.push([x(N-1+k),y(C.p0*(1+C.cond[qa]/100*f))]);
+        vol.push([x(N-1+k),y(C.p0*(1+C.cond[qb]/100*f))]);
+      }
+      const d=arr.map((p,i)=>`${i?"L":"M"}${p[0]},${p[1]}`).join("")+
+        vol.reverse().map(p=>`L${p[0]},${p[1]}`).join("")+"Z";
+      s.appendChild(el("path",{d:d,fill:"var(--ink-3)",opacity:op}));
+    };
+    banda("p90","p10",".12");
+    banda("p75","p25",".18");
+    const med=[];
+    for(let k=0;k<=FUT;k++)med.push([x(N-1+k),y(C.p0*(1+C.cond.p50/100*Math.sqrt(k/FUT)))]);
+    s.appendChild(el("path",{d:med.map((p,i)=>`${i?"L":"M"}${p[0]},${p[1]}`).join(""),
+      fill:"none",stroke:"var(--ink-3)","stroke-width":1.5,"stroke-dasharray":"4 3"}));
+    s.appendChild(el("line",{x1:x(N-1),x2:x(N-1),y1:mT,y2:H-mB,
+      stroke:"var(--ink-3)","stroke-width":1,opacity:".5"}));
+    [["p90","var(--sube)"],["p50","var(--ink-2)"],["p10","var(--baja)"]].forEach(([q,col])=>{
+      const v=C.p0*(1+C.cond[q]/100);
+      s.appendChild(el("text",{x:W-mR+6,y:y(v)+4,class:"val-b",fill:col},v.toFixed(3)));
+    });
+    s.appendChild(el("text",{x:W-6,y:mT-8,class:"lbl","text-anchor":"end"},
+      `80% de los casos, ${FUT} ruedas →`));
+  }
+
+  // Las anotaciones se amontonan cuando dos saltos caen cerca (junio tiene tres
+  // en dos semanas). Se reparten en tres filas: cada etiqueta busca la primera
+  // fila donde su ancho estimado no pise a otra ya colocada.
+  const FILAS=[[],[],[]];
+  D.notas.forEach(nt=>{
+    const col=nt.chg>=0?"var(--sube)":"var(--baja)";
+    const txt=`${fecha(nt.f)}  ${nf(nt.chg)}%`;
+    const ancho=txt.length*6.4+10;
+    const anc=nt.i>N*.7?"end":"start";
+    const x0=anc==="end"?x(nt.i)-ancho:x(nt.i);
+    let fila=FILAS.findIndex(f=>f.every(r=>x0>r[1]||x0+ancho<r[0]));
+    if(fila<0)fila=2;
+    FILAS[fila].push([x0,x0+ancho]);
+    const yl=16+fila*17;
+    s.appendChild(el("line",{x1:x(nt.i),x2:x(nt.i),y1:yl+5,y2:y(P[nt.i].p)-7,
+      stroke:col,"stroke-width":1,"stroke-dasharray":"3 3",opacity:".55"}));
+    s.appendChild(el("text",{x:x(nt.i)+(anc==="end"?-6:6),y:yl,class:"val-b",
+      "text-anchor":anc,fill:col},txt));
+    s.appendChild(el("circle",{cx:x(nt.i),cy:y(P[nt.i].p),r:4,fill:col,
+      stroke:"var(--panel)","stroke-width":2}));
+  });
+
+  P.forEach((q,i)=>{
+    if(q.h.length){
+      const yy=y(q.p)-14;
+      const d=el("path",{d:`M${x(i)},${yy-5}L${x(i)+5},${yy}L${x(i)},${yy+5}L${x(i)-5},${yy}Z`,
+        fill:"var(--ink-3)",stroke:"var(--panel)","stroke-width":1});
+      s.appendChild(d);
+    }
+    const hit=el("rect",{x:x(i)-pasoX/2,y:mT-48,width:pasoX,
+      height:H-mT-mB+48,fill:"transparent"});
+    cebar(hit,globo(q));
+    s.appendChild(hit);
+  });
+  document.getElementById("p-precio").appendChild(s);
+})();
+
+/* ── variación diaria ── */
+(function(){
+  const W=980,H=170,mL=48,mR=16,mT=16,mB=26;
+  const mx=Math.max(...P.map(q=>Math.abs(q.chg)),4);
+  const x=i=>mL+i*(W-mL-mR)/(N-1);
+  const y=v=>mT+((mx-v)/(2*mx))*(H-mT-mB);
+  const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"});
+  [mx,0,-mx].forEach(v=>{
+    s.appendChild(el("line",{x1:mL,x2:W-mR,y1:y(v),y2:y(v),
+      class:v===0?"zero":"grid"}));
+    s.appendChild(el("text",{x:mL-8,y:y(v)+4,class:"lbl","text-anchor":"end"},
+      nf(v,0)+"%"));});
+  const w=Math.max((W-mL-mR)/N-1.5,1.2);
+  P.forEach((q,i)=>{
+    const col=q.chg>=0?"var(--sube)":"var(--baja)";
+    const alto=Math.abs(y(q.chg)-y(0));
+    const r=el("rect",{x:x(i)-w/2,y:Math.min(y(q.chg),y(0)),width:w,
+      height:Math.max(alto,.8),fill:col,opacity:Math.abs(q.chg)>=4?"1":".55",rx:1});
+    cebar(r,globo(q));
+    s.appendChild(r);});
+  document.getElementById("p-var").appendChild(s);
+})();
+</script>

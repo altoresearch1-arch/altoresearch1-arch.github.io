@@ -72,6 +72,24 @@ def num(v):
         return None
 
 
+def spread_pct(compra, venta):
+    """Cuánto cuesta cruzar el libro, en % del punto medio.
+
+    Contra el PUNTO MEDIO y no contra el último precio: el último transado
+    queda pegado a una de las dos puntas según de qué lado entró la orden, y
+    dividir por él daría un spread distinto para el mismo libro.
+
+    Devuelve None si falta una punta o si vienen cruzadas (venta por debajo de
+    compra): eso pasa entre ruedas y no es un spread negativo, es que no hay
+    libro. Inventar un 0 ahí diría que la acción es gratis de operar.
+    """
+    c, v = num(compra), num(venta)
+    if not c or not v or c <= 0 or v <= 0 or v < c:
+        return None
+    medio = (c + v) / 2
+    return round(100 * (v - c) / medio, 3) if medio else None
+
+
 def hora_lima(iso):
     """'2026-07-31T19:59:42' (UTC) -> '2026-07-31T14:59:42-05:00'."""
     if not iso or "T" not in iso:
@@ -127,6 +145,12 @@ def acumular_intradia(precios):
             "previo": p.get("previo"), "ops": p.get("operaciones"),
             "monto": p.get("montoNegociado"), "cantidad": p.get("cantidadNegociada"),
             "moneda": p.get("moneda"), "ultima": p.get("ultimaOperacion"),
+            # El spread AL CIERRE de esa sesión. Acá es donde de verdad hace
+            # falta: el de hoy en `precios.json` se pisa en cada corrida, y lo
+            # que hay que poder mirar después es cuánto costaba entrar EL DÍA
+            # de la caída — que es justo cuando el libro se abre.
+            "puntaCompra": p.get("puntaCompra"), "puntaVenta": p.get("puntaVenta"),
+            "spreadPct": p.get("spreadPct"),
         })
         # `tomas` solo se anota si la sesión es la de HOY. Estampar la hora de
         # nuestro reloj sobre una sesión de la semana pasada diría que esa
@@ -134,9 +158,24 @@ def acumular_intradia(precios):
         if sesion == hoy and (not e["tomas"] or e["tomas"][-1][1] != p["precio"]):
             e["tomas"].append([ahora.strftime("%H:%M"), p["precio"]])
 
-    # Se conservan los últimos DIAS_INTRADIA días de mercado y nada más.
+    # ── LA APERTURA Y EL RANGO NO SE BORRAN MÁS (8-ago-2026) ─────────────
+    #
+    # Esto borraba todo lo anterior a 45 días. Y ahí se iba lo único que puede
+    # responder la pregunta que hoy bloquea la mejor señal del proyecto: cuando
+    # el metal se mueve, ¿la minera abre ya con el salto adentro (y entonces no
+    # se puede tomar) o lo hace durante la sesión?
+    #
+    # El 8-ago quedaban 20 días guardados y **ninguna acción llegaba a 15**.
+    # Con eso no se puede medir nada: la prueba del hueco dio n=43 sobre las
+    # diez mineras juntas y se deshizo en ruido.
+    #
+    # Lo pesado son las `tomas` (una entrada por corrida del robot), no el
+    # resumen. Así que se conserva el resumen del día PARA SIEMPRE y se podan
+    # solo las tomas de los días viejos. El archivo crece ~45 KB al año.
     for viejo in sorted(dias)[:-DIAS_INTRADIA]:
-        dias.pop(viejo, None)
+        for tk in dias[viejo]:
+            if isinstance(dias[viejo][tk], dict):
+                dias[viejo][tk]["tomas"] = []
 
     salida = {
         "_comment": ("Foto POR DÍA de lo que el endpoint de mercado de la BVL solo "
@@ -230,6 +269,27 @@ def main():
             "apertura": row.get("opening"),
             "minimo": row.get("minimun"),
             "maximo": row.get("maximun"),
+            # ── LAS PUNTAS DEL LIBRO (desde el 07-ago-2026) ──────────────────
+            # `buy` y `sell` son las órdenes paradas en pantalla: a `sell` se le
+            # compra y a `buy` se le vende. La advertencia de arriba sigue en
+            # pie —`sell` NO es el cierre— y por eso van con otro nombre.
+            #
+            # Por qué se guardan: sin ellas no se puede saber cuánto cuesta
+            # entrar y salir, y ese número decide si una señal de días vale
+            # algo. Midiendo el 07-ago al cierre: Volcan 1.13%, Nexa 0.70%,
+            # RIO 0.81%, MINSUR 0.14%… y BAP 4.65% (386.51 contra 404.90).
+            # Un movimiento esperado de 2% en BAP no existe: se lo come el
+            # libro entero. El endpoint las trajo siempre, igual que trajo el
+            # volumen y la hora de la última operación antes de que alguien
+            # las mirara.
+            #
+            # Se guarda el spread ya calculado además de las dos puntas porque
+            # es contra el PUNTO MEDIO, no contra el último precio: si el
+            # último transado quedó pegado a una de las dos puntas, dividir por
+            # él infla o achica el spread según de qué lado cerró.
+            "puntaCompra": row.get("buy"),
+            "puntaVenta": row.get("sell"),
+            "spreadPct": spread_pct(row.get("buy"), row.get("sell")),
             # CUÁNTA PLATA se movió. Sin esto, un +3% con 69 operaciones y un
             # +3% con 13 se pintaban idénticos.
             "operaciones": int(num(ops) or 0),
