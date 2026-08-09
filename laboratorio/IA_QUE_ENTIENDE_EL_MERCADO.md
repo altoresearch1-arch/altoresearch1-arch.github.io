@@ -210,6 +210,72 @@ absolutos y los aprobaba un modelo cuya única habilidad era saber en qué acci�
 estaba: su propia base ya daba 0.0380 de las 0.0383 de resolución. El examen v2
 mide todo **como ganancia sobre esa base**.
 
+### 3.1 El lector direccional — `direccional.py` (9-ago-2026)
+
+Tras ocho fracasos contra la pregunta de magnitud, se cambió de pregunta en vez
+de seguir insistiendo. Este lee **dirección**, que es lo único probado del
+laboratorio, y convierte R8 en una probabilidad calibrada.
+
+Una tasa de acierto no es un lector: un lector dice un número y tiene que
+acertar **ese** número. El rival no es el 50% — es la base propia de cada
+acción, por la misma razón que mató ocho reglas del cementerio.
+
+**La escalera aprendida** (log-odds sobre la base, mediana entre acciones,
+estimada solo con datos anteriores a 2026):
+
+| metal −≥2% | −1a2% | −0.5a1% | +0.5a1% | +1a2% | +≥2% |
+|---|---|---|---|---|---|
+| **−1.029** | −0.863 | −0.304 | +0.284 | +0.514 | **+1.009** |
+
+Monótona y simétrica. En crudo sobre el entrenamiento: con el metal −≥2% la
+minera sube al día siguiente el **28.4%** de las veces; con +≥2%, el **80.1%**.
+
+**El examen, y sus controles:**
+
+| grupo | ganancia Brier | habla → acierta | calla → acierta | prueba |
+|---|---|---|---|---|
+| **MINERAS** | **+0.02709** | 797 → **70.0%** | 447 → 49.2% | **3/4** |
+| **peruanas no mineras** | **+0.00076** | 1036 → 55.5% | 762 → 52.0% | 1/4 |
+| globales y ETF (SPY, GLD…) | +0.02189 | 935 → 69.2% | 676 → 53.1% | 3/4 |
+| ADR peruanos | +0.01490 | 228 → 64.5% | 168 → 50.0% | 3/4 |
+| **Minsur** (no entrenó) | **+0.02810** | 77 → **75.3%** | 58 → 43.1% | 2/4\* |
+
+**El control es el que sostiene todo.** Las peruanas no mineras dan +0.00076 —
+36 veces menos— y **8 de 17 le ganan a su base**, que es la moneda al aire. No
+es «los días agitados del mundo agitan todo»: Alicorp, Backus y Unacem no lo
+tienen. Los globales sí lo tienen, y eso **confirma** en vez de contaminar: GLD
+contiene oro y SPY es el mundo. Y **Minsur, minera que nunca entró al
+entrenamiento, da más que el promedio de las once.**
+
+\* Minsur reprueba la 4 solo porque es una sola acción y no hay prueba de
+signos con n=1.
+
+**Lo que falla: el sesgo.** Dice 55.7% y sube 53.1%. Medido aparte, **el sesgo
+es de la base, no de la señal**: la base sola ya dice 56.6% contra 53.1% real y
+el metal encima agrega +0.3 puntos. Es el mismo mal del ARREGLO 3 y por eso la
+ventana se alineó al 90 del cerebro, que bajó el sesgo de 3.9 a 2.6. Lo que
+queda es que las mineras subieron menos en 2026 que en su ventana previa.
+
+**La prueba 4 se endureció acá y hay que decir por qué.** La v1 contaba
+acciones con acierto >50% y era regalada igual que el examen v1 del cerebro:
+una acción que sube el 55% de sus ruedas lo logra diciendo siempre «sube». Con
+esa versión el control de peruanas no mineras la **pasaba 15 de 17 con
+ganancia cero**. Ahora cada acción se compara contra su propia base y el mismo
+control da 8 de 17.
+
+**EN CONTRA, y va escrito porque el §6 lo exige: este examen ya se miró tres
+veces.** Una versión dio 0/4, se corrigieron dos errores (un corte que vaciaba
+el lado de bajada y un encogimiento con las unidades cambiadas) y se volvió a
+correr; después se endureció la prueba 4 y se acortó la ventana. Los cambios se
+justificaron con datos de **entrenamiento** y con errores reales, no mirando el
+examen — pero el conteo es tres, y la lección del §6 es que sobrevivir a varios
+exámenes sobre los mismos datos no prueba más que al principio. Minsur es lo
+más parecido a datos nuevos que hay hoy. **La prueba de verdad son las ruedas
+de agosto en adelante, que todavía no existen.**
+
+Y sigue colgando de lo mismo que todo R8: esto mide una ventaja que **existe**,
+no una que se pueda **cobrar**. Ver §4.
+
 ---
 
 ## 4. Lo que falta, en orden de lo que desbloquea
@@ -237,7 +303,8 @@ mide todo **como ganancia sobre esa base**.
 
 | archivo | qué hace |
 |---|---|
-| `cerebro.py` | el motor + su examen de 5 pruebas |
+| `cerebro.py` | el motor de MAGNITUD + su examen de 5 pruebas |
+| `direccional.py` | el lector de DIRECCIÓN (R8 calibrado) + su examen y 4 controles |
 | `bitacora.py` | `anotar` / `resolver` / `examen` — apuesta escrita antes del resultado |
 | `bitacora.jsonl` | el registro. **No se edita nunca** |
 | `REGLAS_CONGELADAS.md` | R1 a R8 con su corte, su fecha y su resultado |
