@@ -224,7 +224,10 @@ mide todo **como ganancia sobre esa base**.
 | `../extractor/fetch_metales.py` | oro, plata, cobre, platino diarios (Yahoo, acumula) |
 | `../app/src/data/metales_diarios.json` | 503 cierres por metal, ago-2024 → hoy |
 
-**Nada está commiteado.** El repo tiene todo esto sin versionar.
+**Commiteado el 8-ago-2026** (`eada5c1`), junto con `fetch_metales.py`,
+`metales_diarios.json` y el arreglo de la apertura en `fetch_precios.py`. Antes
+de eso el laboratorio entero vivía sin versionar: si se perdía el disco se
+perdía el cementerio, que es la parte cara.
 
 ---
 
