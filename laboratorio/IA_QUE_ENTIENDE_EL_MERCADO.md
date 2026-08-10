@@ -150,6 +150,7 @@ Se guarda para no volver a desenterrarlo. Detalle completo en
 | Filtro de volumen del ADR | 60% contra base 42.5%, pero **p=0.18** y todo son 4 casos de RIO |
 | Magnitud (¿se va a mover?) | 72% aparente, pero **era composición**: dentro de cada acción el lift es −2.8 pts |
 | Metal grande → semana movida (9-ago) | el signo se da vuelta entre tramos (−0.170 entrenando, +0.210 en examen, p=0.75 los dos) y el control lo remata: mineras 6 de 10 a favor, no-mineras **22 de 36**, la misma proporción |
+| El IPC de EE.UU. agita el metal (10-ago) | al revés: el día del IPC el metal se mueve **menos**. Oro 0.933% contra 1.074% del resto (percentil 27.5), plata 9.7, platino **3.3**. Y en D+1 tampoco (oro 63.2). 23 publicaciones del BLS, 5,000 sorteos |
 
 **El patrón de todos:** un efecto agregado que en realidad decía en qué acción
 estabas parado. La prueba por defecto ya no es entrenamiento/prueba —
@@ -310,6 +311,8 @@ no una que se pueda **cobrar**. Ver §4.
 | `REGLAS_CONGELADAS.md` | R1 a R8 con su corte, su fecha y su resultado |
 | `metal_manda.py` | la prueba del metal → minera |
 | `metal_magnitud.py` | el intento de pasar R8 de dirección a magnitud, rechazado |
+| `calendario_ipc.py` | ¿el IPC de EE.UU. agita el metal? Con el calendario real del BLS. No |
+| `bitacora_direccional.jsonl` | las apuestas del lector direccional, escritas antes de la rueda |
 | `estabilidad_colas.py` | Spearman de la cola, el que mató la tabla de explosión |
 | `filtro_adr.py` + `eventos_adr.csv` | el filtro de volumen extranjero, rechazado |
 | `pregunta_magnitud.py` | el cambio de pregunta: magnitud en vez de dirección |

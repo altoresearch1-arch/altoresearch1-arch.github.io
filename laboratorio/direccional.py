@@ -265,8 +265,68 @@ def examen(mapa, titulo):
                   if n_ok == 4 else 'TODAVÍA NO. Se anota qué falló y se sigue.'))
 
 
+def anotar(rueda):
+    """Escribe la apuesta direccional de una rueda ANTES de que se sepa el resultado.
+
+    Archivo aparte de `bitacora.jsonl` a propósito: esa bitácora tiene el
+    esquema del cerebro de MAGNITUD (`p`, `cuartil`, `zona`, `se_movio`) y
+    mezclar dos preguntas distintas en el mismo registro es cómo se termina
+    puntuando una con la vara de la otra.
+
+    El insumo es el ÚLTIMO cierre del metal que ya ocurrió — para la rueda del
+    lunes, el oro del viernes. No se anota nada si esa rueda ya está escrita:
+    una apuesta que se puede reescribir después del resultado no es una
+    apuesta.
+    """
+    ruta = 'laboratorio/bitacora_direccional.jsonl'
+    try:
+        filas = [json.loads(l) for l in open(ruta, encoding='utf-8') if l.strip()]
+    except FileNotFoundError:
+        filas = []
+    ya = {(r['rueda'], r['ticker']) for r in filas}
+
+    metal_f = {m: sorted(MET[m])[-1] for m in MET}
+    nuevas = 0
+    for t in sorted(MAPA):
+        if t not in C.SERIES or (rueda, t) in ya:
+            continue
+        met = MAPA[t]
+        f_met = metal_f[met]
+        if f_met >= rueda:          # el metal tiene que ser ANTERIOR a la rueda
+            continue
+        x = MET[met][f_met]
+        d = dias(t, met)
+        base = base_hasta(d, len(d))
+        b = balde(x)
+        lift = LIFT.get(b)
+        if base is None or lift is None:
+            continue
+        n = len(VOTOS.get(b, []))
+        p = sig(lodds(base) + (n / (n + ENCOGE)) * lift)
+        filas.append({
+            'rueda': rueda, 'ticker': t, 'metal': met,
+            'metal_fecha': f_met, 'metal_mov': round(x, 3),
+            'balde': list(b), 'base': round(base, 4), 'p': round(p, 4),
+            'habla': abs(p - base) >= 0.05,
+            'precio_previo': C.SERIES[t][-1][1], 'fecha_previa': C.SERIES[t][-1][0],
+            'subio': None,          # lo llena `resolver` cuando exista la rueda
+        })
+        nuevas += 1
+    with open(ruta, 'w', encoding='utf-8') as f:
+        for r in filas:
+            f.write(json.dumps(r, ensure_ascii=False) + '\n')
+    print(f'  rueda {rueda}: anotadas {nuevas} · archivo: {len(filas)} en total')
+    for r in filas[-nuevas:] if nuevas else []:
+        print(f'    {r["ticker"]:10s} {r["metal"]:6s} {r["metal_mov"]:+6.2f}% el {r["metal_fecha"]}'
+              f'  ->  base {100*r["base"]:.1f}%  dice {100*r["p"]:.1f}%'
+              f'  {"HABLA" if r["habla"] else "calla"}')
+
+
 if __name__ == '__main__':
     sys.stdout.reconfigure(encoding='utf-8')
+    if len(sys.argv) > 2 and sys.argv[1] == 'anotar':
+        anotar(sys.argv[2])
+        sys.exit()
     print('  Baldes aprendidos con el entrenamiento (log-odds, mediana entre acciones):')
     for b in sorted(LIFT):
         print(f'    metal {"sube" if b[0] > 0 else "baja"} tamaño {b[1]}:'
