@@ -281,9 +281,20 @@ sin ninguna noticia — venía con 5.8% de premio sobre Toronto y convergió.
    decide si sirve»*, para estas dos está **garantizado**: todo lo que pasa en
    Canadá con Lima cerrada solo puede entrar como hueco.
 3. El ejemplo que R8 cita para ilustrar el hueco —RIO el 7-ago, abriendo en
-   2.28 viniendo de 2.10— probablemente no es el metal entrando con retraso.
-   Es el espejo alcanzando a Toronto. **Pendiente de verificar** con el cierre
-   de RIO.TO del 6 y 7 de agosto.
+   2.28 viniendo de 2.10— **no es el metal entrando con retraso. Verificado el
+   13-ago-2026** con `espejos.json`:
+
+   | fecha | Toronto | implícito US$ | Lima | desviación |
+   |---|---|---|---|---|
+   | 04-ago | 2.700 | 1.920 | 1.851 | −3.57% |
+   | 05-ago | 3.050 | 2.177 | 1.851 | **−14.97%** |
+   | 07-ago | 3.540 | 2.526 | 2.100 | **−16.87%** |
+   | 10-ago | 3.480 | 2.498 | 2.430 | −2.71% |
+
+   Toronto subió 31% en tres ruedas mientras Lima no se movía, y el descuento
+   se abrió a 17%. El salto de Lima no fue información llegando: fue el espejo
+   cerrando el descuento. R8 estaba leyendo convergencia y anotándola como
+   transmisión del metal.
 4. El spread de RIO en Lima ese día fue **4.35%** ida y vuelta, contra una
    ventaja neta medida de +0.76%. Aunque la señal existiera, no se cobra.
 
@@ -302,6 +313,27 @@ contarlo hacia adelante, como manda este archivo.
 meses) y Panoro (`OE2760`) sí publican hechos de importancia en la BVL siendo
 igual de canadienses. O Rio2 no filea en Perú, o el extractor nunca le encontró
 el código. Sin resolver.
+
+### Qué cierre del metal usa R8 — decidido 13-ago-2026
+
+Salió al chocar dos números del mismo día: la página de cotización de Yahoo
+daba el oro en −1.14%, y la serie diaria del repo decía que el 12-ago cerró en
+4,408.90, contra lo cual el mismo precio da casi plano. No es un error de
+nadie: uno es la **settlement** del pit (13:30 EDT) y el otro el último del
+electrónico, que sigue operando después.
+
+Importa porque **el corte de ≥1% se juega exactamente en esa diferencia**: la
+misma rueda llama arriba con un cierre y calla con el otro.
+
+**Decisión: manda la serie diaria de la API de Yahoo — la settlement.** No
+porque sea mejor en abstracto, sino por consistencia: las 793 llamadas del
+71.8%, las betas de las diez acciones y la prueba de GLD se midieron todas con
+esa serie. Cambiar la definición ahora no mejoraría la medición, la
+invalidaría. El número de la página de cotización no entra como insumo de nada.
+
+Corolario operativo: **una lectura hecha antes de la settlement no es una
+lectura.** Por eso `fetch_metales.py` se salta la rueda en curso y `resolver.py`
+no puntúa la rueda de hoy.
 
 ---
 

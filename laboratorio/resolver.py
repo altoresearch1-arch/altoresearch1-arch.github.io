@@ -21,11 +21,28 @@ TRES REGLAS QUE NO SE NEGOCIAN
 DÍAS SIN NEGOCIAR: si el precio no se movió, la rueda no dejó dato y la fila
 queda SIN RESOLVER, no como "no subió". Contar un día sin negociar como fallo
 inventaría un resultado que nunca ocurrió.
+
+DOS EXCLUSIONES, agregadas el 13-ago-2026. Se MARCAN en la fila y se saltean al
+puntuar; no se borran ni se recalculan. Reescribir una apuesta vieja con datos
+nuevos es exactamente lo que la regla 1 prohíbe, así que la fila mala se queda
+donde está con su motivo escrito, igual que una regla del cementerio.
+
+· `dato_malo`: la apuesta se calculó con un cierre de metal que resultó ser un
+  precio intradía. `fetch_metales.py` grababa la rueda en curso como si fuera
+  la settlement y el primer valor visto quedaba congelado. Afecta a las 15
+  filas cuyo insumo fue el 10-ago (oro anotado +2.315%, real +0.486%) y el
+  12-ago (oro anotado +1.962%, real +0.591%). Las dos se escribieron como si
+  el metal hubiera pasado el corte de 1% y ninguna lo pasó.
+
+· `fuera_universo`: RIO y PPX no hacen precio en Lima, lo copian de Toronto
+  convertido a dólares. El corte está en REGLAS_CONGELADAS.md, sección R8 del
+  13-ago-2026. Sus apuestas quedan como registro pero no puntúan.
 """
 import io
 import json
 import os
 import sys
+from datetime import datetime, timedelta, timezone
 
 _stdout, sys.stdout = sys.stdout, io.StringIO()
 sys.path.insert(0, 'laboratorio')
@@ -66,8 +83,17 @@ def resolver():
     filas = cargar()
     nuevas = 0
     pend = {}
+    # LA RUEDA DE HOY NO SE RESUELVE (13-ago-2026). historicos.json se refresca
+    # cada 10 minutos con el mercado abierto, así que resolver hoy puntúa contra
+    # un precio de media rueda y lo deja grabado — `subio` nace null pero una vez
+    # escrito no se vuelve a tocar. Es el mismo error que envenenó la serie del
+    # metal, del otro lado del registro. Se espera al cierre.
+    hoy = datetime.now(timezone(timedelta(hours=-5))).strftime('%Y-%m-%d')
     for r in filas:
         if r.get('subio') is not None:
+            continue
+        if r['rueda'] >= hoy:
+            pend.setdefault(r['rueda'], []).append(r['ticker'] + ' (rueda en curso)')
             continue
         m = movimiento(r['ticker'], r['rueda'])
         if m is None:
@@ -83,10 +109,22 @@ def resolver():
     return filas
 
 
+def puntuable(r):
+    """Se resuelve todo; se PUNTÚA solo lo limpio y dentro del universo de R8."""
+    return not r.get('dato_malo') and not r.get('fuera_universo')
+
+
 def examen(filas):
-    hechas = [r for r in filas if r.get('subio') is not None]
+    resueltas = [r for r in filas if r.get('subio') is not None]
+    hechas = [r for r in resueltas if puntuable(r)]
+    fuera = len(resueltas) - len(hechas)
+    if fuera:
+        malo = sum(1 for r in resueltas if r.get('dato_malo'))
+        esp = sum(1 for r in resueltas if r.get('fuera_universo') and not r.get('dato_malo'))
+        print(f'\n  excluidas del puntaje: {fuera}'
+              f'  ({malo} por dato_malo, {esp} por fuera_universo)')
     if not hechas:
-        print('\n  todavía no hay filas resueltas')
+        print('\n  todavía no hay filas resueltas y puntuables')
         return
     real = [(r['p'], r['subio']) for r in hechas]
     base = [(r['base'], r['subio']) for r in hechas]
