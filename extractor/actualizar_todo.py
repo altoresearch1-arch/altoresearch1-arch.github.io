@@ -130,7 +130,18 @@ PASOS_HECHOS = ["fetch_hechos.py", "gen_lecturas.py", "fetch_bem.py", "fetch_pro
 # vivo ya viene en precios.json (`previous` + `last`, en una sola llamada) y en
 # intradia.json. El histórico se rehace en el cierre, que es cuando nace la
 # fila del día.
-PASOS_PRECIOS = ["fetch_precios.py", ("fetch_noticias.py", ["--feeds"]),
+PASOS_PRECIOS = ["fetch_precios.py",
+                 # 📖 Las puntas (13-ago-2026). MISMA llamada al mismo endpoint
+                 # que fetch_precios —cero costo de red nuevo— pero guardando
+                 # los dos campos que ese robot descartaba: `buy` y `sell`. Se
+                 # agregó el día que RIO cayó 10.42% y su punta de compra pasó
+                 # de 2.210 a 2.050 SIN que se negociara una acción: el OHLC de
+                 # esa rueda no conserva nada de eso, y sin las puntas el costo
+                 # real de salir en una caída es inreconstruible. Append-only,
+                 # un archivo por día, y se saltea la captura idéntica a la
+                 # anterior para no escribir 48 líneas iguales.
+                 "fetch_puntas.py",
+                 ("fetch_noticias.py", ["--feeds"]),
                  # 📋 El resumen se re-sella en cada corrida: así el de las 4
                  # de la tarde ya está escrito cuando cierra la rueda, sin que
                  # nadie tenga que acordarse de correr nada.
