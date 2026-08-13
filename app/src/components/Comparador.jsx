@@ -7,6 +7,7 @@ import familiaData from '../data/mineria_familia.json'
 import Glosado from './Glosado'
 import Disclaimer from './Disclaimer'
 import { peInfo, precioDe, dividendosDe, historicoDe, yieldNumerico, pagaDividendos } from '../lib/finanzas'
+import { serieDe } from '../lib/series'
 import { lenteDe } from '../lib/lente'
 import { Reveal } from '../lib/anim'
 
@@ -133,26 +134,27 @@ const RANGOS = [
 function Carrera({ tA, tB }) {
   const [rango, setRango] = useState('6M')
   const [hover, setHover] = useState(null) // timestamp bajo el cursor
-  const hA = historicoDe(tA)
-  const hB = historicoDe(tB)
-
+  // Las dos series reparadas (lib/series.js): una carrera entre dos acciones
+  // no puede correrse con una que llega al 30-jul y otra al 3-ago.
   const series = useMemo(() => {
-    if (!hA?.valores?.length || !hB?.valores?.length) return null
+    const vA = serieDe(tA)
+    const vB = serieDe(tB)
+    if (!vA.length || !vB.length) return null
     const meses = RANGOS.find((r) => r.id === rango)?.meses || 6
     const corte = new Date()
     corte.setMonth(corte.getMonth() - meses)
     const iso = corte.toISOString().slice(0, 10)
-    const arma = (h) => {
-      const vs = h.valores.filter((v) => v[0] >= iso)
+    const arma = (valores) => {
+      const vs = valores.filter((v) => v[0] >= iso)
       if (vs.length < 2) return null
       const base = vs[0][1]
       if (!base) return null
       return vs.map(([f, c]) => [f, (c / base) * 100])
     }
-    const sA = arma(hA)
-    const sB = arma(hB)
+    const sA = arma(vA)
+    const sB = arma(vB)
     return sA && sB ? { sA, sB } : null
-  }, [hA, hB, rango])
+  }, [tA, tB, rango])
 
   if (!series) return null
   const { sA, sB } = series

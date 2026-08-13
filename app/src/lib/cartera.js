@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import empresasData from '../data/empresas.json'
 import preciosData from '../data/precios.json'
 import dividendosData from '../data/dividendos.json'
-import hechosData from '../data/hechos.json'
+import { hechosDe } from './hechos'
 import lecturasData from '../data/lecturas.json'
 import epsAnualData from '../data/eps_anual.json'
 import pagosData from '../data/pagos_dividendos.json'
@@ -184,27 +184,32 @@ export function haceDias(iso) {
 
 // ── La empresa "vista por el cuaderno": precio + dividendos + hechos ─────
 // (con el veredicto del lector 🛰 de lecturas.json pegado a cada hecho)
-const cacheEmp = {}
-export function empresaDe(t) {
-  if (cacheEmp[t] !== undefined) return cacheEmp[t]
+//
+// EL CACHÉ GUARDA SOLO LO QUE NO CAMBIA. Antes guardaba la empresa entera,
+// precio incluido, y eso volvía imposible el dato vivo: la capa viva traía un
+// precio nuevo, React repintaba el Cuaderno, y esta función devolvía el objeto
+// viejo porque la clave del ticker ya estaba en el caché. Es el mismo
+// antipatrón del 🌍 congelado — un dato que cambia guardado donde React no
+// mira—, y acá pesaba más porque el número que se quedaba quieto era cuánto
+// vale la plata de alguien.
+//
+// El nombre, el sector, el historial de dividendos y los Hechos del archivo no
+// cambian durante la vida de la página: eso sí se cachea, y es donde está el
+// trabajo. El precio entra por argumento en cada llamada.
+const cacheBase = {}
+function baseDe(t) {
+  if (cacheBase[t] !== undefined) return cacheBase[t]
   const base = empresasData.empresas.find((e) => e.ticker === t)
-  if (!base) { cacheEmp[t] = null; return null }
-  const px = preciosData.precios?.[t]
+  if (!base) { cacheBase[t] = null; return null }
   const dv = dividendosData.empresas?.[t]
-  const hi = hechosData.hechos?.[t]
-  const hechos = (hi?.hechos || []).map((h) => {
+  const hechos = hechosDe(t).map((h) => {
     const lec = h.pdf && lecturasData.lecturas?.[h.pdf]
     return lec ? { ...h, veredicto: lec.veredicto, razon: lec.razones?.[0] || null } : h
   })
-  cacheEmp[t] = {
+  cacheBase[t] = {
     t,
     nombre: base.nombre,
     sector: base.sector,
-    precio: px?.precio ?? null,
-    previo: px?.previo ?? null,
-    moneda: px?.moneda || dv?.anualSim || 'S/',
-    fechaPrecio: px?.fecha || null,
-    sinNegoc: !!px?.sinNegociacionReciente,
     divMoneda: dv?.anualSim || 'S/',
     yield: dv?.yield || null,
     frecuencia: dv?.frecuencia || null,
@@ -212,7 +217,25 @@ export function empresaDe(t) {
     historial: dv?.historial || [],
     hechos,
   }
-  return cacheEmp[t]
+  return cacheBase[t]
+}
+
+// `px` es la fila de precio de la capa viva (lib/vivo.js). Sin ella se usa la
+// horneada, que es lo que había siempre: la misma llamada de antes sigue
+// funcionando igual.
+export function empresaDe(t, px = null) {
+  const base = baseDe(t)
+  if (!base) return null
+  const p = px || preciosData.precios?.[t]
+  return {
+    ...base,
+    precio: p?.precio ?? null,
+    previo: p?.previo ?? null,
+    moneda: p?.moneda || base.divMoneda || 'S/',
+    fechaPrecio: p?.fecha || null,
+    sinNegoc: !!p?.sinNegociacionReciente,
+    envivo: !!p?.envivo,
+  }
 }
 
 // Valores fuera de ALTO (internacionales, nuevos): se guardan sin inventar.
@@ -226,10 +249,18 @@ export const stubEmpresa = (c) => ({
 })
 
 // ── Filas calculadas de la cartera (lo que pintan todas las secciones) ───
-export function filasDe(cartera) {
+// `vivos` es el mapa ticker -> precio de la capa viva. Sin él, todo funciona
+// como siempre con el precio del robot; con él, la valorización es la del
+// mercado ahora mismo — que es lo que la pantalla promete cuando dice «valor
+// hoy». Es la misma regla de una sola frescura que ya cumplen el Sonar y la
+// ficha de empresa: si el Radar dice que subió 4%, tu plata no puede seguir
+// mostrando el cierre de ayer.
+export function filasDe(cartera, vivos = null) {
   let totalValor = 0, totalCosto = 0, cambioDia = 0, suben = 0, bajan = 0
   const filas = cartera.map((c) => {
-    let e = c.manual || c.sinDatos ? stubEmpresa(c) : empresaDe(c.t) || stubEmpresa(c)
+    let e = c.manual || c.sinDatos
+      ? stubEmpresa(c)
+      : empresaDe(c.t, vivos?.[c.t]) || stubEmpresa(c)
     // Empresas ALTO que casi no negocian (AFP, estatales…): sin precio del
     // robot se valoriza al costo del usuario — honesto, sin inventar cotización.
     if (e.precio == null) e = { ...e, precio: c.costo, previo: null, sinPrecio: true }

@@ -254,6 +254,55 @@ mismo («el oro cerró +2.3% después de que Lima cerrara; históricamente BVN
 recogió 1.25 por cada punto al día siguiente»). Como señal para operar, no
 hasta resolver el hueco.
 
+### R8 — corte añadido 13-ago-2026: RIO y PPX salen del universo
+
+No se toca ningún número de arriba. Se acota **a qué acciones aplica**, porque
+dos de las diez no hacen precio en Lima: lo copian de Canadá convertido a
+dólares.
+
+**La aritmética del 13-ago-2026, medida al centavo con CAD/USD = 0.7171:**
+
+| | Toronto | × 0.7171 | Lima | |
+|---|---|---|---|---|
+| RIO, cierre 12-ago | CAD 3.360 | US$2.409 | US$2.400 | paridad |
+| RIO, 13-ago 10:46 | CAD 3.135 | US$2.248 | US$2.260 | paridad |
+| PPX, cierre 12-ago | CAD 0.2200 | US$0.1578 | US$0.158 | paridad |
+
+RIO.TO cayó −6.69% ese día por su reporte del Q2 y Lima marcó −5.83%. No es
+que la minera de Lima reaccionara: reimprimió. Lo mismo PPX, que marcó −5.39%
+sin ninguna noticia — venía con 5.8% de premio sobre Toronto y convergió.
+
+**Por qué esto invalida R8 para las dos:**
+
+1. La beta contra el oro (RIO +0.72, r=+0.39) no mide a Lima reaccionando al
+   metal. Mide a **Toronto** reaccionando, y a Lima copiando con el desfase de
+   su horario. Es la misma información contada dos veces.
+2. El hueco de apertura, que R8 declara como *«lo que no se sabe, y es lo que
+   decide si sirve»*, para estas dos está **garantizado**: todo lo que pasa en
+   Canadá con Lima cerrada solo puede entrar como hueco.
+3. El ejemplo que R8 cita para ilustrar el hueco —RIO el 7-ago, abriendo en
+   2.28 viniendo de 2.10— probablemente no es el metal entrando con retraso.
+   Es el espejo alcanzando a Toronto. **Pendiente de verificar** con el cierre
+   de RIO.TO del 6 y 7 de agosto.
+4. El spread de RIO en Lima ese día fue **4.35%** ida y vuelta, contra una
+   ventaja neta medida de +0.76%. Aunque la señal existiera, no se cobra.
+
+**Universo de R8 después de este corte:** SCCO, BVN, GDX, Atacocha, Volcan,
+Nexa, Cerro Verde, Poderosa. **Fuera: RIO y PPX.**
+
+**Lo que se abre en su lugar, sin congelar todavía:** para un espejo, la serie
+que importa no es el metal sino la **desviación contra su plaza de origen**.
+El 13-ago PPX pasó de paridad a las 09:35 a +5.7% de premio sobre el medio de
+Toronto a las 12:27, en la misma rueda. Eso es medible todos los días y es
+falsable. Antes de convertirlo en regla hace falta escribirle el corte y
+contarlo hacia adelante, como manda este archivo.
+
+**Anotado de paso:** RIO no tiene código RPJ en `hechos.json`
+(`encontrado: False`, cero hechos), mientras PPX (`OE4570`, 40 hechos en 12
+meses) y Panoro (`OE2760`) sí publican hechos de importancia en la BVL siendo
+igual de canadienses. O Rio2 no filea en Perú, o el extractor nunca le encontró
+el código. Sin resolver.
+
 ---
 
 ## Cómo se agrega una regla

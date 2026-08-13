@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { PLAZOS, filasRadar, huecoHistorico, rotacionSectores, leerFuerza, generadoNoticias } from '../lib/radar'
-import { useColaHistorica, useMercadoVivo, useNoticiasFrescas } from '../lib/vivo'
+import { partesLima, useColaHistorica, useNoticiasFrescas } from '../lib/vivo'
+import { useVivo } from '../lib/vivoCompartido'
 import RadarCandente from './RadarCandente'
 import MuroNoticias from './MuroNoticias'
 import RadarHistoria from './RadarHistoria'
@@ -45,7 +46,9 @@ export default function Radar({ onVerEmpresa }) {
   // precio a la BVL cada 45 s y TODO el Radar se recalcula con él: el plato,
   // el ranking, los sectores. Si la BVL no contesta (o es domingo), `precios`
   // queda en null y filasRadar cae sola al dato horneado del robot.
-  const vivo = useMercadoVivo()
+  // El motor ya no vive acá: es uno solo para toda la app (lib/vivoCompartido).
+  // Este hook lo enciende mientras el Radar esté montado y lo apaga al salir.
+  const vivo = useVivo()
   // 📈 Si el robot no corrió, el archivo de cierres se quedó ruedas atrás y
   // los plazos medirían mal. Esto baja de la BVL solo las ruedas que faltan,
   // una vez por visita. Con el archivo al día no cuesta ni una llamada.
@@ -56,9 +59,14 @@ export default function Radar({ onVerEmpresa }) {
   // a que la web se vuelva a publicar: así aparece apenas el robot la
   // commitea. `prensa` sube de número cada vez que entra una copia más nueva.
   const prensa = useNoticiasFrescas()
-  const { filas, descartadas, total, fecha } = useMemo(
-    () => filasRadar(vivo.precios, vivo.hechos, cola),
-    [vivo.precios, vivo.hechos, cola, prensa],
+  // El día de hoy en hora de Lima, para medir la edad de un Hecho de
+  // Importancia contra el calendario y no contra la última rueda: un HI de las
+  // 07:08 sale ANTES de que la rueda abra, y midiéndolo contra el cierre daba
+  // días negativos y desaparecía de la pantalla.
+  const hoy = partesLima().fecha
+  const { filas, descartadas, total, fecha, series } = useMemo(
+    () => filasRadar(vivo.precios, vivo.hechos, cola, hoy),
+    [vivo.precios, vivo.hechos, cola, prensa, hoy],
   )
   const sectores = useMemo(() => rotacionSectores(filas, ruedas), [filas, ruedas])
 
@@ -117,7 +125,11 @@ export default function Radar({ onVerEmpresa }) {
       <RadarResumen onVerEmpresa={onVerEmpresa} />
 
       {/* ── 2) El sonar: el mercado de un vistazo, en pantalla de submarino. */}
-      <RadarSonar filas={filas} ruedas={ruedas} plazo={plazo} vivo={vivo} onVerEmpresa={onVerEmpresa} />
+      {/* `prensa` viaja como prop y no es adorno: los titulares viven en un
+          módulo, así que sin este contador el Sonar seguiría cruzando el 🌍
+          con la prensa horneada aunque hayan entrado copias nuevas. */}
+      <RadarSonar filas={filas} series={series} ruedas={ruedas} plazo={plazo}
+                  vivo={vivo} prensa={prensa} onVerEmpresa={onVerEmpresa} />
 
       {/* ── 3) El mundo: lo que llega de afuera, con el canal por el que llega.
              Va antes del muro y del ranking a propósito — más de un tercio del

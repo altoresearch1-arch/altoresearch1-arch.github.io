@@ -42,6 +42,20 @@ METALES = [
     # pendiente y hay que sacarlo del LME o de investing.com. Duele porque Nexa
     # y Atacocha son zinc; Volcan es plata segun su propia gerencia.
     ('platino', 'PL=F', 'precioso'),
+    # ── EL PETRÓLEO (10-ago-2026) ────────────────────────────────────────
+    # No es un metal y por eso hay que justificar que viva acá: es la misma
+    # cañería —Yahoo, diario, acumula— y la pregunta que responde es de la
+    # misma familia. Entra por dos canales de SIGNO OPUESTO y nadie midió cuál
+    # pesa en la BVL:
+    #   · como COSTO: la energía es insumo minero, un salto aprieta márgenes
+    #   · como INFLACIÓN: crudo arriba -> expectativa de inflación -> oro arriba
+    # Y hay un motivo del día: el estrecho de Ormuz está cerrado desde el
+    # 19-jun-2026 y el crudo pasó de 117.63 a ~82 CON el estrecho cerrado. Esa
+    # caída con el cierre vigente es el hecho a explicar, y sin la serie diaria
+    # no se puede saber si cayó EN los altos el fuego o si venía cayendo igual.
+    # Brent además de WTI porque el crudo de Medio Oriente cotiza contra Brent.
+    ('petroleo_wti',   'CL=F', 'energia'),
+    ('petroleo_brent', 'BZ=F', 'energia'),
 ]
 
 CTX = ssl.create_default_context()

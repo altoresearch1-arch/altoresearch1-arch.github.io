@@ -6680,6 +6680,11 @@ a.link {
 }
 .cd-dato .k { font-size: 11.5px; color: var(--texto-tenue); text-transform: uppercase; letter-spacing: 0.05em; }
 .cd-dato .v { font-size: 17px; font-weight: 700; }
+/* Cifras de ancho fijo: desde que el Cuaderno se valoriza con el precio en
+   vivo, estos números se reemplazan solos durante la rueda. Sin esto, un 1 es
+   más angosto que un 8 y la fila se movería sola cada vez — el temblor es un
+   problema tipográfico, no una razón para congelar el dato. */
+.cd-dato .v, .cd-resumen-num .n, .cd-fila-valor, .cd-fila-precio { font-variant-numeric: tabular-nums; }
 .cd-dato .v.oro { color: var(--oro); }
 .cd-mini-divs { display: flex; gap: 8px; margin: 10px 0; }
 .cd-anio {

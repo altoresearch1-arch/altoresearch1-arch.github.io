@@ -1,26 +1,35 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
 import config from './data/config.json'
 import empresasData from './data/empresas.json'
 import Quiz from './components/Quiz'
 import Resultados from './components/Resultados'
 import Empresa from './components/Empresa'
-import Glosario from './components/Glosario'
 import Explorar from './components/Explorar'
-import Comparador from './components/Comparador'
 import ApoyoModal from './components/ApoyoModal'
 import Pildora from './components/Pildora'
 import Disclaimer from './components/Disclaimer'
 import HoyBVL from './components/HoyBVL'
-import Radar from './components/Radar'
+import CercoError from './components/CercoError'
+
+// 🐢 LAS PANTALLAS GRANDES SE BAJAN CUANDO SE ABREN, no al arrancar.
+// El Radar arrastra el historico completo (~957 KB) y el Atlas las lecturas
+// (~506 KB): quien entra a leer una ficha de empresa no tiene por que
+// descargar ninguna de las dos. Con el service worker de la PWA el resto
+// igual se precachea despues, en segundo plano: lo que cambia es lo que hay
+// que esperar ANTES de ver algo.
+const Radar = lazy(() => import('./components/Radar'))
+const Cuaderno = lazy(() => import('./components/Cuaderno'))
+const Atlas = lazy(() => import('./components/Atlas'))
+const Comparador = lazy(() => import('./components/Comparador'))
+const Glosario = lazy(() => import('./components/Glosario'))
+const Comentarios = lazy(() => import('./components/Comentarios'))
+const Gracias = lazy(() => import('./components/Gracias'))
+import { ProveedorVivo } from './lib/vivoCompartido'
 import EmpresaDelDia from './components/EmpresaDelDia'
 import MiLista from './components/MiLista'
-import Cuaderno from './components/Cuaderno'
 import CuadernoPortada from './components/CuadernoPortada'
 import MonedaFidget from './components/MonedaFidget'
 import FondoVivo from './components/FondoVivo'
-import Atlas from './components/Atlas'
-import Comentarios from './components/Comentarios'
-import Gracias from './components/Gracias'
 import AvisoNovedades from './components/AvisoNovedades'
 import SelectorNivel from './components/SelectorNivel'
 import Bienvenida from './components/Bienvenida'
@@ -350,7 +359,7 @@ export default function App() {
   }
 
   return (
-    <>
+    <ProveedorVivo>
       <FondoVivo />
       <div className="aurora" aria-hidden="true" />
       {/* 📡 El Radar rompe el ancho de lectura (760px, pensado para textos) y
@@ -411,8 +420,13 @@ export default function App() {
           />
         )}
 
-        {/* key={vista}: remonta el contenido al cambiar de vista -> transición suave */}
+        {/* key={vista}: remonta el contenido al cambiar de vista -> transición suave.
+            Y como el cerco vive DENTRO de este div, ese mismo remonte lo
+            reinicia: un fallo en el Cuaderno no te deja atrapado al cambiar
+            de pantalla. */}
         <div key={vista + (tickerSel || '')} className="vista-anim">
+         <CercoError nombre={vista}>
+          <Suspense fallback={<div className="card muted">Abriendo {vista}…</div>}>
           {vista === 'inicio' && (() => {
             // 🆕 Actualizaciones (reemplaza al "mensaje del día", pedido de Jair 09-jul):
             // las mejoras REALES de la app, editables en config.json
@@ -648,6 +662,8 @@ export default function App() {
               onVerEmpresa={(t) => abrirEmpresa(t, 'comparar')}
             />
           )}
+          </Suspense>
+         </CercoError>
         </div>
       </div>
 
@@ -740,6 +756,6 @@ export default function App() {
         <br />
         Contenido educativo · no es recomendación de inversión · el mercado manda.
       </footer>
-    </>
+    </ProveedorVivo>
   )
 }

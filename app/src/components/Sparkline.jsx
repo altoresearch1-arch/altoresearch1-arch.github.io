@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { historicoDe, precioDe } from '../lib/finanzas'
+import { serieDe } from '../lib/series'
 
 // Gráfico del precio (cierres DIARIOS reales de la BVL, historicos.json),
 // estilo BEM (pedido de Jair: "todas las gráficas como el BEM"): eje Y con
@@ -32,15 +33,19 @@ export default function Sparkline({ ticker, compacto = false }) {
   const [rango, setRango] = useState('6M')
   const [hover, setHover] = useState(null)
 
+  // La serie REPARADA (lib/series.js): con el archivo del robot a secas, esta
+  // gráfica terminaba tres ruedas antes que el precio impreso al lado — en el
+  // Cuaderno, una línea antes del «Valor hoy» de tu propia plata.
   const serie = useMemo(() => {
-    if (!h?.valores?.length) return null
+    const valores = serieDe(ticker)
+    if (!valores.length) return null
     const meses = RANGOS.find((r) => r.id === rango)?.meses || 6
     const corte = new Date()
     corte.setMonth(corte.getMonth() - meses)
     const iso = corte.toISOString().slice(0, 10)
-    const vs = h.valores.filter((v) => v[0] >= iso)
-    return vs.length >= 2 ? vs : h.valores
-  }, [h, rango])
+    const vs = valores.filter((v) => v[0] >= iso)
+    return vs.length >= 2 ? vs : valores
+  }, [ticker, rango])
 
   if (!serie || serie.length < 2) return null
 

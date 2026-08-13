@@ -3,7 +3,7 @@ import terminosData from '../data/terminos.json'
 import glosarioData from '../data/glosario.json'
 import tesisData from '../data/tesis.json'
 import tipsData from '../data/tips.json'
-import hechosData from '../data/hechos.json'
+import { hechosDe } from './hechos'
 import conocimientoData from '../data/conocimiento.json'
 import lecturasData from '../data/lecturas.json'
 import gerenciaData from '../data/gerencia.json'
@@ -113,7 +113,6 @@ function buscarTermino(q) {
 // ── piezas de texto reutilizables
 const tesisDe = (t) => tesisData.tesis?.[t] || null
 const tipsDe = (t) => tipsData.tips?.[t] || []
-const hechosDe = (t) => hechosData.hechos?.[t]?.hechos || []
 
 function lineaPrecio(t) {
   const px = precioDe(t)

@@ -1,7 +1,7 @@
 import preciosData from '../data/precios.json'
 import epsAnualData from '../data/eps_anual.json'
 import dividendosData from '../data/dividendos.json'
-import historicosData from '../data/historicos.json'
+import { metaDe, serieDe } from './series'
 import escenariosData from '../data/escenarios.json'
 
 // P/E CON CONTEXTO (pedido de Jair 08-jul): P/E = precio ÷ BPA anual (SMV).
@@ -9,13 +9,19 @@ import escenariosData from '../data/escenarios.json'
 // BPA sí existe (ej. Santa Luisa: BPA S/ 41.02, precio S/ 304 → P/E ~7.4).
 // Ahora se muestra CON advertencia. Devuelve:
 //   { pe, referencial, fechaPrecio }  · referencial=true → precio viejo, ⚠
-//   { perdida: true }                 · BPA anual ≤ 0 (no hay P/E)
+//   { perdida: true }                 · BPA anual < 0 (perdió: no hay P/E)
 //   null                              · sin precio o sin BPA anual
 export function peInfo(ticker) {
   const px = preciosData.precios?.[ticker]
   const ea = epsAnualData.eps?.[ticker]
   if (!px || px.precio == null || !ea || ea.epsAnual == null) return null
-  if (ea.epsAnual <= 0) return { perdida: true }
+  // Un BPA de CERO no es una pérdida. Hasta el 05-ago-2026 el <= 0 metía a los
+  // dos en la misma bolsa, y la SMV publica ese 0.000 cuando nadie llenó el
+  // campo: Southern, con US$ 723.9 M de ganancia, salía "en pérdida" en la
+  // ficha. El extractor ahora manda null en ese caso, pero el 0 se descarta
+  // igual acá — un P/E sobre cero no significa nada aunque el cero sea real.
+  if (ea.epsAnual < 0) return { perdida: true }
+  if (ea.epsAnual === 0) return null
   const monedaPrecio = px.moneda === 'US$' ? 'USD' : 'PEN'
   let eps = ea.epsAnual
   if (monedaPrecio !== ea.moneda) {
@@ -37,8 +43,14 @@ export function dividendosDe(ticker) {
   return dividendosData.empresas?.[ticker] || null
 }
 
+// Los METADATOS de la acción: volatilidad, rango de 12 meses, liquidez,
+// moneda. NO trae la serie de precios, y eso es a propósito: la serie del
+// archivo se queda ruedas atrás cada vez que el robot no corre, y quien la
+// leía de acá terminaba dibujando un gráfico que acababa antes que el precio
+// impreso al lado (pasó en el Sparkline de la ficha y del Cuaderno). Para la
+// serie hay una sola puerta: `serieDe()` en lib/series.js.
 export function historicoDe(ticker) {
-  return historicosData.historicos?.[ticker] || null
+  return metaDe(ticker)
 }
 
 export function pagaDividendos(ticker) {
@@ -52,9 +64,10 @@ export function pagaDividendos(ticker) {
 // cierre a menos de 14 días (Regla de Oro #1: sin dato, no se inventa).
 export function precioEnFecha(ticker, isoFecha) {
   const h = historicoDe(ticker)
-  if (!h?.valores?.length || !isoFecha) return null
+  const valores = serieDe(ticker)
+  if (!valores.length || !isoFecha) return null
   let elegido = null
-  for (const [fecha, cierre] of h.valores) {
+  for (const [fecha, cierre] of valores) {
     if (fecha > isoFecha) break
     elegido = { fecha, precio: cierre }
   }
@@ -102,12 +115,13 @@ export function variacionesDia(empresas) {
 // acción es "poco negociada" (el % sería engañoso — la BVL rellena la serie).
 export function cambio6M(ticker) {
   const h = historicoDe(ticker)
-  if (!h?.valores?.length) return null
-  if (h.volatilidadEtiqueta === 'poco negociada') return null
+  const valores = serieDe(ticker)
+  if (!valores.length) return null
+  if (h?.volatilidadEtiqueta === 'poco negociada') return null
   const corte = new Date()
   corte.setMonth(corte.getMonth() - 6)
   const iso = corte.toISOString().slice(0, 10)
-  const rango = h.valores.filter(([f, v]) => f >= iso && v > 0)
+  const rango = valores.filter(([f, v]) => f >= iso && v > 0)
   if (rango.length < 2) return null
   const primero = rango[0][1]
   const ultimo = rango[rango.length - 1][1]

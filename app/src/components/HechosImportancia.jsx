@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import hechosData from '../data/hechos.json'
+import { hechosDe } from '../lib/hechos'
+import { useVivo } from '../lib/vivoCompartido'
 import lecturasData from '../data/lecturas.json'
 import empresasData from '../data/empresas.json'
 import { redactarLectura } from '../lib/redactor'
@@ -76,12 +77,18 @@ function LecturaInline({ lec, ticker }) {
 }
 
 export default function HechosImportancia({ ticker }) {
-  const h = hechosData.hechos?.[ticker]
+  // La misma frescura que el Sonar: si el Radar anunció un Hecho de las 07:08,
+  // esta lista tiene que tenerlo. Reemplazo silencioso — se pinta el archivo
+  // horneado de inmediato y el Hecho nuevo entra solo cuando llega, sin
+  // «cargando…» ni saltos de la página (de cuándo es el dato ya lo dice el
+  // sello de la capa viva, que es el vocabulario que la app ya tiene).
+  const { hechos: vivos } = useVivo()
+  const hechos = hechosDe(ticker, vivos)
   const [abiertos, setAbiertos] = useState(false)
   const [lecturaAbierta, setLecturaAbierta] = useState(null) // índice del hecho desplegado
-  if (!h?.hechos?.length) return null
+  if (!hechos.length) return null
 
-  const lista = abiertos ? h.hechos : h.hechos.slice(0, VISIBLES)
+  const lista = abiertos ? hechos : hechos.slice(0, VISIBLES)
 
   return (
     <div>
@@ -122,9 +129,9 @@ export default function HechosImportancia({ ticker }) {
           )
         })}
       </div>
-      {h.hechos.length > VISIBLES && (
+      {hechos.length > VISIBLES && (
         <button className="btn btn-fantasma hi-vermas" onClick={() => setAbiertos((v) => !v)}>
-          {abiertos ? '− Ver menos' : `+ Ver los ${h.hechos.length} del último año`}
+          {abiertos ? '− Ver menos' : `+ Ver los ${hechos.length} del último año`}
         </button>
       )}
       <p className="muted" style={{ marginTop: 8, fontSize: 12 }}>

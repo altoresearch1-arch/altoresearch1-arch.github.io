@@ -182,24 +182,217 @@ Con 2 o 3 nombres por sector, un caso raro cuenta una película que no pasó.
 `SonarGrafica` dibuja `fila.serie`, **la misma** de la que salen el `%` y la
 fuerza. Si alguna vez no coinciden, el bug está en la serie, no en el dibujo.
 
+### 26. La serie de precios se pide por UNA sola puerta: `serieDe()`
+`lib/series.js`. Y `historicoDe()` **no devuelve `valores`** — entrega los
+metadatos (volatilidad, rango de 12 meses, liquidez) y nada más.
+
+No es una preferencia de estilo: es el cierre de una clase entera de bugs. El
+archivo del robot se queda ruedas atrás cada vez que el cron falla (el
+04-ago-2026 llegaba al 30-jul con el precio ya en el 3-ago), así que quien leía
+la serie cruda mostraba números viejos al lado de números frescos:
+
+- el «+X% desde el titular» del Sonar daba **+2.0%** donde correspondía
+  **+3.7%** (BBVAC1, medido el 04-ago);
+- el Sparkline de la ficha de empresa y del Cuaderno terminaba tres ruedas
+  antes que el «Valor hoy» que tiene una línea más abajo.
+
+Dos bugs distintos, una sola causa: dos fuentes de verdad para el mismo dato.
+Si la serie cruda no sale por ninguna puerta, no se puede leer mal.
+
+> ⚠️ La reparación tiene **dos patas** y hacen falta las dos: `conCola` (las
+> ruedas cerradas que el robot no guardó) y `conUltimoPrecio` (la rueda en
+> curso). Reparar solo con el precio de hoy deja un hueco en el medio y la
+> ventana sigue midiendo desde una fecha vieja.
+
+### 27. La edad de un Hecho de Importancia se mide contra el CALENDARIO
+Contra el día de hoy, que entra **por parámetro** — nunca un `new Date()`
+escondido dentro del cálculo, y nunca contra la fecha del último cierre.
+
+Medida contra el cierre, cualquier Hecho posterior a la última rueda daba días
+negativos y **desaparecía de toda la pantalla**. Pasa en las dos ventanas donde
+el dato vale más: entre las 8 y las 9 de la mañana (la rueda no abrió, el cierre
+es de ayer) y los fines de semana. El 03-ago-2026 Alicorp publicó su compra a
+Unilever a las 07:08 — justo el caso que la capa en vivo existe para mostrar.
+
+La relación con la última sesión (`despuesDelCierre`) es un dato **aparte**: la
+pantalla dice la hora («📄 HI 07:08»), no un «hace 0 días» que sería falso. Y
+las fechas futuras siguen dando `null`: ahí no hay nada que mostrar, hay un dato
+malo.
+
+### 28. Si el dato vive en un módulo, el componente necesita su contador
+Los titulares no viven en el estado de React (`NOTICIAS` en `lib/radar.js`), así
+que React **no puede saber** que entró una copia nueva. `RadarSonar` calculaba
+el cruce 🌍 con `useMemo(…, [])` y se quedaba congelado con la prensa horneada
+toda la visita, aunque el módulo hiciera bien su parte invalidando `cacheMundoTk`.
+
+Por eso `prensa` viaja como prop y entra en las dependencias. Y por eso mismo la
+serie reparada **no** se guarda en un Map de módulo: un dato que cambia donde
+React no mira es exactamente esta falla otra vez.
+
+### 28-bis. Los patrones no aflojan sus cortes hasta que enciendan
+`lib/patrones.js` agrega cuatro lecturas al Sonar. Tres de ellas dieron **0
+contactos** el día que se escribieron (7-ago-2026) y así se dejaron:
+
+- **el día partido** mide la separación con las medianas de las acciones de
+  Lima, no con el precio de los metales. El 7-ago el oro subió 2.37% y el cobre
+  cayó 1.85% en el exterior, pero en Lima las dos familias cerraron en verde:
+  la marca no encendió, y **está bien** que no encendiera. Para ver ese día
+  hace falta la cotización DIARIA del metal, que hoy no se baja (el BCRP la
+  publica mensual). Bajar el corte hasta que prenda es fabricar la señal.
+- **la mixta no vota.** Volcan vende zinc y plata: si se la asignara a una
+  familia, correría esa mediana y el «día partido» pasaría a demostrarse solo.
+- **el spread contra la plaza extranjera** devuelve `null` sin el precio de
+  afuera, en vez de mostrar el último conocido. Un spread viejo se ve idéntico
+  a uno fresco.
+
+Y el tipo de cambio se acepta en los dos sentidos (`USD/CAD` o `CAD/USD`)
+porque invertir el par da un número plausible y equivocado: RIO2 el 7-ago daba
+−4.3% bien convertido y −50.7% al revés.
+
 ---
 
 ## 🎯 Tono (la Regla de Oro del proyecto)
 
-### 26. Todo en pasado y en modo descripción
+### 29. Todo en pasado y en modo descripción
 "Se movió", nunca "va a subir". "Mira", nunca "compra". La app **muestra, no
 recomienda**.
 
-### 27. Lo medido va separado de lo hipotético
+### 30. Lo medido va separado de lo hipotético
 El 🌍 mundo lleva otro rótulo que la firma **a propósito**: la firma trae su
 cuenta sacada de los cierres, el mundo son cadenas escritas a mano sin medir
 contra el precio. Mezclarlas le daría a una hipótesis el mismo peso visual que a
 un hecho, y esa es justo la confusión que el Radar existe para evitar.
 
-### 28. Nunca "porque", siempre "puede"
+### 31. Nunca "porque", siempre "puede"
 Que el precio subiera después del titular no significa que subiera **por** el
 titular. `estudio_noticias.py` midió que ni los titulares de la propia empresa
 predicen su cierre.
+
+---
+
+## 🧪 Las pruebas
+
+### 32. Son DOS runners, y no hay forma de que sea uno solo
+```bash
+cd app && npm test                 # vitest -> app/src/lib/radar.test.js
+python extractor/test_guardas.py   # sin pytest -> la guarda del extractor
+```
+La guarda es Python y vitest no la puede tocar. Escribir ese test en JavaScript
+sería probar una reimplementación, no la guarda que corre cada 10 minutos.
+
+**Qué merece una prueba:** lo que al romperse produce **números plausibles** que
+nadie notaría mirando la pantalla — las tres ramas de `conUltimoPrecio`, la
+mediana por sector, el conteo con `encontrado` de la guarda, el filtro
+`pocoNegociada`. **Qué no:** formatos, textos, iconos. Cambian mucho más seguido
+que la aritmética, y ahí el test se vuelve un peaje.
+
+Existe porque los invariantes vivían solo en prosa, y dos revisiones externas
+propusieron cambios destructivos sin poder notarlo: leer un documento no falla,
+un test sí.
+
+---
+
+## 🔴 La capa viva
+
+### 33. Los Hechos de Importancia se piden por `hechosDe()`
+`lib/hechos.js`. Mismo motivo que la serie de precios (#26): tienen **dos
+representaciones con distinta frescura** —el archivo del robot y lo que el
+navegador baja cada 45 s— y mientras solo el Radar veía la viva, el Sonar decía
+«📄 HI 07:08» de una empresa y esa misma empresa, abierta, no tenía ese Hecho.
+
+**El dedupe va por fecha + texto, JAMÁS por PDF.** El Hecho que llega en vivo
+puede no traer documento todavía (`bajarHechosVivos` solo pone `pdf` si la BVL
+ya publicó la ruta) y el mismo Hecho, cuando el robot lo hornee, sí lo va a
+traer. Con el PDF de clave serían dos registros distintos y el usuario vería su
+Hecho repetido.
+
+La regla general, que vale para cualquier campo que se agregue después: **la
+identidad de un registro no puede depender de un atributo que aparece más
+tarde.** Si el dato vivo y el horneado se distinguen por algo que uno de los dos
+todavía no tiene, no son el mismo registro para el código y sí lo son para el
+usuario.
+
+> **El criterio para la próxima fuente de datos:** la puerta única no se pone
+> por simetría, se pone donde existe una segunda representación **más fresca**
+> del mismo dato. `historicos.json` sí · `hechos.json` sí · `dividendos.json`
+> no, porque no existe un dividendo intradía.
+
+### 34. El almacén de datos vivos es uno solo, y el gatillo lo encienden los consumidores
+`lib/vivoCompartido.jsx`. El almacén vive en la raíz de la app para que no haya
+dos frescuras del mismo dato; el motor **solo corre cuando hay al menos una
+pantalla montada que muestre dato vivo**. Una pestaña olvidada en el glosario no
+le pregunta nada a la BVL. Comprobado: recargando en el glosario, **0 llamadas**;
+recargando directo en una ficha de empresa, `stock-quote/market` y
+`corporate-actions`.
+
+Y el motor sigue siendo `useMercadoVivo` **con todo lo que ya tenía**: backoff al
+fallar, silencio con la pestaña de fondo y una sola consulta fuera del horario de
+rueda. Un `setInterval` de 45 s pelado es más corto de escribir y le estaría
+preguntando a la BVL un domingo a las tres de la mañana.
+
+### 35. Ningún consumidor guarda su propia copia del dato vivo
+El proveedor tiene el estado; las pantallas lo **leen**. En cuanto una guarda su
+copia —en un `useState` propio, o en un caché de módulo— vuelve a haber dos
+verdades y ninguna prueba de resultado lo nota.
+
+Pasó dos veces, y la segunda costaba plata: `empresaDe()` en `lib/cartera.js`
+cacheaba la empresa **entera, precio incluido**, así que la capa viva traía un
+precio nuevo, React repintaba el Cuaderno, y la función devolvía el objeto viejo
+porque la clave del ticker ya estaba guardada. El Cuaderno mostraba el cierre del
+día anterior mientras el Sonar ya iba en vivo.
+
+Se cachea **solo lo que no cambia** durante la vida de la página (nombre, sector,
+historial de dividendos, Hechos del archivo). El precio entra por argumento.
+
+### 36. La valorización del Cuaderno se mueve con el mercado, y sin adornos
+Cuando la pantalla dice «esto vale tu portafolio», responde a *ahora*, no a *la
+última vez que el robot publicó*. Congelar la cifra mientras alguien la mira es
+programar el mismo bug a propósito: al recargar, la plata daría un salto en vez
+de irse moviendo.
+
+Pero **nada de destellos, animaciones ni resaltados** en cada cambio. Hay
+diferencia entre *el mercado cambió* y *quiero llamar tu atención sobre que
+cambió*; lo segundo es una cinta bursátil, y esto es un cuaderno. El temblor de
+la fila cuando un `1` es más angosto que un `8` se arregla donde corresponde:
+`font-variant-numeric: tabular-nums`, en el CSS.
+
+---
+
+## 📦 El peso de la app
+
+### 37. Los datos van HORNEADOS en el bundle, y es una decisión, no una deuda
+Se evaluó el 05-ago-2026 sacarlos y pedirlos en tiempo de ejecución para
+aligerar la primera carga. **Se rechaza.** Todo lo que hace especial a este
+proyecto —sin backend, sin servidor, GitHub Pages, un robot que publica y una
+app que funciona entera sin señal— se apoya en que el dato viaja con el código.
+Romper eso para ahorrar una descarga sería cambiar la propiedad más fuerte por
+la métrica más vistosa.
+
+**Y la métrica era engañosa.** Los 4 MB del `dist` son tamaño en disco; lo que
+de verdad viaja va comprimido:
+
+| | disco | por la red |
+|---|---|---|
+| `datos` | 1,701 KB | 436 KB |
+| `datos-historicos` | 980 KB | 152 KB |
+| `index` | 558 KB | 186 KB |
+| `datos-lecturas` | 513 KB | 84 KB |
+| `datos-hechos` | 418 KB | 54 KB |
+| **primera carga** | **~4.0 MB** | **~950 KB** |
+
+Comprobado contra el sitio publicado: GitHub Pages responde
+`Content-Encoding: gzip` **solo**, incluso pidiéndole brotli. Por eso **no** se
+agrega un plugin que genere `.br`/`.gz` en el build: esos archivos nadie los
+pediría —Pages comprime al vuelo y no negocia archivos precomprimidos— y solo
+engordarían el repo.
+
+Una sola descarga de ~950 KB, cacheada para siempre por el service worker
+(29 entradas), a cambio de que la app entera funcione en un avión. Ese trato se
+mantiene mientras no cambien los objetivos de fondo.
+
+> Si algún día aparece un dato **muy pesado, poco usado y prescindible sin red**
+> (una biblioteca documental, un paquete de PDF), ese sí es candidato a salir
+> del bundle. Los datos que sostienen las pantallas, no.
 
 ---
 

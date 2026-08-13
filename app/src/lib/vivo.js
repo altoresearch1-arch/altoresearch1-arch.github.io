@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import preciosData from '../data/precios.json'
-import hechosData from '../data/hechos.json'
+import { mapaRpj } from './hechos'
 import { usarNoticiasFrescas } from './radar'
 
 // ═════════════════════════════════════════════════════════════════════════
@@ -178,11 +178,8 @@ export async function bajarMercadoVivo({ signal } = {}) {
 }
 
 // rpjCode de la BVL -> ticker nuestro. Sale de hechos.json, que ya guarda el
-// rpj de cada empresa.
-const POR_RPJ = new Map()
-for (const [ticker, h] of Object.entries(hechosData.hechos || {})) {
-  if (h?.rpj) POR_RPJ.set(h.rpj, ticker)
-}
+// rpj de cada empresa (lib/hechos.js es quien lee ese archivo).
+const POR_RPJ = mapaRpj()
 
 const menosDias = (iso, n) =>
   new Date(new Date(`${iso}T12:00:00Z`).getTime() - n * 86400000).toISOString().slice(0, 10)

@@ -1,10 +1,10 @@
 import empresasData from '../data/empresas.json'
-import historicosData from '../data/historicos.json'
 import preciosData from '../data/precios.json'
-import hechosData from '../data/hechos.json'
+import { ultimoHechoDe } from './hechos'
 import noticiasData from '../data/noticias.json'
 import dividendosData from '../data/dividendos.json'
 import cotizacionesData from '../data/cotizaciones.json'
+import { crudaDe, metaDe, serieDe, tickersConHistorico, totalEnArchivo } from './series'
 
 // ─────────────────────────────────────────────────────────────────────────
 // 📡 RADAR DE ROTACIÓN — qué se está moviendo y si se movió DE VERDAD.
@@ -86,7 +86,10 @@ const EMPRESAS = new Map(empresasData.empresas.map((e) => [e.ticker, e]))
 // atras=1 es la misma ventana vista ayer (sirve para saber si algo acaba
 // de cruzar el anillo); con atras=ruedas es la ventana ANTERIOR completa
 // (sirve para ver si la acción se dio vuelta).
-function retornoOffset(valores, ruedas, atras = 0) {
+// Se exporta solo para poder fijarla con una prueba: un error de un puesto acá
+// no rompe nada visible — devuelve +3.9% donde tocaba +4.2%, con el mismo
+// color y el mismo aspecto de número razonable.
+export function retornoOffset(valores, ruedas, atras = 0) {
   const fin = valores.length - 1 - atras
   const ini = fin - ruedas
   if (ini < 0 || fin < 0) return null
@@ -295,13 +298,34 @@ function dividendoCerca(ticker, desdeISO, hastaISO, precio, moneda) {
 // el Sonar a los segundos de publicarse: el 03-ago-2026 Alicorp publicó su
 // compra a Unilever a las 07:08 y el archivo del repo seguía clavado en el 24
 // de julio.
-function ultimoHecho(ticker, hoyISO, hechosVivos) {
-  const guardado = hechosData.hechos?.[ticker]?.hechos?.[0]
-  const fresco = hechosVivos?.[ticker]?.[0]
-  const h = fresco?.fecha && (!guardado?.fecha || fresco.fecha >= guardado.fecha)
-    ? fresco : guardado
+// DOS EDADES DISTINTAS, y confundirlas escondía Hechos enteros:
+//
+//   · `dias` es la edad de CALENDARIO — contra el día de hoy de verdad, que
+//     entra por parámetro (nada de un `new Date()` escondido acá adentro).
+//   · `despuesDelCierre` es la relación con la última SESIÓN de esa acción.
+//
+// Antes se medía la edad contra la fecha de cierre, y entonces cualquier Hecho
+// posterior a la última sesión daba días NEGATIVOS -> `null` -> desaparecía de
+// toda la pantalla. Pasa en las dos ventanas donde el dato vale más: entre las
+// 8 y las 9 de la mañana (la rueda no abrió, el cierre es de ayer) y los fines
+// de semana. El 03-ago-2026 Alicorp publicó su compra a Unilever a las 07:08 —
+// justo el caso que la capa en vivo existe para mostrar, y justo el que se
+// perdía.
+//
+// El `null` se queda para las fechas futuras: ahí no hay nada que mostrar,
+// hay un dato malo, y este proyecto no inventa cuando no sabe.
+function ultimoHecho(ticker, hoyISO, fechaCierre, hechosVivos) {
+  // La puerta ya fusiona el archivo con lo que bajó la capa viva y ordena por
+  // fecha y hora: acá solo se lee el primero.
+  const h = ultimoHechoDe(ticker, hechosVivos)
   if (!h?.fecha) return null
-  const dias = Math.round((new Date(hoyISO) - new Date(h.fecha)) / 86400000)
+  // Las dos fechas se recortan a YYYY-MM-DD y se leen como medianoche UTC. Sin
+  // eso, un llamador que pase un instante completo («2026-08-04T23:55:00-05:00»
+  // en vez de «2026-08-04») haría envejecer el Hecho un día entero a las siete
+  // de la tarde de Lima: diría «hace 1 día» de algo publicado hoy, y nadie
+  // levanta un reporte por eso.
+  const dia = (iso) => new Date(`${String(iso).slice(0, 10)}T00:00:00Z`)
+  const dias = Math.round((dia(hoyISO) - dia(h.fecha)) / 86400000)
   return {
     fecha: h.fecha,
     titulo: h.titulo || '',
@@ -310,48 +334,23 @@ function ultimoHecho(ticker, hoyISO, hechosVivos) {
     hora: h.hora || null,
     envivo: !!h.envivo,
     dias: isFinite(dias) && dias >= 0 ? dias : null,
+    // Salió después de la última rueda de esta acción: la pantalla lo dice con
+    // la hora («📄 HI 07:08»), no con un «hace 0 días» que sería falso.
+    despuesDelCierre: !!fechaCierre && h.fecha > fechaCierre,
   }
 }
 
-// ── EL PRECIO DE HOY, PEGADO AL FINAL DE LA SERIE ────────────────────────
+// ── LA SERIE REPARADA ────────────────────────────────────────────────────
 //
-// historicos.json solo se rehace en el cierre de las 22:23, así que durante
-// la rueda su última fila es el cierre de AYER. El precio de hoy vive aparte
-// (precios.json, o el vivo que baja el navegador). Mientras estuvieron
-// separados el Sonar decía dos cosas a la vez: la ficha mostraba «S/ 2.70» y
-// el punto se dibujaba en la posición que le tocaba a S/ 2.45.
+// La reparación (pegar las ruedas que el robot no guardó + el precio de hoy)
+// vive en lib/series.js, que es la ÚNICA puerta para pedir una serie de
+// precios en toda la app. Está ahí y no acá porque el mismo desfase le pegaba
+// al Sparkline de la ficha de empresa, que no pasa por el Radar: eran dos
+// fuentes de verdad para el mismo dato, no dos bugs distintos.
 //
-// Acá se juntan. La regla es la fecha de la SESIÓN (la de la última
-// operación, no la de nuestra consulta):
-//   · sesión POSTERIOR al último cierre -> se agrega una fila: hoy existe.
-//   · sesión IGUAL al último cierre     -> se reemplaza: es el mismo día,
-//     más fresco.
-//   · sesión ANTERIOR (o sin dato)      -> no se toca NADA. Esto es lo que
-//     protege de la acción que lleva días sin negociar: la BVL repite su
-//     último cierre, y estamparlo como si fuera de hoy inventaría un día que
-//     no existió.
-//
-// Al agregar una fila, las ventanas se corren solas: `atras=1` pasa a ser
-// «esta misma ventana vista en el cierre anterior», que es justo lo que la
+// Al agregar la rueda de hoy, las ventanas se corren solas: `atras=1` pasa a
+// ser «esta misma ventana vista en el cierre anterior», que es justo lo que la
 // firma necesita para saber si el contacto acaba de cruzar el anillo.
-// ── LAS RUEDAS QUE EL ROBOT NO ALCANZÓ A GUARDAR ─────────────────────────
-//
-// historicos.json se rehace solo en el cierre de las 22:23. Si el robot no
-// corre —el 03-ago-2026 llevaba dos días sin correr— el archivo se va
-// quedando ruedas atrás, y entonces «dos semanas» deja de medir dos semanas:
-// mide desde una fecha vieja hasta otra fecha vieja.
-//
-// Esto pega al final las ruedas que faltan, bajadas en vivo del mismo
-// endpoint de la BVL. Solo se agregan fechas POSTERIORES a la última del
-// archivo: nunca se reescribe un cierre ya guardado.
-function conCola(base, cola) {
-  if (!cola?.length) return base
-  const ultima = base[base.length - 1][0]
-  const nuevas = cola
-    .filter(([f, v]) => f > ultima && v > 0)
-    .sort((a, b) => (a[0] < b[0] ? -1 : 1))
-  return nuevas.length ? [...base, ...nuevas] : base
-}
 
 // Qué le falta al archivo: los tickers que el Radar realmente usa y la última
 // fecha guardada. Con esto lib/vivo.js sabe qué pedir y desde cuándo, sin
@@ -359,9 +358,9 @@ function conCola(base, cola) {
 export function huecoHistorico() {
   const tickers = []
   let ultima = null
-  for (const [ticker, h] of Object.entries(historicosData.historicos || {})) {
-    if (!EMPRESAS.has(ticker) || h.pocoNegociada) continue
-    const vals = (h.valores || []).filter(([, v]) => v > 0)
+  for (const ticker of tickersConHistorico()) {
+    if (!EMPRESAS.has(ticker) || metaDe(ticker)?.pocoNegociada) continue
+    const vals = crudaDe(ticker)
     if (vals.length < 21) continue
     tickers.push(ticker)
     const f = vals[vals.length - 1][0]
@@ -370,42 +369,34 @@ export function huecoHistorico() {
   return { tickers, ultima }
 }
 
-function conUltimoPrecio(base, px) {
-  const precio = px?.precio
-  if (!(precio > 0)) return base
-  const sesion = (px.ultimaOperacion || '').slice(0, 10) || px.fecha
-  if (!sesion) return base
-  const ultima = base[base.length - 1][0]
-  if (sesion > ultima) return [...base, [sesion, precio]]
-  if (sesion === ultima) return [...base.slice(0, -1), [sesion, precio]]
-  return base
-}
-
 // ── Las filas del Radar: una por acción realmente negociable.
 //
 // `vivos` (opcional) es el mapa ticker -> precio que baja lib/vivo.js
 // directo de la BVL. Cuando llega, manda sobre el precios.json horneado y el
 // Radar entero —plato, ranking, sectores, candente— se recalcula con él. Sin
 // él, todo funciona igual que siempre con el dato del robot.
-export function filasRadar(vivos = null, hechosVivos = null, cola = null) {
+export function filasRadar(vivos = null, hechosVivos = null, cola = null, hoyISO = null) {
   const filas = []
+  // La serie reparada de cada acción, para lo que necesita medir DESDE una
+  // fecha vieja hasta hoy (los titulares). Va aparte de las filas: son ~390
+  // cierres por ticker y no tienen para qué viajar dentro de cada objeto.
+  const series = new Map()
   let descartadas = 0
   const fechas = {}
 
-  for (const [ticker, h] of Object.entries(historicosData.historicos || {})) {
+  for (const ticker of tickersConHistorico()) {
     const emp = EMPRESAS.get(ticker)
     if (!emp) continue
-    const guardadas = (h.valores || []).filter(([, v]) => v > 0)
-    if (guardadas.length < 21) { descartadas++; continue }
+    const h = metaDe(ticker)
+    if (crudaDe(ticker).length < 21) { descartadas++; continue }
     // Regla 1: el precio congelado no es una tendencia, es un archivo viejo.
     if (h.pocoNegociada) { descartadas++; continue }
 
-    // Primero las ruedas que el robot no alcanzó a guardar, después el precio
-    // de hoy. En ese orden: la cola trae cierres cerrados, el precio de hoy
-    // es la rueda en curso.
-    const base = conCola(guardadas, cola?.[ticker])
+    // La serie ya reparada: las ruedas que el robot no alcanzó a guardar y,
+    // encima, el precio de hoy (lib/series.js).
     const px = vivos?.[ticker] || preciosData.precios?.[ticker]
-    const valores = conUltimoPrecio(base, px)
+    const valores = serieDe(ticker, { cola: cola?.[ticker], px })
+    series.set(ticker, valores)
     const fechaCierre = valores[valores.length - 1][0]
     fechas[fechaCierre] = (fechas[fechaCierre] || 0) + 1
     const retornos = {}
@@ -493,7 +484,9 @@ export function filasRadar(vivos = null, hechosVivos = null, cola = null) {
       // global: en una misma pantalla puede haber contactos con precio de
       // hace segundos y otros que no negocian desde el jueves.
       envivo: !!px?.envivo,
-      hecho: ultimoHecho(ticker, fechaCierre, hechosVivos),
+      // El «hoy» entra por parámetro; sin él se cae a la fecha de cierre, que
+      // es como se comportaba antes (útil para pruebas deterministas).
+      hecho: ultimoHecho(ticker, hoyISO || fechaCierre, fechaCierre, hechosVivos),
     })
   }
 
@@ -523,9 +516,8 @@ export function filasRadar(vivos = null, hechosVivos = null, cola = null) {
   // La fecha de cierre que comparte la mayoría (igual que HoyBVL): alguna
   // acción puede traer una rueda de menos y no por eso mentimos la fecha.
   const fecha = Object.entries(fechas).sort((a, b) => b[1] - a[1])[0]?.[0] || null
-  const total = Object.keys(historicosData.historicos || {}).length
 
-  return { filas, descartadas, total, fecha }
+  return { filas, descartadas, total: totalEnArchivo(), fecha, series }
 }
 
 function mediana(nums) {
@@ -627,9 +619,16 @@ export function noticiasOrdenadas(ticker) {
 // subiera después del titular no significa que subiera POR el titular —
 // pudo ser el metal, el mercado entero o nada. Por eso todo lo que sale de
 // acá se rotula «posible» y jamás «porque».
-export function noticiasConEfecto(ticker, ruedas) {
-  const h = historicosData.historicos?.[ticker]
-  const vals = (h?.valores || []).filter(([, v]) => v > 0)
+// `serie` es la serie YA REPARADA de esa acción — la misma de la que salen el
+// % y la fuerza de la ficha (`filasRadar()` la devuelve en `series`). Es un
+// parámetro obligatorio y a propósito no tiene valor por defecto: cuando esta
+// función leía el archivo por su cuenta, el «desde el titular» se calculaba
+// contra un cierre tres ruedas más viejo que el precio que la misma tarjeta
+// mostraba dos centímetros más arriba (hasta 7 puntos de diferencia, medido el
+// 04-ago-2026). Un default que cayera al archivo traería ese bug de vuelta en
+// silencio el día que alguien olvide el argumento.
+export function noticiasConEfecto(ticker, ruedas, serie) {
+  const vals = serie || []
   if (vals.length < 2) return []
   const ultimo = vals[vals.length - 1][1]
   const idxIni = Math.max(0, vals.length - 1 - ruedas)
@@ -662,8 +661,8 @@ export function noticiasConEfecto(ticker, ruedas) {
 // «tal vez subió 10.5% por su recertificación de Buen Empleador» no es un
 // titular flojo, es una afirmación falsa con un número al lado que la hace
 // parecer medida.
-export function posiblesExplicaciones(ticker, ruedas, subio) {
-  return noticiasConEfecto(ticker, ruedas)
+export function posiblesExplicaciones(ticker, ruedas, subio, serie) {
+  return noticiasConEfecto(ticker, ruedas, serie)
     .filter((n) => n.dentroDeVentana && n.desdeElTitular != null
       && pesoDe(n) > 0
       && (subio ? n.desdeElTitular > 0 : n.desdeElTitular < 0))
@@ -911,11 +910,13 @@ function series() {
   if (cacheSeries) return cacheSeries
   const porTicker = new Map()
   const fechas = new Set()
-  for (const [ticker, h] of Object.entries(historicosData.historicos || {})) {
-    if (h.pocoNegociada || !EMPRESAS.has(ticker)) continue
+  // Serie CRUDA a propósito: esto mira 18 meses hacia atrás en ventanas
+  // deslizantes, donde las últimas tres ruedas no mueven ninguna cuenta.
+  for (const ticker of tickersConHistorico()) {
+    if (metaDe(ticker)?.pocoNegociada || !EMPRESAS.has(ticker)) continue
     const m = new Map()
-    for (const [f, v] of h.valores || []) {
-      if (v > 0) { m.set(f, v); fechas.add(f) }
+    for (const [f, v] of crudaDe(ticker)) {
+      m.set(f, v); fechas.add(f)
     }
     if (m.size > 30) porTicker.set(ticker, m)
   }
@@ -986,7 +987,7 @@ export function historiaDelPlazo(ruedas) {
         sube5,
         baja5,
         saldo: sube5 - baja5,
-        volatilidadAnualPct: historicosData.historicos?.[ticker]?.volatilidadAnualPct ?? null,
+        volatilidadAnualPct: metaDe(ticker)?.volatilidadAnualPct ?? null,
       }
     })
     .sort((a, b) => b.saldo - a.saldo)
@@ -1205,4 +1206,16 @@ export const RASTREOS = [
   { id: 'undia', icono: '⚡', etiqueta: 'fue un solo día',
     ayuda: 'Casi todo el recorrido pasó en una sola rueda: hay una fecha que buscar.',
     prueba: (c) => c.marcas.has('undia') },
+  // Los tres que vienen de lib/patrones.js. Se listan acá, con los otros, porque
+  // para quien mira son la misma pregunta: «¿qué notó el Sonar?». Los ids son
+  // los que arma marcasPatron().
+  { id: 'sinpagar', icono: '🌙', etiqueta: 'noticia sin pagar',
+    ayuda: 'Presentaron un Hecho de Importancia con la rueda ya cerrada: todavía no se pudo operar.',
+    prueba: (c) => c.marcas.has('sinpagar') },
+  { id: 'metal', icono: '⚖️', etiqueta: 'el día lo partió el metal',
+    ayuda: 'Hoy los metales preciosos y los industriales fueron para lados opuestos.',
+    prueba: (c) => c.marcas.has('metal') },
+  { id: 'estirada', icono: '🎈', etiqueta: 'tramo estirado',
+    ayuda: 'RSI de 14 ruedas en una punta: casi todo el movimiento del último mes fue para el mismo lado.',
+    prueba: (c) => c.marcas.has('estirada') || c.marcas.has('castigada') },
 ]

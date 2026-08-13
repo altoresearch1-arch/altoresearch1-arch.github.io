@@ -2,31 +2,19 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "alto-app",
-      "runtimeExecutable": "C:\\Program Files\\nodejs\\node.exe",
-      "runtimeArgs": ["app/node_modules/vite/bin/vite.js", "app", "--port", "5173"],
-      "port": 5173,
-      "autoPort": true
-    },
-    {
-      "name": "alto-app-2",
-      "runtimeExecutable": "C:\\Program Files\\nodejs\\node.exe",
-      "runtimeArgs": ["app/node_modules/vite/bin/vite.js", "app", "--port", "5174", "--strictPort"],
-      "port": 5174,
-      "autoPort": true
-    },
-    {
-      "name": "cuaderno-mockup",
+      "name": "laboratorio",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8412", "--directory", "C:\\Users\\User\\AppData\\Local\\Temp\\claude\\C--Users-User-Desktop-Plan-de-app-ALTO-RESEARCH\\4127285d-180f-400b-9b56-03e206a73795\\scratchpad"],
-      "port": 8412
+      "runtimeArgs": [
+        "-c",
+        "import http.server,functools;h=http.server.SimpleHTTPRequestHandler;h.extensions_map['.html']='text/html; charset=utf-8';http.server.test(HandlerClass=functools.partial(h,directory='laboratorio'),port=8778)"
+      ],
+      "port": 8778
     },
     {
-      "name": "alto-dist",
-      "runtimeExecutable": "C:\\Program Files\\nodejs\\node.exe",
-      "runtimeArgs": ["app/node_modules/vite/bin/vite.js", "preview", "app", "--port", "4189", "--strictPort"],
-      "port": 4189,
-      "autoPort": true
+      "name": "app",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "app"],
+      "port": 5173
     }
   ]
 }

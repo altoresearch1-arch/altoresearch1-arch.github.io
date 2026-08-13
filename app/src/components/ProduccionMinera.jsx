@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import mineriaData from '../data/mineria.json'
 import familiaData from '../data/mineria_familia.json'
-import hechosData from '../data/hechos.json'
+import { hechosDe } from '../lib/hechos'
 import produccionData from '../data/produccion.json'
 import ProduccionOficial from './ProduccionOficial'
 import Glosado from './Glosado'
@@ -398,7 +398,7 @@ function frasesVigilancia(fam) {
 const DIAS_HI_PROD = 120 // un trimestre + margen: solo se destaca el vigente
 
 function hiProduccionOficial(ticker) {
-  const lista = hechosData.hechos?.[ticker]?.hechos || []
+  const lista = hechosDe(ticker)
   const limite = new Date(Date.now() - DIAS_HI_PROD * 86400000).toISOString().slice(0, 10)
   const hi = lista.find((h) =>
     (h.fecha || '') >= limite &&

@@ -14,6 +14,7 @@ import {
   marcarDemo, cuadernosConDemo,
 } from '../lib/cartera'
 import { useTinte, leerNivel } from '../lib/nivel'
+import { useVivo } from '../lib/vivoCompartido'
 
 // ─────────────────────────────────────────────────────────────────────────
 // 📓 MI CUADERNO — la cartera del usuario, viva con los datos de los robots.
@@ -197,8 +198,13 @@ export default function Cuaderno({ onVerEmpresa, onRegistrarTour }) {
     if (sucios.includes(activo)) setCartera([])
   }, [])
 
+  // 🔴 El precio del mercado, no el del último despliegue. Estar montado acá
+  // enciende el motor compartido (lib/vivoCompartido): mientras miras tu
+  // cartera, el valor es el de ahora — sin destellos ni animaciones, el número
+  // se reemplaza y ya. El Cuaderno es una herramienta, no una cinta bursátil.
+  const { precios: vivos } = useVivo()
   const { filas, totalValor, totalCosto, ganTotal, cambioDia, suben, bajan } =
-    useMemo(() => filasDe(cartera), [cartera])
+    useMemo(() => filasDe(cartera, vivos), [cartera, vivos])
   const proys = useMemo(() => proyecciones(filas), [filas])
 
   const hrs = hoy.getHours()

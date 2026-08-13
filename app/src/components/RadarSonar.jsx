@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from 'react'
 import { RASTREOS, firmaDe, leerFuerza, mundoDe, noticiasDe, noticiasOrdenadas, noticiasConEfecto, pesoDe, posiblesExplicaciones, tickersTocadosPorElMundo } from '../lib/radar'
+import { diaPartido, marcasPatron, sinPagar } from '../lib/patrones'
 import SelloVivo from './SelloVivo'
 import SonarGrafica from './SonarGrafica'
 
@@ -48,7 +49,7 @@ function semilla(texto) {
   return Math.abs(h % 1000) / 1000
 }
 
-export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa }) {
+export default function RadarSonar({ filas, series, ruedas, plazo, vivo, prensa, onVerEmpresa }) {
   const [sel, setSel] = useState(null)
   const [verTodos, setVerTodos] = useState(false)
   // Para qué se enciende el sonar hoy. Arranca en «todo el plato»: el filtro
@@ -109,6 +110,12 @@ export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa })
 
   const { contactos, sectores } = useMemo(() => {
     const todos = filas.filter((f) => f.fuerzas[ruedas] != null && f.retornos[ruedas] != null)
+    // ⚖️ ¿EL DÍA ESTÁ PARTIDO EN DOS METALES? Se calcula una vez para todo el
+    // plato y SIEMPRE con la rueda de hoy (1 día), no con el plazo elegido: la
+    // pregunta es qué pasó hoy, aunque se esté mirando el mes. Va sobre `filas`
+    // enteras y no sobre `todos` para que abrir una cuña no cambie la mediana
+    // del mercado — es el mismo criterio que ya usan los sectores del plato.
+    const dia = diaPartido(Object.fromEntries(filas.map((f) => [f.ticker, f.retornos[1]])))
     // Los sectores del plato SIEMPRE salen del universo completo: si se
     // calcularan sobre el sector abierto, al entrar quedaría una sola cuña de
     // 360° y al salir habría que recomponer el plato de memoria.
@@ -145,7 +152,19 @@ export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa })
         : (i * paso) + paso * (0.18 + s * 0.64) - 90 // -90: arrancar arriba
       const rad = (ang * Math.PI) / 180
       const dist = R_MINIMO + (Math.min(Math.abs(fz), FUERZA_MAX) / FUERZA_MAX) * (RADIO - R_MINIMO)
-      const firma = firmaDe(f, ruedas)
+      // Las marcas de la firma (lib/radar.js) y las de los patrones
+      // (lib/patrones.js) van a la misma lista: para quien mira son todas «lo
+      // que el Sonar notó», y separarlas en dos filas obligaría a leer dos
+      // veces. El spread contra la plaza extranjera queda fuera hasta que el
+      // robot baje ese precio — sin él, `marcasPatron` no lo inventa.
+      const firma = [
+        ...firmaDe(f, ruedas),
+        ...marcasPatron(f.ticker, {
+          serie: f.serie,
+          dia,
+          noticia: f.hecho ? sinPagar(f.hecho, f.fechaCierre) : null,
+        }),
+      ]
       return {
         ...f,
         fz,
@@ -195,7 +214,11 @@ export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa })
   const porFuerza = [...contactos].sort((a, b) => Math.abs(b.fz) - Math.abs(a.fz))
   const porPct = [...contactos].sort((a, b) => Math.abs(b.ret) - Math.abs(a.ret))
   const ordenados = orden === 'pct' ? porPct : porFuerza
-  const tocadasPorElMundo = useMemo(() => tickersTocadosPorElMundo(), [])
+  // Depende de `prensa`: el cruce mundo→ticker se arma de los titulares, que
+  // viven en un módulo (lib/radar.js) y no en el estado de React. Con la lista
+  // de dependencias vacía, este Set se quedaba congelado con la prensa
+  // horneada durante toda la visita aunque entraran copias nuevas cada 5 min.
+  const tocadasPorElMundo = useMemo(() => tickersTocadosPorElMundo(), [prensa])
 
   // Cuántos contactos responde cada rastreo, HOY y a ESTE plazo. El número va
   // escrito en el botón: un filtro que promete y devuelve una pantalla vacía
@@ -213,13 +236,17 @@ export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa })
   // Se ordenan por peso antes de cortar en 4: si una empresa tuvo una semana
   // de notas de prensa, sus resultados del trimestre no se pueden quedar en el
   // quinto lugar sin salir en pantalla.
+  // La serie que se les pasa es la MISMA de la que salen el % y la fuerza de
+  // esta ficha: el «desde el titular» no puede medirse contra otros cierres.
+  const serieElegida = elegido ? series?.get(elegido.ticker) : null
   const noticias = elegido
-    ? [...noticiasConEfecto(elegido.ticker, ruedas)]
+    ? [...noticiasConEfecto(elegido.ticker, ruedas, serieElegida)]
       .sort((a, b) => (pesoDe(b) - pesoDe(a))
         || (a.fecha < b.fecha ? 1 : a.fecha > b.fecha ? -1 : 0))
       .slice(0, 4)
     : []
-  const explican = elegido ? posiblesExplicaciones(elegido.ticker, ruedas, elegido.sube) : []
+  const explican = elegido
+    ? posiblesExplicaciones(elegido.ticker, ruedas, elegido.sube, serieElegida) : []
 
   return (
     <div className="card sonar-card">
@@ -452,8 +479,8 @@ export default function RadarSonar({ filas, ruedas, plazo, vivo, onVerEmpresa })
                       // «📄 HI 07:08» dice cuándo mirar la rueda; «hace 0d»
                       // no dice nada.
                       <span className={'sonar-item-hi' + (c.hecho.envivo && c.hecho.dias === 0 ? ' nuevo' : '')}>
-                        {' '}· 📄 {c.hecho.dias === 0 && c.hecho.hora
-                          ? `HI ${c.hecho.hora}`
+                        {' '}· 📄 {c.hecho.dias === 0
+                          ? (c.hecho.hora ? `HI ${c.hecho.hora}` : 'HI de hoy')
                           : `hecho hace ${c.hecho.dias}d`}
                       </span>
                     )}

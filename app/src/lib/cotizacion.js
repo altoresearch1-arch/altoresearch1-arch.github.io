@@ -1,6 +1,7 @@
 import cotizacionesData from '../data/cotizaciones.json'
 import { claveLente } from './lente'
 import { historicoDe, precioEnFecha } from './finanzas'
+import { serieDe } from './series'
 
 // ─────────────────────────────────────────────────────────────────────────
 // 🛢️🥇 EL PRECIO DEL MOTOR (mejora #116 — pedido de Jair el 22-jul-2026)
@@ -161,8 +162,8 @@ export function esteAnio(prod) {
 export function contraLaAccion(empresa, prod) {
   if (!empresa || !prod?.mensual?.length) return null
   const h = historicoDe(empresa.ticker)
-  if (!h?.valores?.length) return null
-  if (h.volatilidadEtiqueta === 'poco negociada') return null
+  if (!serieDe(empresa.ticker).length) return null
+  if (h?.volatilidadEtiqueta === 'poco negociada') return null
 
   const n = prod.mensual.length
   if (n < 13) return null
