@@ -31,8 +31,13 @@ import cerebro as C  # noqa: E402
 sys.stdout = _stdout
 
 M = json.load(open('app/src/data/metales_diarios.json', encoding='utf-8'))['metales']
-PRECIO_HOY = {'RIO': 2.460, 'PPX': 0.165, 'BVN': 34.700, 'NEXAPEC1': 4.359,
-              'VOLCABC1': 0.890, 'MINSURI1': 7.400, 'GDX': None}
+# Estaba clavado a mano con los precios del 10-ago y quedó viejo en tres ruedas
+# (13-ago: decía RIO 2.460 cuando el papel estaba en 2.20). Ahora lo lee del
+# archivo que el robot refresca cada 10 minutos. Si un ticker no está, queda en
+# None y la fila sale sin precio implícito en vez de mentir con uno viejo.
+_P = json.load(open('app/src/data/precios.json', encoding='utf-8'))['precios']
+PRECIO_HOY = {t: (_P.get(t) or {}).get('precio')
+              for t in ('RIO', 'PPX', 'BVN', 'NEXAPEC1', 'VOLCABC1', 'MINSURI1', 'GDX')}
 
 
 def var_diaria(nom):

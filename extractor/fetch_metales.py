@@ -108,13 +108,35 @@ def main():
         # Solo se AGREGAN fechas nuevas. Un cierre ya guardado no se reescribe:
         # el proveedor puede corregir hacia atrás y eso reescribiría la historia
         # con la que ya se midió.
+        #
+        # LA RUEDA DE HOY NO ENTRA (arreglado 13-ago-2026). Yahoo devuelve la
+        # fecha de hoy con el precio EN VIVO, no con la settlement. Combinado con
+        # la regla de arriba, el primer valor que se ve queda grabado COMO SI
+        # fuera el cierre y ya nadie lo corrige. Así se envenenaron tres ruedas:
+        # el 10-ago quedó en 4441.20 cuando cerró en 4361.80, y el 12-ago en
+        # 4469.00 cuando cerró en 4408.90 — errores de +1.8% y +1.4% metidos
+        # justo en la variable que R8 usa para llamar la dirección. La bitácora
+        # del 13-ago decía «oro +1.96%» y el movimiento real fue +0.59%: por
+        # debajo del corte de 1% donde la regla tiene su 71.8%.
+        #
+        # Se salta la fecha de hoy en Nueva York, que es donde settlean estos
+        # futuros. Nada se pierde: la corrida siguiente pide 2 años de rango y
+        # trae la rueda de ayer ya cerrada.
+        hoy_ny = datetime.now(timezone(timedelta(hours=-4))).strftime('%Y-%m-%d')
         nuevas = 0
         for f, c in serie.items():
+            if f >= hoy_ny:
+                continue
             if f not in prev['cierres']:
                 prev['cierres'][f] = c
                 nuevas += 1
-        ult = max(serie)
-        print(f'  {nombre:9} {sym:8} {serie[ult]:>10.3f} al {ult}   '
+        # Se reporta la última rueda GUARDADA, no la última que devolvió Yahoo:
+        # si se imprimiera la de hoy parecería que entró, y justo no entra.
+        ult = max(prev['cierres']) if prev['cierres'] else None
+        if ult is None:
+            print(f'  {nombre:9} {sym:8} sin ruedas cerradas todavía')
+            continue
+        print(f'  {nombre:9} {sym:8} {prev["cierres"][ult]:>10.3f} al {ult}   '
               f'(+{nuevas} ruedas nuevas, {len(prev["cierres"])} en total)')
 
     doc['metales'] = acum
