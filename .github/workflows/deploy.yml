@@ -196,7 +196,28 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          # NODE 24 Y NO 20, y costó seis días de web congelada averiguar por qué
+          # (19-ago-2026). El 13-ago entró vitest como devDependency; vitest 4 se
+          # trae adentro vite 8, que declara `esbuild ^0.27 || ^0.28` como peer
+          # OPCIONAL. El npm 11 de esta PC resolvió ese peer como "no instalado" y
+          # no lo escribió en package-lock.json. El npm 10 que viene con Node 20
+          # calcula lo contrario —que esbuild 0.28.2 SÍ tiene que estar— y muere:
+          #
+          #   npm error code EUSAGE
+          #   npm error `npm ci` can only install packages when your package.json
+          #   npm error and package-lock.json ... are in sync.
+          #   npm error Missing: esbuild@0.28.2 from lock file
+          #
+          # O sea: el lock que escribe esta máquina no lo sabe leer el runner. Desde
+          # ese commit TODOS los despliegues murieron en `npm ci` — el robot siguió
+          # bajando precios y commiteando en verde, pero la página se quedó clavada
+          # en el build del 13-ago 12:37 y el lector vio precios de seis días.
+          # Con Node 24 el runner usa el mismo npm 11 que genera el lock acá.
+          #
+          # No es capricho tampoco por otro lado: pdfjs-dist ya pide node >=22.13 y
+          # el vite 8 de vitest pide ^20.19 || >=22.12. Node 20 se le quedó chico
+          # al proyecto; esto solo lo pone al día.
+          node-version: '24'
           cache: npm
           cache-dependency-path: app/package-lock.json
 
