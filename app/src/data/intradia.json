@@ -1,6 +1,6 @@
 {
  "_comment": "Foto POR DÍA de lo que el endpoint de mercado de la BVL solo sabe de hoy: apertura, mínimo, máximo, volumen (monto y cantidad), número de operaciones y la hora de la última. `tomas` son los [hora, precio] de cada corrida del robot, anotados solo cuando el precio cambió. NO se puede reconstruir hacia atrás: lo que no se guarda hoy se pierde. Lo genera extractor/fetch_precios.py y guarda 45 días.",
- "generado": "2026-09-04 17:11",
+ "generado": "2026-09-07 13:41",
  "dias": {
   "2026-07-31": {
    "NEXAPEC1": {
@@ -40678,6 +40678,995 @@
     "puntaCompra": null,
     "puntaVenta": null,
     "spreadPct": null
+   }
+  },
+  "2026-09-07": {
+   "NEXAPEC1": {
+    "tomas": [
+     [
+      "13:41",
+      4.51
+     ]
+    ],
+    "apertura": 4.6,
+    "min": 4.51,
+    "max": 4.61,
+    "cierre": 4.51,
+    "previo": 4.63,
+    "ops": 50,
+    "monto": 207618.0,
+    "cantidad": 45231.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T13:34:14-05:00",
+    "puntaCompra": 4.51,
+    "puntaVenta": 4.57,
+    "spreadPct": 1.322
+   },
+   "BVN": {
+    "tomas": [
+     [
+      "13:41",
+      34.0
+     ]
+    ],
+    "apertura": 34.1,
+    "min": 34.0,
+    "max": 34.1,
+    "cierre": 34.0,
+    "previo": 34.1,
+    "ops": 11,
+    "monto": 7045.0,
+    "cantidad": 206.0,
+    "moneda": "US$",
+    "ultima": "2026-09-07T12:40:18-05:00",
+    "puntaCompra": 34.0,
+    "puntaVenta": 35.0,
+    "spreadPct": 2.899
+   },
+   "CVERDEC1": {
+    "tomas": [
+     [
+      "13:41",
+      71.4
+     ]
+    ],
+    "apertura": 71.4,
+    "min": 71.4,
+    "max": 71.4,
+    "cierre": 71.4,
+    "previo": 71.5,
+    "ops": 9,
+    "monto": 24133.0,
+    "cantidad": 338.0,
+    "moneda": "US$",
+    "ultima": "2026-09-07T13:10:06-05:00",
+    "puntaCompra": 70.26,
+    "puntaVenta": 71.4,
+    "spreadPct": 1.609
+   },
+   "BBVAC1": {
+    "tomas": [
+     [
+      "13:41",
+      2.28
+     ]
+    ],
+    "apertura": 2.28,
+    "min": 2.271,
+    "max": 2.28,
+    "cierre": 2.28,
+    "previo": 2.28,
+    "ops": 64,
+    "monto": 310555.0,
+    "cantidad": 136396.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T13:40:08-05:00",
+    "puntaCompra": 2.28,
+    "puntaVenta": 2.28,
+    "spreadPct": 0.0
+   },
+   "CREDITC1": {
+    "tomas": [
+     [
+      "13:41",
+      7.2
+     ]
+    ],
+    "apertura": 7.15,
+    "min": 7.15,
+    "max": 7.26,
+    "cierre": 7.2,
+    "previo": 7.24,
+    "ops": 73,
+    "monto": 334005.0,
+    "cantidad": 46406.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T13:37:09-05:00",
+    "puntaCompra": 7.18,
+    "puntaVenta": 7.2,
+    "spreadPct": 0.278
+   },
+   "INTERBC1": {
+    "tomas": [
+     [
+      "13:41",
+      2.15
+     ]
+    ],
+    "apertura": 2.15,
+    "min": 2.15,
+    "max": 2.15,
+    "cierre": 2.15,
+    "previo": 2.2,
+    "ops": 3,
+    "monto": 15211.0,
+    "cantidad": 7070.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T12:08:43-05:00",
+    "puntaCompra": 2.2,
+    "puntaVenta": 2.38,
+    "spreadPct": 7.86
+   },
+   "ALICORC1": {
+    "tomas": [
+     [
+      "13:41",
+      13.3
+     ]
+    ],
+    "apertura": 13.3,
+    "min": 13.3,
+    "max": 13.38,
+    "cierre": 13.3,
+    "previo": 13.31,
+    "ops": 78,
+    "monto": 254836.0,
+    "cantidad": 19122.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T13:33:07-05:00",
+    "puntaCompra": 13.3,
+    "puntaVenta": 13.38,
+    "spreadPct": 0.6
+   },
+   "MICHEI1": {
+    "tomas": [
+     [
+      "13:41",
+      4.3
+     ]
+    ],
+    "apertura": 4.3,
+    "min": 4.3,
+    "max": 4.3,
+    "cierre": 4.3,
+    "previo": 4.3,
+    "ops": 1,
+    "monto": 60200.0,
+    "cantidad": 14000.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T09:59:52-05:00",
+    "puntaCompra": 4.2,
+    "puntaVenta": null,
+    "spreadPct": null
+   },
+   "CORAREI1": {
+    "tomas": [
+     [
+      "13:41",
+      1.6
+     ]
+    ],
+    "apertura": 1.6,
+    "min": 1.6,
+    "max": 1.6,
+    "cierre": 1.6,
+    "previo": 1.58,
+    "ops": 5,
+    "monto": 20644.0,
+    "cantidad": 12895.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T13:31:56-05:00",
+    "puntaCompra": 1.6,
+    "puntaVenta": 1.62,
+    "spreadPct": 1.242
+   },
+   "SIDERC1": {
+    "tomas": [
+     [
+      "13:41",
+      3.01
+     ]
+    ],
+    "apertura": 3.0,
+    "min": 3.0,
+    "max": 3.01,
+    "cierre": 3.01,
+    "previo": 3.08,
+    "ops": 25,
+    "monto": 44788.0,
+    "cantidad": 14870.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T13:36:21-05:00",
+    "puntaCompra": 3.01,
+    "puntaVenta": 3.09,
+    "spreadPct": 2.623
+   },
+   "AUSTRAC1": {
+    "tomas": [
+     [
+      "13:41",
+      1.5
+     ]
+    ],
+    "apertura": null,
+    "min": null,
+    "max": null,
+    "cierre": 1.5,
+    "previo": 1.5,
+    "ops": 1,
+    "monto": 2364.0,
+    "cantidad": 1576.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T11:39:16-05:00",
+    "puntaCompra": 1.5,
+    "puntaVenta": 1.69,
+    "spreadPct": 11.912
+   },
+   "VOLCABC1": {
+    "tomas": [
+     [
+      "13:41",
+      0.86
+     ]
+    ],
+    "apertura": 0.86,
+    "min": 0.856,
+    "max": 0.86,
+    "cierre": 0.86,
+    "previo": 0.86,
+    "ops": 65,
+    "monto": 764283.0,
+    "cantidad": 889531.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T13:37:55-05:00",
+    "puntaCompra": 0.86,
+    "puntaVenta": 0.86,
+    "spreadPct": 0.0
+   },
+   "MINSURI1": {
+    "tomas": [
+     [
+      "13:41",
+      7.6
+     ]
+    ],
+    "apertura": 7.56,
+    "min": 7.56,
+    "max": 7.65,
+    "cierre": 7.6,
+    "previo": 7.6,
+    "ops": 77,
+    "monto": 337097.0,
+    "cantidad": 44361.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T13:36:58-05:00",
+    "puntaCompra": 7.58,
+    "puntaVenta": 7.6,
+    "spreadPct": 0.264
+   },
+   "BROCALC1": {
+    "tomas": [
+     [
+      "13:41",
+      28.0
+     ]
+    ],
+    "apertura": null,
+    "min": null,
+    "max": null,
+    "cierre": 28.0,
+    "previo": 28.0,
+    "ops": 2,
+    "monto": 140.0,
+    "cantidad": 5.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T08:29:01-05:00",
+    "puntaCompra": 26.0,
+    "puntaVenta": 28.0,
+    "spreadPct": 7.407
+   },
+   "BACKUSI1": {
+    "tomas": [
+     [
+      "13:41",
+      28.17
+     ]
+    ],
+    "apertura": 28.05,
+    "min": 27.49,
+    "max": 28.4,
+    "cierre": 28.17,
+    "previo": 28.17,
+    "ops": 33,
+    "monto": 146184.0,
+    "cantidad": 5209.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T13:36:35-05:00",
+    "puntaCompra": 27.7,
+    "puntaVenta": 28.0,
+    "spreadPct": 1.077
+   },
+   "SNJUANI1": {
+    "tomas": [
+     [
+      "13:41",
+      72.0
+     ]
+    ],
+    "apertura": null,
+    "min": null,
+    "max": null,
+    "cierre": 72.0,
+    "previo": 72.0,
+    "ops": 1,
+    "monto": 1998.0,
+    "cantidad": 27.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T12:38:13-05:00",
+    "puntaCompra": 70.5,
+    "puntaVenta": 74.0,
+    "spreadPct": 4.844
+   },
+   "CASAGRC1": {
+    "tomas": [
+     [
+      "13:41",
+      8.66
+     ]
+    ],
+    "apertura": 8.67,
+    "min": 8.65,
+    "max": 8.67,
+    "cierre": 8.66,
+    "previo": 8.6,
+    "ops": 17,
+    "monto": 50708.0,
+    "cantidad": 5857.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T13:24:37-05:00",
+    "puntaCompra": 8.66,
+    "puntaVenta": 8.93,
+    "spreadPct": 3.07
+   },
+   "LUSURC1": {
+    "tomas": [
+     [
+      "13:41",
+      13.0
+     ]
+    ],
+    "apertura": 13.0,
+    "min": 13.0,
+    "max": 13.0,
+    "cierre": 13.0,
+    "previo": 13.0,
+    "ops": 5,
+    "monto": 11651.0,
+    "cantidad": 896.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T12:38:11-05:00",
+    "puntaCompra": 13.0,
+    "puntaVenta": 13.1,
+    "spreadPct": 0.766
+   },
+   "ENGIEC1": {
+    "tomas": [
+     [
+      "13:41",
+      4.63
+     ]
+    ],
+    "apertura": 4.68,
+    "min": 4.63,
+    "max": 4.68,
+    "cierre": 4.63,
+    "previo": 4.62,
+    "ops": 43,
+    "monto": 80487.0,
+    "cantidad": 17268.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T13:31:45-05:00",
+    "puntaCompra": 4.63,
+    "puntaVenta": 4.65,
+    "spreadPct": 0.431
+   },
+   "ORYGENC1": {
+    "tomas": [
+     [
+      "13:41",
+      2.48
+     ]
+    ],
+    "apertura": 2.5,
+    "min": 2.4,
+    "max": 2.499,
+    "cierre": 2.48,
+    "previo": 2.58,
+    "ops": 206,
+    "monto": 818344.0,
+    "cantidad": 332406.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T13:40:02-05:00",
+    "puntaCompra": 2.48,
+    "puntaVenta": 2.49,
+    "spreadPct": 0.402
+   },
+   "CPACASC1": {
+    "tomas": [
+     [
+      "13:41",
+      8.3
+     ]
+    ],
+    "apertura": 8.3,
+    "min": 8.3,
+    "max": 8.3,
+    "cierre": 8.3,
+    "previo": 8.36,
+    "ops": 12,
+    "monto": 20169.0,
+    "cantidad": 2425.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T13:29:49-05:00",
+    "puntaCompra": 8.3,
+    "puntaVenta": 8.33,
+    "spreadPct": 0.361
+   },
+   "UNACEMC1": {
+    "tomas": [
+     [
+      "13:41",
+      2.25
+     ]
+    ],
+    "apertura": 2.2,
+    "min": 2.2,
+    "max": 2.28,
+    "cierre": 2.25,
+    "previo": 2.21,
+    "ops": 26,
+    "monto": 195511.0,
+    "cantidad": 87028.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T13:22:59-05:00",
+    "puntaCompra": 2.2,
+    "puntaVenta": 2.25,
+    "spreadPct": 2.247
+   },
+   "FERREYC1": {
+    "tomas": [
+     [
+      "13:41",
+      4.38
+     ]
+    ],
+    "apertura": 4.37,
+    "min": 4.37,
+    "max": 4.39,
+    "cierre": 4.38,
+    "previo": 4.38,
+    "ops": 71,
+    "monto": 321767.0,
+    "cantidad": 73409.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T13:38:48-05:00",
+    "puntaCompra": 4.38,
+    "puntaVenta": 4.4,
+    "spreadPct": 0.456
+   },
+   "INRETC1": {
+    "tomas": [
+     [
+      "13:41",
+      37.0
+     ]
+    ],
+    "apertura": 37.0,
+    "min": 36.61,
+    "max": 37.0,
+    "cierre": 37.0,
+    "previo": 37.0,
+    "ops": 19,
+    "monto": 69553.0,
+    "cantidad": 1882.0,
+    "moneda": "US$",
+    "ultima": "2026-09-07T13:32:32-05:00",
+    "puntaCompra": 36.5,
+    "puntaVenta": 37.0,
+    "spreadPct": 1.361
+   },
+   "IFS": {
+    "tomas": [
+     [
+      "13:41",
+      55.75
+     ]
+    ],
+    "apertura": null,
+    "min": null,
+    "max": null,
+    "cierre": 55.75,
+    "previo": 55.75,
+    "ops": 3,
+    "monto": 789.0,
+    "cantidad": 14.0,
+    "moneda": "US$",
+    "ultima": "2026-09-07T11:37:17-05:00",
+    "puntaCompra": 55.93,
+    "puntaVenta": 56.5,
+    "spreadPct": 1.014
+   },
+   "AENZAC1": {
+    "tomas": [
+     [
+      "13:41",
+      0.41
+     ]
+    ],
+    "apertura": 0.41,
+    "min": 0.41,
+    "max": 0.41,
+    "cierre": 0.41,
+    "previo": 0.414,
+    "ops": 30,
+    "monto": 62380.0,
+    "cantidad": 151932.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T13:36:46-05:00",
+    "puntaCompra": 0.41,
+    "puntaVenta": 0.415,
+    "spreadPct": 1.212
+   },
+   "PODERC1": {
+    "tomas": [
+     [
+      "13:41",
+      9.5
+     ]
+    ],
+    "apertura": null,
+    "min": null,
+    "max": null,
+    "cierre": 9.5,
+    "previo": 9.5,
+    "ops": 2,
+    "monto": 2529.0,
+    "cantidad": 269.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T10:55:02-05:00",
+    "puntaCompra": 9.3,
+    "puntaVenta": 9.4,
+    "spreadPct": 1.07
+   },
+   "SPCCPI1": {
+    "tomas": [
+     [
+      "13:41",
+      267.0
+     ]
+    ],
+    "apertura": null,
+    "min": null,
+    "max": null,
+    "cierre": 267.0,
+    "previo": 267.0,
+    "ops": 2,
+    "monto": 2017.0,
+    "cantidad": 8.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T12:39:52-05:00",
+    "puntaCompra": 250.2,
+    "puntaVenta": 266.0,
+    "spreadPct": 6.122
+   },
+   "ATACOBC1": {
+    "tomas": [
+     [
+      "13:41",
+      0.36
+     ]
+    ],
+    "apertura": null,
+    "min": null,
+    "max": null,
+    "cierre": 0.36,
+    "previo": 0.36,
+    "ops": 11,
+    "monto": 4083.0,
+    "cantidad": 11607.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T13:17:54-05:00",
+    "puntaCompra": 0.355,
+    "puntaVenta": 0.36,
+    "spreadPct": 1.399
+   },
+   "CARTAVC1": {
+    "tomas": [
+     [
+      "13:41",
+      32.2
+     ]
+    ],
+    "apertura": 32.2,
+    "min": 32.2,
+    "max": 32.2,
+    "cierre": 32.2,
+    "previo": 32.65,
+    "ops": 6,
+    "monto": 8533.0,
+    "cantidad": 265.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T10:53:03-05:00",
+    "puntaCompra": 32.2,
+    "puntaVenta": 33.1,
+    "spreadPct": 2.757
+   },
+   "POMALCC1": {
+    "tomas": [
+     [
+      "13:41",
+      0.3
+     ]
+    ],
+    "apertura": 0.3,
+    "min": 0.3,
+    "max": 0.3,
+    "cierre": 0.3,
+    "previo": 0.3,
+    "ops": 2,
+    "monto": 4232.0,
+    "cantidad": 14112.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T11:44:16-05:00",
+    "puntaCompra": 0.3,
+    "puntaVenta": 0.33,
+    "spreadPct": 9.524
+   },
+   "HIDRA2C1": {
+    "tomas": [
+     [
+      "13:41",
+      1.2
+     ]
+    ],
+    "apertura": 1.2,
+    "min": 1.2,
+    "max": 1.2,
+    "cierre": 1.2,
+    "previo": 1.17,
+    "ops": 8,
+    "monto": 8820.0,
+    "cantidad": 7296.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T13:35:14-05:00",
+    "puntaCompra": 1.2,
+    "puntaVenta": 1.25,
+    "spreadPct": 4.082
+   },
+   "PLUZENC1": {
+    "tomas": [
+     [
+      "13:41",
+      1.33
+     ]
+    ],
+    "apertura": null,
+    "min": null,
+    "max": null,
+    "cierre": 1.33,
+    "previo": 1.33,
+    "ops": 4,
+    "monto": 3352.0,
+    "cantidad": 2545.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T09:37:45-05:00",
+    "puntaCompra": 1.31,
+    "puntaVenta": 1.34,
+    "spreadPct": 2.264
+   },
+   "AUNA": {
+    "tomas": [
+     [
+      "13:41",
+      5.4
+     ]
+    ],
+    "apertura": 5.35,
+    "min": 5.35,
+    "max": 5.4,
+    "cierre": 5.4,
+    "previo": 5.33,
+    "ops": 26,
+    "monto": 28586.0,
+    "cantidad": 5310.0,
+    "moneda": "US$",
+    "ultima": "2026-09-07T13:22:28-05:00",
+    "puntaCompra": 5.37,
+    "puntaVenta": 5.4,
+    "spreadPct": 0.557
+   },
+   "IPCHBC1": {
+    "tomas": [
+     [
+      "13:41",
+      0.13
+     ]
+    ],
+    "apertura": null,
+    "min": null,
+    "max": null,
+    "cierre": 0.13,
+    "previo": 0.13,
+    "ops": 10,
+    "monto": 5316.0,
+    "cantidad": 41118.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T12:48:44-05:00",
+    "puntaCompra": 0.129,
+    "puntaVenta": 0.13,
+    "spreadPct": 0.772
+   },
+   "RIMSEGC1": {
+    "tomas": [
+     [
+      "13:41",
+      1.28
+     ]
+    ],
+    "apertura": 1.28,
+    "min": 1.28,
+    "max": 1.28,
+    "cierre": 1.28,
+    "previo": 1.31,
+    "ops": 2,
+    "monto": 14397.0,
+    "cantidad": 11219.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T09:23:37-05:00",
+    "puntaCompra": 1.25,
+    "puntaVenta": 1.33,
+    "spreadPct": 6.202
+   },
+   "MOROCOI1": {
+    "tomas": [
+     [
+      "13:41",
+      0.67
+     ]
+    ],
+    "apertura": null,
+    "min": null,
+    "max": null,
+    "cierre": 0.67,
+    "previo": 0.67,
+    "ops": 1,
+    "monto": 410.0,
+    "cantidad": 612.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T11:38:29-05:00",
+    "puntaCompra": 0.67,
+    "puntaVenta": null,
+    "spreadPct": null
+   },
+   "FIBPRIME": {
+    "tomas": [
+     [
+      "13:41",
+      7.01
+     ]
+    ],
+    "apertura": 7.05,
+    "min": 7.0,
+    "max": 7.05,
+    "cierre": 7.01,
+    "previo": 7.05,
+    "ops": 23,
+    "monto": 11014.0,
+    "cantidad": 1568.0,
+    "moneda": "US$",
+    "ultima": "2026-09-07T13:39:34-05:00",
+    "puntaCompra": 7.0,
+    "puntaVenta": 7.05,
+    "spreadPct": 0.712
+   },
+   "ETFPERUD": {
+    "tomas": [
+     [
+      "13:41",
+      25.48
+     ]
+    ],
+    "apertura": null,
+    "min": null,
+    "max": null,
+    "cierre": 25.48,
+    "previo": 25.48,
+    "ops": 12,
+    "monto": 2162.0,
+    "cantidad": 84.0,
+    "moneda": "US$",
+    "ultima": "2026-09-07T13:38:14-05:00",
+    "puntaCompra": 25.48,
+    "puntaVenta": 25.85,
+    "spreadPct": 1.442
+   },
+   "ETFPESOV": {
+    "tomas": [
+     [
+      "13:41",
+      112.2
+     ]
+    ],
+    "apertura": 112.2,
+    "min": 112.2,
+    "max": 112.2,
+    "cierre": 112.2,
+    "previo": 112.33,
+    "ops": 6,
+    "monto": 9994.0,
+    "cantidad": 89.0,
+    "moneda": "S/",
+    "ultima": "2026-09-07T13:11:45-05:00",
+    "puntaCompra": 112.26,
+    "puntaVenta": 112.95,
+    "spreadPct": 0.613
+   },
+   "SPY": {
+    "tomas": [
+     [
+      "13:41",
+      768.1
+     ]
+    ],
+    "apertura": 768.1,
+    "min": 768.1,
+    "max": 768.1,
+    "cierre": 768.1,
+    "previo": 769.0,
+    "ops": 11,
+    "monto": 9291.0,
+    "cantidad": 12.0,
+    "moneda": "US$",
+    "ultima": "2026-09-07T13:24:53-05:00",
+    "puntaCompra": 762.0,
+    "puntaVenta": 770.0,
+    "spreadPct": 1.044
+   },
+   "EPU": {
+    "tomas": [
+     [
+      "13:41",
+      92.63
+     ]
+    ],
+    "apertura": null,
+    "min": null,
+    "max": null,
+    "cierre": 92.63,
+    "previo": 92.63,
+    "ops": 1,
+    "monto": 368.0,
+    "cantidad": 4.0,
+    "moneda": "US$",
+    "ultima": "2026-09-07T08:38:54-05:00",
+    "puntaCompra": 92.0,
+    "puntaVenta": 98.0,
+    "spreadPct": 6.316
+   },
+   "XLK": {
+    "tomas": [
+     [
+      "13:41",
+      186.5
+     ]
+    ],
+    "apertura": null,
+    "min": null,
+    "max": null,
+    "cierre": 186.5,
+    "previo": 186.5,
+    "ops": 1,
+    "monto": 187.0,
+    "cantidad": 1.0,
+    "moneda": "US$",
+    "ultima": "2026-09-07T12:02:55-05:00",
+    "puntaCompra": 186.5,
+    "puntaVenta": null,
+    "spreadPct": null
+   },
+   "BAP": {
+    "tomas": [
+     [
+      "13:41",
+      381.4
+     ]
+    ],
+    "apertura": null,
+    "min": null,
+    "max": null,
+    "cierre": 381.4,
+    "previo": 381.4,
+    "ops": 1,
+    "monto": 780.0,
+    "cantidad": 2.0,
+    "moneda": "US$",
+    "ultima": "2026-09-07T11:57:04-05:00",
+    "puntaCompra": 382.0,
+    "puntaVenta": 390.0,
+    "spreadPct": 2.073
+   },
+   "PML": {
+    "tomas": [
+     [
+      "13:41",
+      1.42
+     ]
+    ],
+    "apertura": 1.38,
+    "min": 1.37,
+    "max": 1.439,
+    "cierre": 1.42,
+    "previo": 1.33,
+    "ops": 24,
+    "monto": 32597.0,
+    "cantidad": 23227.0,
+    "moneda": "US$",
+    "ultima": "2026-09-07T13:19:40-05:00",
+    "puntaCompra": 1.4,
+    "puntaVenta": 1.41,
+    "spreadPct": 0.712
+   },
+   "PPX": {
+    "tomas": [
+     [
+      "13:41",
+      0.195
+     ]
+    ],
+    "apertura": null,
+    "min": null,
+    "max": null,
+    "cierre": 0.195,
+    "previo": 0.195,
+    "ops": 8,
+    "monto": 3124.0,
+    "cantidad": 15869.0,
+    "moneda": "US$",
+    "ultima": "2026-09-07T13:34:47-05:00",
+    "puntaCompra": 0.195,
+    "puntaVenta": 0.198,
+    "spreadPct": 1.527
+   },
+   "RIO": {
+    "tomas": [
+     [
+      "13:41",
+      2.56
+     ]
+    ],
+    "apertura": 2.56,
+    "min": 2.56,
+    "max": 2.56,
+    "cierre": 2.56,
+    "previo": 2.49,
+    "ops": 2,
+    "monto": 12878.0,
+    "cantidad": 5030.0,
+    "moneda": "US$",
+    "ultima": "2026-09-07T09:07:28-05:00",
+    "puntaCompra": 2.45,
+    "puntaVenta": 2.55,
+    "spreadPct": 4.0
    }
   }
  }
