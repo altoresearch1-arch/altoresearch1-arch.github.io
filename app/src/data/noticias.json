@@ -1,704 +1,9 @@
 {
  "_comment": "Titulares de prensa (SOLO título, fecha, medio y link — nunca el cuerpo de la nota, que es material con derechos de su medio). Generado por extractor/fetch_noticias.py con DOS redes: consultas dirigidas a Google News RSS y un barrido de las portadas RSS de la prensa peruana. El archivo se FUSIONA en cada corrida (no se reemplaza) y solo bota lo que pasó la ventana de días. NO reemplaza a hechos.json: los Hechos de Importancia son la fuente primaria y salen antes. Qué titular es 'candente' NO se decide acá: lo decide el Radar cruzándolo con el precio (app/src/lib/radar.js).",
  "fuente": "Google News RSS + RSS de El Comercio, Energiminas, Gestión, Minería en Línea, ProActivo, Rumbo Minero — ninguna es API oficial",
- "generado": "2026-10-17 08:08",
+ "generado": "2026-10-19 19:46",
  "ventanaDias": 20,
  "porEmpresa": {
-  "RIO": [],
-  "EPU": [],
-  "GLD": [],
-  "NEXAPEC1": [
-   {
-    "fecha": "2026-10-07",
-    "cuando": "2026-10-07T06:41-05:00",
-    "titulo": "Morgan Stanley mejora calificación de Nexa Resources por perspectivas del zinc - Investing.com México",
-    "medio": "Finanzas, Bolsa y Forex",
-    "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNZk5Dc1RRTlptVGNCd01zNk5fV3ZkNUVnVVd2ZUZwSnF3dTh6am5FRTZ2aVQ1ZmRLOGJ0bkdzelA2eHZldWZKQnNvMWNQOW83SDJMWk5Mbjl1Nk5na2dsNWg2ZTJoN2c1UEpIb2RLcU9QdlhKYlNmR1NWQ0RRQVl1N3k5VktFcmtYV20yR1dLQ01IYlB1cEdLX0Jxb0lRcVZUOVVhNkJabUZqdi15TXF3UDV0WEFMeHFvMWZOUlFNamg1RTN1VHFHcUd3NFNhMF9GaXg0?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-02",
-    "cuando": "2026-10-02T02:00-05:00",
-    "titulo": "Programa Expert+ de Nexa atrae a más de 250 ingenieros para su formación técnica en metalurgia en Perú",
-    "medio": "Rumbo Minero",
-    "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPc0FoRTVfQldMTjRSUUM0WVlmc09lNjlsVHRoT0hzMGpybVcwVldZOXpMQ09CQTNaMUtkN3FXejl0WF9hRVRsVGFvdlk1LXpDb08zWGI0MlRTaFd2eWVKa2I1VWo2NHpjcVM1bTR6d3ViM0tLTnpmaWl0VDRrZG1SMlA0ZGhKQ1VFRlhFc010aXRjUEJYMVZibDZmUFljTkMyVEdDVQ?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   }
-  ],
-  "PPX": [],
-  "PODERC1": [
-   {
-    "fecha": "2026-10-15",
-    "cuando": "2026-10-15T15:14-05:00",
-    "titulo": "Compañía Minera Poderosa promueve la identidad cultural y el talento en el II Festival del Teatro Escolar",
-    "medio": "Desde Adentro",
-    "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxONmxxRGZRMjN0WWFORUVrdTE5eXFTMUx3VVlOQVlLYTFPYVczUGx5QkxRWHRtQlMyVTV6blF4WUNoWi12dE5fT1A1WmJKZ3NQT0M1ZWR0V2tIaS02dWNHMDkzWjRhUVY2MGQ5MnZ5ZUNqSEF0c0lrd0hIbl9taEdTb0NOdmZjMTdfUVpIUkNDRWhvSmdMME1PbEpsampERHhLMXk2TG9fMXpnVXQ3dTJtWkRRZ3JHTEhLWXlEOGo3b3VVY21XNWJLQjJTUXhaQUdJdHVMQ2VMb3V6dw?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-15",
-    "cuando": "2026-10-15T15:07-05:00",
-    "titulo": "Pobladores de Pataz son reconocidos en Reescribiendo Historias 2026 por culminar su educación básica",
-    "medio": "Desde Adentro",
-    "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxQazJCSG4zLTNPNDhMX2FoREJUZDVsTFhEV0tjT3pZOUhpVHcyajQ4WjJCcFRQVjZoM1FEaVNrV2Y2Z2psbEFkWDN3cFA2REFScjhCcDhZNV9POWd3NTlsSGwxbUZVUUZvMkZzUGh5UlQyZnpJOTlnQVBpV0lOUFNkcXJURVFONUR2SXdodWRhQmNzSzZIaUZNNDVUQmVmWWhrcHJhSVN0Vk5qNnZSb3NKd0hYeWtMU1Q3QWc5eThFQ2Q4Y1FreTZUYU9mcWx4NFdLUzNn?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-14",
-    "cuando": "2026-10-14T14:27-05:00",
-    "titulo": "La resiliencia estilo Poderosa",
-    "medio": "Energiminas",
-    "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE40NUQ4b0tpWGpndWhWalY3M1B5UVRyUmNkSWExcDhkdmRmaExSMEJfM2pLaXVNb05CYmVfYTB1a1hRV2JQb2RuMDJ4eE9qMlBNel9wa2IyZldFbW5wTWRkOEs1UVNqNzNjVWVqd0FyVHRNLUhO?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-13",
-    "cuando": "2026-10-13T15:58-05:00",
-    "titulo": "Poderosa invierte S/ 591,000 en restaurar la histórica Iglesia de Quiches",
-    "medio": "Revista ProActivo",
-    "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOQzhrUE9XUHVYWGpVMGVHSTB3MmNYQ0I2QThFbi1kSS0zd1VkYjRTS1ZSN3AzRXR1TGxuUE9qNDdKSTFFVXFHWmhXcjdINkw1eEdOY1VUbFhvbGs0RVVXMndaZXpxZG4wR2JZRmZiekliejhXRXRPT2l0UklWNFhIMFFjeXM3Y2lvS0FoSnhYSzBheFRPaGU2OFFsdXNsdw?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-12",
-    "cuando": "2026-10-12T13:06-05:00",
-    "titulo": "Atrapan a presuntos implicados de atentado a minera Poderosa",
-    "medio": "Diario EP",
-    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPVkdUMFdCOWV5WGpIXzdlRUg3TzZCaUhZZ1ctekpUb1NMYUdLTXpUUC1RM1A3VHdyYUQ5blBjVktsZzdSMlltSmU3YWd5Z2Y1Q09nS3F6enl6N1Z0d1lDcHhOSFhQSmNwRVUzQUJ4WDVlalZnNFBiOUVhRGJvQXpmb3JEZUhXMGx2Z1dsSllSYWhIUQ?oc=5",
-    "tipo": "riesgo",
-    "icono": "⚠️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-10-09",
-    "cuando": "2026-10-09T09:45-05:00",
-    "titulo": "Minera Poderosa: Ataque en su concesión deja dos muertos en Pataz",
-    "medio": "Rumbo Minero",
-    "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNMEpRdXFWREE2VjN4U2UzNU1CSUdxTmhxODlIXzcwU2RqMGJIZjFjUU1VRzZvOHF0M1BfRF9OdkdKWm1oa2RjaUtvU1hLMmVDWGZhQW5xS09lSTFOX1o3RGVqaWUyTXlOQ2hhT3pUZlg4bUpBczRtRGhydkFHQUtUUHdmbGgtMmJO?oc=5",
-    "tipo": "operativo",
-    "icono": "⚙️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-10-09",
-    "cuando": "2026-10-08T22:05-05:00",
-    "titulo": "La Libertad: Ataque armado en bocamina vinculada a minera Poderosa deja dos muertos y dos heridos en Pataz",
-    "medio": "Perú Informa",
-    "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxOaUlCbklNa0ZvUDd6dUFadXBMOVZsTk1YcjdkMEIzNWNXVUd3Tl9YamJMSFZLTU5hVlBIM1hEMGVwZzFYM2xJbnlsRHcxdGhQYmdZUTl0MGdneUxlQ3p0UHlUeHBRSndxa1l3a2c1enFrdnZ5VC0ta1NNZmcwU2FHOVI3OWF5UkJEMGZHbGNsR25Jclo0MC03ckpKMExpX0NGbExrM1NMYWg5V3BpVnJubnpvdFVvWXNOUk41blB3SURBeVpnLWIwcmR4Q252Y0k?oc=5",
-    "tipo": "operativo",
-    "icono": "⚙️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-10-09",
-    "cuando": "2026-10-09T10:05-05:00",
-    "titulo": "IIMP condena ataque a Poderosa en Pataz: \"Como país, no podemos normalizar la minería ilegal\"",
-    "medio": "Rumbo Minero",
-    "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxQU3JaY01BVU9PWmlmVVhkXzhSa3ZqUG56Mk80R2JvaTRHc0huZGpVLUhBbU5hRUd5U3NiMnhvb1RLSk9HcDVMbjkyUDZqQUdaVnVfUXl1Q2N1NkpiVTJrQWdaVkY4ZThkQ1hyZ0wyOF8xNjd2VGFxQ0Vub0VlWVI1NkpvRnFWZw?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-09",
-    "cuando": "2026-10-09T10:11-05:00",
-    "titulo": "Poderosa señala “categóricamente” a la minería ilegal como crimen organizado",
-    "medio": "Energiminas",
-    "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOLWdzSjFGLXdNN1pXMGhIUzdwNkk5SUM4OV9Wb0ZxUzZPMFp6UW5Bd2Z6ckJUSm50LXAxZWd1Unl4a1lrQ2hvS3oxcXZHQ1d2V0FFQ2RUZjgtS3AwLVhhY1BPTEoyWDZqOFdyamlQSWZIOVBmbm5NcTNWSUE2Vks0TTFXSUhCSVdmY0NaYXA4TGNmWU9vMUdoN2pWczNXR2c1QnhnbDZvMjB2TW5oR05V?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-08",
-    "cuando": "2026-10-08T02:00-05:00",
-    "titulo": "Ataque armado en Pataz deja dos vigilantes muertos y otros dos heridos en una bocamina vinculada a la minera Poderosa",
-    "medio": "Infobae",
-    "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxPYWYxcGx6ZjBzdE9qcHM1VDN2cTJGMXByeTJSWFJkcWFDMGkyV24tbWdHaGdnNzVBM1VfUFpJOXdURndTWE9rY2h5cGRLaG1tLWtQTWYtaEwxSzRnQ0ZvYmt1WXNtTGw1S3Z2MHdlZHlqU3hVSzVDWlZfS1ZzeWFSZWd4aXhINE9IR19vWDRqQ1JsTkpTdmFDMGVNc2dqazdKdWVYTi1zbVduZDNDVFlDN01xalRXWlB0bmF3X193YnJnRTV2SkFmX21LVVJLYnZ3RG9ZM3hOY3BuNlR4Q2NSMXB5YlNMLXBTM0EzSjlDRQ?oc=5",
-    "tipo": "operativo",
-    "icono": "⚙️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-10-08",
-    "cuando": "2026-10-08T02:00-05:00",
-    "titulo": "Violento ataque en una bocamina de Pataz deja dos vigilantes muertos y dos heridos en una zona vinculada a minera Poderosa",
-    "medio": "Infobae",
-    "url": "https://news.google.com/rss/articles/CBMi-wFBVV95cUxPQW11cEtpM0dTWWtNWWZOU20zTzJuMGxYTlA0cktHTWJGVWJpVWpaOUJGZ2FQcWJoSlJEblk0cjZVUTdWcDNJX3kwZjNzSzVTNVgyQU1rcXhJRU5QTjY5N2dXMlZFcG5UNk9rT1dTLW8yLU5LdGZpMWhqWEtlanJuVkxWUmp3U3YzU25KUmpCQU5EVXFQbXQyOGQtcmM2RWlQd1pDc29QLXgyX3hsMzhTQkNaN3pUcF9vTkd0Y2picl9rQmtmSGlOelB5anA3dFBiQS1DcDR2RTJXbUpLa3l3Ml83X1hSVTRYcE1UY0Q3YTNBTzVaOHR2N2gxTQ?oc=5",
-    "tipo": "operativo",
-    "icono": "⚙️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-10-05",
-    "cuando": "2026-10-05T15:55-05:00",
-    "titulo": "Exploración minera en Perú alcanza US$ 412 millones en siete meses: Zafranal y Poderosa lideran inversión",
-    "medio": "Minería en Línea",
-    "url": "https://mineriaenlinea.com/2026/10/exploracion-minera-en-peru-alcanza-us-412-millones-en-siete-meses-zafranal-y-poderosa-lideran-inversion/",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-10-03",
-    "cuando": "2026-10-02T21:23-05:00",
-    "titulo": "Poderosa fortalece capacidades de líderes comunales de Pataz, Piás y Huaylillas",
-    "medio": "Revista ProActivo",
-    "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOZjlSaWdLVDdrZTlObGhoOFdtSjlOQnpFaUowQnFUUWVZbE5SUTB0Z1VjZjBDT0dPYUhUaUtkWnBzRzZUWUhqTVBqdlF5ekVHc01MTW5CdzROWFhDR25jQks4b1hfd3FMV2MtN3Jsb0doNVdjaVFmTDN1VFV2aERPZGM4TVZ2NXVVYXFHakdVVkowdExIdC1JZVNUckoydzZsWnY4T3ZuYw?oc=5",
-    "tipo": "operativo",
-    "icono": "⚙️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-09-30",
-    "cuando": "2026-09-30T02:00-05:00",
-    "titulo": "Poderosa presiona al Gobierno y pone fin a los mineros de Pataz: Llevó al MINEM a los tribunales y ahora el Poder Judicial ordena acelerar las exclusiones del REINFO",
-    "medio": "Diario UNO",
-    "url": "https://news.google.com/rss/articles/CBMiowJBVV95cUxPRENmRlBkdHc3RHNKbUxUZHRPNXZnbGt2OEZ4and6UWRuNTV2WmhIUFVfaFhFMUFyOEVNcjdRWERIRzAxV3Z0Y0NKNy1jT3MzZFV6Qk14VFZuWWpjX011cWdfSGFMODNoNjhIV3h0T3lhbl9saGpYWExRLTJzX3ZJWmpYTVY2VS1WVmU4WENrYWl5QU15RVo3N2E1VjR5dk5nVHZXOUM2V1FkZWhhdGRyQjdOYVFDellBNzdHQjNkaTdFYVhSOU5Xd3hrczdaOXZyLXBLalZaU01sd1J2XzZ3TWFTVjFUNUl6Ul9uNWNGTE1tZ1NKWlBtMG5WY1B3b1dHT1A2UnBTQ2g1b1RvUFhWNl9mdDlwcS1hbENzV29wMDBVUDA?oc=5",
-    "tipo": "legal",
-    "icono": "⚖️",
-    "peso": 2
-   }
-  ],
-  "CASAGRC1": [],
-  "XLK": [],
-  "BAP": [
-   {
-    "fecha": "2026-10-16",
-    "cuando": "2026-10-16T11:01-05:00",
-    "titulo": "Credicorp Capital: la economía peruana más allá de los desafíos de la coyuntura",
-    "medio": "Gestión",
-    "url": "https://gestion.pe/g-de-gestion/columnistas/credicorp-capital-economia-peruana-mas-alla-de-los-desafios-de-la-coyuntura-daniel-velandia-noticia/",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-16",
-    "cuando": "2026-10-16T10:36-05:00",
-    "titulo": "Credicorp, holding del BCP, supera 100 casos de uso de IA",
-    "medio": "El Ecosistema Startup",
-    "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNVWVPcHFvNDZIRXBsWmFQeTdZUzlqZE5RdS10eW9PNzJ4bG9jZzlTTXZ6eXFRZW5FemhwckRrbFNDeVBZNEZqbzdOMGFpdzhhUmp3WGVFNXlGdEYxRXdrWk9kTmFJV3IyWXhCaHhoWG14OW1oZnhHQlJYdzBVNHdJbWJDVHVPV3lhcHRDc0ZNZw?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-15",
-    "cuando": "2026-10-15T09:35-05:00",
-    "titulo": "Daniel Velandia, economista jefe de Credicorp Capital: “Si las condiciones se dan después de El Niño, al 2028 podremos crecer más de 4%”",
-    "medio": "El Comercio",
-    "url": "https://elcomercio.pe/economia/peru/daniel-velandia-economista-jefe-de-credicorp-capital-si-las-condiciones-se-dan-despues-de-el-nino-al-2028-podremos-ver-un-crecimiento-superior-al-4-apuesplan-noticia/",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-14",
-    "cuando": "2026-10-14T13:53-05:00",
-    "titulo": "Últimas notas de prensa y noticias corporativas de Credicorp Ltd. (BAP.LM)",
-    "medio": "Yahoo",
-    "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFA1SVQxZzVlR0NINXFyYWh1MnFGR0ZxVEVyR1VTMGdoa0FHVElYZ0hNOFVJdUpGMG1hM2dIaVRfdTFUT2pSa1JxMzVhc3VTVWpsYkxUVTNwQldvcEhSZjdKMjIxYXpDRzhX?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-12",
-    "cuando": "2026-10-12T16:05-05:00",
-    "titulo": "IA atrae cada vez más inversión pero genera incertidumbre sobre burbuja, ¿qué ve Credicorp?",
-    "medio": "Gestión",
-    "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPclRYeGZvOEZMVmNna0JjNHdCV2IwdE9DUHJPdV9QcXNsVWcwQUJqdS1hV2w0bWxNNTBDLUxSSmN3VmtJLTNiSDJJQ3c1dDdaSmdINEt0SnlwX3dLN0s4UjBpdWdwWUhxYUh3eWJ2VUxNT2hMNDBxZk80Z3A0LTlubWVkWC1VdHJOMGVRVzVWRHVlMUZvbGRLZk85U1d0bjd0dG1PUkh6enkxZzBienZnUDctRHRRWkVBVzNOclNQOVhCVjlKemlzQ0hTdTJhT2M?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-10-09",
-    "cuando": "2026-10-09T08:38-05:00",
-    "titulo": "El reto más grande para Perú, según el CEO de Yape",
-    "medio": "Gestión",
-    "url": "https://gestion.pe/g-de-gestion/columnistas/raimundo-morales-y-yape-delincuencia-e-inseguridad-ciudadana-en-peru-el-reto-mas-grande-para-la-economia-noticia/",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-02",
-    "cuando": "2026-10-02T02:00-05:00",
-    "titulo": "Credicorp Capital ve oportunidades en la región andina: ¿dónde están las apuestas de inversión en Perú, Colombia y Chile?",
-    "medio": "El Comercio Perú",
-    "url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxQak5aaWpKbEk5REwwVk5tVDRUM3ZHTXowN2o2U2ZNNElPZkFQd3gzMGxza2MySnNiZDZTQ1ZiNlk5MnAzWEhURTZ5clQxV0RQRTRsaGVUeHZNUnNQV2ttb2lmMGpxUzRaM2E1eHFPTEFoX1JycnNyeWIxS0JlN0pZclRTRXE2dVZnRnpMaWtFSWNOd3JXWXpOUnNoYUhzT0JYMGJJY2ZvbFd3VmV5VmNIUVIyVkxJMmZ2ckNxZWtSY1BPZ28zZnhMN2NoY05rSHRWbUpIZFo1OVZ4SW9xc1RnVHIzVVpHbnhEMnN6OGtxNXhSMUhB0gGIAkFVX3lxTFBqSG9QV0pnaXVnUnBoMUN3am5pX013aWtWc3FXWmxHdFVPeU5pcmxqUWdOenRRVnEtWklLUGlTRzNhbmFNejI3OE5mYmY1TG94bU9rd1ZmVTVZSVNneFB1eFNnUmo5V3A1WGZjNHZsYlU5TVhOV19Vc1R6WkFKT1VOdHRrU3EtS2RIUk1LT2VQalI5dXBET2YxMXRTWWd4a21pdzJfRm9xSG5NSVVpaXJZaTJQN0RJU2c5TWVIakFuODNxdU56YkJmaXlJbE9BMHZxUzV4Zy05dGx5R1N4QlZtVlJSZ3FoVkt1V1RxdF91SE9yMmVWRzhGYzBjMHlvZHRTZ2dqOFl2VA?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-10-02",
-    "cuando": "2026-10-01T21:48-05:00",
-    "titulo": "Precio de acciones, noticias, cotización e historial de Credicorp Ltd. (B2AP34.SA)",
-    "medio": "Yahoo",
-    "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE02Tnp5UlRTZ3lWLUIydTRWbnJTOEpQdUFHclM1QWFkalRUQXhsV25HUTk0QjVDQ3F6V2Jfa3BBUDVVakpYVno2clZqbnRETmxxSkNrSDVQczZJSXoxd1RBbU1BdlVjaXM?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-09-30",
-    "cuando": "2026-09-30T17:33-05:00",
-    "titulo": "Shicra: el programa estratégico de Credicorp y Kyndryl que impulsa la transformación tecnológica del holding",
-    "medio": "Semana Económica",
-    "url": "https://news.google.com/rss/articles/CBMi9wFBVV95cUxNOXB1YnhzTkdUNWV1bk9aMW4ybEZJdHZtaGtxTmdmNnF0VjM2US1mcHo0emd3NTlCU1VnUHJSUktxc2FWRERpSXlXdFROZFBiZmh1Rk1FX0szRERCS2VSZnl3QjdQRk81TEhpN1QyYzNGdFpBQTFzNWtLd2JMeWFJZ2tpMHktY09fVEdrWnpKRXdCWnh4VzRGSzRFWUI0RUFQTVNWMzJtN2dYQzZBdXZmVWJMSlBwUkR6SG96Mno2bk95UTZrQUo1ZW85eDRoMmQzejFmR25GYlEzYWg1NlN2aDQxbWVCVG14OVNLSld3V0NxRjBoLWNV?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-09-28",
-    "cuando": "2026-09-28T02:00-05:00",
-    "titulo": "Peso chileno es la “piñata” de los inversionistas, según Credicorp, ¿qué le juega en contra?",
-    "medio": "Gestión",
-    "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOVXR0YXVPWGh0QTVLN3BiNjRJb2RrT0E3MTViNkp4dUx5QnVmSHRPTmEyUDNfVjU3VE5XanBWX1lOZnMxRDc0cFM0MVkyN29Ma2JEdEhrYkhDQ2VQMm42THl4dlRyX3lNZG51U2dldk1GQXFRU3VoUmtkQjc1NGVzRUk5d01ieWRBNVU4dU9Kcm5mLVV0MEdJVkQwbFZaa2oyNmFNVWpRWU1Jc0JRTVV6bzJtYWRTU25tSVRSYUwtLS1QUQ?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-09-28",
-    "cuando": "2026-09-28T02:00-05:00",
-    "titulo": "Credicorp Capital prevé crecimiento de 2,2 % para Colombia en 2027 y dólar en $3.600",
-    "medio": "Yahoo",
-    "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNN3d5UHVxYnlTckI2enBnNURMM2xOYWFzQUNFWnI1bW5yTG9nc1U2SWI1c0VkN2ZaMGVmbFRhcWJmMzR3X2JpU29rVjNleEp5ekw4RHYtUWJGUlp1WEhONDVlUUVMU0JQaWFlRWRpWW1rT3VUb193bHBQYnZ4UVoxRHllNmtTT0FWVTFOdGpmN0FCMU1X?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-09-27",
-    "cuando": "2026-09-27T03:20-05:00",
-    "titulo": "Credicorp Capital: “Esperamos que el 2S26 sea bueno para las inversiones”",
-    "medio": "Semana Económica",
-    "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNZUQ3MWMwT3MxMWo2WGtaaWdhRkpybzhtRF9tcmN4bldVVzBNUGMwWEVyWjZ5TGxqNnJhdExFZjlqZWxNQ1hTcjU5Zjlac0JfZTZLT29hbHR1ZVY3aDI3RWZTSXB3dTFIajFqaURoYXF5LWFJMkxXUTlyRjBQU294ZkxnckdvVnZ3bTBSQ2MwWXpFS1prUGRKcEE3aHBLWTJHeFZvYmJxZFpFbVk2dnFlLU50SlgtOWdtdTd3RGZVaGJyTDdfalBPbzVzU2h3OGh6?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-09-27",
-    "cuando": "2026-09-27T02:00-05:00",
-    "titulo": "Colombia busca recuperar la inversión tras seis años de caída y Credicorp proyecta un repunte de 8,9% en 2027",
-    "medio": "Portafolio.co",
-    "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxNRDFQNG55dll2RlNJYmZOVlQ2V21XQWZmUWxWRGtOM0preHA4eWxfQ1VkdHpqbG9KNGltTHdwQnc2WWZCSFJyenVRT0RCWno5SWx6Wk1Lb3YtVE45WWdUa2tBUGFvQ3Y2V2lodFRRdWVqTV9GT2xrOEFWOV9Vc1NkOUJJSHJmU3RGNlI1R0QyZUhyWlR2aldvZjlJcWF4b0pub1JFUVNENWtFdkNZRDk0QVo3RUdlQ2lTZ1dSUlVxVXJSYl83Q2dTWGNvVFRYbHlrU2V1MGdoNGVSNWRIQmfSAeMBQVVfeXFMT1R4cW1id3I3RTZOWmNqT0gyaVBnNkRCWTUzYzRXc2liQlMyXzJ3X2l0TGo1b05DVC0tY256Q0RqS1N6bTlvYVFOU3hXR05TZ2phQmhnYWVvc01Uc1gzTnR5ZlFFMUZnQlIwVmkyeF9SUExCaDRVNkZTWWJmenhFZTBneG00cGZWclNpcThqSWtJOVcyUzhOblA3QXd5NW1MaDdMa2lYWHE2Sm1VV1FNODNjclRLUUtnMkVlYi12VE90Mm8xQWd2SWJpQXl5Q1pkNWJwS0VoRGJMczRSU0ZjRV8xaFk?oc=5",
-    "tipo": "riesgo",
-    "icono": "⚠️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-09-27",
-    "cuando": "2026-09-27T12:13-05:00",
-    "titulo": "Credicorp Capital: La inversión privada registra su mayor expansión en más de una década",
-    "medio": "Business Empresarial",
-    "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOdmNpSkdZenBReUlGS2VBQVNOUk9BZmRpZG1CY3J6TXo1Y3JiSEVqU0pBRVpETmM1Q05UcUFDQ05teHU4OUZGV1pmby1rQ1RPYmNuLU9GRnZYNV9oZEg4WVI2WVpFRlo4eDd3UGRCUW1zMDQ4VU5adlpaRlJNdkF2eXNSZTc2emx3RWY3RlNYbUdFeG5yVTFZSUFXQjBHWWk5VVFBNVNkb1JRR2VtUWhwZlFFY0l2LWRYTy12TWZZbG9kWkZENmc?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   }
-  ],
-  "IPCHBC1": [],
-  "GDX": [],
-  "MINSURI1": [
-   {
-    "fecha": "2026-10-15",
-    "cuando": "2026-10-14T20:02-05:00",
-    "titulo": "Minsur repartirá US$375 millones en dividendos con cargo a utilidades de 2025",
-    "medio": "Semana Económica",
-    "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxPRG9xZFczUWg2TFBpMjhsNVNQa2pITThxcUE4NjdNM3V0QmxsdC1zdnV2NVhlaVBwV0QyZUFocXgxekN6WlVrTnU3RHNleXlDM2VpeGtGOWFxd19jVlcwd1Q1azdCSGo2OE9DZVNTaUZhSDVVRFZ6SEZtbnpUUk5icnJYNjNldGNTRGlIbXZUTlp5bEJsTms1WTFGeHE5TlA1X2tIZkhubXJOMEhoelN5NjlxWkdLeldHMzRMQjM5eDlMTjd0cXBONjd1NA?oc=5",
-    "tipo": "dividendo",
-    "icono": "💰",
-    "peso": 3
-   },
-   {
-    "fecha": "2026-10-14",
-    "cuando": "2026-10-14T09:58-05:00",
-    "titulo": "Accionista de Chile en Mina Justa evalúa ampliar su apuesta en Perú o desarrollar una mina",
-    "medio": "Gestión",
-    "url": "https://gestion.pe/economia/empresas/filial-de-copec-busca-nuevas-inversiones-mineras-en-peru-y-evalua-proyectos-de-cobre-noticia/",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-10-13",
-    "cuando": "2026-10-13T17:01-05:00",
-    "titulo": "Antauta: reprograman reunión del Convenio Marco con Minsur para el 21 de octubre y exigen informe sobre avances y compromisos pendientes",
-    "medio": "Radio Onda Azul",
-    "url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxQSURhTTRTVEp2d3FZQV9IdHR0N0dBMG0wSldkbm83UG9pVGtkejBsa1VHellfN3dnWVh5eFE5dUFvUlFvUWNTQ1NGTHpZVW9Qb1BLZXRFVFd0RVVOaGV1aS10dkE5WV9rOEs4dHpuWEVQRkpxeVRIY3QtenpibER1ZDBZa0NmZ1ZheUtDS2Z0bURKaVVMWC1vU2xMYzR5Tnc5UmlIYU1OaDNDclo1SngzcEZFWEt6YVE3MndFWm1VNVZ0dkxFY2FfTTRjNlJ3TXlZTkNidnh3UHNBQ1VZY0ZkOEVhcGlhUkltdWZPRlYzMUFzX084?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-12",
-    "cuando": "2026-10-12T16:05-05:00",
-    "titulo": "Edición 335: Rumbo a PERUMIN y 49 años de Minsur - Instituto de Ingenieros de Minas del Perú",
-    "medio": "IIMP",
-    "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOUW9qV2d0T2hFVEdkbEJhWjBUZS1wWEE1M2RKMGNkc0FTS1NpUWdzQTY3TVRRWHVtTkNpVFBSbjlndU9WZmMtbXpTdEEwNDFOakQtdW1ESk5WZ0toU1ktY1dDOS13a2tGbktwMllFSV9vdWxSbHpqTWhiQ3RsQzhPekIwZHVxckl3SlQ4Rg?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-09",
-    "cuando": "2026-10-09T15:01-05:00",
-    "titulo": "Minsur restaura 16,000 m² del humedal de Pisco Playa-San Andrés",
-    "medio": "Revista ProActivo",
-    "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOdEJNOERFdE1FVnJnOVNteFNQYzRsQVRLenpIOWJITDdkV2VOS2JKaXlRY252a3FCWm1CM2FFSzFYT1U3RWg0dTFzcE9GMmFaWHh0bnhHejU0MHVudElsQ3pmWklEOTBRdzZobkZiS054SnBFeWc3SGFOdjNaT3ZXV3V0cGM4eXEwUkVhMXc1LVljNkZQOVdzQg?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-06",
-    "cuando": "2026-10-06T11:36-05:00",
-    "titulo": "Marcobre fortalece sus operaciones con programa de capacitación liderado por CETEMIN",
-    "medio": "Rumbo Minero",
-    "url": "https://www.rumbominero.com/peru/noticias/actualidad-empresarial/marcobre-cetemin/",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-02",
-    "cuando": "2026-10-02T02:00-05:00",
-    "titulo": "Minsur: De la gestión reputacional a la legitimidad para operar",
-    "medio": "Revista ProActivo",
-    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOMWtEU2JTcHRZUGVvU2pST01TbnMwSkN4elBpeE1SU0czcHc4bFhaSGFIX1ZvNS1ja1JsTlpKZWtPb1EwV1A2M2tJcEhQdnp2YTM3UmROYVNILWNuS2ZWQmtpRmNCd0xJdjVXOFU5Y29yNXhTQXJPOU44ZHdjdnJ4WnJKZmdIU2JzMV85ZWRNZkpWQQ?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-09-30",
-    "cuando": "2026-09-30T09:54-05:00",
-    "titulo": "Minsur mejora la detección temprana de la anemia con nuevos equipos y reactivos para los establecimientos de salud",
-    "medio": "Revista ProActivo",
-    "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxQdi0weGRkSE9lNzRkRmNRaWdGeUlTaFNFS1NWR2dCYXJ2ZlFDQkYzdjVsMWsxWnJlQkU4UjB6WEtFMng2eVY4Zmg4dFRKTWtybzNKVGNxTHgzbVB1OThldzY0RlBSeVI4ZW9COUR6WE9OVFI1M0M3X0ZKaFZPVDNOY1JrRmVoSmQ0VWIzSmxxMUhLaVhpSjB1Y2NwbkJaNHdfcVRXV2JpeDczckNJVGpFMlBjejE3RTFjeWF3M2hwakRFcy1UNzU5UHFOY1Z1R01vMDhhZGNURQ?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   }
-  ],
-  "CPACASC1": [
-   {
-    "fecha": "2026-10-14",
-    "cuando": "2026-10-13T20:10-05:00",
-    "titulo": "Cementos Pacasmayo mejora su experiencia al cliente con SAP Commerce Cloud",
-    "medio": "Portal ERP",
-    "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPX3QxQ0pINThqOEhFMFNrN3dJN0UzazFtTnJxSE5hTVktSWc1ck50dVhEMmhDRFd4TlRVX1RiVDgyb05XRXlMNW1pNEUzWU9WVXhyY25qUHoxZ2N1VTBXMXBXZWF1dDRwUHZyMVJZRlpsRWRmVFFUOFFtZVE0MGctZGhkQlpZbmVBOVZtTGlDZ1pjVmVWQXRxM1RQTFJ4Z2dtejlITmpoeWl1b28?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-14",
-    "cuando": "2026-10-14T16:17-05:00",
-    "titulo": "Cementos Pacasmayo reafirma su liderazgo en el sector cementero en el Ranking Merco Empresas 2026",
-    "medio": "construyendo.pe",
-    "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPb0VScDFKajJIV0lHMWFXYnZtUkhSUDZfME83QUJ5MjgyUmVvNWllMXpKLXltdGZzWVVFQ1NITW1hLTh3bmRqbUtQYU5lWl8wQ1hUWWl1YXpoY1FpclBzcUxMLW9WU2xBSVIwekJsSTdpb3hvb1dkNGpvZHBDb2x3VWNUNTZZa0NHdDZNOW0tM1hLRHh1SVRIbnNpeVFXU2dZMFhNeXJ1VExpWTdmZGdHQTA4c2JrZ1NmTUF6c0pXSHlPMy1LajNaRlZFWWE5VTVGR2hEeHBTNWhhYU1KWUcxdVV3?oc=5",
-    "tipo": "corporativo",
-    "icono": "🏢",
-    "peso": 0
-   },
-   {
-    "fecha": "2026-10-13",
-    "cuando": "2026-10-13T15:34-05:00",
-    "titulo": "Cementos Pacasmayo destaca en el Top 10 de Merco Empresas 2026",
-    "medio": "Revista ProActivo",
-    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPTkJMR2NaWmVxY21SbVZKLUc1aENrMklyREdHRElRZVBRMldBQVNaOHBycU9iZEU4RXVSdEtOeGhLWnNEenN0Y2lYc2trM3BBdmdxRzVkOVZQbzRlZGJZVzlIVUIzNDl2OXFpR2RkTXFWbXpCX0ZSVWJSV29DanVTSWpDNWVTYU5ZTTZyT0VZem95dw?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-13",
-    "cuando": "2026-10-13T13:40-05:00",
-    "titulo": "Cementos Pacasmayo, entre las diez organizaciones más admiradas del país",
-    "medio": "Energiminas",
-    "url": "https://energiminas.com/2026/10/13/cementos-pacasmayo-entre-las-diez-organizaciones-mas-admiradas-del-pais/?utm_source=rss&utm_medium=rss&utm_campaign=cementos-pacasmayo-entre-las-diez-organizaciones-mas-admiradas-del-pais",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-05",
-    "cuando": "2026-10-05T14:39-05:00",
-    "titulo": "Cementos Pacasmayo: de construir estructuras a transformar la forma en que habitamos",
-    "medio": "Mercado Negro",
-    "url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxPeXBHOF9yS1lDdmFLRVBETExrdWtia1hkMU1VYXVZMXZCcmR0bEhrMGlYTHFFbW9HMVJENm9BX195OTZybHBPYkVFWi15TXZEMktQZk5ZN1F1SW1TV3VqWjJpY2xYLThfOGpvN0VUd1YzLXoxY2RaT0pQeDFnNDhDVGJ2MS05Z3RVa2lKN3Rhdmoydm1NXzk4UER2V2tQQjVsNVpjVVR4SUVnMjFsN245RDB4Y01ieG9jd0Y5TmUtMUVEMXlGbDNMWEJWbnF5aGg1bm5rN3hjcEctY1Fkd2UtYndTOXg?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-05",
-    "cuando": "2026-10-05T14:38-05:00",
-    "titulo": "De construir estructuras a pensar en quienes las habitan: la propuesta de Cementos Pacasmayo en Perú Sostenible",
-    "medio": "Mercado Negro",
-    "url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxPeXBHOF9yS1lDdmFLRVBETExrdWtia1hkMU1VYXVZMXZCcmR0bEhrMGlYTHFFbW9HMVJENm9BX195OTZybHBPYkVFWi15TXZEMktQZk5ZN1F1SW1TV3VqWjJpY2xYLThfOGpvN0VUd1YzLXoxY2RaT0pQeDFnNDhDVGJ2MS05Z3RVa2lKN3Rhdmoydm1NXzk4UER2V2tQQjVsNVpjVVR4SUVnMjFsN245RDB4Y01ieG9jd0Y5TmUtMUVEMXlGbDNMWEJWbnF5aGg1bm5rN3hjcEctY1Fkd2UtYndTOXg?oc=5",
-    "tipo": "corporativo",
-    "icono": "🏢",
-    "peso": 0
-   },
-   {
-    "fecha": "2026-10-02",
-    "cuando": "2026-10-02T06:55-05:00",
-    "titulo": "Cotización Cementos Pacasmayo SAA - CPACASI1 hoy 2026-10-02",
-    "medio": "Bloomberg Línea",
-    "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBld2FvaThpVkZZZ21Obi1tZTAxbi1feXpFM0tuQmV5cGJKdUFOLWRIdFRyTWxJYjhVWkVBeGlCU2Z0YkdSYmt4QlljVjBIdnVYVUQwaG5JUDJxcUpRM1E?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   }
-  ],
-  "AUNA": [
-   {
-    "fecha": "2026-09-28",
-    "cuando": "2026-09-28T17:07-05:00",
-    "titulo": "Clínica Delgado y su nueva oferta para pacientes oncológicos, ¿cómo aplican la robotización?",
-    "medio": "Gestión",
-    "url": "https://gestion.pe/economia/empresas/auna-lleva-la-robotica-a-la-atencion-oncologica-con-dos-nuevos-equipos-noticia/",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-09-28",
-    "cuando": "2026-09-28T05:30-05:00",
-    "titulo": "Clínica Delgado apuesta por dos robots para replantear atención de pacientes oncológicos",
-    "medio": "Gestión",
-    "url": "https://gestion.pe/economia/empresas/auna-lleva-la-robotica-a-la-atencion-oncologica-con-dos-nuevos-equipos-noticia/",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   }
-  ],
-  "SOXX": [],
-  "BVN": [
-   {
-    "fecha": "2026-10-16",
-    "cuando": "2026-10-16T12:00-05:00",
-    "titulo": "Moquegua: San Gabriel produce 5059 onzas de oro al tercer trimestre y Buenaventura revisa su guía anual",
-    "medio": "Rumbo Minero",
-    "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPeExhbGZHbW00bExjMUR1aktpM0o2RDFqdTF4eVQ1MjE4eHhKeXlXcFB4U1ZFMlpZVTJlZTFKUFBzWWdDc3dGQjVZVGxzbXk1azBKMDc2VEpxbkZWQTRMaFZNY2pLQ1VXRk1LY1QwTThoQ1Y1ZDc2VU5IXzQ0Ti1tY0RCeUhDbGx0QWV1bnppTkR5ak9wN1FfWDk5WFlIM3RQRlp6R1dubmo5UEpSY2c?oc=5",
-    "tipo": "resultados",
-    "icono": "📊",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-10-16",
-    "cuando": "2026-10-16T15:59-05:00",
-    "titulo": "San Gabriel produjo 599 onzas de oro en el tercer trimestre por restricciones operativas",
-    "medio": "Revista Economía",
-    "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE43TlV3d3VTQ0k0bjZHRzNSMlJZQWprTEpfYkY3b1p1N0xDcGxDMktadDROVU1QMVRqd2t4X3hDODlib2o0LU1nT3dPaVpaZTdmaFdOZjZKTEhRUUZ3WURtTWM2S3JfcUJma2ZR?oc=5",
-    "tipo": "resultados",
-    "icono": "📊",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-10-16",
-    "cuando": "2026-10-16T07:00-05:00",
-    "titulo": "Buenaventura recorta proyección de oro de San Gabriel y mantiene estimados de sus otras unidades",
-    "medio": "Gan@Más",
-    "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxPWkkyR05BTUVjcjdyeWtrcnh3d2NYLWNJV3pwVVBJUUN2VFBSMW53S3o4djdjcDJrekRlZGEwQnYzRE5kQzE3R0lXTF9xb2JMYUlJSWFkSkdWdjkyNzZUTXI2d09ZS2VIZlgwTUU5TURWZVAyZHV4dFgybzVIOVRxeFVmMFVnWjlOdWM4QU42SnpBanhtZElIMk9hcjFQUlFZQnFwT2JlcnJwbXljaU5fa3ZHa0ZFTFZxOTNEYXZQeXJQZG1zb0E?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-16",
-    "cuando": "2026-10-16T13:51-05:00",
-    "titulo": "Tras recortar guía, Buenaventura prevé resolver en 2027 restricción de procesamiento en San Gabriel",
-    "medio": "BNamericas",
-    "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNaVpZY2NaNnJsNGxGd3h3dlpjYmdYWHJobGcwMnlBYUJBTnpDblRHWGlvZS1MNnlLLWVHaHZmZXRObm5WZWl2NWZtSEdxNXZYTUpEcUZMaWVWMmRRQWlRYnhqdWpYbUhUZGhiMHp6dFVuczg2WnYxT2lGQlJ4X1BZYmpEVnZQRXhQSUZZVzgyRnkzZ3RubVdhQ1UxaEt4QlhhZXQ1SjFPdTRBR2Y5VDZIdWxTaGhCMGJmYk9ucFZmdmZ4Zy1YX2FNOXVwR1BCZnVXaUxN?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-15",
-    "cuando": "2026-10-15T18:39-05:00",
-    "titulo": "Buenaventura reduce proyección de producción de oro de San Gabriel para 2026",
-    "medio": "Gestión",
-    "url": "https://gestion.pe/economia/empresas/buenaventura-ajusta-perspectiva-de-produccion-de-oro-de-san-gabriel-para-2026-noticia/",
-    "tipo": "operativo",
-    "icono": "⚙️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-10-05",
-    "cuando": "2026-10-05T18:25-05:00",
-    "titulo": "Colquijirca: El Brocal prioriza mina subterránea y solicita ampliar suspensión del Tajo Norte",
-    "medio": "Revista ProActivo",
-    "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxOX0JCQzFvU0t1WkFZdFU3WnFrQ3VMTUtyczgtVHljRmlVMDJqTWJUTkN2UzFKYmlaSWJQUTVpZVR4SHc4VlNxYXpWc0RxWTZLd2xJajRpT2ItM3hqNlhsSmJJWnhWSFUwNGNieldCUnpQcV9IaVZJdUxVTE1aalpXVWJqYV9qdHVIbWZxZWQtNHdyRDRlalJoMmJRR3h6NFlsTTFJQnFKY0lDcDFsd0hrdGhxZTliVENPM0E?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-10-01",
-    "cuando": "2026-10-01T02:00-05:00",
-    "titulo": "BUENAVENTURA ATRAE CAPITAL DE CINCO PAÍSES PARA DESARROLLAR EL PROYECTO TRAPICHE",
-    "medio": "RCR Peru",
-    "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQdFdhTHNGMUFtU2prcjhCcTZobXctcHBMVWtyblozSEVRSUgtQ19GQmh4TUZtYUdrWXRzZEs4eUNwLVg1aU92djE1Rzd2ZHJQajRwRWxFOFJvM3dfRGkxYzNHakNtaEpEOGdpQjQ5RHBDdU5QY0xScWUtc1RsT2V6UGFrNjN3Z3k1QUtyeWNQNXRDQW1Ra19TRXhLMXNQUXRSRDZQZWZMVTY?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-10-01",
-    "cuando": "2026-10-01T06:20-05:00",
-    "titulo": "Buenaventura atrae capital de cinco países para desarrollar Trapiche, su proyecto de cobre en Perú",
-    "medio": "Revista Digital Minera REDIMIN",
-    "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOUDlzVURJV21Lc2xQeHY4a2JLZ3gzWDFCcVpMc3BqeUU4d1F6SnFBYWN5UWNzWUxVQVYycWdzRlRCRFFPWmJBeW5FX2Jhd1lMS3J0SE0tVE5uSGtERWpkNy1hZmpGZW9tTnJuYzYtRGNUOURYeHlWNEZYTnBRbHVpamlid3B2YklNRXBzTmNwYUx4TFBPTGd0NURzcDQxSXpSMmR2STg1MHB0eE9RVzJ6M0dLTkpSb21CZHZnNA?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-10-01",
-    "cuando": "2026-10-01T13:07-05:00",
-    "titulo": "Buenaventura busca socio internacional para desarrollar Trapiche, proyecto de cobre en Perú",
-    "medio": "Rumbo Minero",
-    "url": "https://www.rumbominero.com/peru/noticias/mineria/buenaventura-internacional-trapiche-cobre-peru/",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-09-30",
-    "cuando": "2026-09-30T02:00-05:00",
-    "titulo": "Buenaventura: Trapiche despierta interés de inversionistas de cinco países para desarrollar proyecto",
-    "medio": "El Peruano",
-    "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxQMC1wS29pTFk3Zk9QcGNLUWZaMEc3MndEMlVwUzJObEJMeEhKMkk5aGxhVmpXRjN3WndUejhVS2tLeHZmeEVkZEJ0ZjJWek9CYW9ocmt3NE1xTkVKSlRHYTRjRDFMRXZHMUZidWZxU0I1NzByT0s1QXd4WXZDREp6eVhRSk1JNFRYTkZJTkdqaXNXdkcxRnhWMG1fODdVNWtDZk5FeVZ4TEVlYXhrajctNUQ1bVV6N09MTFFjS1l4VlBEcGx5dlhHZFBuanRYTk1r?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-09-30",
-    "cuando": "2026-09-30T02:00-05:00",
-    "titulo": "Buenaventura evalúa socios de cinco países para su proyecto de cobre Trapiche",
-    "medio": "Gestión",
-    "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPeXFFYWh2X1JKclRPU0JiMWQtT2p2bWZpTFhPOE4zakY3RDE1dks0dy1fLTNQRjk1UHA4UEs0NDlhNkxjR0VVd0FHZ2h0M0tjbnJzZ1oxcWFHNGZLZUZmY1NyVnNzRUd0Nlh5ZXRKSENua3hoWkwyYXNSeUtnQnZxdVEzSGNOLWJOM1ZteW9qd24yTmFvbDhXNWVFeWtrX1lyamVkei01b0RrdFcxSThBWEsyaXJxb0J1Y3lPUzZJYXczUGZ0YTczRFp3cFZxdExVZkE?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-09-30",
-    "cuando": "2026-09-30T13:09-05:00",
-    "titulo": "Buenaventura: proyecto de cobre Trapiche despierta interés de inversionistas",
-    "medio": "Perú 21",
-    "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNTHFFM3RmMm94Qkh4dXNqYWxlZmZnUmtmbDJmQWJUeHpUTlZqSmZHbXJibTd6SUpsSEcweWsxQWpDQ19zbU5PMDJVNWwzbnpQdlN1SjJJeGJXd25rSTlraXZqSDR4NnVIbFlyczNIVDJIbndLSnYyWTlJSnBQcExHa0hwaDJmV24tSldoRlJ3R010clhTRXVSdUtJTGlqdw?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-09-30",
-    "cuando": "2026-09-30T13:44-05:00",
-    "titulo": "Buenaventura: Trapiche atrae inversores de cinco países con proyecto de US$ 2.000 millones",
-    "medio": "Reporte Minero",
-    "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNUWlXa1JSRUJpNTZtOWxtQWFiWElFUE90UTl6MXFzR21KTWc2VHc5TkRDcVRqTG84UmRJbGdBcTIzSHVKdjhoUUdnVWMzbVJLMHJEZmRFRG9lYmxYU2I1NFdFUjBnejA5dFlMam9IbWphQk40blRsWmpfRFpLT24wTHFrSktOM3lQOU5TbW03eWJLb2pXd1JjMEllemJZUzZwak0wRE1KeDU2cklZRzNtLS1IellNbGxYakU2REFCOEtYNGc?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-09-30",
-    "cuando": "2026-09-30T16:31-05:00",
-    "titulo": "Inversionistas de Chile y otros cuatro países ponen la mira en proyecto de cobre de minera Buenaventura en Perú",
-    "medio": "Diario Financiero",
-    "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNaXhqVUtUd09Sa3Iyb0pQakt0UGxTeDRWZUlnUjFLeGxCS19lSFBDSmdlSDhYZmNUYkZHbURUSnBpX0UzT2NRS3I1TE02Xy1JQUxreDE2TTdqTl9KSFNsQVdOaVVOOERLUmhzdmlndk9xTE9BbC1oMzBWeFRmNV9DRlM3d2w0SWYyckhJNkZVN25pRnp1MVkzRGdSX1o0S1owd3JReVEtMVhubGJTaWc?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   }
-  ],
-  "FIBPRIME": [
-   {
-    "fecha": "2026-10-06",
-    "cuando": "2026-10-05T23:49-05:00",
-    "titulo": "FIBRA Prime concreta la mayor compra inmobiliaria por US$ 145 millones con una innovadora estructura de financiamiento",
-    "medio": "Business Empresarial",
-    "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxOWS0tV1RFMk9yS2tKbXE4QnRzZzNCOE0zX012elNDNHgzT1R1Z0JXekM1VzlRcC1TMjdmVVJtQ05Eb0sxbnRDUGtqZkZfblhPVkhwOTFCeUNtRUhwaUkzWDNONFlxRFZCSGxBRUszMTBtZnl4NkZjTm14dnJaN3BQWVRjcGszOWVGRXVwNVpUa21CMGtjaVVYRTg2OFg5RUtaQ0lRM3d1X2haVWM0aU9acVMxeDdvWUdvdUgyXzNWQk1oaTZJMlhoUnBvTk9TbFNnZWdxVGdTMXMxMmMtcnNxaFFPS19KcUtZa09jYjl3?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-05",
-    "cuando": "2026-10-05T02:00-05:00",
-    "titulo": "Parque Logístico Lima Sur: Fibra Prime concreta la mayor compra inmobiliaria de la historia del Perú por USD 145 millones",
-    "medio": "Infobae",
-    "url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxPWUFXZmNSU09UNkNZVGlTNXBQMGNKRk9kQ1FOZDFHd05EX3ZsWTJ0UWNhN1pDXzJDRjlFbVRpdlc3R09KSEpyNVVLMVRhdVFqRG50bWYwUnNNaERTOUstajc2c0hCRXlzRDM4OFpvWjZLaDFjY3NfbHYzQjhMQTlyVGRKNmJ4cXZlRnJJQnBIa3NvSDVHRXk5bHJ5N2NLNDFtRTNFOTdnc3ltZHh2WEVFZmJab3lhNDFncGE1TnFvNDZTX1JHVU5LcnpERndhcm1kMjVQR3FUTkg4WGc3alh4ZFdxZEVKREZzLTFFNU1aWlBZejjSAY4CQVVfeXFMTi1BNFlNNzNyMDFZRVMxeU1fWEZhQUVXYmlYYm1tRmU3VFJpN3c3NFFoRXRqc1FuTE5tazlRS1hLMDRDbzhfeFhMU21qVzhIcGEwUGEzbGEydW9SRnhqRXNKWVRWSGRJbVh5YWFFRUdkeDQ2RVM1OEYzRFZlRXRORGFwUDR4U2J6TVZTa0tNZEhaZmVHT1Z5VmpzMjRIU1ZiLW11RmhqUEtxSG0yTzNzaWNHVFJyTjV0akM5eWNxV1FFcmpyaldWbjQyaTNtMXpPS0J0U2pVZ09qQkppLVFZUVg1aGE4MU9xWlYtNkg1cjN2OHVXTVV3Z0E3ZGtxT09kSTA4cFFIM0FwbG9wakZR?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-05",
-    "cuando": "2026-10-05T16:48-05:00",
-    "titulo": "Fibra Prime concretó la adquisición del Parque Logístico Lima Sur por US$145 millones",
-    "medio": "Semana Económica",
-    "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNX3AwSFo0bjZEMlhER1MwR3RwTFg0c3BoUlRheGhMUENjcTJtN3VTa2JsQTlFcjl5UWo1amtYNUpkeEVlVVhUZ2lhb1dNQ2l0U0xFTWs5M1pVcGR5MGQtSmU0VGFKNkp4X3NiNEpTSGszM3E3cGFPRFJER3A1cExLWERSbExBTzhrZ1F0MXBWZm5wZ0hCdnhMM0xOZDAxekJZSEFzMEJ4RnRRS0VsSkllVHZ4N2dtclBkd1V5UHNMbXg2TEhnNDdKeGF5ZXBjemZsekgxMDBB?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-05",
-    "cuando": "2026-10-05T02:00-05:00",
-    "titulo": "Fibra Prime compra parque logístico en Lurín por US$ 145 millones: ¿por qué LPA vendió?",
-    "medio": "Gestión",
-    "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxNTXlnM2MzbDBZR0hkLWNNNURJU3VObzc2SmZNMVVFSW9vNmlLSlRfclU0MmkwYW1LUUtYY2lPakJUamVnQnRMekhPaVFsRnF4elhlc0JJYVViZG1taEV4R05wRW5nN2w3Mmp0ZzRHczQ0RVdaeld4dDEta1Ywc1BkQThqTWZ0LUs0NjlDSGNVanBJaVlFd281d1FxNXBRZ0Y1TnRpTmY5WmV4NXVXd2h1RzVKVS1kZ1RzejJldmlpaGdkWHk5dlF1T1FvYw?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-03",
-    "cuando": "2026-10-03T02:00-05:00",
-    "titulo": "FIBRA Prime concreta la adquisición del Parque Logístico Lima Sur por US$ 145 millones",
-    "medio": "Perú Retail",
-    "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPS0tKSlIzdGxtcnFQcGtLSV9Tb1dVVGR1NEthdTJZWEhzNTVGQnkyOWdBckZYZ2dBNnlKZDR6RHlzUElrV1ZaSFJodk9CMzVaZk1FXzFTVjVRaTkwZW54eTlDaDFKUzdjUEFTTmRDS3ZvZFhHQ09XUGJXdk9OQjNYd2dxeVBkTUlWRmdadnVHSGJrZURRY2FHUmh2RjRaX0otdk9WNDJCalZKM0JPUFhlRDhsWFU5QjhrZ21j?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-02",
-    "cuando": "2026-10-02T11:51-05:00",
-    "titulo": "Fibra Prime acelera su expansión rumbo al 2030: “Era el momento perfecto para hacer una colocación de US$120 millones”",
-    "medio": "El Comercio Perú",
-    "url": "https://news.google.com/rss/articles/CBMiiwJBVV95cUxOSmZ4NUlNWlRPSlFRZDdfdHN4UjZDSHNRMHQwUXdOT3FjMnFUTmM2cFZtcFZQblhNMmxFTU0tSlg0ZnR3M3ZtMlUwTW9odDRNNm4tNmdCNFhCUmRYMXBJX2owelNzcXdhUnVNZjAyTmt1UkdEaHJQZTdHdlM5MkZsQThWRkRIOXFTVGZsWUpLY01qWDJOVWRaeEFINzRFY1FpWkIzaG5NRFpJZE9YeHVlTEFoWlhod212YXBMRlRRQThOVnF0WUJZV3dCaDhIazdnbE9GdTQxRndGWEtvaWxfWVBDNW84emhDSnp1VlFfU3I2VkhOaTBZOGFVVlV4NU9QYzlCckFSUTZSa1HSAZ8CQVVfeXFMUHZYR2J3SzUwVXhSS2xjdGd0TnYtSDFzcmF3Z0JvM01sSWNQanBZZzB6T0pENFZVSFNHTWNfWl90cml1OC00czV4U0NzMGJxNTM0Um5hdHlWNTNXQ3pWOGg3NVlYUENpdW9zRl9TTjVKN2ZoaW9hejF2OVRZeUFuX01KVTY2UjJaWDkwMzY4aUQxbTBtQ1dSOHd3SHBQS0RWMElGUmpBSzNEWjRfV0hsc01ua0RSY0NiLWxYd1dzTllYLW5YVU8zZGVZSW1LWERjQWRKVWZxcFZzUGdDMHlSRHpvV1FnWUx2NjFiV3FGemptaDlYVTM0QnpMc0JDVzgyZndLRHdYekJaRElNNjE0UEpmOXlZV25UVF9melJka3M?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   }
-  ],
   "ALICORC1": [
    {
     "fecha": "2026-10-16",
@@ -809,42 +114,88 @@
     "tipo": "legal",
     "icono": "⚖️",
     "peso": 2
-   },
+   }
+  ],
+  "ORYGENC1": [
    {
-    "fecha": "2026-09-28",
-    "cuando": "2026-09-28T16:16-05:00",
-    "titulo": "Alicorp distribuirá S/215 millones en dividendos con cargo a utilidades de 2019",
-    "medio": "Semana Económica",
-    "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOS29JcklBRDRsNUZQZ3RqOEpTYS0yeWRabkxiZGJxNjA5Snh6NEtnQ2lIZHRqX29fOVFVYmlqOW9TMTc1SXNtUG9DQ05sanAtOUZ4U1kxQURpN3BOczRkYUtheHR2X19zZmwwQzdmYWxmc0pRWG4wZThKX2duQ3ZpUjVBczN6aW9lTG9CbXEzclFuZEtmYlFCWEFnMzdyeWlGX2ZXWVZQNzlsODQweWozSUhXWk1VcTI4aXJMejh5SlIwc1Jsekxkb2pZbEpHQQ?oc=5",
-    "tipo": "dividendo",
-    "icono": "💰",
-    "peso": 3
-   },
-   {
-    "fecha": "2026-09-28",
-    "cuando": "2026-09-28T02:09-05:00",
-    "titulo": "Garrigues asesora en la financiación de US$480 millones con la que Alicorp impulsa su expansión regional",
-    "medio": "Líder Legal",
-    "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxPSUNvdTlZVndzQ0VCdnBXUlpGTHgxd01oWVphUTFYTHN0dkZQWE50dkppal9VektUZ202ZWxDN2N3cU5ieVdVNGEzb3Fua0RnNGllVXFfdXdWZ1E4enc0S284VnVyUW1zMnpFMG1LanV3OUJTUkNoaWlDRlFCS3JJTkNKWU15ZkhwVVY4UzdvWW0zSXMtTnd5dW43Nm1hUG4yX2dzRTV5Q3N3Rk8wdDJyenNCWU5Gb2g3V3YtS0FNMlVzNWtQdlE?oc=5",
+    "fecha": "2026-10-07",
+    "cuando": "2026-10-07T18:52-05:00",
+    "titulo": "Culmina OPA de empresa eléctrica Orygen y Grupo Romero adquiere el 5.12% de las acciones por US$117.2 millones",
+    "medio": "Gato Encerrado",
+    "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxOZWU3R3I1UVY0UnNoRXNEakQ5OXZFeGxiMzNRb1RXa1VHRTd6S3UySmVoNTFFbUoxenRYeVVERUl2eVNYMnpiNm9UaTcxWXVlM2hqMjNyTnF5OVN5NDRuNXVEdlZpVmNqelA2MFB2a0trbjdqcW5vczBKRVFsdVpNdXpfaUFZR2JPNm9BWDhkTHpyTS0yU3prbkNLOFhuLUJxNXZMMTlRMVJkbllNZldtRkVialFhZElZRFpCaDhBRXhxMHhPTnV5WldMaDNxTEs5TFlybEZ3?oc=5",
     "tipo": "expansion",
     "icono": "🏗️",
     "peso": 2
    },
    {
-    "fecha": "2026-09-27",
-    "cuando": "2026-09-27T12:31-05:00",
-    "titulo": "Alicorp distribuirá S/ 215 millones en dividendos con cargo a utilidades de 2019",
-    "medio": "Gan@Más",
-    "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPOVNkT1UtTGFNc0Y5czBTYjhHckZtTnNUQ0lYTnNaYWk1SzRuYnctRUQtTXktTGE1WlozQ1EtdTBSdG5lalJNMGpGRnRWeFJxWHdjd091YXV5R0szeGktR1E4dERhTGl2WUhFWVJWejRqUDRlMXZuWW5ITzE0elJRSWdEaEowV0hUa29wSHFaVEJwRUM3VjhYZHpDemtJWmozR3lYVHBxaVV6aE5JOFpJ?oc=5",
-    "tipo": "dividendo",
-    "icono": "💰",
-    "peso": 3
+    "fecha": "2026-10-07",
+    "cuando": "2026-10-07T14:31-05:00",
+    "titulo": "Orygen brinda 1,480 atenciones médicas gratuitas en el Cercado de Lima y Ventanilla",
+    "medio": "Revista ProActivo",
+    "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPNXBrN1dOMHZaSEFyR0NIQkZCS1dYenFMRl92a0hsWVJmYURtOEwzWGdPaHpkeElBcDAydkY1b1ltalJoZDVBVUVtZTJkSnY5YzRyd0dxbWxnNEVoRVJPSXhNMEI1U3M5RV9EajhfcUVjbHluOXRDYjIxbFpid0lFYllqV3p5RF9oOHhDNjNmV1JsclZLUlVFN1ZHOHdsSkFSaExLZmJ2RldVOUtB?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-06",
+    "cuando": "2026-10-06T15:20-05:00",
+    "titulo": "Campañas de salud de Orygen en el Cercado de Lima y Ventanilla lograron más de 1,450 atenciones médicas gratuitas",
+    "medio": "desdeadentro.pe",
+    "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxOOEhla2ZPRGhIS2FxSE5US2ZVM1k2YlZUa1NPZzlEZFo2UlZzWk1tMnRnMFFSMlp4blYxcWJUcUQzRG1HTk5HNE9kZzQxMUhNMEhOdTBreUQ1dmFMYVl1Y2J1RjJGS1lJNEtSZnIzSllpRlBrVmJJbmNOcTE4elFSaC1xQTJfNUhrUkdwc3h0aUd4N2ZVX1NRN1YtY1BtbjIwUnNjWUdNMl9tc2xXczBmMTF6YVNqQ0tNN1J3aHZaTzltckIwMlNTak9tVTVCV09UWmxUVkVFb0t0UE1xVFdnbE5xRQ?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-02",
+    "cuando": "2026-10-02T12:13-05:00",
+    "titulo": "Pala Orygen Zoom Xtreme Carbon 3 ¡Potencia al límite!",
+    "medio": "padelstar.es",
+    "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOaFZESkJuZ215MWJSV1dMUGwzX2FVcFFsUm9DNUtYOThnTWRKcUE3TVhhdS1tMzByajNtVXhwUmFNSTlxMHhQQ0FlQUdDU1lTdV9wTUg5czc5THd1eFV6R0JNSFZxVlQ0VkVJSkVJeDhTS1BWWUU2bndPUTc4NlRtSUF1UVlBM1BlLUpUTVhFTQ?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
    }
   ],
-  "LUSURC1": [],
-  "CARTAVC1": [],
-  "SPY": [],
-  "IBIT": [],
+  "XLK": [],
+  "ILF": [],
+  "BACKUSI1": [
+   {
+    "fecha": "2026-10-12",
+    "cuando": "2026-10-12T16:16-05:00",
+    "titulo": "Innovación y marketing: cómo Backus impulsa nuevas marcas en el Perú",
+    "medio": "Perú 21",
+    "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPTUdhcmJPcnBCQzJudHNDRnV5QkNERGRRLXFsd0U5LTBEYkRMdGNUbUNoZmEwdUI5clR5dlR0Mm02UFVUYnpaUVJXZS1zVkN1Z0FhU2dvV3BtLXFPQVVaeGJLTDJoR1lhMktFOE9ubGtBeEVTYkZ4STFFcjlQXy14QldqREE5dXR1UE9ma2RkTWpfR2Mxd3o3dUlxc9IBoAFBVV95cUxNQi1VT1QyTW1ScHJ0ZjNCRjdDaTA5SnMwUUNCSTdfR3VpMk9yLUJyb2Frb1QxVUkxNFRkRXZQd015RzhoUU0zc0s0WGc5bUljWkFGS0xVcU1td1d3UEoteUY5d2NRX3RRZG9ka0VtbXE0MlJVNFp1N0RwRDdHempybGhvbTNjN1ZEMXkzNG1RN19uOVNwUWkyenRkdHpLc3o4?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-09-30",
+    "cuando": "2026-09-29T20:49-05:00",
+    "titulo": "Ecuación de Backus: La ecuación de Drake para la novia ideal",
+    "medio": "NeoTeo",
+    "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9GWV9FeVF2Q1EyR21KbVlpcXVxM3d0UDNaLXF2LWtIY1NnVHJYajZ2NVREbHRqdllGNnd5SW5rVWxnYnhpTlJpV2VJd3dGY2F2UE54SmhLbndaSGt5QjVvMjVHMXEyX19SaGJmWWVHMmFwcWQ0?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   }
+  ],
+  "SPCCPI1": [],
+  "IPCHBC1": [],
+  "QQQ": [
+   {
+    "fecha": "2026-10-12",
+    "cuando": "2026-10-12T12:09-05:00",
+    "titulo": "Invesco QQQ Trust, Series 1 Tokenized Stock (Reality)Historial de precios: Descargar RQQQIDatos Históricos",
+    "medio": "CoinGecko",
+    "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPd1p1OHRzeG9yRE1sTnR2ZHJEM2gyaXpjUGt4bzhLMWFWMWZYRGJ2Ul9MVE5fOFFfWVUxU0NVSlRpYUVRX3lDTGFkejhNcWFELW83TWlsWVRGeU9nYXVMaXgteXBURERCM1YyMEpyTE1tbnBnVERFbElpM1h5MTBrbFhvRkVLaFhpNnFmLXFVRWRrSHVZalE?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   }
+  ],
   "SCCO": [
    {
     "fecha": "2026-10-16",
@@ -987,196 +338,357 @@
     "peso": 2
    }
   ],
-  "CREDITC1": [
+  "PODERC1": [
    {
-    "fecha": "2026-10-16",
-    "cuando": "2026-10-16T11:01-05:00",
-    "titulo": "Credicorp Capital: la economía peruana más allá de los desafíos de la coyuntura",
+    "fecha": "2026-10-19",
+    "cuando": "2026-10-18T22:15-05:00",
+    "titulo": "Fiscalía advierte sobre zona convertida en un “nuevo Pataz” debido a minería ilegal: ¿dónde?",
     "medio": "Gestión",
-    "url": "https://gestion.pe/g-de-gestion/columnistas/credicorp-capital-economia-peruana-mas-alla-de-los-desafios-de-la-coyuntura-daniel-velandia-noticia/",
+    "url": "https://gestion.pe/peru/fiscalia-advierte-sobre-zona-convertida-en-un-nuevo-pataz-debido-a-mineria-ilegal-donde-noticia/",
+    "tipo": "legal",
+    "icono": "⚖️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-10-19",
+    "cuando": "2026-10-19T08:47-05:00",
+    "titulo": "La apuesta de Poderosa por infraestructura y desarrollo productivo en Pataz",
+    "medio": "Energiminas",
+    "url": "https://energiminas.com/2026/10/19/la-apuesta-de-poderosa-por-infraestructura-y-desarrollo-productivo-en-pataz/?utm_source=rss&utm_medium=rss&utm_campaign=la-apuesta-de-poderosa-por-infraestructura-y-desarrollo-productivo-en-pataz",
     "tipo": "general",
     "icono": "📰",
     "peso": 1
    },
    {
     "fecha": "2026-10-15",
-    "cuando": "2026-10-15T09:35-05:00",
-    "titulo": "Daniel Velandia, economista jefe de Credicorp Capital: “Si las condiciones se dan después de El Niño, al 2028 podremos crecer más de 4%”",
-    "medio": "El Comercio",
-    "url": "https://elcomercio.pe/economia/peru/daniel-velandia-economista-jefe-de-credicorp-capital-si-las-condiciones-se-dan-despues-de-el-nino-al-2028-podremos-ver-un-crecimiento-superior-al-4-apuesplan-noticia/",
+    "cuando": "2026-10-15T15:14-05:00",
+    "titulo": "Compañía Minera Poderosa promueve la identidad cultural y el talento en el II Festival del Teatro Escolar",
+    "medio": "Desde Adentro",
+    "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxONmxxRGZRMjN0WWFORUVrdTE5eXFTMUx3VVlOQVlLYTFPYVczUGx5QkxRWHRtQlMyVTV6blF4WUNoWi12dE5fT1A1WmJKZ3NQT0M1ZWR0V2tIaS02dWNHMDkzWjRhUVY2MGQ5MnZ5ZUNqSEF0c0lrd0hIbl9taEdTb0NOdmZjMTdfUVpIUkNDRWhvSmdMME1PbEpsampERHhLMXk2TG9fMXpnVXQ3dTJtWkRRZ3JHTEhLWXlEOGo3b3VVY21XNWJLQjJTUXhaQUdJdHVMQ2VMb3V6dw?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-15",
+    "cuando": "2026-10-15T15:07-05:00",
+    "titulo": "Pobladores de Pataz son reconocidos en Reescribiendo Historias 2026 por culminar su educación básica",
+    "medio": "Desde Adentro",
+    "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxQazJCSG4zLTNPNDhMX2FoREJUZDVsTFhEV0tjT3pZOUhpVHcyajQ4WjJCcFRQVjZoM1FEaVNrV2Y2Z2psbEFkWDN3cFA2REFScjhCcDhZNV9POWd3NTlsSGwxbUZVUUZvMkZzUGh5UlQyZnpJOTlnQVBpV0lOUFNkcXJURVFONUR2SXdodWRhQmNzSzZIaUZNNDVUQmVmWWhrcHJhSVN0Vk5qNnZSb3NKd0hYeWtMU1Q3QWc5eThFQ2Q4Y1FreTZUYU9mcWx4NFdLUzNn?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-14",
+    "cuando": "2026-10-14T14:27-05:00",
+    "titulo": "La resiliencia estilo Poderosa",
+    "medio": "Energiminas",
+    "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE40NUQ4b0tpWGpndWhWalY3M1B5UVRyUmNkSWExcDhkdmRmaExSMEJfM2pLaXVNb05CYmVfYTB1a1hRV2JQb2RuMDJ4eE9qMlBNel9wa2IyZldFbW5wTWRkOEs1UVNqNzNjVWVqd0FyVHRNLUhO?oc=5",
     "tipo": "general",
     "icono": "📰",
     "peso": 1
    },
    {
     "fecha": "2026-10-13",
-    "cuando": "2026-10-13T16:53-05:00",
-    "titulo": "BCP destaca por su fortaleza en inversión e integridad y alcanza la máxima calificación en el índice de Milenio",
-    "medio": "Economy",
-    "url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxQQ2FpOEprM0hDZ0FpVW82ODN2djBvdmtwdUViWkVndWtMT08tSldmVTlpc29aQWpIaEhFUmhoZTAzTzdReFFRUmNaTWhSTWdkNW9kMlE0UUppNTdCcGhLS2NPT09kWFB3ZE8yaWt4MHFidTlORjZ6Z0VqOXZtUWVTS1kyVmdid0hfVElNMGdhU0JKR2gtWkpPQ29YaEJvX0piR0VvcWQwcVljTUlyWlhsMU0tVTNnalViOUFucmtwOWxndkJsZWdkOVN4Ul9sX2JQZmIyVEpwOWN2VDVCaGowdjhNMC1LX2RPaTE5UmxGWVhUZUNS?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
+    "cuando": "2026-10-13T15:58-05:00",
+    "titulo": "Poderosa invierte S/ 591,000 en restaurar la histórica Iglesia de Quiches",
+    "medio": "Revista ProActivo",
+    "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOQzhrUE9XUHVYWGpVMGVHSTB3MmNYQ0I2QThFbi1kSS0zd1VkYjRTS1ZSN3AzRXR1TGxuUE9qNDdKSTFFVXFHWmhXcjdINkw1eEdOY1VUbFhvbGs0RVVXMndaZXpxZG4wR2JZRmZiekliejhXRXRPT2l0UklWNFhIMFFjeXM3Y2lvS0FoSnhYSzBheFRPaGU2OFFsdXNsdw?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
    },
    {
     "fecha": "2026-10-12",
-    "cuando": "2026-10-12T16:05-05:00",
-    "titulo": "IA atrae cada vez más inversión pero genera incertidumbre sobre burbuja, ¿qué ve Credicorp?",
-    "medio": "Gestión",
-    "url": "https://gestion.pe/economia/mercados/ia-atrae-cada-vez-mas-inversion-pero-genera-incertidumbre-sobre-burbuja-que-ve-credicorp-noticia/",
-    "tipo": "expansion",
-    "icono": "🏗️",
+    "cuando": "2026-10-12T13:06-05:00",
+    "titulo": "Atrapan a presuntos implicados de atentado a minera Poderosa",
+    "medio": "Diario EP",
+    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPVkdUMFdCOWV5WGpIXzdlRUg3TzZCaUhZZ1ctekpUb1NMYUdLTXpUUC1RM1A3VHdyYUQ5blBjVktsZzdSMlltSmU3YWd5Z2Y1Q09nS3F6enl6N1Z0d1lDcHhOSFhQSmNwRVUzQUJ4WDVlalZnNFBiOUVhRGJvQXpmb3JEZUhXMGx2Z1dsSllSYWhIUQ?oc=5",
+    "tipo": "riesgo",
+    "icono": "⚠️",
     "peso": 2
    },
    {
-    "fecha": "2026-10-02",
-    "cuando": "2026-10-02T17:28-05:00",
-    "titulo": "Credicorp Capital ve oportunidades en la región andina: ¿dónde están las apuestas de inversión en Perú, Colombia y Chile?",
-    "medio": "El Comercio",
-    "url": "https://elcomercio.pe/economia/peru/credicorp-capital-ve-oportunidades-en-la-region-andina-donde-estan-las-apuestas-de-inversion-en-peru-colombia-y-chile-noticia/",
-    "tipo": "expansion",
-    "icono": "🏗️",
+    "fecha": "2026-10-09",
+    "cuando": "2026-10-09T09:45-05:00",
+    "titulo": "Minera Poderosa: Ataque en su concesión deja dos muertos en Pataz",
+    "medio": "Rumbo Minero",
+    "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNMEpRdXFWREE2VjN4U2UzNU1CSUdxTmhxODlIXzcwU2RqMGJIZjFjUU1VRzZvOHF0M1BfRF9OdkdKWm1oa2RjaUtvU1hLMmVDWGZhQW5xS09lSTFOX1o3RGVqaWUyTXlOQ2hhT3pUZlg4bUpBczRtRGhydkFHQUtUUHdmbGgtMmJO?oc=5",
+    "tipo": "operativo",
+    "icono": "⚙️",
     "peso": 2
    },
    {
-    "fecha": "2026-10-01",
-    "cuando": "2026-10-01T02:00-05:00",
-    "titulo": "BCP otorga US$ 25 millones a empresa agroindustrial para habilitar unidades productivas en Olmos",
-    "medio": "Cuatrecasas",
-    "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQX2JPWmt6Qm9xbW9naTJfNFl6ZDc0QnVsRmVhd0g4YXVMWjVlOU1NTnhBOC1ReGpERXhFQzVxZE9vQjFkZzJ1VkZINnFBcjZrNFhBdEJ4bTlzQ1doTlJWbGphUVdMcVo0U2JfcW9jVWxkdjF6YW1iTGZqZHBfc3I1RXBhdEo4X1dQMXRNQXdkcWJkc1h1VlFLT213MWZkT0t4Tk5VMTBqOFBQS3hyMl9mNEU2QkJJMkNpNlE1cS1xeENZVFc3?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-09-30",
-    "cuando": "2026-09-30T12:49-05:00",
-    "titulo": "TBWA Perú crea para BCP emotiva campaña junto a Pol Deportes",
-    "medio": "LatinSpots.com",
-    "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNX051VkxPQWM0VzVMS21OemRpSktLLU1lT3hROHRpVk9Ra0JJdklvRDU0cTJnaXhTVWRKTHFiUUp1Y0RBSnctMS1TT1NwY2xDb3gwV1NybnlzaDlYQURWZFgzUW8xVF9BN0pnYlRPdHh4UF9UMXlnVFVaQlAzdWV5LXlocVJZQ0pkVkNEZ09WbkNfMndDNEN5YTZfczYxUHIz?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-09-30",
-    "cuando": "2026-09-30T11:59-05:00",
-    "titulo": "Emergent Cold obtiene financiamiento de US$ 19.9 millones del BCP para expandirse en Perú",
-    "medio": "Gestión",
-    "url": "https://gestion.pe/economia/empresas/emergent-cold-multinacional-de-logistica-y-almacenamiento-en-frio-obtiene-financiamiento-de-us-199-millones-del-bcp-noticia/",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-09-28",
-    "cuando": "2026-09-28T10:17-05:00",
-    "titulo": "Peso chileno es la “piñata” de los inversionistas, según Credicorp, ¿qué le juega en contra?",
-    "medio": "Gestión",
-    "url": "https://gestion.pe/tu-dinero/peso-chileno-es-la-pinata-de-los-inversionistas-segun-credicorp-que-le-juega-en-contra-noticia/",
-    "tipo": "expansion",
-    "icono": "🏗️",
+    "fecha": "2026-10-09",
+    "cuando": "2026-10-08T22:05-05:00",
+    "titulo": "La Libertad: Ataque armado en bocamina vinculada a minera Poderosa deja dos muertos y dos heridos en Pataz",
+    "medio": "Perú Informa",
+    "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxOaUlCbklNa0ZvUDd6dUFadXBMOVZsTk1YcjdkMEIzNWNXVUd3Tl9YamJMSFZLTU5hVlBIM1hEMGVwZzFYM2xJbnlsRHcxdGhQYmdZUTl0MGdneUxlQ3p0UHlUeHBRSndxa1l3a2c1enFrdnZ5VC0ta1NNZmcwU2FHOVI3OWF5UkJEMGZHbGNsR25Jclo0MC03ckpKMExpX0NGbExrM1NMYWg5V3BpVnJubnpvdFVvWXNOUk41blB3SURBeVpnLWIwcmR4Q252Y0k?oc=5",
+    "tipo": "operativo",
+    "icono": "⚙️",
     "peso": 2
-   }
-  ],
-  "ILF": [],
-  "ATACOBC1": [],
-  "ENGIEC1": [
+   },
    {
-    "fecha": "2026-10-06",
-    "cuando": "2026-10-06T13:00-05:00",
-    "titulo": "Gobierno suscribe contratos con Engie Transmisión Perú para impulsar cuatro proyectos por US$ 339 millones",
-    "medio": "Energiminas",
-    "url": "https://energiminas.com/2026/10/06/gobierno-suscribe-contratos-con-engie-transmision-peru-para-impulsar-cuatro-proyectos-por-us-339-millones/?utm_source=rss&utm_medium=rss&utm_campaign=gobierno-suscribe-contratos-con-engie-transmision-peru-para-impulsar-cuatro-proyectos-por-us-339-millones",
-    "tipo": "expansion",
-    "icono": "🏗️",
+    "fecha": "2026-10-08",
+    "cuando": "2026-10-08T02:00-05:00",
+    "titulo": "Ataque armado en Pataz deja dos vigilantes muertos y otros dos heridos en una bocamina vinculada a la minera Poderosa",
+    "medio": "Infobae",
+    "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxPYWYxcGx6ZjBzdE9qcHM1VDN2cTJGMXByeTJSWFJkcWFDMGkyV24tbWdHaGdnNzVBM1VfUFpJOXdURndTWE9rY2h5cGRLaG1tLWtQTWYtaEwxSzRnQ0ZvYmt1WXNtTGw1S3Z2MHdlZHlqU3hVSzVDWlZfS1ZzeWFSZWd4aXhINE9IR19vWDRqQ1JsTkpTdmFDMGVNc2dqazdKdWVYTi1zbVduZDNDVFlDN01xalRXWlB0bmF3X193YnJnRTV2SkFmX21LVVJLYnZ3RG9ZM3hOY3BuNlR4Q2NSMXB5YlNMLXBTM0EzSjlDRQ?oc=5",
+    "tipo": "operativo",
+    "icono": "⚙️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-10-08",
+    "cuando": "2026-10-08T02:00-05:00",
+    "titulo": "Violento ataque en una bocamina de Pataz deja dos vigilantes muertos y dos heridos en una zona vinculada a minera Poderosa",
+    "medio": "Infobae",
+    "url": "https://news.google.com/rss/articles/CBMi-wFBVV95cUxPQW11cEtpM0dTWWtNWWZOU20zTzJuMGxYTlA0cktHTWJGVWJpVWpaOUJGZ2FQcWJoSlJEblk0cjZVUTdWcDNJX3kwZjNzSzVTNVgyQU1rcXhJRU5QTjY5N2dXMlZFcG5UNk9rT1dTLW8yLU5LdGZpMWhqWEtlanJuVkxWUmp3U3YzU25KUmpCQU5EVXFQbXQyOGQtcmM2RWlQd1pDc29QLXgyX3hsMzhTQkNaN3pUcF9vTkd0Y2picl9rQmtmSGlOelB5anA3dFBiQS1DcDR2RTJXbUpLa3l3Ml83X1hSVTRYcE1UY0Q3YTNBTzVaOHR2N2gxTQ?oc=5",
+    "tipo": "operativo",
+    "icono": "⚙️",
     "peso": 2
    },
    {
     "fecha": "2026-10-05",
-    "cuando": "2026-10-05T09:03-05:00",
-    "titulo": "PROINVERSIÓN y ENGIE impulsan proyectos eléctricos en Ayacucho, Piura, Lambayeque y Junín",
-    "medio": "ProActivo",
-    "url": "https://proactivo.com.pe/proinversion-y-engie-impulsan-proyectos-electricos-en-ayacucho-piura-lambayeque-y-junin/",
+    "cuando": "2026-10-05T15:55-05:00",
+    "titulo": "Exploración minera en Perú alcanza US$ 412 millones en siete meses: Zafranal y Poderosa lideran inversión",
+    "medio": "Minería en Línea",
+    "url": "https://mineriaenlinea.com/2026/10/exploracion-minera-en-peru-alcanza-us-412-millones-en-siete-meses-zafranal-y-poderosa-lideran-inversion/",
     "tipo": "expansion",
     "icono": "🏗️",
     "peso": 2
    },
    {
-    "fecha": "2026-10-02",
-    "cuando": "2026-10-02T02:00-05:00",
-    "titulo": "Engie firma cuatros concesiones por US$ 339 millones para proyectos eléctricos: ¿dónde?",
-    "medio": "Gestión",
-    "url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxPTW5ibUdseEFJV1pvQlJhT3hlcE5Rdko1WDlSSWpUMkkxamExMENLYUxMcm9WempVMDFUM2RRa1FMTVd0aURIcXpHQTZYQlZKaXVWMnk5Y0lIMk9hSlRsdzkxWXpNVGVUMk1SRUhkdlRoYkdPWkVIVEJ6cEVEM2hvZlNOeVR1UVFvZjl1UDFSVUpxRGlMazlsY2VVSjMteEM1RUNmZXd2VUxDbHhxeWcwMHFXUG01UEFFdWw3amE0VEl1NEJhT2l4MXRBazkteGVldDlHV0N2N3g5T0hzc1R3VzBGenR4YzBNY3RSTjlBQzZkdw?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-10-01",
-    "cuando": "2026-10-01T18:18-05:00",
-    "titulo": "ENGIE completa adquisición de la Línea de Transmisión Aguaytía-Pucallpa por US$15 millones",
+    "fecha": "2026-10-03",
+    "cuando": "2026-10-02T21:23-05:00",
+    "titulo": "Poderosa fortalece capacidades de líderes comunales de Pataz, Piás y Huaylillas",
     "medio": "Revista ProActivo",
-    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNR0VybDFOdHo3bGhCcml6WGxUWGwtazBUQ29JSGVlQnlqbUt1bGhTNVZsVHZsRllGc1VNU2tOUUJuQmhGWkFjc0ozclFJZ1BHOWlkZW5IRzVXNEpMbE14UkFOX2drczZVRnl4ZWRjSEc5dmtEbGpydUdLRnlVb1FzM093ODUtTFlYYmo0aTFVbUNLdG9ORTNvMXRYUm1qWGxZamtQZ1AtajBkejF2bW1CTFlNOVl0QQ?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-01",
-    "cuando": "2026-10-01T17:10-05:00",
-    "titulo": "ENGIE completa adquisición del 100% de Línea de Transmisión Aguaytía-Pucallpa",
-    "medio": "Energiminas",
-    "url": "https://energiminas.com/2026/10/01/engie-completa-adquisicion-del-100-de-linea-de-transmision-aguaytia-pucallpa/?utm_source=rss&utm_medium=rss&utm_campaign=engie-completa-adquisicion-del-100-de-linea-de-transmision-aguaytia-pucallpa",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
+    "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOZjlSaWdLVDdrZTlObGhoOFdtSjlOQnpFaUowQnFUUWVZbE5SUTB0Z1VjZjBDT0dPYUhUaUtkWnBzRzZUWUhqTVBqdlF5ekVHc01MTW5CdzROWFhDR25jQks4b1hfd3FMV2MtN3Jsb0doNVdjaVFmTDN1VFV2aERPZGM4TVZ2NXVVYXFHakdVVkowdExIdC1JZVNUckoydzZsWnY4T3ZuYw?oc=5",
+    "tipo": "operativo",
+    "icono": "⚙️",
+    "peso": 2
    },
    {
     "fecha": "2026-09-30",
-    "cuando": "2026-09-30T11:44-05:00",
-    "titulo": "Terna vende el 100% de su operación en Perú a Engie por US$15 millones",
-    "medio": "Gestión",
-    "url": "https://gestion.pe/economia/empresas/engie-compra-terna-peru-por-us15-millones-y-suma-linea-electrica-de-132-km-en-ucayali-noticia/",
+    "cuando": "2026-09-30T02:00-05:00",
+    "titulo": "Poderosa presiona al Gobierno y pone fin a los mineros de Pataz: Llevó al MINEM a los tribunales y ahora el Poder Judicial ordena acelerar las exclusiones del REINFO",
+    "medio": "Diario UNO",
+    "url": "https://news.google.com/rss/articles/CBMiowJBVV95cUxPRENmRlBkdHc3RHNKbUxUZHRPNXZnbGt2OEZ4and6UWRuNTV2WmhIUFVfaFhFMUFyOEVNcjdRWERIRzAxV3Z0Y0NKNy1jT3MzZFV6Qk14VFZuWWpjX011cWdfSGFMODNoNjhIV3h0T3lhbl9saGpYWExRLTJzX3ZJWmpYTVY2VS1WVmU4WENrYWl5QU15RVo3N2E1VjR5dk5nVHZXOUM2V1FkZWhhdGRyQjdOYVFDellBNzdHQjNkaTdFYVhSOU5Xd3hrczdaOXZyLXBLalZaU01sd1J2XzZ3TWFTVjFUNUl6Ul9uNWNGTE1tZ1NKWlBtMG5WY1B3b1dHT1A2UnBTQ2g1b1RvUFhWNl9mdDlwcS1hbENzV29wMDBVUDA?oc=5",
+    "tipo": "legal",
+    "icono": "⚖️",
+    "peso": 2
+   }
+  ],
+  "CASAGRC1": [],
+  "SOXX": [],
+  "CORAREI1": [
+   {
+    "fecha": "2026-10-13",
+    "cuando": "2026-10-13T15:28-05:00",
+    "titulo": "El talento matemático brilla en la ONEM Aceros Arequipa 2026",
+    "medio": "Revista ProActivo",
+    "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOaGxoa1lqYnlHNTJGRFBJNlFSbUdSQU5JM0xkNWZHRV9BLWtFRDNBbTBSeHNMYXg3RXpzaG9acm1vT0xxdjk4cGdvRHExRVRFandfbUxMVl9SOVRET0FEUEpTTGFrZzVkaEt6ZkJIbV9FaDZNSE9Mam9iZmJ2aGR0NVIyaDFrbkpfUlptWkJPRQ?oc=5",
     "tipo": "general",
     "icono": "📰",
     "peso": 1
    },
    {
-    "fecha": "2026-09-29",
-    "cuando": "2026-09-29T02:00-05:00",
-    "titulo": "ENGIE completa la adquisición del 100% de la Línea de Transmisión Aguaytía-Pucallpa",
-    "medio": "BNamericas",
-    "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNNHB2cmZMd080aWlDTktKY2Z3RkZlRF9rRFZiSWsycDdNaW5XTEE2NWxRcklSaGNpbktJX1FXUzdMaEdVSF9rc1ptdW9iZ211RXZrSWZUNVJycVZNN2JxYTJhNUxvZXVSSk5QQzVaQ1AyTlBKWlRNZzdGTUcxNzZEalpHY3pVTUdGR3VoX0JoV0NrbGgwa3ljcnNacWJsSFFYTC0zWGEya3dNcU5rOWY1bzFDSW1MQ1l6Q08tMVNR?oc=5",
+    "fecha": "2026-10-13",
+    "cuando": "2026-10-13T15:28-05:00",
+    "titulo": "Olimpiada Nacional Escolar de Matemática Aceros Arequipa 2026 reconoce a los mejores talentos del país",
+    "medio": "ProActivo",
+    "url": "https://proactivo.com.pe/el-talento-matematico-brilla-en-la-onem-aceros-arequipa-2026/",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-08",
+    "cuando": "2026-10-08T10:24-05:00",
+    "titulo": "Aceros Arequipa impulsa la formación del sector construcción desde hace 20 años",
+    "medio": "Business Empresarial",
+    "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQeUwwTzJERll5SEZvMWg5dkZIQ1dvZlVVdEtKS3BNWG5qVEktYTVzS0QyZ3M0bnZxdkZ4c3N0ZXZuVVpFRGhMLVdSOTE1X3FOMHA4cUNnejF3RG9rQlR2cTZ0a3B5NUNDWGxwdHFRMnhkWWRBaUxzaWh1bkhNQ1VISWx0bElBZU5FV1lncmh5YUY0YVJTaFA4andWbU9aclZxckxHaXpCSWNJTmpNdXctTWktekFUTXFZY044?oc=5",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   }
+  ],
+  "SPY": [],
+  "PLUZENC1": [
+   {
+    "fecha": "2026-10-05",
+    "cuando": "2026-10-05T02:00-05:00",
+    "titulo": "Ranking Merco 2026: Pluz Energía escala 45 posiciones, ingresa al Top 100 y lidera el sector Servicios Públicos",
+    "medio": "Gestión",
+    "url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxOMW9PSjR1NS1FcVh1YWE4aktGU2xCeFljM2hsNy1CYVI2OXlTc3NoejVGTm5SZUpPdVNXUG15cExQRFphc0syb3VTMllIQjJVVTRoWWdVUVlLTi1qSndOMFlXdElKbUQzdGQzSHpzYjdWc0ZmZE5sYk00ZkpHZXlCYWgyTUcxRHQyRHRjc0h2SEhnbk03MGhhdXNiX2g5MTFlYzZTUGJBOVViUnFZSjF4Y0F2bXI1aTJkQ3dETEo2ek9PNWNsbUNvcjFMWmdVNTRtcjVZY3NOR2NiVDAwUjFfWjhtZzJOc2dB?oc=5",
+    "tipo": "corporativo",
+    "icono": "🏢",
+    "peso": 0
+   }
+  ],
+  "DRAMUS": [
+   {
+    "fecha": "2026-10-13",
+    "cuando": "2026-10-13T15:32-05:00",
+    "titulo": "Cadena de opciones de Roundhill Memory ETF (DRAM)",
+    "medio": "Yahoo",
+    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPVHBTd2tpUVY1bkJmS0VzVGt2bVRZQVF5TGxHUHZnTUh6eWdrcXZIM1ZHMi1xNXRQTzk5UmhKR0NMS3ZoeGFPOU1LUlZyc3FtSGxuekVSRllhMnQ3R0UxelFaZGtTNWJBQUNCTURZYWFua0lrMTUyMlc4X2dMMFNLcHNjalEtZlVSVFdCWmgxYXp5QQ?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-01",
+    "cuando": "2026-10-01T18:29-05:00",
+    "titulo": "Precio de acciones, noticias, cotización e historial de Roundhill Memory ETF (DRAM)",
+    "medio": "Yahoo",
+    "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE0zbGxHWVFaRnhVcmh5TGlQMDZzTzhjZFA5c3haeE14TnlheFRKVUNpclljbTZZRUxRSTBWWUNlSzBNV2diMUxVSWRqcVNsSzgzUXc?oc=5",
     "tipo": "general",
     "icono": "📰",
     "peso": 1
    }
   ],
-  "AENZAC1": [],
-  "BACKUSI1": [
+  "GDX": [],
+  "SMH": [
    {
-    "fecha": "2026-10-12",
-    "cuando": "2026-10-12T16:16-05:00",
-    "titulo": "Innovación y marketing: cómo Backus impulsa nuevas marcas en el Perú",
-    "medio": "Perú 21",
-    "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPTUdhcmJPcnBCQzJudHNDRnV5QkNERGRRLXFsd0U5LTBEYkRMdGNUbUNoZmEwdUI5clR5dlR0Mm02UFVUYnpaUVJXZS1zVkN1Z0FhU2dvV3BtLXFPQVVaeGJLTDJoR1lhMktFOE9ubGtBeEVTYkZ4STFFcjlQXy14QldqREE5dXR1UE9ma2RkTWpfR2Mxd3o3dUlxc9IBoAFBVV95cUxNQi1VT1QyTW1ScHJ0ZjNCRjdDaTA5SnMwUUNCSTdfR3VpMk9yLUJyb2Frb1QxVUkxNFRkRXZQd015RzhoUU0zc0s0WGc5bUljWkFGS0xVcU1td1d3UEoteUY5d2NRX3RRZG9ka0VtbXE0MlJVNFp1N0RwRDdHempybGhvbTNjN1ZEMXkzNG1RN19uOVNwUWkyenRkdHpLc3o4?oc=5",
+    "fecha": "2026-10-02",
+    "cuando": "2026-10-01T21:37-05:00",
+    "titulo": "Perfil y datos de criptomonedas de VanEck Semiconductor ETF Tokenized bStocks USD (SMHB-USD)",
+    "medio": "Yahoo",
+    "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE85MEZRQi1Ecm42UUNEd3cySzBEY0dDN21uUi1JRlBucldydGZFQktraHdGcGxqN2xGV1o5TW9jeGNBS1hPU0hJaXhXNHplYVh3X3c2WG5lZVo1aEM5LUIzaFlR?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   }
+  ],
+  "IFS": [
+   {
+    "fecha": "2026-10-16",
+    "cuando": "2026-10-15T21:26-05:00",
+    "titulo": "Indecopi se pronuncia sobre presunta filtración de datos en Interseguro",
+    "medio": "El Comercio",
+    "url": "https://elcomercio.pe/economia/indecopi-se-pronuncia-sobre-presunta-filtracion-de-datos-en-interseguro-noticia/",
+    "tipo": "legal",
+    "icono": "⚖️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-10-16",
+    "cuando": "2026-10-15T20:41-05:00",
+    "titulo": "SBS sobre posible filtración de datos de Interseguro: “Estamos ya realizando el seguimiento y las acciones de supervisión que corresponden”",
+    "medio": "El Comercio",
+    "url": "https://elcomercio.pe/economia/sbs-sobre-posible-filtracion-de-datos-de-interseguro-estamos-realizando-el-seguimiento-y-las-acciones-de-supervision-que-corresponden-noticia/",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-16",
+    "cuando": "2026-10-15T21:01-05:00",
+    "titulo": "Interseguro: ciberdelincuentes filtran base de datos con pólizas y reclamos de miles de clientes",
+    "medio": "Willax",
+    "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNX2djZmozSmhBYVdaTFNuOGx6eTFzUm5ua1pyMnNLdXNWQUNSbktidFJ5U0M2MTVxaWJsNUt6UFIwdTlDOGU1UWY5Nzl6QzhrWklDRjN2c3hZZVhwZzVYVVNjdkNQdk1pZ0o2bmdDcmRVbmh5QmEydWQ4b3oyNEdOQ01WWQ?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-15",
+    "cuando": "2026-10-15T18:26-05:00",
+    "titulo": "Interseguro, empresa de Intercorp, sufre un ataque que expuso datos personales de clientes",
+    "medio": "Perú Retail",
+    "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxPLVZkcTJUWm05TDJidEVXbmltNFVlTnJEbVBwNWpGQmJZQnN1RFZKVHRaSUF1cWIxVURnWlNNUWV4NE1pYVVtTXJScDlWUUhYeWlZbGg2eWhUM2RYLXFwR3BjcS1sZHBINWhOelVTLVloVVpvQzZXS0s2SHl3SFFjWmtaOWRES3locmZZNDAtUGlpRWtUc0E1QmVVekZIZ1RnVWV6OGluQTl0Zm1Ud2xacEZiMUlVeWhVcDhldXBhS1pGNVdfTHc?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-14",
+    "cuando": "2026-10-13T21:04-05:00",
+    "titulo": "Interseguro sobre incidente de ciberseguridad: “El 7 de octubre detectamos el acceso no autorizado del ciberdelincuente”",
+    "medio": "El Comercio",
+    "url": "https://elcomercio.pe/economia/interseguro-reporta-acceso-no-autorizado-a-sus-sistemas-y-notifica-a-clientes-por-posible-filtracion-de-datos-ultimas-noticia/",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-14",
+    "cuando": "2026-10-13T21:25-05:00",
+    "titulo": "Interseguro fue víctima del grupo de ransomware Direwolf y extrajo 2.5 TB de información de sus clientes",
+    "medio": "Gato Encerrado",
+    "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxQeEVFN0lMd0RaNlp4RnltSm84MV85WFJOV3lUSzBEOEZJZFN5eUJGN0dKQTJueHAxY0NubkxpT0wtdVYzMURKY2hHVmJQanZpb0FFYzFfY0JSVklGbnQySC12TkRTbTg0UUc2bmVrYzJObS1hV1pmbzhmVzZsNG5kRnlRWFRvSnZjSTZ6V2RBZE5nNnRvUkJ5Uk5rSGFzRVdMcTBFNmJrNmZFYXFOMVh0YXBWanphWm5BenZDeGdHcU1CQmJ3aGZDSDFkSzgwQmdU?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-13",
+    "cuando": "2026-10-13T18:57-05:00",
+    "titulo": "Interseguro enfrenta una alerta por presunta filtración de datos: reportan DNI, información financiera y archivos internos en la dark web",
+    "medio": "Infobae",
+    "url": "https://news.google.com/rss/articles/CBMihwJBVV95cUxOaEE0UjVBN1VsNmdkZXE4TUV3Y2lyWEliV0VDTmtmeGJGdGZ5THV3ODkycURXQTNoU0JlWEtCVmxXcURnajQ4TG16a2JMOFoyU1FWUHRoUmpDU1J2a0Z3NlcwTHNTUU83TlRreE5YQzU1Uzl0bURMbFNodWg1SFdOclpaajMtdnVMQkN4YXFSYzVUWkh3M0prTEd6VXFkRHVQeEpSM0pFbTZJRDhSSnYyZ1d0MmlKLVBvT3Mxd0QxZ084Wi1kTjBxQ3QwZHYySWpFQnlHRUliWXBjckhFVHE2LW5HQkt5dW9ReWxxY2FEa2k1U3lNNTVCa0lDMUs3WUJEOC1iblpiYw?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-09",
+    "cuando": "2026-10-09T04:25-05:00",
+    "titulo": "Cotización Intercorp Financial Services Inc - IFS hoy 2026-10-09",
+    "medio": "Bloomberg Línea",
+    "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE54ZjZSTTlRRk1Ha2RoUE1ocGV1S2VzWjlHZzdRd1BKajJuNU1PZW4ybE1FRGNJRDlma3Rtck5YMUV6NmtXbXRxb1FjYjVFTF9ZYlNoeTB2QQ?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   }
+  ],
+  "CARTAVC1": [],
+  "AUNA": [],
+  "UNACEMC1": [
+   {
+    "fecha": "2026-10-14",
+    "cuando": "2026-10-14T09:58-05:00",
+    "titulo": "Celepsa alista la construcción de la central solar Solimana de 257 MW en Arequipa para operar en 2028",
+    "medio": "ProActivo",
+    "url": "https://proactivo.com.pe/celepsa-alista-la-construccion-de-la-central-solar-solimana-en-arequipa/",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-10-01",
+    "cuando": "2026-10-01T12:05-05:00",
+    "titulo": "UNACEM: Senace aprobó actualización de estudio ambiental para mejoras en complejo Las Dunas",
+    "medio": "Energiminas",
+    "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNZ2dkTUtxM3NPZHhObG1pNUQwSEU3cGpfMXh0YjlOdklmZW9pY0R6OGFVZ2d3LWRFUnBsdWtNQ0FIVDI3QVBVb2s4MktLLWhrTWlFTmZYaVpxWFQ5TUl5SVJsZTM3ZkJSMVliTExvSkN0NnR2X3RvNnlKckU1LXNLVGcwcmFsWGJzaGlzODlfS0NfNUZkRkNqakNGRFRhTUlvVWg2RWE3Z3NraWQySnlEX0pTRVVjSnp1azkyTEppUVdSbmVH?oc=5",
     "tipo": "general",
     "icono": "📰",
     "peso": 1
    },
    {
     "fecha": "2026-09-30",
-    "cuando": "2026-09-29T20:49-05:00",
-    "titulo": "Ecuación de Backus: La ecuación de Drake para la novia ideal",
-    "medio": "NeoTeo",
-    "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9GWV9FeVF2Q1EyR21KbVlpcXVxM3d0UDNaLXF2LWtIY1NnVHJYajZ2NVREbHRqdllGNnd5SW5rVWxnYnhpTlJpV2VJd3dGY2F2UE54SmhLbndaSGt5QjVvMjVHMXEyX19SaGJmWWVHMmFwcWQ0?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
+    "cuando": "2026-09-30T14:29-05:00",
+    "titulo": "Senace aprueba actualización del EIA de Las Dunas de UNACEM",
+    "medio": "Rumbo Minero",
+    "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQd3Jza3lNTmc5NDV2Y0U1OW1xZ0JWdlM2NXdmZ25SbWJjUmpMM09ndnl3ZHdXVWRPZDBzTXNmNzl1dlJjYUFmRk5pcllQWjJFcUpySWVCQnJFbHlZOHhlcnlHUG1IV3VhSEdrU0VMQVF6TGFGNXF6cXFiOXpVQU9SZFNvbF94QTZ6NWNCaWlMLWdDVlZYNF9KeTJYdlNhV1BGbGJtZnN0SDdmUlp1UWpn?oc=5",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
    }
   ],
   "CVERDEC1": [
+   {
+    "fecha": "2026-10-19",
+    "cuando": "2026-10-19T13:16-05:00",
+    "titulo": "Sociedad Minera Cerro Verde destinará US$ 363 millones de inversión directa a nuevos proyectos de agua y saneamiento en Arequipa",
+    "medio": "Energiminas",
+    "url": "https://energiminas.com/2026/10/19/sociedad-minera-cerro-verde-destinara-us-363-millones-de-inversion-directa-a-nuevos-proyectos-de-agua-y-saneamiento-en-arequipa/?utm_source=rss&utm_medium=rss&utm_campaign=sociedad-minera-cerro-verde-destinara-us-363-millones-de-inversion-directa-a-nuevos-proyectos-de-agua-y-saneamiento-en-arequipa",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   },
    {
     "fecha": "2026-10-16",
     "cuando": "2026-10-16T16:27-05:00",
@@ -1213,16 +725,6 @@
     "titulo": "Clima en Cerro Verde, Cochabamba por horas",
     "medio": "SpaceRef",
     "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE00OThFa3F2cmJxWE9fOFhUVG9NS3loeEVhaFJDUGZva1Z0TVZvTkJ4NTJ4eWNwcWxVRzdOTkhsYlpqRGdLamdJRkk0N2ROd2xDWFpUUDlSQzdyTk9udldUc3YxSnlHelZkZnlvMW0tMC0?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-11",
-    "cuando": "2026-10-11T12:01-05:00",
-    "titulo": "Feria del Jocote Corona continúa este domingo en Cerro Verde",
-    "medio": "elsalvador.com",
-    "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQSEtoTGF5Y1hRSE1kSDlSMXdteS0tVzRIQVlwazJXWXhZTVp3ZTdxWGlUR1Q2eDBzOUdCUlBFM1UtdzVxRE4ydTRuTmZ1cXZVbWNjLW9URmpMSklTcGZsSmUzSjN5TmE5RjFDZzFlVXo3RE5JZVhPNHVLTjBwLXZKNmhNWUZINnBMeDlGZzVvQ0k5VXpZWkV3dUVJZ3NSUQ?oc=5",
     "tipo": "general",
     "icono": "📰",
     "peso": 1
@@ -1318,7 +820,41 @@
     "peso": 2
    }
   ],
+  "EFA": [],
+  "EMXCUS": [],
+  "SIDERC1": [
+   {
+    "fecha": "2026-10-02",
+    "cuando": "2026-10-02T15:38-05:00",
+    "titulo": "SIDERPERU exige condiciones equitativas tras revelarse construcción irregular de planta china en Chilca",
+    "medio": "El Comercio Perú",
+    "url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxPU1lFY2MtUndJOS15MU5Pb01ic3h6ZFZvZ2t4c0hCc0ZHRkF3OGZUdDB5VjBuMkUtZnpYWFNQYzQwbGNJUzFkWlBHSV94YkljRm91bmtfUDJGZ0pJRmpCQVBmN0NSRW9MM0Q0dS1QSDk3YmFXUi1renJ3NmpqOFg1LTVfbldjeVQxbzZCRXNZZjZPQlhpSm9LcWhwalhDRC0xbWxFaEd4Q0RfRTR4aGo5d3ZIektJa0d4WkVBNmlTVkh6T2k3UmIyWlJKb3RNa010ZXVMV1RIYzBNWDd0RnhwRVFHUEHSAfgBQVVfeXFMTlhoRWpYX1N1QjhHXy10LURZWjNxV2g4d1Eybkp5VEg3N2QwQkJMYmdKbVJ0WXZWVGtlQ1VrY1pLWTc4d2lyVXQtZl9tbldkNUpoUFV1U1VQM3h4eFBUOVJ5TjkySVpiWmlpeXdYNVZrcFZYYmZPbzd3UGJ1LWZJTU9OZDE5WU5JSGdxd2loc28zWDNkeDNfNGVJX2FxQXZPTDFoeXlRdXhVYkNoWERNRFIzbkRxUXAtMVNWMGh3eHhfN2ZRM1FsU0FPNDF2SVliRkxZdlZzaXp3cWNpdnNKdEc5UnloOXNyQjQ0cUh4SW9CM3A0SEZEa2Q?oc=5",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-10-01",
+    "cuando": "2026-10-01T11:53-05:00",
+    "titulo": "Chimbote: trabajadores realizan olla común frente a la planta de Siderperú",
+    "medio": "Radio RSD",
+    "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPZnU5X0ZXaGJJY2E2SDRNNHhlUWU3azk4VEl5Q1VFM0h3TFFQTFdwWDhFWEJSOXA3UEJqYWJxaF9XN29teURFajR4a2FYRXJjWXJnNGJrQ09KM09WYWt3Vl9UNEVIbjhDX1Fjc1lkUG1mR1hqT2t5WnpwSkdLel9wTUJqYXJKbTFLaXlZc2VUd3NOaENLN0oyWW9nS25FMWpjLVE?oc=5",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   }
+  ],
   "INRETC1": [
+   {
+    "fecha": "2026-10-19",
+    "cuando": "2026-10-19T13:27-05:00",
+    "titulo": "La tercera cadena de boticas tras Inkafarma y Mifarma llevará marca propia a Wong y Metro",
+    "medio": "Gestión",
+    "url": "https://gestion.pe/economia/boticas-peru-duplica-su-stock-por-el-nino-y-reorden-su-red-con-foco-en-provincias-noticia/",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
    {
     "fecha": "2026-10-15",
     "cuando": "2026-10-15T05:45-05:00",
@@ -1350,198 +886,9 @@
     "peso": 1
    }
   ],
-  "IFS": [
-   {
-    "fecha": "2026-10-16",
-    "cuando": "2026-10-15T21:26-05:00",
-    "titulo": "Indecopi se pronuncia sobre presunta filtración de datos en Interseguro",
-    "medio": "El Comercio",
-    "url": "https://elcomercio.pe/economia/indecopi-se-pronuncia-sobre-presunta-filtracion-de-datos-en-interseguro-noticia/",
-    "tipo": "legal",
-    "icono": "⚖️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-10-16",
-    "cuando": "2026-10-15T20:41-05:00",
-    "titulo": "SBS sobre posible filtración de datos de Interseguro: “Estamos ya realizando el seguimiento y las acciones de supervisión que corresponden”",
-    "medio": "El Comercio",
-    "url": "https://elcomercio.pe/economia/sbs-sobre-posible-filtracion-de-datos-de-interseguro-estamos-realizando-el-seguimiento-y-las-acciones-de-supervision-que-corresponden-noticia/",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-16",
-    "cuando": "2026-10-15T21:01-05:00",
-    "titulo": "Interseguro: ciberdelincuentes filtran base de datos con pólizas y reclamos de miles de clientes",
-    "medio": "Willax",
-    "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNX2djZmozSmhBYVdaTFNuOGx6eTFzUm5ua1pyMnNLdXNWQUNSbktidFJ5U0M2MTVxaWJsNUt6UFIwdTlDOGU1UWY5Nzl6QzhrWklDRjN2c3hZZVhwZzVYVVNjdkNQdk1pZ0o2bmdDcmRVbmh5QmEydWQ4b3oyNEdOQ01WWQ?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-15",
-    "cuando": "2026-10-15T18:26-05:00",
-    "titulo": "Interseguro, empresa de Intercorp, sufre un ataque que expuso datos personales de clientes",
-    "medio": "Perú Retail",
-    "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxPLVZkcTJUWm05TDJidEVXbmltNFVlTnJEbVBwNWpGQmJZQnN1RFZKVHRaSUF1cWIxVURnWlNNUWV4NE1pYVVtTXJScDlWUUhYeWlZbGg2eWhUM2RYLXFwR3BjcS1sZHBINWhOelVTLVloVVpvQzZXS0s2SHl3SFFjWmtaOWRES3locmZZNDAtUGlpRWtUc0E1QmVVekZIZ1RnVWV6OGluQTl0Zm1Ud2xacEZiMUlVeWhVcDhldXBhS1pGNVdfTHc?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-14",
-    "cuando": "2026-10-13T21:04-05:00",
-    "titulo": "Interseguro sobre incidente de ciberseguridad: “El 7 de octubre detectamos el acceso no autorizado del ciberdelincuente”",
-    "medio": "El Comercio",
-    "url": "https://elcomercio.pe/economia/interseguro-reporta-acceso-no-autorizado-a-sus-sistemas-y-notifica-a-clientes-por-posible-filtracion-de-datos-ultimas-noticia/",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-14",
-    "cuando": "2026-10-13T21:25-05:00",
-    "titulo": "Interseguro fue víctima del grupo de ransomware Direwolf y extrajo 2.5 TB de información de sus clientes",
-    "medio": "Gato Encerrado",
-    "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxQeEVFN0lMd0RaNlp4RnltSm84MV85WFJOV3lUSzBEOEZJZFN5eUJGN0dKQTJueHAxY0NubkxpT0wtdVYzMURKY2hHVmJQanZpb0FFYzFfY0JSVklGbnQySC12TkRTbTg0UUc2bmVrYzJObS1hV1pmbzhmVzZsNG5kRnlRWFRvSnZjSTZ6V2RBZE5nNnRvUkJ5Uk5rSGFzRVdMcTBFNmJrNmZFYXFOMVh0YXBWanphWm5BenZDeGdHcU1CQmJ3aGZDSDFkSzgwQmdU?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-13",
-    "cuando": "2026-10-13T18:57-05:00",
-    "titulo": "Interseguro enfrenta una alerta por presunta filtración de datos: reportan DNI, información financiera y archivos internos en la dark web",
-    "medio": "Infobae",
-    "url": "https://news.google.com/rss/articles/CBMihwJBVV95cUxOaEE0UjVBN1VsNmdkZXE4TUV3Y2lyWEliV0VDTmtmeGJGdGZ5THV3ODkycURXQTNoU0JlWEtCVmxXcURnajQ4TG16a2JMOFoyU1FWUHRoUmpDU1J2a0Z3NlcwTHNTUU83TlRreE5YQzU1Uzl0bURMbFNodWg1SFdOclpaajMtdnVMQkN4YXFSYzVUWkh3M0prTEd6VXFkRHVQeEpSM0pFbTZJRDhSSnYyZ1d0MmlKLVBvT3Mxd0QxZ084Wi1kTjBxQ3QwZHYySWpFQnlHRUliWXBjckhFVHE2LW5HQkt5dW9ReWxxY2FEa2k1U3lNNTVCa0lDMUs3WUJEOC1iblpiYw?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-09",
-    "cuando": "2026-10-09T04:25-05:00",
-    "titulo": "Cotización Intercorp Financial Services Inc - IFS hoy 2026-10-09",
-    "medio": "Bloomberg Línea",
-    "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE54ZjZSTTlRRk1Ha2RoUE1ocGV1S2VzWjlHZzdRd1BKajJuNU1PZW4ybE1FRGNJRDlma3Rtck5YMUV6NmtXbXRxb1FjYjVFTF9ZYlNoeTB2QQ?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   }
-  ],
-  "EFA": [],
-  "SPCCPI1": [],
-  "EEM": [],
-  "ORYGENC1": [
-   {
-    "fecha": "2026-10-07",
-    "cuando": "2026-10-07T18:52-05:00",
-    "titulo": "Culmina OPA de empresa eléctrica Orygen y Grupo Romero adquiere el 5.12% de las acciones por US$117.2 millones",
-    "medio": "Gato Encerrado",
-    "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxOZWU3R3I1UVY0UnNoRXNEakQ5OXZFeGxiMzNRb1RXa1VHRTd6S3UySmVoNTFFbUoxenRYeVVERUl2eVNYMnpiNm9UaTcxWXVlM2hqMjNyTnF5OVN5NDRuNXVEdlZpVmNqelA2MFB2a0trbjdqcW5vczBKRVFsdVpNdXpfaUFZR2JPNm9BWDhkTHpyTS0yU3prbkNLOFhuLUJxNXZMMTlRMVJkbllNZldtRkVialFhZElZRFpCaDhBRXhxMHhPTnV5WldMaDNxTEs5TFlybEZ3?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-10-07",
-    "cuando": "2026-10-07T14:31-05:00",
-    "titulo": "Orygen brinda 1,480 atenciones médicas gratuitas en el Cercado de Lima y Ventanilla",
-    "medio": "Revista ProActivo",
-    "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPNXBrN1dOMHZaSEFyR0NIQkZCS1dYenFMRl92a0hsWVJmYURtOEwzWGdPaHpkeElBcDAydkY1b1ltalJoZDVBVUVtZTJkSnY5YzRyd0dxbWxnNEVoRVJPSXhNMEI1U3M5RV9EajhfcUVjbHluOXRDYjIxbFpid0lFYllqV3p5RF9oOHhDNjNmV1JsclZLUlVFN1ZHOHdsSkFSaExLZmJ2RldVOUtB?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-06",
-    "cuando": "2026-10-06T15:20-05:00",
-    "titulo": "Campañas de salud de Orygen en el Cercado de Lima y Ventanilla lograron más de 1,450 atenciones médicas gratuitas",
-    "medio": "desdeadentro.pe",
-    "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxOOEhla2ZPRGhIS2FxSE5US2ZVM1k2YlZUa1NPZzlEZFo2UlZzWk1tMnRnMFFSMlp4blYxcWJUcUQzRG1HTk5HNE9kZzQxMUhNMEhOdTBreUQ1dmFMYVl1Y2J1RjJGS1lJNEtSZnIzSllpRlBrVmJJbmNOcTE4elFSaC1xQTJfNUhrUkdwc3h0aUd4N2ZVX1NRN1YtY1BtbjIwUnNjWUdNMl9tc2xXczBmMTF6YVNqQ0tNN1J3aHZaTzltckIwMlNTak9tVTVCV09UWmxUVkVFb0t0UE1xVFdnbE5xRQ?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-02",
-    "cuando": "2026-10-02T12:13-05:00",
-    "titulo": "Pala Orygen Zoom Xtreme Carbon 3 ¡Potencia al límite!",
-    "medio": "padelstar.es",
-    "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOaFZESkJuZ215MWJSV1dMUGwzX2FVcFFsUm9DNUtYOThnTWRKcUE3TVhhdS1tMzByajNtVXhwUmFNSTlxMHhQQ0FlQUdDU1lTdV9wTUg5czc5THd1eFV6R0JNSFZxVlQ0VkVJSkVJeDhTS1BWWUU2bndPUTc4NlRtSUF1UVlBM1BlLUpUTVhFTQ?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   }
-  ],
-  "CORAREI1": [
-   {
-    "fecha": "2026-10-13",
-    "cuando": "2026-10-13T15:28-05:00",
-    "titulo": "El talento matemático brilla en la ONEM Aceros Arequipa 2026",
-    "medio": "Revista ProActivo",
-    "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOaGxoa1lqYnlHNTJGRFBJNlFSbUdSQU5JM0xkNWZHRV9BLWtFRDNBbTBSeHNMYXg3RXpzaG9acm1vT0xxdjk4cGdvRHExRVRFandfbUxMVl9SOVRET0FEUEpTTGFrZzVkaEt6ZkJIbV9FaDZNSE9Mam9iZmJ2aGR0NVIyaDFrbkpfUlptWkJPRQ?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-13",
-    "cuando": "2026-10-13T15:28-05:00",
-    "titulo": "Olimpiada Nacional Escolar de Matemática Aceros Arequipa 2026 reconoce a los mejores talentos del país",
-    "medio": "ProActivo",
-    "url": "https://proactivo.com.pe/el-talento-matematico-brilla-en-la-onem-aceros-arequipa-2026/",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-10-08",
-    "cuando": "2026-10-08T10:24-05:00",
-    "titulo": "Aceros Arequipa impulsa la formación del sector construcción desde hace 20 años",
-    "medio": "Business Empresarial",
-    "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQeUwwTzJERll5SEZvMWg5dkZIQ1dvZlVVdEtKS3BNWG5qVEktYTVzS0QyZ3M0bnZxdkZ4c3N0ZXZuVVpFRGhMLVdSOTE1X3FOMHA4cUNnejF3RG9rQlR2cTZ0a3B5NUNDWGxwdHFRMnhkWWRBaUxzaWh1bkhNQ1VISWx0bElBZU5FV1lncmh5YUY0YVJTaFA4andWbU9aclZxckxHaXpCSWNJTmpNdXctTWktekFUTXFZY044?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
-    "peso": 2
-   },
-   {
-    "fecha": "2026-09-28",
-    "cuando": "2026-09-28T02:00-05:00",
-    "titulo": "Comunicado que no comunica de Siderperú, Aceros Arequipa, Celima y Cerámica San Lorenzo",
-    "medio": "Gato Encerrado",
-    "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOcmJ5LUd1X2tsM2VEZDRUVFR6bWc3V1pBQ1o1blRYTkpLV2hMbmwwODdiMDgxWVVhUDUwcjRCWmhaWUlEQTVNb0xERkJXaWV4cXFMZHVRaTlMcTh3WW8tT0NIVlhCN0o4NUFHWFlXWmdqczY2ejlaZjZya3V4anMzSTFsX1duSkE4QkJpZEFyQVQwNy16c0pYY09iSzZVLVJsUXJEZ3p2T3N1YUo4X3kya095dWZJYWc?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   },
-   {
-    "fecha": "2026-09-28",
-    "cuando": "2026-09-28T02:00-05:00",
-    "titulo": "Aceros Arequipa: el acero de una gestión corporativa sostenible",
-    "medio": "https://stakeholders.com.pe/",
-    "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxOSS1xWEpYSDgtREVrTjZsZC1zdmRiLWxjaVhQdmpPMklnNHJjTmR1cDJrQ1FpbXZTanlTVUM5b0QxdTl5LTFRYTdybGMyWXRtbUtnTGRZYjJmS01fVUZmb0J1MGhwU3hZNnlSYTg5NHRQZm4wNmdaTzdDMXhGYjNfdG04S0xJMFlITW5ZdzZVOF80VFJKczBuMnlsSU5QRVp0T3cyS1YtQl9VUEdYS0d3NngyU1dZcGZha3JyUGx6T0xrVTBYR1pr?oc=5",
-    "tipo": "corporativo",
-    "icono": "🏢",
-    "peso": 0
-   }
-  ],
-  "SMH": [
-   {
-    "fecha": "2026-10-02",
-    "cuando": "2026-10-01T21:37-05:00",
-    "titulo": "Perfil y datos de criptomonedas de VanEck Semiconductor ETF Tokenized bStocks USD (SMHB-USD)",
-    "medio": "Yahoo",
-    "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE85MEZRQi1Ecm42UUNEd3cySzBEY0dDN21uUi1JRlBucldydGZFQktraHdGcGxqN2xGV1o5TW9jeGNBS1hPU0hJaXhXNHplYVh3X3c2WG5lZVo1aEM5LUIzaFlR?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   }
-  ],
-  "LQDA": [],
+  "ATACOBC1": [],
+  "VOO": [],
+  "RIO": [],
   "PML": [
    {
     "fecha": "2026-10-12",
@@ -1664,7 +1011,7 @@
     "peso": 1
    }
   ],
-  "VOO": [],
+  "EPU": [],
   "VOLCABC1": [
    {
     "fecha": "2026-10-15",
@@ -1727,118 +1074,378 @@
     "peso": 1
    }
   ],
-  "SIDERC1": [
+  "BVN": [
    {
-    "fecha": "2026-10-02",
-    "cuando": "2026-10-02T15:38-05:00",
-    "titulo": "SIDERPERU exige condiciones equitativas tras revelarse construcción irregular de planta china en Chilca",
-    "medio": "El Comercio Perú",
-    "url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxPU1lFY2MtUndJOS15MU5Pb01ic3h6ZFZvZ2t4c0hCc0ZHRkF3OGZUdDB5VjBuMkUtZnpYWFNQYzQwbGNJUzFkWlBHSV94YkljRm91bmtfUDJGZ0pJRmpCQVBmN0NSRW9MM0Q0dS1QSDk3YmFXUi1renJ3NmpqOFg1LTVfbldjeVQxbzZCRXNZZjZPQlhpSm9LcWhwalhDRC0xbWxFaEd4Q0RfRTR4aGo5d3ZIektJa0d4WkVBNmlTVkh6T2k3UmIyWlJKb3RNa010ZXVMV1RIYzBNWDd0RnhwRVFHUEHSAfgBQVVfeXFMTlhoRWpYX1N1QjhHXy10LURZWjNxV2g4d1Eybkp5VEg3N2QwQkJMYmdKbVJ0WXZWVGtlQ1VrY1pLWTc4d2lyVXQtZl9tbldkNUpoUFV1U1VQM3h4eFBUOVJ5TjkySVpiWmlpeXdYNVZrcFZYYmZPbzd3UGJ1LWZJTU9OZDE5WU5JSGdxd2loc28zWDNkeDNfNGVJX2FxQXZPTDFoeXlRdXhVYkNoWERNRFIzbkRxUXAtMVNWMGh3eHhfN2ZRM1FsU0FPNDF2SVliRkxZdlZzaXp3cWNpdnNKdEc5UnloOXNyQjQ0cUh4SW9CM3A0SEZEa2Q?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
+    "fecha": "2026-10-16",
+    "cuando": "2026-10-16T12:00-05:00",
+    "titulo": "Moquegua: San Gabriel produce 5059 onzas de oro al tercer trimestre y Buenaventura revisa su guía anual",
+    "medio": "Rumbo Minero",
+    "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPeExhbGZHbW00bExjMUR1aktpM0o2RDFqdTF4eVQ1MjE4eHhKeXlXcFB4U1ZFMlpZVTJlZTFKUFBzWWdDc3dGQjVZVGxzbXk1azBKMDc2VEpxbkZWQTRMaFZNY2pLQ1VXRk1LY1QwTThoQ1Y1ZDc2VU5IXzQ0Ti1tY0RCeUhDbGx0QWV1bnppTkR5ak9wN1FfWDk5WFlIM3RQRlp6R1dubmo5UEpSY2c?oc=5",
+    "tipo": "resultados",
+    "icono": "📊",
     "peso": 2
    },
    {
-    "fecha": "2026-10-01",
-    "cuando": "2026-10-01T11:53-05:00",
-    "titulo": "Chimbote: trabajadores realizan olla común frente a la planta de Siderperú",
-    "medio": "Radio RSD",
-    "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPZnU5X0ZXaGJJY2E2SDRNNHhlUWU3azk4VEl5Q1VFM0h3TFFQTFdwWDhFWEJSOXA3UEJqYWJxaF9XN29teURFajR4a2FYRXJjWXJnNGJrQ09KM09WYWt3Vl9UNEVIbjhDX1Fjc1lkUG1mR1hqT2t5WnpwSkdLel9wTUJqYXJKbTFLaXlZc2VUd3NOaENLN0oyWW9nS25FMWpjLVE?oc=5",
-    "tipo": "expansion",
-    "icono": "🏗️",
+    "fecha": "2026-10-16",
+    "cuando": "2026-10-16T15:59-05:00",
+    "titulo": "San Gabriel produjo 599 onzas de oro en el tercer trimestre por restricciones operativas",
+    "medio": "Revista Economía",
+    "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE43TlV3d3VTQ0k0bjZHRzNSMlJZQWprTEpfYkY3b1p1N0xDcGxDMktadDROVU1QMVRqd2t4X3hDODlib2o0LU1nT3dPaVpaZTdmaFdOZjZKTEhRUUZ3WURtTWM2S3JfcUJma2ZR?oc=5",
+    "tipo": "resultados",
+    "icono": "📊",
     "peso": 2
    },
    {
-    "fecha": "2026-09-28",
-    "cuando": "2026-09-28T02:00-05:00",
-    "titulo": "Comunicado que no comunica de Siderperú, Aceros Arequipa, Celima y Cerámica San Lorenzo",
-    "medio": "Gato Encerrado",
-    "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOcmJ5LUd1X2tsM2VEZDRUVFR6bWc3V1pBQ1o1blRYTkpLV2hMbmwwODdiMDgxWVVhUDUwcjRCWmhaWUlEQTVNb0xERkJXaWV4cXFMZHVRaTlMcTh3WW8tT0NIVlhCN0o4NUFHWFlXWmdqczY2ejlaZjZya3V4anMzSTFsX1duSkE4QkJpZEFyQVQwNy16c0pYY09iSzZVLVJsUXJEZ3p2T3N1YUo4X3kya095dWZJYWc?oc=5",
+    "fecha": "2026-10-16",
+    "cuando": "2026-10-16T07:00-05:00",
+    "titulo": "Buenaventura recorta proyección de oro de San Gabriel y mantiene estimados de sus otras unidades",
+    "medio": "Gan@Más",
+    "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxPWkkyR05BTUVjcjdyeWtrcnh3d2NYLWNJV3pwVVBJUUN2VFBSMW53S3o4djdjcDJrekRlZGEwQnYzRE5kQzE3R0lXTF9xb2JMYUlJSWFkSkdWdjkyNzZUTXI2d09ZS2VIZlgwTUU5TURWZVAyZHV4dFgybzVIOVRxeFVmMFVnWjlOdWM4QU42SnpBanhtZElIMk9hcjFQUlFZQnFwT2JlcnJwbXljaU5fa3ZHa0ZFTFZxOTNEYXZQeXJQZG1zb0E?oc=5",
     "tipo": "general",
     "icono": "📰",
     "peso": 1
-   }
-  ],
-  "EMXCUS": [],
-  "PLUZENC1": [
+   },
+   {
+    "fecha": "2026-10-16",
+    "cuando": "2026-10-16T13:51-05:00",
+    "titulo": "Tras recortar guía, Buenaventura prevé resolver en 2027 restricción de procesamiento en San Gabriel",
+    "medio": "BNamericas",
+    "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNaVpZY2NaNnJsNGxGd3h3dlpjYmdYWHJobGcwMnlBYUJBTnpDblRHWGlvZS1MNnlLLWVHaHZmZXRObm5WZWl2NWZtSEdxNXZYTUpEcUZMaWVWMmRRQWlRYnhqdWpYbUhUZGhiMHp6dFVuczg2WnYxT2lGQlJ4X1BZYmpEVnZQRXhQSUZZVzgyRnkzZ3RubVdhQ1UxaEt4QlhhZXQ1SjFPdTRBR2Y5VDZIdWxTaGhCMGJmYk9ucFZmdmZ4Zy1YX2FNOXVwR1BCZnVXaUxN?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-15",
+    "cuando": "2026-10-15T18:39-05:00",
+    "titulo": "Buenaventura reduce proyección de producción de oro de San Gabriel para 2026",
+    "medio": "Gestión",
+    "url": "https://gestion.pe/economia/empresas/buenaventura-ajusta-perspectiva-de-produccion-de-oro-de-san-gabriel-para-2026-noticia/",
+    "tipo": "operativo",
+    "icono": "⚙️",
+    "peso": 2
+   },
    {
     "fecha": "2026-10-05",
-    "cuando": "2026-10-05T02:00-05:00",
-    "titulo": "Ranking Merco 2026: Pluz Energía escala 45 posiciones, ingresa al Top 100 y lidera el sector Servicios Públicos",
-    "medio": "Gestión",
-    "url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxOMW9PSjR1NS1FcVh1YWE4aktGU2xCeFljM2hsNy1CYVI2OXlTc3NoejVGTm5SZUpPdVNXUG15cExQRFphc0syb3VTMllIQjJVVTRoWWdVUVlLTi1qSndOMFlXdElKbUQzdGQzSHpzYjdWc0ZmZE5sYk00ZkpHZXlCYWgyTUcxRHQyRHRjc0h2SEhnbk03MGhhdXNiX2g5MTFlYzZTUGJBOVViUnFZSjF4Y0F2bXI1aTJkQ3dETEo2ek9PNWNsbUNvcjFMWmdVNTRtcjVZY3NOR2NiVDAwUjFfWjhtZzJOc2dB?oc=5",
-    "tipo": "corporativo",
-    "icono": "🏢",
-    "peso": 0
-   }
-  ],
-  "QQQ": [
-   {
-    "fecha": "2026-10-12",
-    "cuando": "2026-10-12T12:09-05:00",
-    "titulo": "Invesco QQQ Trust, Series 1 Tokenized Stock (Reality)Historial de precios: Descargar RQQQIDatos Históricos",
-    "medio": "CoinGecko",
-    "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPd1p1OHRzeG9yRE1sTnR2ZHJEM2gyaXpjUGt4bzhLMWFWMWZYRGJ2Ul9MVE5fOFFfWVUxU0NVSlRpYUVRX3lDTGFkejhNcWFELW83TWlsWVRGeU9nYXVMaXgteXBURERCM1YyMEpyTE1tbnBnVERFbElpM1h5MTBrbFhvRkVLaFhpNnFmLXFVRWRrSHVZalE?oc=5",
-    "tipo": "general",
-    "icono": "📰",
-    "peso": 1
-   }
-  ],
-  "FERREYC1": [],
-  "UNACEMC1": [
-   {
-    "fecha": "2026-10-14",
-    "cuando": "2026-10-14T09:58-05:00",
-    "titulo": "Celepsa alista la construcción de la central solar Solimana de 257 MW en Arequipa para operar en 2028",
-    "medio": "ProActivo",
-    "url": "https://proactivo.com.pe/celepsa-alista-la-construccion-de-la-central-solar-solimana-en-arequipa/",
+    "cuando": "2026-10-05T18:25-05:00",
+    "titulo": "Colquijirca: El Brocal prioriza mina subterránea y solicita ampliar suspensión del Tajo Norte",
+    "medio": "Revista ProActivo",
+    "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxOX0JCQzFvU0t1WkFZdFU3WnFrQ3VMTUtyczgtVHljRmlVMDJqTWJUTkN2UzFKYmlaSWJQUTVpZVR4SHc4VlNxYXpWc0RxWTZLd2xJajRpT2ItM3hqNlhsSmJJWnhWSFUwNGNieldCUnpQcV9IaVZJdUxVTE1aalpXVWJqYV9qdHVIbWZxZWQtNHdyRDRlalJoMmJRR3h6NFlsTTFJQnFKY0lDcDFsd0hrdGhxZTliVENPM0E?oc=5",
     "tipo": "expansion",
     "icono": "🏗️",
     "peso": 2
    },
    {
     "fecha": "2026-10-01",
-    "cuando": "2026-10-01T12:05-05:00",
-    "titulo": "UNACEM: Senace aprobó actualización de estudio ambiental para mejoras en complejo Las Dunas",
-    "medio": "Energiminas",
-    "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNZ2dkTUtxM3NPZHhObG1pNUQwSEU3cGpfMXh0YjlOdklmZW9pY0R6OGFVZ2d3LWRFUnBsdWtNQ0FIVDI3QVBVb2s4MktLLWhrTWlFTmZYaVpxWFQ5TUl5SVJsZTM3ZkJSMVliTExvSkN0NnR2X3RvNnlKckU1LXNLVGcwcmFsWGJzaGlzODlfS0NfNUZkRkNqakNGRFRhTUlvVWg2RWE3Z3NraWQySnlEX0pTRVVjSnp1azkyTEppUVdSbmVH?oc=5",
+    "cuando": "2026-10-01T02:00-05:00",
+    "titulo": "BUENAVENTURA ATRAE CAPITAL DE CINCO PAÍSES PARA DESARROLLAR EL PROYECTO TRAPICHE",
+    "medio": "RCR Peru",
+    "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQdFdhTHNGMUFtU2prcjhCcTZobXctcHBMVWtyblozSEVRSUgtQ19GQmh4TUZtYUdrWXRzZEs4eUNwLVg1aU92djE1Rzd2ZHJQajRwRWxFOFJvM3dfRGkxYzNHakNtaEpEOGdpQjQ5RHBDdU5QY0xScWUtc1RsT2V6UGFrNjN3Z3k1QUtyeWNQNXRDQW1Ra19TRXhLMXNQUXRSRDZQZWZMVTY?oc=5",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-10-01",
+    "cuando": "2026-10-01T06:20-05:00",
+    "titulo": "Buenaventura atrae capital de cinco países para desarrollar Trapiche, su proyecto de cobre en Perú",
+    "medio": "Revista Digital Minera REDIMIN",
+    "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOUDlzVURJV21Lc2xQeHY4a2JLZ3gzWDFCcVpMc3BqeUU4d1F6SnFBYWN5UWNzWUxVQVYycWdzRlRCRFFPWmJBeW5FX2Jhd1lMS3J0SE0tVE5uSGtERWpkNy1hZmpGZW9tTnJuYzYtRGNUOURYeHlWNEZYTnBRbHVpamlid3B2YklNRXBzTmNwYUx4TFBPTGd0NURzcDQxSXpSMmR2STg1MHB0eE9RVzJ6M0dLTkpSb21CZHZnNA?oc=5",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-10-01",
+    "cuando": "2026-10-01T13:07-05:00",
+    "titulo": "Buenaventura busca socio internacional para desarrollar Trapiche, proyecto de cobre en Perú",
+    "medio": "Rumbo Minero",
+    "url": "https://www.rumbominero.com/peru/noticias/mineria/buenaventura-internacional-trapiche-cobre-peru/",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-09-30",
+    "cuando": "2026-09-30T02:00-05:00",
+    "titulo": "Buenaventura: Trapiche despierta interés de inversionistas de cinco países para desarrollar proyecto",
+    "medio": "El Peruano",
+    "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxQMC1wS29pTFk3Zk9QcGNLUWZaMEc3MndEMlVwUzJObEJMeEhKMkk5aGxhVmpXRjN3WndUejhVS2tLeHZmeEVkZEJ0ZjJWek9CYW9ocmt3NE1xTkVKSlRHYTRjRDFMRXZHMUZidWZxU0I1NzByT0s1QXd4WXZDREp6eVhRSk1JNFRYTkZJTkdqaXNXdkcxRnhWMG1fODdVNWtDZk5FeVZ4TEVlYXhrajctNUQ1bVV6N09MTFFjS1l4VlBEcGx5dlhHZFBuanRYTk1r?oc=5",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-09-30",
+    "cuando": "2026-09-30T02:00-05:00",
+    "titulo": "Buenaventura evalúa socios de cinco países para su proyecto de cobre Trapiche",
+    "medio": "Gestión",
+    "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPeXFFYWh2X1JKclRPU0JiMWQtT2p2bWZpTFhPOE4zakY3RDE1dks0dy1fLTNQRjk1UHA4UEs0NDlhNkxjR0VVd0FHZ2h0M0tjbnJzZ1oxcWFHNGZLZUZmY1NyVnNzRUd0Nlh5ZXRKSENua3hoWkwyYXNSeUtnQnZxdVEzSGNOLWJOM1ZteW9qd24yTmFvbDhXNWVFeWtrX1lyamVkei01b0RrdFcxSThBWEsyaXJxb0J1Y3lPUzZJYXczUGZ0YTczRFp3cFZxdExVZkE?oc=5",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-09-30",
+    "cuando": "2026-09-30T13:09-05:00",
+    "titulo": "Buenaventura: proyecto de cobre Trapiche despierta interés de inversionistas",
+    "medio": "Perú 21",
+    "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNTHFFM3RmMm94Qkh4dXNqYWxlZmZnUmtmbDJmQWJUeHpUTlZqSmZHbXJibTd6SUpsSEcweWsxQWpDQ19zbU5PMDJVNWwzbnpQdlN1SjJJeGJXd25rSTlraXZqSDR4NnVIbFlyczNIVDJIbndLSnYyWTlJSnBQcExHa0hwaDJmV24tSldoRlJ3R010clhTRXVSdUtJTGlqdw?oc=5",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-09-30",
+    "cuando": "2026-09-30T13:44-05:00",
+    "titulo": "Buenaventura: Trapiche atrae inversores de cinco países con proyecto de US$ 2.000 millones",
+    "medio": "Reporte Minero",
+    "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNUWlXa1JSRUJpNTZtOWxtQWFiWElFUE90UTl6MXFzR21KTWc2VHc5TkRDcVRqTG84UmRJbGdBcTIzSHVKdjhoUUdnVWMzbVJLMHJEZmRFRG9lYmxYU2I1NFdFUjBnejA5dFlMam9IbWphQk40blRsWmpfRFpLT24wTHFrSktOM3lQOU5TbW03eWJLb2pXd1JjMEllemJZUzZwak0wRE1KeDU2cklZRzNtLS1IellNbGxYakU2REFCOEtYNGc?oc=5",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-09-30",
+    "cuando": "2026-09-30T16:31-05:00",
+    "titulo": "Inversionistas de Chile y otros cuatro países ponen la mira en proyecto de cobre de minera Buenaventura en Perú",
+    "medio": "Diario Financiero",
+    "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNaXhqVUtUd09Sa3Iyb0pQakt0UGxTeDRWZUlnUjFLeGxCS19lSFBDSmdlSDhYZmNUYkZHbURUSnBpX0UzT2NRS3I1TE02Xy1JQUxreDE2TTdqTl9KSFNsQVdOaVVOOERLUmhzdmlndk9xTE9BbC1oMzBWeFRmNV9DRlM3d2w0SWYyckhJNkZVN25pRnp1MVkzRGdSX1o0S1owd3JReVEtMVhubGJTaWc?oc=5",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   }
+  ],
+  "EEM": [],
+  "PPX": [],
+  "CREDITC1": [
+   {
+    "fecha": "2026-10-16",
+    "cuando": "2026-10-16T11:01-05:00",
+    "titulo": "Credicorp Capital: la economía peruana más allá de los desafíos de la coyuntura",
+    "medio": "Gestión",
+    "url": "https://gestion.pe/g-de-gestion/columnistas/credicorp-capital-economia-peruana-mas-alla-de-los-desafios-de-la-coyuntura-daniel-velandia-noticia/",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-15",
+    "cuando": "2026-10-15T09:35-05:00",
+    "titulo": "Daniel Velandia, economista jefe de Credicorp Capital: “Si las condiciones se dan después de El Niño, al 2028 podremos crecer más de 4%”",
+    "medio": "El Comercio",
+    "url": "https://elcomercio.pe/economia/peru/daniel-velandia-economista-jefe-de-credicorp-capital-si-las-condiciones-se-dan-despues-de-el-nino-al-2028-podremos-ver-un-crecimiento-superior-al-4-apuesplan-noticia/",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-13",
+    "cuando": "2026-10-13T16:53-05:00",
+    "titulo": "BCP destaca por su fortaleza en inversión e integridad y alcanza la máxima calificación en el índice de Milenio",
+    "medio": "Economy",
+    "url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxQQ2FpOEprM0hDZ0FpVW82ODN2djBvdmtwdUViWkVndWtMT08tSldmVTlpc29aQWpIaEhFUmhoZTAzTzdReFFRUmNaTWhSTWdkNW9kMlE0UUppNTdCcGhLS2NPT09kWFB3ZE8yaWt4MHFidTlORjZ6Z0VqOXZtUWVTS1kyVmdid0hfVElNMGdhU0JKR2gtWkpPQ29YaEJvX0piR0VvcWQwcVljTUlyWlhsMU0tVTNnalViOUFucmtwOWxndkJsZWdkOVN4Ul9sX2JQZmIyVEpwOWN2VDVCaGowdjhNMC1LX2RPaTE5UmxGWVhUZUNS?oc=5",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-10-12",
+    "cuando": "2026-10-12T16:05-05:00",
+    "titulo": "IA atrae cada vez más inversión pero genera incertidumbre sobre burbuja, ¿qué ve Credicorp?",
+    "medio": "Gestión",
+    "url": "https://gestion.pe/economia/mercados/ia-atrae-cada-vez-mas-inversion-pero-genera-incertidumbre-sobre-burbuja-que-ve-credicorp-noticia/",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-10-02",
+    "cuando": "2026-10-02T17:28-05:00",
+    "titulo": "Credicorp Capital ve oportunidades en la región andina: ¿dónde están las apuestas de inversión en Perú, Colombia y Chile?",
+    "medio": "El Comercio",
+    "url": "https://elcomercio.pe/economia/peru/credicorp-capital-ve-oportunidades-en-la-region-andina-donde-estan-las-apuestas-de-inversion-en-peru-colombia-y-chile-noticia/",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-10-01",
+    "cuando": "2026-10-01T02:00-05:00",
+    "titulo": "BCP otorga US$ 25 millones a empresa agroindustrial para habilitar unidades productivas en Olmos",
+    "medio": "Cuatrecasas",
+    "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQX2JPWmt6Qm9xbW9naTJfNFl6ZDc0QnVsRmVhd0g4YXVMWjVlOU1NTnhBOC1ReGpERXhFQzVxZE9vQjFkZzJ1VkZINnFBcjZrNFhBdEJ4bTlzQ1doTlJWbGphUVdMcVo0U2JfcW9jVWxkdjF6YW1iTGZqZHBfc3I1RXBhdEo4X1dQMXRNQXdkcWJkc1h1VlFLT213MWZkT0t4Tk5VMTBqOFBQS3hyMl9mNEU2QkJJMkNpNlE1cS1xeENZVFc3?oc=5",
     "tipo": "general",
     "icono": "📰",
     "peso": 1
    },
    {
     "fecha": "2026-09-30",
-    "cuando": "2026-09-30T14:29-05:00",
-    "titulo": "Senace aprueba actualización del EIA de Las Dunas de UNACEM",
-    "medio": "Rumbo Minero",
-    "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQd3Jza3lNTmc5NDV2Y0U1OW1xZ0JWdlM2NXdmZ25SbWJjUmpMM09ndnl3ZHdXVWRPZDBzTXNmNzl1dlJjYUFmRk5pcllQWjJFcUpySWVCQnJFbHlZOHhlcnlHUG1IV3VhSEdrU0VMQVF6TGFGNXF6cXFiOXpVQU9SZFNvbF94QTZ6NWNCaWlMLWdDVlZYNF9KeTJYdlNhV1BGbGJtZnN0SDdmUlp1UWpn?oc=5",
+    "cuando": "2026-09-30T12:49-05:00",
+    "titulo": "TBWA Perú crea para BCP emotiva campaña junto a Pol Deportes",
+    "medio": "LatinSpots.com",
+    "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNX051VkxPQWM0VzVMS21OemRpSktLLU1lT3hROHRpVk9Ra0JJdklvRDU0cTJnaXhTVWRKTHFiUUp1Y0RBSnctMS1TT1NwY2xDb3gwV1NybnlzaDlYQURWZFgzUW8xVF9BN0pnYlRPdHh4UF9UMXlnVFVaQlAzdWV5LXlocVJZQ0pkVkNEZ09WbkNfMndDNEN5YTZfczYxUHIz?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-09-30",
+    "cuando": "2026-09-30T11:59-05:00",
+    "titulo": "Emergent Cold obtiene financiamiento de US$ 19.9 millones del BCP para expandirse en Perú",
+    "medio": "Gestión",
+    "url": "https://gestion.pe/economia/empresas/emergent-cold-multinacional-de-logistica-y-almacenamiento-en-frio-obtiene-financiamiento-de-us-199-millones-del-bcp-noticia/",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   }
+  ],
+  "ENGIEC1": [
+   {
+    "fecha": "2026-10-06",
+    "cuando": "2026-10-06T13:00-05:00",
+    "titulo": "Gobierno suscribe contratos con Engie Transmisión Perú para impulsar cuatro proyectos por US$ 339 millones",
+    "medio": "Energiminas",
+    "url": "https://energiminas.com/2026/10/06/gobierno-suscribe-contratos-con-engie-transmision-peru-para-impulsar-cuatro-proyectos-por-us-339-millones/?utm_source=rss&utm_medium=rss&utm_campaign=gobierno-suscribe-contratos-con-engie-transmision-peru-para-impulsar-cuatro-proyectos-por-us-339-millones",
     "tipo": "expansion",
     "icono": "🏗️",
     "peso": 2
-   }
-  ],
-  "DRAMUS": [
+   },
    {
-    "fecha": "2026-10-13",
-    "cuando": "2026-10-13T15:32-05:00",
-    "titulo": "Cadena de opciones de Roundhill Memory ETF (DRAM)",
-    "medio": "Yahoo",
-    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPVHBTd2tpUVY1bkJmS0VzVGt2bVRZQVF5TGxHUHZnTUh6eWdrcXZIM1ZHMi1xNXRQTzk5UmhKR0NMS3ZoeGFPOU1LUlZyc3FtSGxuekVSRllhMnQ3R0UxelFaZGtTNWJBQUNCTURZYWFua0lrMTUyMlc4X2dMMFNLcHNjalEtZlVSVFdCWmgxYXp5QQ?oc=5",
+    "fecha": "2026-10-05",
+    "cuando": "2026-10-05T09:03-05:00",
+    "titulo": "PROINVERSIÓN y ENGIE impulsan proyectos eléctricos en Ayacucho, Piura, Lambayeque y Junín",
+    "medio": "ProActivo",
+    "url": "https://proactivo.com.pe/proinversion-y-engie-impulsan-proyectos-electricos-en-ayacucho-piura-lambayeque-y-junin/",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-10-02",
+    "cuando": "2026-10-02T02:00-05:00",
+    "titulo": "Engie firma cuatros concesiones por US$ 339 millones para proyectos eléctricos: ¿dónde?",
+    "medio": "Gestión",
+    "url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxPTW5ibUdseEFJV1pvQlJhT3hlcE5Rdko1WDlSSWpUMkkxamExMENLYUxMcm9WempVMDFUM2RRa1FMTVd0aURIcXpHQTZYQlZKaXVWMnk5Y0lIMk9hSlRsdzkxWXpNVGVUMk1SRUhkdlRoYkdPWkVIVEJ6cEVEM2hvZlNOeVR1UVFvZjl1UDFSVUpxRGlMazlsY2VVSjMteEM1RUNmZXd2VUxDbHhxeWcwMHFXUG01UEFFdWw3amE0VEl1NEJhT2l4MXRBazkteGVldDlHV0N2N3g5T0hzc1R3VzBGenR4YzBNY3RSTjlBQzZkdw?oc=5",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-10-01",
+    "cuando": "2026-10-01T18:18-05:00",
+    "titulo": "ENGIE completa adquisición de la Línea de Transmisión Aguaytía-Pucallpa por US$15 millones",
+    "medio": "Revista ProActivo",
+    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNR0VybDFOdHo3bGhCcml6WGxUWGwtazBUQ29JSGVlQnlqbUt1bGhTNVZsVHZsRllGc1VNU2tOUUJuQmhGWkFjc0ozclFJZ1BHOWlkZW5IRzVXNEpMbE14UkFOX2drczZVRnl4ZWRjSEc5dmtEbGpydUdLRnlVb1FzM093ODUtTFlYYmo0aTFVbUNLdG9ORTNvMXRYUm1qWGxZamtQZ1AtajBkejF2bW1CTFlNOVl0QQ?oc=5",
     "tipo": "general",
     "icono": "📰",
     "peso": 1
    },
    {
     "fecha": "2026-10-01",
-    "cuando": "2026-10-01T18:29-05:00",
-    "titulo": "Precio de acciones, noticias, cotización e historial de Roundhill Memory ETF (DRAM)",
-    "medio": "Yahoo",
-    "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE0zbGxHWVFaRnhVcmh5TGlQMDZzTzhjZFA5c3haeE14TnlheFRKVUNpclljbTZZRUxRSTBWWUNlSzBNV2diMUxVSWRqcVNsSzgzUXc?oc=5",
+    "cuando": "2026-10-01T17:10-05:00",
+    "titulo": "ENGIE completa adquisición del 100% de Línea de Transmisión Aguaytía-Pucallpa",
+    "medio": "Energiminas",
+    "url": "https://energiminas.com/2026/10/01/engie-completa-adquisicion-del-100-de-linea-de-transmision-aguaytia-pucallpa/?utm_source=rss&utm_medium=rss&utm_campaign=engie-completa-adquisicion-del-100-de-linea-de-transmision-aguaytia-pucallpa",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-09-30",
+    "cuando": "2026-09-30T11:44-05:00",
+    "titulo": "Terna vende el 100% de su operación en Perú a Engie por US$15 millones",
+    "medio": "Gestión",
+    "url": "https://gestion.pe/economia/empresas/engie-compra-terna-peru-por-us15-millones-y-suma-linea-electrica-de-132-km-en-ucayali-noticia/",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-09-29",
+    "cuando": "2026-09-29T02:00-05:00",
+    "titulo": "ENGIE completa la adquisición del 100% de la Línea de Transmisión Aguaytía-Pucallpa",
+    "medio": "BNamericas",
+    "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNNHB2cmZMd080aWlDTktKY2Z3RkZlRF9rRFZiSWsycDdNaW5XTEE2NWxRcklSaGNpbktJX1FXUzdMaEdVSF9rc1ptdW9iZ211RXZrSWZUNVJycVZNN2JxYTJhNUxvZXVSSk5QQzVaQ1AyTlBKWlRNZzdGTUcxNzZEalpHY3pVTUdGR3VoX0JoV0NrbGgwa3ljcnNacWJsSFFYTC0zWGEya3dNcU5rOWY1bzFDSW1MQ1l6Q08tMVNR?oc=5",
     "tipo": "general",
     "icono": "📰",
     "peso": 1
    }
   ],
+  "AENZAC1": [],
+  "CPACASC1": [
+   {
+    "fecha": "2026-10-14",
+    "cuando": "2026-10-13T20:10-05:00",
+    "titulo": "Cementos Pacasmayo mejora su experiencia al cliente con SAP Commerce Cloud",
+    "medio": "Portal ERP",
+    "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPX3QxQ0pINThqOEhFMFNrN3dJN0UzazFtTnJxSE5hTVktSWc1ck50dVhEMmhDRFd4TlRVX1RiVDgyb05XRXlMNW1pNEUzWU9WVXhyY25qUHoxZ2N1VTBXMXBXZWF1dDRwUHZyMVJZRlpsRWRmVFFUOFFtZVE0MGctZGhkQlpZbmVBOVZtTGlDZ1pjVmVWQXRxM1RQTFJ4Z2dtejlITmpoeWl1b28?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-14",
+    "cuando": "2026-10-14T16:17-05:00",
+    "titulo": "Cementos Pacasmayo reafirma su liderazgo en el sector cementero en el Ranking Merco Empresas 2026",
+    "medio": "construyendo.pe",
+    "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPb0VScDFKajJIV0lHMWFXYnZtUkhSUDZfME83QUJ5MjgyUmVvNWllMXpKLXltdGZzWVVFQ1NITW1hLTh3bmRqbUtQYU5lWl8wQ1hUWWl1YXpoY1FpclBzcUxMLW9WU2xBSVIwekJsSTdpb3hvb1dkNGpvZHBDb2x3VWNUNTZZa0NHdDZNOW0tM1hLRHh1SVRIbnNpeVFXU2dZMFhNeXJ1VExpWTdmZGdHQTA4c2JrZ1NmTUF6c0pXSHlPMy1LajNaRlZFWWE5VTVGR2hEeHBTNWhhYU1KWUcxdVV3?oc=5",
+    "tipo": "corporativo",
+    "icono": "🏢",
+    "peso": 0
+   },
+   {
+    "fecha": "2026-10-13",
+    "cuando": "2026-10-13T15:34-05:00",
+    "titulo": "Cementos Pacasmayo destaca en el Top 10 de Merco Empresas 2026",
+    "medio": "Revista ProActivo",
+    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPTkJMR2NaWmVxY21SbVZKLUc1aENrMklyREdHRElRZVBRMldBQVNaOHBycU9iZEU4RXVSdEtOeGhLWnNEenN0Y2lYc2trM3BBdmdxRzVkOVZQbzRlZGJZVzlIVUIzNDl2OXFpR2RkTXFWbXpCX0ZSVWJSV29DanVTSWpDNWVTYU5ZTTZyT0VZem95dw?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-13",
+    "cuando": "2026-10-13T13:40-05:00",
+    "titulo": "Cementos Pacasmayo, entre las diez organizaciones más admiradas del país",
+    "medio": "Energiminas",
+    "url": "https://energiminas.com/2026/10/13/cementos-pacasmayo-entre-las-diez-organizaciones-mas-admiradas-del-pais/?utm_source=rss&utm_medium=rss&utm_campaign=cementos-pacasmayo-entre-las-diez-organizaciones-mas-admiradas-del-pais",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-05",
+    "cuando": "2026-10-05T14:39-05:00",
+    "titulo": "Cementos Pacasmayo: de construir estructuras a transformar la forma en que habitamos",
+    "medio": "Mercado Negro",
+    "url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxPeXBHOF9yS1lDdmFLRVBETExrdWtia1hkMU1VYXVZMXZCcmR0bEhrMGlYTHFFbW9HMVJENm9BX195OTZybHBPYkVFWi15TXZEMktQZk5ZN1F1SW1TV3VqWjJpY2xYLThfOGpvN0VUd1YzLXoxY2RaT0pQeDFnNDhDVGJ2MS05Z3RVa2lKN3Rhdmoydm1NXzk4UER2V2tQQjVsNVpjVVR4SUVnMjFsN245RDB4Y01ieG9jd0Y5TmUtMUVEMXlGbDNMWEJWbnF5aGg1bm5rN3hjcEctY1Fkd2UtYndTOXg?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-05",
+    "cuando": "2026-10-05T14:38-05:00",
+    "titulo": "De construir estructuras a pensar en quienes las habitan: la propuesta de Cementos Pacasmayo en Perú Sostenible",
+    "medio": "Mercado Negro",
+    "url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxPeXBHOF9yS1lDdmFLRVBETExrdWtia1hkMU1VYXVZMXZCcmR0bEhrMGlYTHFFbW9HMVJENm9BX195OTZybHBPYkVFWi15TXZEMktQZk5ZN1F1SW1TV3VqWjJpY2xYLThfOGpvN0VUd1YzLXoxY2RaT0pQeDFnNDhDVGJ2MS05Z3RVa2lKN3Rhdmoydm1NXzk4UER2V2tQQjVsNVpjVVR4SUVnMjFsN245RDB4Y01ieG9jd0Y5TmUtMUVEMXlGbDNMWEJWbnF5aGg1bm5rN3hjcEctY1Fkd2UtYndTOXg?oc=5",
+    "tipo": "corporativo",
+    "icono": "🏢",
+    "peso": 0
+   },
+   {
+    "fecha": "2026-10-02",
+    "cuando": "2026-10-02T06:55-05:00",
+    "titulo": "Cotización Cementos Pacasmayo SAA - CPACASI1 hoy 2026-10-02",
+    "medio": "Bloomberg Línea",
+    "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBld2FvaThpVkZZZ21Obi1tZTAxbi1feXpFM0tuQmV5cGJKdUFOLWRIdFRyTWxJYjhVWkVBeGlCU2Z0YkdSYmt4QlljVjBIdnVYVUQwaG5JUDJxcUpRM1E?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   }
+  ],
+  "IBIT": [],
   "BBVAC1": [
    {
     "fecha": "2026-10-09",
@@ -1910,7 +1517,269 @@
     "icono": "📰",
     "peso": 1
    }
-  ]
+  ],
+  "NEXAPEC1": [
+   {
+    "fecha": "2026-10-07",
+    "cuando": "2026-10-07T06:41-05:00",
+    "titulo": "Morgan Stanley mejora calificación de Nexa Resources por perspectivas del zinc - Investing.com México",
+    "medio": "Finanzas, Bolsa y Forex",
+    "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNZk5Dc1RRTlptVGNCd01zNk5fV3ZkNUVnVVd2ZUZwSnF3dTh6am5FRTZ2aVQ1ZmRLOGJ0bkdzelA2eHZldWZKQnNvMWNQOW83SDJMWk5Mbjl1Nk5na2dsNWg2ZTJoN2c1UEpIb2RLcU9QdlhKYlNmR1NWQ0RRQVl1N3k5VktFcmtYV20yR1dLQ01IYlB1cEdLX0Jxb0lRcVZUOVVhNkJabUZqdi15TXF3UDV0WEFMeHFvMWZOUlFNamg1RTN1VHFHcUd3NFNhMF9GaXg0?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-02",
+    "cuando": "2026-10-02T02:00-05:00",
+    "titulo": "Programa Expert+ de Nexa atrae a más de 250 ingenieros para su formación técnica en metalurgia en Perú",
+    "medio": "Rumbo Minero",
+    "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPc0FoRTVfQldMTjRSUUM0WVlmc09lNjlsVHRoT0hzMGpybVcwVldZOXpMQ09CQTNaMUtkN3FXejl0WF9hRVRsVGFvdlk1LXpDb08zWGI0MlRTaFd2eWVKa2I1VWo2NHpjcVM1bTR6d3ViM0tLTnpmaWl0VDRrZG1SMlA0ZGhKQ1VFRlhFc010aXRjUEJYMVZibDZmUFljTkMyVEdDVQ?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   }
+  ],
+  "LQDA": [],
+  "MINSURI1": [
+   {
+    "fecha": "2026-10-15",
+    "cuando": "2026-10-14T20:02-05:00",
+    "titulo": "Minsur repartirá US$375 millones en dividendos con cargo a utilidades de 2025",
+    "medio": "Semana Económica",
+    "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxPRG9xZFczUWg2TFBpMjhsNVNQa2pITThxcUE4NjdNM3V0QmxsdC1zdnV2NVhlaVBwV0QyZUFocXgxekN6WlVrTnU3RHNleXlDM2VpeGtGOWFxd19jVlcwd1Q1azdCSGo2OE9DZVNTaUZhSDVVRFZ6SEZtbnpUUk5icnJYNjNldGNTRGlIbXZUTlp5bEJsTms1WTFGeHE5TlA1X2tIZkhubXJOMEhoelN5NjlxWkdLeldHMzRMQjM5eDlMTjd0cXBONjd1NA?oc=5",
+    "tipo": "dividendo",
+    "icono": "💰",
+    "peso": 3
+   },
+   {
+    "fecha": "2026-10-14",
+    "cuando": "2026-10-14T09:58-05:00",
+    "titulo": "Accionista de Chile en Mina Justa evalúa ampliar su apuesta en Perú o desarrollar una mina",
+    "medio": "Gestión",
+    "url": "https://gestion.pe/economia/empresas/filial-de-copec-busca-nuevas-inversiones-mineras-en-peru-y-evalua-proyectos-de-cobre-noticia/",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-10-13",
+    "cuando": "2026-10-13T17:01-05:00",
+    "titulo": "Antauta: reprograman reunión del Convenio Marco con Minsur para el 21 de octubre y exigen informe sobre avances y compromisos pendientes",
+    "medio": "Radio Onda Azul",
+    "url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxQSURhTTRTVEp2d3FZQV9IdHR0N0dBMG0wSldkbm83UG9pVGtkejBsa1VHellfN3dnWVh5eFE5dUFvUlFvUWNTQ1NGTHpZVW9Qb1BLZXRFVFd0RVVOaGV1aS10dkE5WV9rOEs4dHpuWEVQRkpxeVRIY3QtenpibER1ZDBZa0NmZ1ZheUtDS2Z0bURKaVVMWC1vU2xMYzR5Tnc5UmlIYU1OaDNDclo1SngzcEZFWEt6YVE3MndFWm1VNVZ0dkxFY2FfTTRjNlJ3TXlZTkNidnh3UHNBQ1VZY0ZkOEVhcGlhUkltdWZPRlYzMUFzX084?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-12",
+    "cuando": "2026-10-12T16:05-05:00",
+    "titulo": "Edición 335: Rumbo a PERUMIN y 49 años de Minsur - Instituto de Ingenieros de Minas del Perú",
+    "medio": "IIMP",
+    "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOUW9qV2d0T2hFVEdkbEJhWjBUZS1wWEE1M2RKMGNkc0FTS1NpUWdzQTY3TVRRWHVtTkNpVFBSbjlndU9WZmMtbXpTdEEwNDFOakQtdW1ESk5WZ0toU1ktY1dDOS13a2tGbktwMllFSV9vdWxSbHpqTWhiQ3RsQzhPekIwZHVxckl3SlQ4Rg?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-09",
+    "cuando": "2026-10-09T15:01-05:00",
+    "titulo": "Minsur restaura 16,000 m² del humedal de Pisco Playa-San Andrés",
+    "medio": "Revista ProActivo",
+    "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOdEJNOERFdE1FVnJnOVNteFNQYzRsQVRLenpIOWJITDdkV2VOS2JKaXlRY252a3FCWm1CM2FFSzFYT1U3RWg0dTFzcE9GMmFaWHh0bnhHejU0MHVudElsQ3pmWklEOTBRdzZobkZiS054SnBFeWc3SGFOdjNaT3ZXV3V0cGM4eXEwUkVhMXc1LVljNkZQOVdzQg?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-06",
+    "cuando": "2026-10-06T11:36-05:00",
+    "titulo": "Marcobre fortalece sus operaciones con programa de capacitación liderado por CETEMIN",
+    "medio": "Rumbo Minero",
+    "url": "https://www.rumbominero.com/peru/noticias/actualidad-empresarial/marcobre-cetemin/",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-02",
+    "cuando": "2026-10-02T02:00-05:00",
+    "titulo": "Minsur: De la gestión reputacional a la legitimidad para operar",
+    "medio": "Revista ProActivo",
+    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOMWtEU2JTcHRZUGVvU2pST01TbnMwSkN4elBpeE1SU0czcHc4bFhaSGFIX1ZvNS1ja1JsTlpKZWtPb1EwV1A2M2tJcEhQdnp2YTM3UmROYVNILWNuS2ZWQmtpRmNCd0xJdjVXOFU5Y29yNXhTQXJPOU44ZHdjdnJ4WnJKZmdIU2JzMV85ZWRNZkpWQQ?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-09-30",
+    "cuando": "2026-09-30T09:54-05:00",
+    "titulo": "Minsur mejora la detección temprana de la anemia con nuevos equipos y reactivos para los establecimientos de salud",
+    "medio": "Revista ProActivo",
+    "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxQdi0weGRkSE9lNzRkRmNRaWdGeUlTaFNFS1NWR2dCYXJ2ZlFDQkYzdjVsMWsxWnJlQkU4UjB6WEtFMng2eVY4Zmg4dFRKTWtybzNKVGNxTHgzbVB1OThldzY0RlBSeVI4ZW9COUR6WE9OVFI1M0M3X0ZKaFZPVDNOY1JrRmVoSmQ0VWIzSmxxMUhLaVhpSjB1Y2NwbkJaNHdfcVRXV2JpeDczckNJVGpFMlBjejE3RTFjeWF3M2hwakRFcy1UNzU5UHFOY1Z1R01vMDhhZGNURQ?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   }
+  ],
+  "FIBPRIME": [
+   {
+    "fecha": "2026-10-06",
+    "cuando": "2026-10-05T23:49-05:00",
+    "titulo": "FIBRA Prime concreta la mayor compra inmobiliaria por US$ 145 millones con una innovadora estructura de financiamiento",
+    "medio": "Business Empresarial",
+    "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxOWS0tV1RFMk9yS2tKbXE4QnRzZzNCOE0zX012elNDNHgzT1R1Z0JXekM1VzlRcC1TMjdmVVJtQ05Eb0sxbnRDUGtqZkZfblhPVkhwOTFCeUNtRUhwaUkzWDNONFlxRFZCSGxBRUszMTBtZnl4NkZjTm14dnJaN3BQWVRjcGszOWVGRXVwNVpUa21CMGtjaVVYRTg2OFg5RUtaQ0lRM3d1X2haVWM0aU9acVMxeDdvWUdvdUgyXzNWQk1oaTZJMlhoUnBvTk9TbFNnZWdxVGdTMXMxMmMtcnNxaFFPS19KcUtZa09jYjl3?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-05",
+    "cuando": "2026-10-05T02:00-05:00",
+    "titulo": "Parque Logístico Lima Sur: Fibra Prime concreta la mayor compra inmobiliaria de la historia del Perú por USD 145 millones",
+    "medio": "Infobae",
+    "url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxPWUFXZmNSU09UNkNZVGlTNXBQMGNKRk9kQ1FOZDFHd05EX3ZsWTJ0UWNhN1pDXzJDRjlFbVRpdlc3R09KSEpyNVVLMVRhdVFqRG50bWYwUnNNaERTOUstajc2c0hCRXlzRDM4OFpvWjZLaDFjY3NfbHYzQjhMQTlyVGRKNmJ4cXZlRnJJQnBIa3NvSDVHRXk5bHJ5N2NLNDFtRTNFOTdnc3ltZHh2WEVFZmJab3lhNDFncGE1TnFvNDZTX1JHVU5LcnpERndhcm1kMjVQR3FUTkg4WGc3alh4ZFdxZEVKREZzLTFFNU1aWlBZejjSAY4CQVVfeXFMTi1BNFlNNzNyMDFZRVMxeU1fWEZhQUVXYmlYYm1tRmU3VFJpN3c3NFFoRXRqc1FuTE5tazlRS1hLMDRDbzhfeFhMU21qVzhIcGEwUGEzbGEydW9SRnhqRXNKWVRWSGRJbVh5YWFFRUdkeDQ2RVM1OEYzRFZlRXRORGFwUDR4U2J6TVZTa0tNZEhaZmVHT1Z5VmpzMjRIU1ZiLW11RmhqUEtxSG0yTzNzaWNHVFJyTjV0akM5eWNxV1FFcmpyaldWbjQyaTNtMXpPS0J0U2pVZ09qQkppLVFZUVg1aGE4MU9xWlYtNkg1cjN2OHVXTVV3Z0E3ZGtxT09kSTA4cFFIM0FwbG9wakZR?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-05",
+    "cuando": "2026-10-05T16:48-05:00",
+    "titulo": "Fibra Prime concretó la adquisición del Parque Logístico Lima Sur por US$145 millones",
+    "medio": "Semana Económica",
+    "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNX3AwSFo0bjZEMlhER1MwR3RwTFg0c3BoUlRheGhMUENjcTJtN3VTa2JsQTlFcjl5UWo1amtYNUpkeEVlVVhUZ2lhb1dNQ2l0U0xFTWs5M1pVcGR5MGQtSmU0VGFKNkp4X3NiNEpTSGszM3E3cGFPRFJER3A1cExLWERSbExBTzhrZ1F0MXBWZm5wZ0hCdnhMM0xOZDAxekJZSEFzMEJ4RnRRS0VsSkllVHZ4N2dtclBkd1V5UHNMbXg2TEhnNDdKeGF5ZXBjemZsekgxMDBB?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-05",
+    "cuando": "2026-10-05T02:00-05:00",
+    "titulo": "Fibra Prime compra parque logístico en Lurín por US$ 145 millones: ¿por qué LPA vendió?",
+    "medio": "Gestión",
+    "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxNTXlnM2MzbDBZR0hkLWNNNURJU3VObzc2SmZNMVVFSW9vNmlLSlRfclU0MmkwYW1LUUtYY2lPakJUamVnQnRMekhPaVFsRnF4elhlc0JJYVViZG1taEV4R05wRW5nN2w3Mmp0ZzRHczQ0RVdaeld4dDEta1Ywc1BkQThqTWZ0LUs0NjlDSGNVanBJaVlFd281d1FxNXBRZ0Y1TnRpTmY5WmV4NXVXd2h1RzVKVS1kZ1RzejJldmlpaGdkWHk5dlF1T1FvYw?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-03",
+    "cuando": "2026-10-03T02:00-05:00",
+    "titulo": "FIBRA Prime concreta la adquisición del Parque Logístico Lima Sur por US$ 145 millones",
+    "medio": "Perú Retail",
+    "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPS0tKSlIzdGxtcnFQcGtLSV9Tb1dVVGR1NEthdTJZWEhzNTVGQnkyOWdBckZYZ2dBNnlKZDR6RHlzUElrV1ZaSFJodk9CMzVaZk1FXzFTVjVRaTkwZW54eTlDaDFKUzdjUEFTTmRDS3ZvZFhHQ09XUGJXdk9OQjNYd2dxeVBkTUlWRmdadnVHSGJrZURRY2FHUmh2RjRaX0otdk9WNDJCalZKM0JPUFhlRDhsWFU5QjhrZ21j?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-02",
+    "cuando": "2026-10-02T11:51-05:00",
+    "titulo": "Fibra Prime acelera su expansión rumbo al 2030: “Era el momento perfecto para hacer una colocación de US$120 millones”",
+    "medio": "El Comercio Perú",
+    "url": "https://news.google.com/rss/articles/CBMiiwJBVV95cUxOSmZ4NUlNWlRPSlFRZDdfdHN4UjZDSHNRMHQwUXdOT3FjMnFUTmM2cFZtcFZQblhNMmxFTU0tSlg0ZnR3M3ZtMlUwTW9odDRNNm4tNmdCNFhCUmRYMXBJX2owelNzcXdhUnVNZjAyTmt1UkdEaHJQZTdHdlM5MkZsQThWRkRIOXFTVGZsWUpLY01qWDJOVWRaeEFINzRFY1FpWkIzaG5NRFpJZE9YeHVlTEFoWlhod212YXBMRlRRQThOVnF0WUJZV3dCaDhIazdnbE9GdTQxRndGWEtvaWxfWVBDNW84emhDSnp1VlFfU3I2VkhOaTBZOGFVVlV4NU9QYzlCckFSUTZSa1HSAZ8CQVVfeXFMUHZYR2J3SzUwVXhSS2xjdGd0TnYtSDFzcmF3Z0JvM01sSWNQanBZZzB6T0pENFZVSFNHTWNfWl90cml1OC00czV4U0NzMGJxNTM0Um5hdHlWNTNXQ3pWOGg3NVlYUENpdW9zRl9TTjVKN2ZoaW9hejF2OVRZeUFuX01KVTY2UjJaWDkwMzY4aUQxbTBtQ1dSOHd3SHBQS0RWMElGUmpBSzNEWjRfV0hsc01ua0RSY0NiLWxYd1dzTllYLW5YVU8zZGVZSW1LWERjQWRKVWZxcFZzUGdDMHlSRHpvV1FnWUx2NjFiV3FGemptaDlYVTM0QnpMc0JDVzgyZndLRHdYekJaRElNNjE0UEpmOXlZV25UVF9melJka3M?oc=5",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   }
+  ],
+  "FERREYC1": [],
+  "LUSURC1": [],
+  "BAP": [
+   {
+    "fecha": "2026-10-16",
+    "cuando": "2026-10-16T11:01-05:00",
+    "titulo": "Credicorp Capital: la economía peruana más allá de los desafíos de la coyuntura",
+    "medio": "Gestión",
+    "url": "https://gestion.pe/g-de-gestion/columnistas/credicorp-capital-economia-peruana-mas-alla-de-los-desafios-de-la-coyuntura-daniel-velandia-noticia/",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-16",
+    "cuando": "2026-10-16T10:36-05:00",
+    "titulo": "Credicorp, holding del BCP, supera 100 casos de uso de IA",
+    "medio": "El Ecosistema Startup",
+    "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNVWVPcHFvNDZIRXBsWmFQeTdZUzlqZE5RdS10eW9PNzJ4bG9jZzlTTXZ6eXFRZW5FemhwckRrbFNDeVBZNEZqbzdOMGFpdzhhUmp3WGVFNXlGdEYxRXdrWk9kTmFJV3IyWXhCaHhoWG14OW1oZnhHQlJYdzBVNHdJbWJDVHVPV3lhcHRDc0ZNZw?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-15",
+    "cuando": "2026-10-15T09:35-05:00",
+    "titulo": "Daniel Velandia, economista jefe de Credicorp Capital: “Si las condiciones se dan después de El Niño, al 2028 podremos crecer más de 4%”",
+    "medio": "El Comercio",
+    "url": "https://elcomercio.pe/economia/peru/daniel-velandia-economista-jefe-de-credicorp-capital-si-las-condiciones-se-dan-despues-de-el-nino-al-2028-podremos-ver-un-crecimiento-superior-al-4-apuesplan-noticia/",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-14",
+    "cuando": "2026-10-14T13:53-05:00",
+    "titulo": "Últimas notas de prensa y noticias corporativas de Credicorp Ltd. (BAP.LM)",
+    "medio": "Yahoo",
+    "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFA1SVQxZzVlR0NINXFyYWh1MnFGR0ZxVEVyR1VTMGdoa0FHVElYZ0hNOFVJdUpGMG1hM2dIaVRfdTFUT2pSa1JxMzVhc3VTVWpsYkxUVTNwQldvcEhSZjdKMjIxYXpDRzhX?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-12",
+    "cuando": "2026-10-12T16:05-05:00",
+    "titulo": "IA atrae cada vez más inversión pero genera incertidumbre sobre burbuja, ¿qué ve Credicorp?",
+    "medio": "Gestión",
+    "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPclRYeGZvOEZMVmNna0JjNHdCV2IwdE9DUHJPdV9QcXNsVWcwQUJqdS1hV2w0bWxNNTBDLUxSSmN3VmtJLTNiSDJJQ3c1dDdaSmdINEt0SnlwX3dLN0s4UjBpdWdwWUhxYUh3eWJ2VUxNT2hMNDBxZk80Z3A0LTlubWVkWC1VdHJOMGVRVzVWRHVlMUZvbGRLZk85U1d0bjd0dG1PUkh6enkxZzBienZnUDctRHRRWkVBVzNOclNQOVhCVjlKemlzQ0hTdTJhT2M?oc=5",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-10-09",
+    "cuando": "2026-10-09T08:38-05:00",
+    "titulo": "El reto más grande para Perú, según el CEO de Yape",
+    "medio": "Gestión",
+    "url": "https://gestion.pe/g-de-gestion/columnistas/raimundo-morales-y-yape-delincuencia-e-inseguridad-ciudadana-en-peru-el-reto-mas-grande-para-la-economia-noticia/",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-10-02",
+    "cuando": "2026-10-02T02:00-05:00",
+    "titulo": "Credicorp Capital ve oportunidades en la región andina: ¿dónde están las apuestas de inversión en Perú, Colombia y Chile?",
+    "medio": "El Comercio Perú",
+    "url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxQak5aaWpKbEk5REwwVk5tVDRUM3ZHTXowN2o2U2ZNNElPZkFQd3gzMGxza2MySnNiZDZTQ1ZiNlk5MnAzWEhURTZ5clQxV0RQRTRsaGVUeHZNUnNQV2ttb2lmMGpxUzRaM2E1eHFPTEFoX1JycnNyeWIxS0JlN0pZclRTRXE2dVZnRnpMaWtFSWNOd3JXWXpOUnNoYUhzT0JYMGJJY2ZvbFd3VmV5VmNIUVIyVkxJMmZ2ckNxZWtSY1BPZ28zZnhMN2NoY05rSHRWbUpIZFo1OVZ4SW9xc1RnVHIzVVpHbnhEMnN6OGtxNXhSMUhB0gGIAkFVX3lxTFBqSG9QV0pnaXVnUnBoMUN3am5pX013aWtWc3FXWmxHdFVPeU5pcmxqUWdOenRRVnEtWklLUGlTRzNhbmFNejI3OE5mYmY1TG94bU9rd1ZmVTVZSVNneFB1eFNnUmo5V3A1WGZjNHZsYlU5TVhOV19Vc1R6WkFKT1VOdHRrU3EtS2RIUk1LT2VQalI5dXBET2YxMXRTWWd4a21pdzJfRm9xSG5NSVVpaXJZaTJQN0RJU2c5TWVIakFuODNxdU56YkJmaXlJbE9BMHZxUzV4Zy05dGx5R1N4QlZtVlJSZ3FoVkt1V1RxdF91SE9yMmVWRzhGYzBjMHlvZHRTZ2dqOFl2VA?oc=5",
+    "tipo": "expansion",
+    "icono": "🏗️",
+    "peso": 2
+   },
+   {
+    "fecha": "2026-10-02",
+    "cuando": "2026-10-01T21:48-05:00",
+    "titulo": "Precio de acciones, noticias, cotización e historial de Credicorp Ltd. (B2AP34.SA)",
+    "medio": "Yahoo",
+    "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE02Tnp5UlRTZ3lWLUIydTRWbnJTOEpQdUFHclM1QWFkalRUQXhsV25HUTk0QjVDQ3F6V2Jfa3BBUDVVakpYVno2clZqbnRETmxxSkNrSDVQczZJSXoxd1RBbU1BdlVjaXM?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   },
+   {
+    "fecha": "2026-09-30",
+    "cuando": "2026-09-30T17:33-05:00",
+    "titulo": "Shicra: el programa estratégico de Credicorp y Kyndryl que impulsa la transformación tecnológica del holding",
+    "medio": "Semana Económica",
+    "url": "https://news.google.com/rss/articles/CBMi9wFBVV95cUxNOXB1YnhzTkdUNWV1bk9aMW4ybEZJdHZtaGtxTmdmNnF0VjM2US1mcHo0emd3NTlCU1VnUHJSUktxc2FWRERpSXlXdFROZFBiZmh1Rk1FX0szRERCS2VSZnl3QjdQRk81TEhpN1QyYzNGdFpBQTFzNWtLd2JMeWFJZ2tpMHktY09fVEdrWnpKRXdCWnh4VzRGSzRFWUI0RUFQTVNWMzJtN2dYQzZBdXZmVWJMSlBwUkR6SG96Mno2bk95UTZrQUo1ZW85eDRoMmQzejFmR25GYlEzYWg1NlN2aDQxbWVCVG14OVNLSld3V0NxRjBoLWNV?oc=5",
+    "tipo": "general",
+    "icono": "📰",
+    "peso": 1
+   }
+  ],
+  "GLD": []
  },
  "temas": {
   "acero": {
@@ -1947,16 +1816,6 @@
      "titulo": "Empresa peruana de acero inoxidable apunta al exterior y eleva su crecimiento",
      "medio": "Gestión",
      "url": "https://gestion.pe/economia/empresas/giam-sac-la-empresa-peruana-de-acero-inoxidable-que-busca-crecer-fuera-del-pais-noticia/",
-     "tipo": "general",
-     "icono": "📰",
-     "peso": 1
-    },
-    {
-     "fecha": "2026-09-28",
-     "cuando": "2026-09-28T15:18-05:00",
-     "titulo": "PRODUCE aclara que Acero Lima Shenglong SAC no cuenta con certificación ambiental",
-     "medio": "Energiminas",
-     "url": "https://energiminas.com/2026/09/28/produce-aclara-que-acero-lima-shenglong-sac-no-cuenta-con-certificacion-ambiental/?utm_source=rss&utm_medium=rss&utm_campaign=produce-aclara-que-acero-lima-shenglong-sac-no-cuenta-con-certificacion-ambiental",
      "tipo": "general",
      "icono": "📰",
      "peso": 1
@@ -2124,6 +1983,26 @@
    "consulta": "obras públicas Perú inversión OR reconstrucción · infraestructura Perú concesiones OR ProInversión",
    "items": [
     {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T09:51-05:00",
+     "titulo": "Ositrán alerta que 11 contratos de concesión están próximos a vencer",
+     "medio": "Gestión",
+     "url": "https://gestion.pe/economia/ositran-alerta-que-11-contratos-de-concesion-estan-proximos-a-vencer-noticia/",
+     "tipo": "operativo",
+     "icono": "⚙️",
+     "peso": 2
+    },
+    {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T12:33-05:00",
+     "titulo": "ProInversión impulsa Obras por Impuestos ante El Niño 2026-2027",
+     "medio": "Rumbo Minero",
+     "url": "https://www.rumbominero.com/actualidad/proinversion-impulsa-obras-por-impuestos-ante-el-nino-2026-2027/",
+     "tipo": "expansion",
+     "icono": "🏗️",
+     "peso": 2
+    },
+    {
      "fecha": "2026-10-17",
      "cuando": "2026-10-16T20:23-05:00",
      "titulo": "Minera Las Bambas: comunidad campesina de Pamputa propone comprar concesión minera a MMG",
@@ -2242,26 +2121,6 @@
      "tipo": "operativo",
      "icono": "⚙️",
      "peso": 2
-    },
-    {
-     "fecha": "2026-10-14",
-     "cuando": "2026-10-14T11:49-05:00",
-     "titulo": "Inversión ejecutada en Infraestructura minera ascendió a US$ 1,128 millones de enero a julio del 2026",
-     "medio": "Rumbo Minero",
-     "url": "https://www.rumbominero.com/peru/noticias/mineria/inversion-ejecutada-en-infraestructura-minera-de-enero-a-julio-2026/",
-     "tipo": "expansion",
-     "icono": "🏗️",
-     "peso": 2
-    },
-    {
-     "fecha": "2026-10-13",
-     "cuando": "2026-10-12T22:19-05:00",
-     "titulo": "Puerto de Corío: ProInversión firma convenio clave para “captar” inversionistas interesados",
-     "medio": "Gestión",
-     "url": "https://gestion.pe/economia/puerto-de-corio-proinversion-firma-convenio-clave-para-captar-inversionistas-interesados-noticia/",
-     "tipo": "expansion",
-     "icono": "🏗️",
-     "peso": 2
     }
    ]
   },
@@ -2273,6 +2132,36 @@
    ],
    "consulta": "precio del cobre mercado · cobre China demanda OR cobre LME",
    "items": [
+    {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T12:54-05:00",
+     "titulo": "South32 incrementa 2 % su producción de cobre en Chile durante el primer trimestre fiscal",
+     "medio": "Rumbo Minero",
+     "url": "https://www.rumbominero.com/chile/south32-2-produccion-cobre-en-chile-primer-trimestre-fiscal/",
+     "tipo": "resultados",
+     "icono": "📊",
+     "peso": 2
+    },
+    {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T12:25-05:00",
+     "titulo": "Goldman Sachs eleva previsión del cobre a US$ 14.700 para cierre de 2026",
+     "medio": "Rumbo Minero",
+     "url": "https://www.rumbominero.com/peru/noticias/internacionales/goldman-sachs-eleva-prevision-del-cobre-a-us-14-700/",
+     "tipo": "riesgo",
+     "icono": "⚠️",
+     "peso": 2
+    },
+    {
+     "fecha": "2026-10-17",
+     "cuando": "2026-10-17T06:00-05:00",
+     "titulo": "El Perú podría producir 5,7 millones toneladas de cobre anualmente, pero, ¿qué falta para lograrlo?",
+     "medio": "El Comercio",
+     "url": "https://elcomercio.pe/economia/el-peru-podria-producir-57-millones-toneladas-de-cobre-anualmente-pero-que-falta-para-lograrlo-noticia/",
+     "tipo": "operativo",
+     "icono": "⚙️",
+     "peso": 2
+    },
     {
      "fecha": "2026-10-16",
      "cuando": "2026-10-16T17:51-05:00",
@@ -2379,36 +2268,6 @@
      "titulo": "Exportaciones mineras del interior del Perú superan US$ 64 mil millones: cobre y plata lideran el crecimiento",
      "medio": "Minería en Línea",
      "url": "https://mineriaenlinea.com/2026/10/exportaciones-mineras-del-interior-del-peru-superan-us-64-mil-millones-cobre-y-plata-lideran-el-crecimiento/",
-     "tipo": "operativo",
-     "icono": "⚙️",
-     "peso": 2
-    },
-    {
-     "fecha": "2026-10-13",
-     "cuando": "2026-10-13T08:48-05:00",
-     "titulo": "Element 29 suma una tercera perforadora a su proyecto de cobre en Perú",
-     "medio": "Gestión",
-     "url": "https://gestion.pe/economia/empresas/element-29-amplia-la-exploracion-de-cobre-en-peru-noticia/",
-     "tipo": "expansion",
-     "icono": "🏗️",
-     "peso": 2
-    },
-    {
-     "fecha": "2026-10-13",
-     "cuando": "2026-10-13T18:32-05:00",
-     "titulo": "Crisis de suministro de cobre chileno: disrupciones simultáneas amenazan precios globales",
-     "medio": "Minería en Línea",
-     "url": "https://mineriaenlinea.com/2026/10/crisis-de-suministro-de-cobre-chileno-disrupciones-simultaneas-amenazan-precios-globales/",
-     "tipo": "legal",
-     "icono": "⚖️",
-     "peso": 2
-    },
-    {
-     "fecha": "2026-10-13",
-     "cuando": "2026-10-13T11:58-05:00",
-     "titulo": "Minera Cobre proyecta elevar producción de Sierra Atacama a 50,000 toneladas anuales en Chile",
-     "medio": "Rumbo Minero",
-     "url": "https://www.rumbominero.com/chile/minera-cobre-produccion-sierra-atacama-a-50000-toneladas-chile/",
      "tipo": "operativo",
      "icono": "⚙️",
      "peso": 2
@@ -2532,36 +2391,6 @@
      "tipo": "operativo",
      "icono": "⚙️",
      "peso": 2
-    },
-    {
-     "fecha": "2026-09-28",
-     "cuando": "2026-09-28T02:33-05:00",
-     "titulo": "La caída del oro y la plata se acelera mientras el petróleo roza los 108 dólares",
-     "medio": "El Boletín",
-     "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPakFYWm44SmllUnNEVERSb194MkxPWmU2MW5FOVlvdGhHcTdhZDMzYld2VkNzWjZJaWlqOXlOVW5OUWJVWTlNTEwxWGZONHI4SWktNmhfM0FSYU51d05HQnZHX2t4Rnh6OXppVVYzSjBsdk1XV2Q2Wmg1cUlUbUFkdXZLbFFpTlJ5ZEFmeHFaRnE1VTgtU3hmYVRKYWpxbUdMUFU1Y0V5SHdaRE3SAbABQVVfeXFMUGhxYVFqSi1ST0pJd1RGYk40a0ZQX2FrRU1lN09kX2FkTzFpcHA3YUZYQ29jdnE3aVNyVU4wT2lFQ2JMYmtPUlNYdGFDb2hfUXRwTldHUWs5ZEJPLVBCNzJmTE1EeTVRb0F4bmlrRGs5TkxhRDRxY3J6eFh6VkZOX3lVV3M0R0VCNjFWaGJ6WndpbjVJa2N1RjNtMDVhai1JUXdLMm1NcXNsRnhObXVhRkU?oc=5",
-     "tipo": "riesgo",
-     "icono": "⚠️",
-     "peso": 2
-    },
-    {
-     "fecha": "2026-09-28",
-     "cuando": "2026-09-28T02:00-05:00",
-     "titulo": "Calcatreu prevé 16 años de vida útil y una producción de 483.000 onzas de oro",
-     "medio": "Diario Río Negro",
-     "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQQUpoUjJodXduLWRmZVNRaDRNbXd5MFF6YnBsdktoRUdxeGpJWDRoU1NENjRWYzhJS1d1LVBXa0JlczdncHZJbXB5WTNQWkNKYTBCQ2x3NFFnN1QtZ01PTGxSTTR3UTEyMHpOeElubUNCMHBrX2M3YTRRZktDVk4wX0hQOVBkN3FUZTBGX0VLRzh6SXpzVjRPOUNvNDZ5TTVNcVBMNmdrTkswTnFfYlA0NmJXVFlvSEdtUkxwVHdnTdIBxwFBVV95cUxNa2tqbkR0QnQwN3Q1Z2hzUkpiM1pCdUstYmZpQ2ZrWE5MdTZ6UHhzMHpQQ3JrNXYtT3FwN3pxd29lMm0yM2lCbFBsTXdYcWpVaHpoeVZ5Nms1Q09KMTRMTDEtSGNmUWVSYkpyRlEwNDNPNzBmVEM1OUtsVlR5c2NCUU5VZF9RTEF2NnRTRkF6cEZteS1PUkhUM2lZaU1TZ2NBNXBGUVJPNlFTbjdack1oZ3d6bnBtMWQxdkU1UzJiajhWbEJDSnkw?oc=5",
-     "tipo": "operativo",
-     "icono": "⚙️",
-     "peso": 2
-    },
-    {
-     "fecha": "2026-09-28",
-     "cuando": "2026-09-28T07:33-05:00",
-     "titulo": "Calcatreu: Patagonia Gold estima 16 años de vida útil y una producción de 483.000 onzas de oro",
-     "medio": "Editorial RN",
-     "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQSm45S04xUS1uNTNhRGNoM0xuS3pabmtnanAzbUhiRzBDeUFHM1pScGFIdTV0OXhQdzRvazNWUmNZUVpuQ1BUU1J0Q0dOT3dKcTFqblk3S1FpRDJpS0tndGhlRDBXeFZPTEFYbTdzd20wZzNQVWZyd3l0SE1Dcmh2OUtscXFiMHBnV1NFSE5VaTBhZDljMGE4SUtocUFDanhUOE00UzRvRllmSVFsc1R2NXB3TU96eUk2cW5aVkJB?oc=5",
-     "tipo": "operativo",
-     "icono": "⚙️",
-     "peso": 2
     }
    ]
   },
@@ -2573,6 +2402,16 @@
    ],
    "consulta": "precio del zinc OR precio del estaño · zinc Perú producción OR plomo Perú",
    "items": [
+    {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T13:00-05:00",
+     "titulo": "Zinc refinado pasaría a superávit de 25.000 toneladas en 2027",
+     "medio": "Rumbo Minero",
+     "url": "https://www.rumbominero.com/peru/noticias/internacionales/zinc-refinado-pasaria-a-superavit-de-25-000-toneladas-en-2027/",
+     "tipo": "operativo",
+     "icono": "⚙️",
+     "peso": 2
+    },
     {
      "fecha": "2026-10-08",
      "cuando": "2026-10-08T10:56-05:00",
@@ -2683,6 +2522,26 @@
    ],
    "consulta": "minería Perú producción OR conflicto minero · MINEM inversión minera Perú · cartera de proyectos mineros Perú",
    "items": [
+    {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-18T22:15-05:00",
+     "titulo": "Fiscalía advierte sobre zona convertida en un “nuevo Pataz” debido a minería ilegal: ¿dónde?",
+     "medio": "Gestión",
+     "url": "https://gestion.pe/peru/fiscalia-advierte-sobre-zona-convertida-en-un-nuevo-pataz-debido-a-mineria-ilegal-donde-noticia/",
+     "tipo": "legal",
+     "icono": "⚖️",
+     "peso": 2
+    },
+    {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T12:09-05:00",
+     "titulo": "Anddes celebra 15 años de trayectoria y fortalece su expansión regional con soluciones para la minería",
+     "medio": "Rumbo Minero",
+     "url": "https://www.rumbominero.com/peru/noticias/actualidad-empresarial/anddes-mineria/",
+     "tipo": "expansion",
+     "icono": "🏗️",
+     "peso": 2
+    },
     {
      "fecha": "2026-10-16",
      "cuando": "2026-10-16T08:58-05:00",
@@ -2802,26 +2661,6 @@
      "tipo": "expansion",
      "icono": "🏗️",
      "peso": 2
-    },
-    {
-     "fecha": "2026-10-15",
-     "cuando": "2026-10-15T06:45-05:00",
-     "titulo": "Vehículos eléctricos: empresa peruana acelera expansión y amplía portafolio para minería",
-     "medio": "Gestión",
-     "url": "https://gestion.pe/economia/empresas/vehiculos-electricos-electron-motors-acelera-expansion-con-ipesa-y-amplia-portafolio-para-el-sector-minero-noticia/",
-     "tipo": "expansion",
-     "icono": "🏗️",
-     "peso": 2
-    },
-    {
-     "fecha": "2026-10-15",
-     "cuando": "2026-10-15T05:55-05:00",
-     "titulo": "Lotes petroleros: Minem busca nuevo “límite” para acabar sus concesiones, ¿qué busca?",
-     "medio": "Gestión",
-     "url": "https://gestion.pe/economia/lotes-petroleros-minem-busca-que-plazo-de-contratos-se-extienda-hasta-su-limite-economico-noticia/",
-     "tipo": "operativo",
-     "icono": "⚙️",
-     "peso": 2
     }
    ]
   },
@@ -2836,24 +2675,34 @@
    "consulta": "BCRP tasa de referencia OR inflación Perú · tipo de cambio dólar Perú sol",
    "items": [
     {
-     "fecha": "2026-10-17",
-     "cuando": "2026-10-16T22:08-05:00",
-     "titulo": "Julio Velarde: Perú registra la inflación más baja de la región en lo que va del siglo",
-     "medio": "Gestión",
-     "url": "https://gestion.pe/economia/julio-velarde-peru-registra-la-inflacion-mas-baja-de-la-region-en-lo-que-va-del-siglo-noticia/",
-     "tipo": "general",
-     "icono": "📰",
-     "peso": 1
-    },
-    {
-     "fecha": "2026-10-16",
-     "cuando": "2026-10-16T10:40-05:00",
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T13:44-05:00",
      "titulo": "PBI se desacelera en agosto: ¿qué frenó el crecimiento y cuáles son los riesgos para el cierre del año?",
      "medio": "El Comercio",
      "url": "https://elcomercio.pe/economia/peru/pbi-se-desacelera-en-agosto-que-freno-el-crecimiento-y-cuales-son-los-riesgos-para-el-cierre-del-ano-economia-peruana-noticia/",
      "tipo": "riesgo",
      "icono": "⚠️",
      "peso": 2
+    },
+    {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T10:52-05:00",
+     "titulo": "Tipo de cambio al 19 de octubre: sol peruano gana terreno frente al dólar en medio de la incertidumbre internacional",
+     "medio": "El Comercio",
+     "url": "https://elcomercio.pe/economia/peru/tipo-de-cambio-al-19-de-octubre-sol-peruano-gana-terreno-frente-al-dolar-en-medio-de-la-incertidumbre-internacional-l-ultimas-noticia/",
+     "tipo": "general",
+     "icono": "📰",
+     "peso": 1
+    },
+    {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T10:57-05:00",
+     "titulo": "MEF: A setiembre, el déficit fiscal acumulado de los últimos 12 meses se redujo a 0,9 % del PBI",
+     "medio": "Energiminas",
+     "url": "https://energiminas.com/2026/10/19/mef-a-setiembre-el-deficit-fiscal-acumulado-de-los-ultimos-12-meses-se-redujo-a-09-del-pbi/?utm_source=rss&utm_medium=rss&utm_campaign=mef-a-setiembre-el-deficit-fiscal-acumulado-de-los-ultimos-12-meses-se-redujo-a-09-del-pbi",
+     "tipo": "general",
+     "icono": "📰",
+     "peso": 1
     },
     {
      "fecha": "2026-10-15",
@@ -2964,16 +2813,6 @@
      "tipo": "resultados",
      "icono": "📊",
      "peso": 2
-    },
-    {
-     "fecha": "2026-09-28",
-     "cuando": "2026-09-28T18:25-05:00",
-     "titulo": "Turismo en Perú: los 6 proyectos priorizados para que el sector “pese” más en el PBI",
-     "medio": "Gestión",
-     "url": "https://gestion.pe/economia/turismo-en-peru-los-seis-proyectos-priorizados-para-que-el-sector-pese-mas-en-la-economia-peruana-noticia/",
-     "tipo": "expansion",
-     "icono": "🏗️",
-     "peso": 2
     }
    ]
   },
@@ -2986,6 +2825,46 @@
    "consulta": "SBS Perú morosidad OR créditos banca · Asbanc colocaciones OR banca peruana utilidades",
    "items": [
     {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T10:20-05:00",
+     "titulo": "Empresarios pueden mejorar su acceso a créditos en solo 30 días: ¿qué deben ajustar?",
+     "medio": "Gestión",
+     "url": "https://gestion.pe/tu-dinero/empresarios-pueden-mejorar-su-acceso-a-creditos-en-solo-30-dias-que-deben-ajustar-noticia/",
+     "tipo": "operativo",
+     "icono": "⚙️",
+     "peso": 2
+    },
+    {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T14:19-05:00",
+     "titulo": "¿Tienes una línea de crédito que nunca usas? Conoce si conviene cerrarla antes de pedir otro crédito",
+     "medio": "El Comercio",
+     "url": "https://elcomercio.pe/economia/peru/tienes-una-linea-de-credito-que-nunca-usas-conoce-si-conviene-cerrarla-antes-de-pedir-otro-credito-l-ultimas-noticia/",
+     "tipo": "operativo",
+     "icono": "⚙️",
+     "peso": 2
+    },
+    {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T10:26-05:00",
+     "titulo": "Appian cierra una línea de crédito sénior garantizada de US$75 millones con Empress Royalty",
+     "medio": "Energiminas",
+     "url": "https://energiminas.com/2026/10/19/appian-cierra-una-linea-de-credito-senior-garantizada-de-us75-millones-con-empress-royalty/?utm_source=rss&utm_medium=rss&utm_campaign=appian-cierra-una-linea-de-credito-senior-garantizada-de-us75-millones-con-empress-royalty",
+     "tipo": "operativo",
+     "icono": "⚙️",
+     "peso": 2
+    },
+    {
+     "fecha": "2026-10-18",
+     "cuando": "2026-10-18T17:30-05:00",
+     "titulo": "Bancos bajan cuota inicial de créditos hipotecarios a 5%: ¿a quiénes dan facilidad?",
+     "medio": "Gestión",
+     "url": "https://gestion.pe/tu-dinero/bancos-bajan-cuota-inicial-de-creditos-hipotecarios-a-5-a-quienes-dan-facilidad-noticia/",
+     "tipo": "operativo",
+     "icono": "⚙️",
+     "peso": 2
+    },
+    {
      "fecha": "2026-10-17",
      "cuando": "2026-10-16T22:29-05:00",
      "titulo": "SBS Librería se blinda ante El Niño: así prepara la campaña escolar 2027 y su expansión",
@@ -2993,16 +2872,6 @@
      "url": "https://gestion.pe/economia/empresas/sbs-libreria-internacional-se-prepara-ante-el-nino-y-alista-su-expansion-para-2027-noticia/",
      "tipo": "expansion",
      "icono": "🏗️",
-     "peso": 2
-    },
-    {
-     "fecha": "2026-10-16",
-     "cuando": "2026-10-16T17:21-05:00",
-     "titulo": "Bancos bajan cuota inicial de créditos hipotecarios a 5%: ¿a quiénes dan facilidad?",
-     "medio": "Gestión",
-     "url": "https://gestion.pe/tu-dinero/bancos-bajan-cuota-inicial-de-creditos-hipotecarios-a-5-a-quienes-dan-facilidad-noticia/",
-     "tipo": "operativo",
-     "icono": "⚙️",
      "peso": 2
     },
     {
@@ -3093,36 +2962,6 @@
      "url": "https://gestion.pe/tu-dinero/caja-municipal-critica-a-sbs-por-no-facilitar-entrega-de-creditos-que-penalidades-cuestiona-noticia/",
      "tipo": "operativo",
      "icono": "⚙️",
-     "peso": 2
-    },
-    {
-     "fecha": "2026-10-06",
-     "cuando": "2026-10-06T13:30-05:00",
-     "titulo": "Samsung Wallet llega a Perú: aplicación incorpora tarjetas de crédito y débito para realizar pagos desde el celular",
-     "medio": "El Comercio",
-     "url": "https://elcomercio.pe/economia/peru/samsung-wallet-llega-a-peru-aplicacion-incorpora-tarjetas-de-credito-y-debito-para-realizar-pagos-desde-el-celular-l-ultimas-noticia/",
-     "tipo": "operativo",
-     "icono": "⚙️",
-     "peso": 2
-    },
-    {
-     "fecha": "2026-10-06",
-     "cuando": "2026-10-06T08:15-05:00",
-     "titulo": "Crédito suplementario por más de S/ 8,000 millones: ¿a qué se destinarían estos recursos?",
-     "medio": "Gestión",
-     "url": "https://gestion.pe/economia/credito-suplementario-por-mas-de-s-8000-millones-a-que-se-destinaran-estos-recursos-esto-dice-el-mef-y-otros-ministros-noticia/",
-     "tipo": "operativo",
-     "icono": "⚙️",
-     "peso": 2
-    },
-    {
-     "fecha": "2026-10-06",
-     "cuando": "2026-10-05T22:45-05:00",
-     "titulo": "Finanzas Abiertas: SBS publica proyecto con primer bloque de normas",
-     "medio": "Gestión",
-     "url": "https://gestion.pe/economia/empresas/finanzas-abiertas-sbs-publica-proyecto-con-primer-bloque-de-normas-noticia/",
-     "tipo": "expansion",
-     "icono": "🏗️",
      "peso": 2
     }
    ]
@@ -3525,14 +3364,14 @@
    "consulta": "agroexportación Perú campaña · azúcar Perú caña de azúcar",
    "items": [
     {
-     "fecha": "2026-10-16",
-     "cuando": "2026-10-16T10:10-05:00",
-     "titulo": "Maxus lanza la New T70 en Perú, con foco en minería, energía y agroindustria",
-     "medio": "Energiminas",
-     "url": "https://energiminas.com/2026/10/16/maxus-lanza-la-new-t70-en-peru-con-foco-en-mineria-energia-y-agroindustria/?utm_source=rss&utm_medium=rss&utm_campaign=maxus-lanza-la-new-t70-en-peru-con-foco-en-mineria-energia-y-agroindustria",
-     "tipo": "general",
-     "icono": "📰",
-     "peso": 1
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T13:31-05:00",
+     "titulo": "Kion busca entrar al “top 10” de la agroexportación en 2027: ¿a quiénes debe “vencer”?",
+     "medio": "Gestión",
+     "url": "https://gestion.pe/economia/kion-busca-entrar-al-top-10-de-la-agroexportacion-para-2027-a-quienes-debe-vencer-noticia/",
+     "tipo": "operativo",
+     "icono": "⚙️",
+     "peso": 2
     },
     {
      "fecha": "2026-10-14",
@@ -3825,6 +3664,36 @@
    "consulta": "riesgo país Perú economía · MEF Perú presupuesto OR reforma económica",
    "items": [
     {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T12:15-05:00",
+     "titulo": "MEF destina S/ 90,8 millones para prevenir daños por El Niño 2026-2027",
+     "medio": "Rumbo Minero",
+     "url": "https://www.rumbominero.com/actualidad/mef-destina-s-908-millones-para-prevenir-danos-por-el-nino-2026-2027/",
+     "tipo": "general",
+     "icono": "📰",
+     "peso": 1
+    },
+    {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T10:57-05:00",
+     "titulo": "MEF: A setiembre, el déficit fiscal acumulado de los últimos 12 meses se redujo a 0,9 % del PBI",
+     "medio": "Energiminas",
+     "url": "https://energiminas.com/2026/10/19/mef-a-setiembre-el-deficit-fiscal-acumulado-de-los-ultimos-12-meses-se-redujo-a-09-del-pbi/?utm_source=rss&utm_medium=rss&utm_campaign=mef-a-setiembre-el-deficit-fiscal-acumulado-de-los-ultimos-12-meses-se-redujo-a-09-del-pbi",
+     "tipo": "general",
+     "icono": "📰",
+     "peso": 1
+    },
+    {
+     "fecha": "2026-10-18",
+     "cuando": "2026-10-18T14:25-05:00",
+     "titulo": "Déficit fiscal se redujo a 0,9% del PBI a setiembre, según el MEF",
+     "medio": "El Comercio",
+     "url": "https://elcomercio.pe/economia/deficit-fiscal-se-redujo-a-09-del-pbi-a-setiembre-segun-el-mef-noticia/",
+     "tipo": "general",
+     "icono": "📰",
+     "peso": 1
+    },
+    {
      "fecha": "2026-10-16",
      "cuando": "2026-10-16T12:43-05:00",
      "titulo": "MEF, MINEM y MINAM coordinan acciones para agilizar inversiones minero-energéticas",
@@ -3925,16 +3794,6 @@
      "peso": 2
     },
     {
-     "fecha": "2026-10-02",
-     "cuando": "2026-10-02T15:19-05:00",
-     "titulo": "El riesgo es Milei: el riesgo país subió más de 60% desde julio y la economía enciende nuevas alarmas",
-     "medio": "abcdiario.com.ar",
-     "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxNOUstZHpaTklkWDlfVndmd2djYmVVYVltUDBDQjRwdkVCaTBiNjloSUVyTWxGTDJJcUNCNnI3eU5RNFdEUUtraFJ1Y2lwNVFqZFlaTzc1a2pBWUZ5bHRrSlBiZklfRXNJLVBuTzFjVGUtM0ZYQmZNM0dmSUdLSmZWR0VLdG15VEVtU3pyekI2Y2RrZkFITENSS3hhdFQwT0pmM3c1SUtoUXE0ZGNvQVp1c1lSU1FpTXZLU0VsZ3ZpRzdpUUI0UDBKSEtVaFRJcjZOM1ZUSlBnQkYteTJRRFHSAdQBQVVfeXFMTlUtZE1PdDhaNmQ2bUlnLTNEWUo2bHg3bTBkWXlRczNuSElyVGVMZTZKcTRqYkx4bnpzYkdjLThSTkJMZGpOMXBfQmxESnR1dWY4cklpaEc1a19qYUxhNE1NX3VyRV95UFVWeW92b0dxRkRIZUNQVFdWZndDQ19vUlR3b2xObjhGTjVoSTJ5cWpWWWpkQ05pUE9zMVcyS09BbW1XMnRKV295VjZZcmltRE43X0xhSHQwaGxMVVJyZVFQZDg5UVpFRDdOVllRZWVxeHBVam4?oc=5",
-     "tipo": "general",
-     "icono": "📰",
-     "peso": 1
-    },
-    {
      "fecha": "2026-09-29",
      "cuando": "2026-09-29T18:44-05:00",
      "titulo": "Elmer Cuba, titular del MEF, y Julio Velarde viajarán a Nueva York para reunirse con inversionistas",
@@ -3956,6 +3815,26 @@
    ],
    "consulta": "fenómeno El Niño Perú pronóstico · lluvias Perú daños huaicos",
    "items": [
+    {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T05:03-05:00",
+     "titulo": "El Niño arriesgaría suministro de agua potable para casi 7 millones de personas: en qué zonas",
+     "medio": "Gestión",
+     "url": "https://gestion.pe/economia/el-nino-pondria-en-riesgo-a-la-mayor-parte-de-empresas-de-agua-potable-del-peru-noticia/",
+     "tipo": "operativo",
+     "icono": "⚙️",
+     "peso": 2
+    },
+    {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T12:33-05:00",
+     "titulo": "ProInversión impulsa Obras por Impuestos ante El Niño 2026-2027",
+     "medio": "Rumbo Minero",
+     "url": "https://www.rumbominero.com/actualidad/proinversion-impulsa-obras-por-impuestos-ante-el-nino-2026-2027/",
+     "tipo": "expansion",
+     "icono": "🏗️",
+     "peso": 2
+    },
     {
      "fecha": "2026-10-17",
      "cuando": "2026-10-16T22:29-05:00",
@@ -4075,26 +3954,6 @@
      "tipo": "operativo",
      "icono": "⚙️",
      "peso": 2
-    },
-    {
-     "fecha": "2026-10-08",
-     "cuando": "2026-10-08T09:56-05:00",
-     "titulo": "Agroexportación empieza a perder ritmo en 2026 por impacto de El Niño, informa ADEX",
-     "medio": "Gestión",
-     "url": "https://gestion.pe/economia/agroexportacion-empieza-a-perder-ritmo-en-2026-por-impacto-de-el-nino-informa-adex-noticia/",
-     "tipo": "operativo",
-     "icono": "⚙️",
-     "peso": 2
-    },
-    {
-     "fecha": "2026-10-08",
-     "cuando": "2026-10-08T09:31-05:00",
-     "titulo": "El Niño: inmobiliarias deberán informar si sus proyectos están en zonas de riesgo, dice Indecopi",
-     "medio": "Gestión",
-     "url": "https://gestion.pe/economia/empresas/indecopi-inmobiliarias-deberan-informar-si-sus-proyectos-se-ubican-en-zonas-de-riesgo-ante-el-nino-noticia/",
-     "tipo": "legal",
-     "icono": "⚖️",
-     "peso": 2
     }
    ]
   }
@@ -4149,6 +4008,26 @@
    ],
    "consulta": "Reserva Federal tasas de interés decisión · Fed recorte de tasas expectativa analistas · dólar tasas Estados Unidos mercados",
    "items": [
+    {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T12:10-05:00",
+     "titulo": "La Plata avanza por encima de 57$ mientras la demanda de activos refugio contrarresta los temores sobre la Fed",
+     "medio": "FXStreet",
+     "url": "https://www.fxstreet.es/news/la-plata-avanza-por-encima-de-los-57-pese-a-las-expectativas-de-una-subida-de-tasas-de-la-fed-y-al-fortalecimiento-del-dolar-estadounidense-202610191710",
+     "tipo": "legal",
+     "icono": "⚖️",
+     "peso": 2
+    },
+    {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T06:04-05:00",
+     "titulo": "El Oro se estanca por debajo de 4.200$ mientras las apuestas de una subida de tasas de la Fed limitan las ganancias",
+     "medio": "FXStreet",
+     "url": "https://www.fxstreet.es/news/el-oro-se-estanca-por-debajo-de-los-4200-mientras-las-apuestas-de-una-subida-de-tasas-de-la-fed-limitan-las-ganancias-202610191104",
+     "tipo": "resultados",
+     "icono": "📊",
+     "peso": 2
+    },
     {
      "fecha": "2026-10-16",
      "cuando": "2026-10-16T03:23-05:00",
@@ -4245,26 +4124,6 @@
      "titulo": "Forex Hoy: Los datos PMI de Europa y los discursos de miembros de la Fed serán los protagonistas",
      "medio": "FXStreet",
      "url": "https://www.fxstreet.es/news/forex-hoy-los-datos-pmi-de-europa-y-los-discursos-de-miembros-de-la-fed-seran-los-protagonistas-202610051824",
-     "tipo": "expansion",
-     "icono": "🏗️",
-     "peso": 2
-    },
-    {
-     "fecha": "2026-10-02",
-     "cuando": "2026-10-02T10:56-05:00",
-     "titulo": "La Libra esterlina rebota mientras el NFP elimina las apuestas de una subida de tipos de la Fed en octubre",
-     "medio": "FXStreet",
-     "url": "https://www.fxstreet.es/news/la-libra-esterlina-rebota-mientras-el-nfp-elimina-las-apuestas-de-una-subida-de-tipos-de-la-fed-en-octubre-202610021556",
-     "tipo": "operativo",
-     "icono": "⚙️",
-     "peso": 2
-    },
-    {
-     "fecha": "2026-10-01",
-     "cuando": "2026-10-01T13:02-05:00",
-     "titulo": "Fed: Mantengo abierta la reunión de octubre, proyecto más subidas por delante – Neel Kashkari",
-     "medio": "FXStreet",
-     "url": "https://www.fxstreet.es/news/fed-mantiene-abierta-la-posibilidad-de-una-subida-en-octubre-y-sigue-viendo-mas-subidas-por-delante-neel-kashkari-202610011802",
      "tipo": "expansion",
      "icono": "🏗️",
      "peso": 2
@@ -4594,6 +4453,16 @@
    "consulta": "oro reacción decisión de la Fed dólar · oro sube tensión guerra inversores refugio · oro analistas proyección mercado esta semana · bancos centrales compra de oro reservas",
    "items": [
     {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T08:59-05:00",
+     "titulo": "El precio del Oro en euros sube a máximos de seis días impulsado por la crisis en Francia",
+     "medio": "FXStreet",
+     "url": "https://www.fxstreet.es/news/el-precio-del-oro-en-euros-sube-a-maximos-de-seis-dias-impulsado-por-la-crisis-en-francia-202610191359",
+     "tipo": "general",
+     "icono": "📰",
+     "peso": 1
+    },
+    {
      "fecha": "2026-10-16",
      "cuando": "2026-10-16T07:33-05:00",
      "titulo": "El precio del Oro en euros retrocede desde máximos de tres días tras la subida de la inflación de la Eurozona",
@@ -4694,16 +4563,6 @@
      "peso": 1
     },
     {
-     "fecha": "2026-10-09",
-     "cuando": "2026-10-09T06:00-05:00",
-     "titulo": "El Oro avanza, pero sigue limitado en un rango estrecho mientras el Dólar y los rendimientos rebotan",
-     "medio": "FXStreet",
-     "url": "https://www.fxstreet.es/news/la-recuperacion-del-oro-se-estanca-cerca-de-4200-mientras-el-dolar-estadounidense-y-los-rendimientos-del-tesoro-se-estabilizan-202610091100",
-     "tipo": "general",
-     "icono": "📰",
-     "peso": 1
-    },
-    {
      "fecha": "2026-10-01",
      "cuando": "2026-10-01T16:03-05:00",
      "titulo": "El Oro desafía el repunte del Dólar estadounidense mientras la caída de los rendimientos reaviva la demanda",
@@ -4744,6 +4603,16 @@
    ],
    "consulta": "China demanda de cobre economía · China exportaciones de acero sobreoferta · estímulo económico China construcción",
    "items": [
+    {
+     "fecha": "2026-10-19",
+     "cuando": "2026-10-19T00:52-05:00",
+     "titulo": "La economía china acelera su crecimiento al 4,5% en el tercer trimestre",
+     "medio": "El País",
+     "url": "https://elpais.com/economia/2026-10-19/la-economia-china-acelera-su-crecimiento-al-45-en-el-tercer-trimestre.html",
+     "tipo": "resultados",
+     "icono": "📊",
+     "peso": 2
+    },
     {
      "fecha": "2026-10-11",
      "cuando": "2026-10-11T07:33-05:00",
@@ -4840,26 +4709,6 @@
      "titulo": "China prepara nuevos estímulos para contrarrestar el deterioro económico",
      "medio": "Diario Financiero",
      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNWEtCRzFKUWNYRklLT3FKLXRjQWttdWZSRFRJUUNLX0R5WlFJZmMxdEk1NXB1MjY3eGh6MVNDdDR4RlY0RzVyQU1yWS1hVDlaeEN3a2hyVTZYeS1aNjlQNHFscmtOWEk3M3BzeXBXR21jVHVUN1g0Y09wQ2liSGxKVlhtd0FJUng5cHY5T1k1M0pGN1BnTXZMUjBJNklNeEUyM2Z3V3NRY2RWdHRYX2duMmpSMA?oc=5",
-     "tipo": "general",
-     "icono": "📰",
-     "peso": 1
-    },
-    {
-     "fecha": "2026-09-28",
-     "cuando": "2026-09-28T11:20-05:00",
-     "titulo": "Cobre cae 1.5% ante señales de menor demanda en China",
-     "medio": "eltiempomx.com",
-     "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOQ0RsTkJ6TjU3Z19vRDFkUS03RjU5LUNYTzRBbDdxUmIydU1tZHhIMU1waG1jNjVMSDZvQTBISWd1b3VaanhLZmtwTjBnVXBNWFh0a0tCRmdMNlFFUTBRazlucTdUbWNtZ05oc2xEWlIxZ3VKUHNNRE9BZVlYRzR5aDdXNFdvWnp1ZlktUjcxVkhBNEhyNHVF0gGLAUFVX3lxTE53U1RiVmxXcE0xZUlSdlNRSmRqTXcxWEdubUFMdmg4X1dieEt3Um9KVkhSdDZub3VObHJSbEV4QzRDU2RuUFNxSmZfOThzWkR2Mm9icUY1b05GQzNXWXdqTTlIaXctVmhNLWZOOFZpT3RwYW1wSDM1RGliNUN2RG9Bc1hMZWN4QnZwN0E?oc=5",
-     "tipo": "legal",
-     "icono": "⚖️",
-     "peso": 2
-    },
-    {
-     "fecha": "2026-09-28",
-     "cuando": "2026-09-28T11:10-05:00",
-     "titulo": "El gabinete de China promete un mayor apoyo de la política contracíclica ante el aumento de las presiones económicas",
-     "medio": "IndexBox",
-     "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOdzdyOHpsU3pNXzZaNHJ6dzNaNTlUOERyNmVFTV9XRXVUc25aenNXa3VGbzFTd2hERlAzOWQxY3pwa1UxdzltbGstTUFYbmhNTDNzM29KX0hIb3o0amVBdEFKS0ZUMmFHTy1mQlA3QnFJbF9iNThsMC02YlR5akZTWW5jUGNDSDFCMGxUc2lGUW91QnhNb19KYmdkd0t5azVaOHdieHhyeG5YbzVJQVVVTlhrc19tWE02akRhUlZ4TDhrdw?oc=5",
      "tipo": "general",
      "icono": "📰",
      "peso": 1
@@ -4971,26 +4820,6 @@
      "titulo": "Fabricantes piden a Trump mantener los aranceles a las importaciones de acero",
      "medio": "Fortuna y Poder",
      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPdGRFUEN4d0pyS3pCNE5FNDZ2YTFwZ3ZwTS14eDhabW9Wa1NuRXBQMzBUVWlDZWZQdnpzM2VRaFBrWGxUYWJMTnJVazdKZ0NxZ2xxeTNhR3kzZUpqSEg2RWxnTWN3aFA0a2cxZ3BSZDgxZU12dHpYUy0wRi0tdVZHbXdNN25RVm9ONHM5OG1FdHU4YWZiWFExRy1lWHkzTjd5VHFtZERGR3RQYjI0clY3TFE5OA?oc=5",
-     "tipo": "general",
-     "icono": "📰",
-     "peso": 1
-    },
-    {
-     "fecha": "2026-09-28",
-     "cuando": "2026-09-28T13:07-05:00",
-     "titulo": "Resiente México aranceles de Estados Unidos sobre acero, autopartes, equipo médico y más",
-     "medio": "vanguardia.com.mx",
-     "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOWEN2OTJhVVZfUkUtTVV6WjNoUFJlSHkwWFZCNU9qSVhBN3hSYS1WbEFvOW1tX1hQZjRwb2l6T1JoN3ZzY19LdjJkNGdFMXk0TFJpTUxNUTNyUzZ0N0p0ZTctUTBiXzJpMm5uVE41ZzVMSXNLaS1hdXhTUXhMdHhhRVZ6SW1ITENUb2lZTkF0NHE2aktjOHo2LTBXcUtPOGVzU2dJelcxY0Z3aVpoUXczVXp2N0pOYmtfRzRxakpweXlRTTJCS3U2dXJn?oc=5",
-     "tipo": "expansion",
-     "icono": "🏗️",
-     "peso": 2
-    },
-    {
-     "fecha": "2026-09-28",
-     "cuando": "2026-09-28T09:04-05:00",
-     "titulo": "EEUU y China pactan una rebaja arancelaria de 60.000 millones de dólares: de carbón a juguetes",
-     "medio": "Expansión",
-     "url": "https://www.expansion.com/economia/2026/09/28/6aba73dfe5fdea89378b4573.html",
      "tipo": "general",
      "icono": "📰",
      "peso": 1
