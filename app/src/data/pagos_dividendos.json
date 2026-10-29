@@ -1,7 +1,7 @@
 {
  "_comment": "CUÁNDO y CUÁNTO paga cada dividendo, leído del acuerdo oficial (Hecho de Importancia, formato MVNet) por fetch_pagos_dividendos.py. Existe porque stockanalysis estampa el dividendo del año entero en la fecha ex: cuando la empresa paga EN PARTES (Nexa: mitad en junio, mitad en octubre) eso contaba de más lo recibido y escondía el pago pendiente. Aquí cada pago va con su fecha de entrega real y su monto por acción. Un pago solo existe si el PDF dio fecha Y monto — nunca se adivina.",
  "fuente": "BVL/SMV — Hechos de Importancia (distribución o aplicación de utilidades)",
- "generado": "2026-10-28",
+ "generado": "2026-10-29",
  "empresas": {
   "FUTURAI1": [
    {
@@ -249,6 +249,18 @@
     "parte": 1,
     "partes": 1,
     "total": 0.59758678
+   }
+  ],
+  "LUSURC1": [
+   {
+    "fecha": "2026-11-24",
+    "monto": 0.27,
+    "moneda": "S/",
+    "hecho": "2026-10-29",
+    "pdf": "https://documents.bvl.com.pe/hhii/B40008/20261029141901/CARTAB400089549520261029121109.PDF",
+    "parte": 1,
+    "partes": 1,
+    "total": 0.27
    }
   ]
  }
